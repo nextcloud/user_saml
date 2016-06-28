@@ -21,7 +21,19 @@
 
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
+\OCP\App::registerAdmin('user_saml', 'admin');
+
 $urlGenerator = \OC::$server->getURLGenerator();
+$config = \OC::$server->getConfig();
+$samlSettings = new \OCA\User_SAML\SAMLSettings(
+	$urlGenerator,
+	$config
+);
+try {
+	$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
+} catch(OneLogin_Saml2_Error $e) {
+	return;
+}
 
 $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getConfig(),
@@ -39,4 +51,3 @@ if($currentUrl === '/server/index.php/login' && !OC_User::isLoggedIn()) {
 	exit();
 }
 
-\OCP\App::registerPersonal('user_saml', 'admin');
