@@ -1,0 +1,11 @@
+#user-saml input[type="text"],textarea {
+	width: 100%;
+}
+
+#user-saml input.required {
+	background-color: lightgoldenrodyellow;
+}
+
+#user-saml input[type="checkbox"] {
+	vertical-align:middle;
+}
