@@ -57,7 +57,6 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @UseSession
-	 * @NoCSRFRequired
 	 */
 	public function login() {
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
