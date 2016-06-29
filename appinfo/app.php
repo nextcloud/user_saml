@@ -25,6 +25,7 @@ require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
+$request = \OC::$server->getRequest();
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config
@@ -45,10 +46,20 @@ OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
 
 // Redirect all requests to the login page to the SAML login
-$currentUrl = substr(explode('?', \OC::$server->getRequest()->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
+$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 if($currentUrl === '/index.php/login' && !OC_User::isLoggedIn()) {
 	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
 	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
 	exit();
 }
 
+// If a request to OCS or remote.php is sent by the official desktop clients it can
+// be intercepted as it supports SAML. All other clients don't yet and thus we
+// require the usage of application specific passwords there.
+if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
+	if(!OC_User::isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
+		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
+		exit();
+	}
+}

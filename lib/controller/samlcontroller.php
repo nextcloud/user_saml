@@ -108,12 +108,19 @@ class SAMLController extends Controller {
 			exit();
 		}
 
+
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 
-		return new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+		$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
+		// to be there.
+		if($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
+			$response->addCookie('_shibsession_', 'authenticated');
+		}
+		return $response;
 	}
 
 	/**
