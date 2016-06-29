@@ -1,6 +1,6 @@
 <?php
-script('user_saml', 'settings');
-style('user_saml', 'settings');
+script('user_saml', 'admin');
+style('user_saml', 'admin');
 
 /** @var array $_ */
 ?>

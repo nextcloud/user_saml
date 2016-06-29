@@ -19,38 +19,7 @@
  *
  */
 
-namespace OCA\User_SAML\AppInfo;
-
-(new Application())->registerRoutes(
-	$this,
-	[
-		'resources' => [
-			'AuthSettings' => [
-				'url' => '/authtokens'
-			],
-		],
-		'routes' => [
-			[
-				'name' => 'SAML#login',
-				'url' => '/saml/login',
-				'verb' => 'GET',
-			],
-			[
-				'name' => 'SAML#getMetadata',
-				'url' => '/saml/metadata',
-				'verb' => 'GET',
-			],
-			[
-				'name' => 'SAML#assertionConsumerService',
-				'url' => '/saml/acs',
-				'verb' => 'POST',
-			],
-			[
-				'name' => 'SAML#singleLogoutService',
-				'url' => '/saml/sls',
-				'verb' => 'GET',
-			],
-		]
-	]
-);
-
+$app = new \OCA\User_SAML\AppInfo\Application();
+/** @var \OCA\User_SAML\Controller\SettingsController $controller */
+$controller = $app->getContainer()->query('SettingsController');
+return $controller->displayPersonalPanel()->render();

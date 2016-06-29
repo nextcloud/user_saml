@@ -22,6 +22,8 @@
 namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDb;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -38,21 +40,26 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $urlGenerator;
 	/** @var ISession */
 	private $session;
+	/** @var IDb */
+	private $db;
 
 	/**
 	 * @param IConfig $config
 	 * @param ILogger $logger
 	 * @param IURLGenerator $urlGenerator
 	 * @param ISession $session
+	 * @param IDb $db
 	 */
 	public function __construct(IConfig $config,
 								ILogger $logger,
 								IURLGenerator $urlGenerator,
-								ISession $session) {
+								ISession $session,
+								IDb $db) {
 		$this->config = $config;
 		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
+		$this->db = $db;
 	}
 
 	/**
@@ -65,8 +72,39 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
+		return (bool)((\OC_User_Backend::CHECK_PASSWORD | \OC_User_Backend::GET_DISPLAYNAME)
+			& $actions);
+	}
+
+	/**
+	 * Check if the provided token is correct
+	 * @param string $uid The username
+	 * @param string $password The password
+	 * @return string
+	 *
+	 * Check if the password is correct without logging in the user
+	 * returns the user id or false
+	 */
+	public function checkPassword($uid, $password) {
+		/* @var $qb IQueryBuilder */
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('token')
+			->from('user_saml_auth_token')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1000);
+		$result = $qb->execute();
+		$data = $result->fetchAll();
+		$result->closeCursor();
+
+		foreach($data as $passwords) {
+			if(password_verify($password, $passwords['token'])) {
+				return $uid;
+			}
+		}
+
 		return false;
 	}
+
 
 	/**
 	 * delete a user

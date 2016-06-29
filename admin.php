@@ -22,4 +22,4 @@
 $app = new \OCA\User_SAML\AppInfo\Application();
 /** @var \OCA\User_SAML\Controller\SettingsController $controller */
 $controller = $app->getContainer()->query('SettingsController');
-return $controller->displayPanel()->render();
+return $controller->displayAdminPanel()->render();

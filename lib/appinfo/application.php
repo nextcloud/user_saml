@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\AppInfo;
 
+use OCA\User_SAML\Controller\AuthSettingsController;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Controller\SettingsController;
 use OCA\User_SAML\SAMLSettings;
@@ -35,6 +36,19 @@ class Application extends App {
 		/**
 		 * Controller
 		 */
+		$container->registerService('AuthSettingsController', function(IAppContainer $c) {
+			/** @var \OC\Server $server */
+			$server = $c->query('ServerContainer');
+			return new AuthSettingsController(
+				$c->getAppName(),
+				$server->getRequest(),
+				$server->getUserManager(),
+				$server->getSession(),
+				$server->getSecureRandom(),
+				$server->getDb(),
+				$server->getUserSession()->getUser()->getUID()
+			);
+		});
 		$container->registerService('SettingsController', function(IAppContainer $c) {
 			/** @var \OC\Server $server */
 			$server = $c->query('ServerContainer');

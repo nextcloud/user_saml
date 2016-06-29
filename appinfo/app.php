@@ -22,6 +22,7 @@
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
 \OCP\App::registerAdmin('user_saml', 'admin');
+\OCP\App::registerPersonal('user_saml', 'personal');
 
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
@@ -30,20 +31,23 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config
 );
-try {
-	$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
-} catch(OneLogin_Saml2_Error $e) {
-	return;
-}
 
 $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getConfig(),
 	\OC::$server->getLogger(),
 	\OC::$server->getURLGenerator(),
-	\OC::$server->getSession()
+	\OC::$server->getSession(),
+	\OC::$server->getDb()
 );
 OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
+
+// Setting up the one login config may fail, if so, do not catch the requests later.
+try {
+	$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
+} catch(OneLogin_Saml2_Error $e) {
+	return;
+}
 
 // Redirect all requests to the login page to the SAML login
 $currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));

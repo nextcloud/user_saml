@@ -1,4 +1,3 @@
-
 function setSAMLConfigValue(category, setting, value) {
 	OC.msg.startSaving('#user-saml-save-indicator');
 	OC.AppConfig.setValue('user_saml', category+'-'+setting, value);

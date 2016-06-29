@@ -45,7 +45,17 @@ class SettingsController extends Controller {
 		$this->l10n = $l10n;
 	}
 
-	public function displayPanel() {
+	/**
+	 * @return Http\TemplateResponse
+	 */
+	public function displayPersonalPanel() {
+		return new Http\TemplateResponse($this->appName, 'personal', [], 'blank');
+	}
+
+	/**
+	 * @return Http\TemplateResponse
+	 */
+	public function displayAdminPanel() {
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
 			'privateKey' => $this->l10n->t('Private key of the Service Provider'),
@@ -80,7 +90,7 @@ class SettingsController extends Controller {
 			'general' => $generalSettings,
 		];
 
-		return new Http\TemplateResponse($this->appName, 'settings', $params, 'blank');
+		return new Http\TemplateResponse($this->appName, 'admin', $params, 'blank');
 	}
 
 }
