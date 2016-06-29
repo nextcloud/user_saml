@@ -45,7 +45,7 @@ OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
 
 // Redirect all requests to the login page to the SAML login
-$currentUrl = substr(explode('?', $_SERVER['REQUEST_URI'], 2)[0], strlen(\OC::$WEBROOT));
+$currentUrl = substr(explode('?', \OC::$server->getRequest()->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 if($currentUrl === '/index.php/login' && !OC_User::isLoggedIn()) {
 	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
 	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
