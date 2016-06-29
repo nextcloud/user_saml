@@ -54,7 +54,7 @@ try {
 // Since with Nextcloud 9 we don't have an unique entry point this is a little
 // bit hacky and won't necessarily detect all situations.
 $currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
-if(($currentUrl === '/' || $currentUrl === '/index.php/' || $currentUrl === '/index.php') && !OC_User::isLoggedIn()) {
+if(($currentUrl === '/index.php') && !OC_User::isLoggedIn()) {
 	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
 	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
 	exit();
