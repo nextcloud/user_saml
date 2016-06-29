@@ -96,7 +96,7 @@ class SAMLController extends Controller {
 		}
 
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
-		$auth->processResponse($this->session->get('AuthNRequestID'));
+		$auth->processResponse($AuthNRequestID);
 
 		$errors = $auth->getErrors();
 
