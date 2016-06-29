@@ -154,7 +154,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getLogoutAttribute() {
-		// FIXME: Detect if SLO is configured
+		$slo = $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', '');
+		if($slo === '') {
+			return 'style="display:none;"';
+		}
+
 		return 'href="'.$this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService').'?requesttoken='.urlencode(\OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue()).'"';
 	}
 

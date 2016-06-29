@@ -63,17 +63,11 @@ class SAMLSettings {
 				'assertionConsumerService' => [
 					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.assertionConsumerService'),
 				],
-				'singleLogoutService' => [
-					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService'),
-				],
 			],
 			'idp' => [
 				'entityId' => $this->config->getAppValue('user_saml', 'idp-entityId', ''),
 				'singleSignOnService' => [
 					'url' => $this->config->getAppValue('user_saml', 'idp-singleSignOnService.url', ''),
-				],
-				'singleLogoutService' => [
-					'url' => $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', ''),
 				],
 			],
 		];
@@ -93,8 +87,15 @@ class SAMLSettings {
 			$settings['idp']['x509cert'] = $idpx509cert;
 		}
 
-
-
+		$slo = $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', '');
+		if($slo !== '') {
+			$settings['idp']['singleLogoutService'] = [
+				'url' => $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', ''),
+			];
+			$settings['sp']['singleLogoutService'] = [
+				'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService'),
+			];
+		}
 
 		return $settings;
 	}
