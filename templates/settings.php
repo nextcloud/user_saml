@@ -43,7 +43,15 @@ style('user_saml', 'settings');
 			<?php endforeach; ?>
 		</div>
 		<div id="user-saml-general">
-			<!-- FIXME: Add mapping editor -->
+			<?php foreach($_['general'] as $key => $attribute): ?>
+				<?php if($attribute['type'] === 'checkbox'): ?>
+					<input type="checkbox" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
+				<?php elseif($attribute['type'] === 'line'): ?>
+					<input name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+				<?php endif; ?>
+			<?php endforeach; ?>
+
 			<!-- FIXME: Add "Disable timeout from SAML" switch (checked by default)-->
 		</div>
 

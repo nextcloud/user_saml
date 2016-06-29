@@ -43,8 +43,8 @@ class SAMLSettings {
 
 	public function getOneLoginSettingsArray() {
 		$settings = [
-			//'debug' => true,
-			'strict' => true,
+		//	'debug' => true,
+		//	'strict' => true,
 			'security' => [
 				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-nameIdEncrypted', '0') === '1') ? true : false,
 				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', 'security-authnRequestsSigned', '0') === '1') ? true : false,
@@ -92,6 +92,8 @@ class SAMLSettings {
 		if($idpx509cert !== '') {
 			$settings['idp']['x509cert'] = $idpx509cert;
 		}
+
+
 
 
 		return $settings;

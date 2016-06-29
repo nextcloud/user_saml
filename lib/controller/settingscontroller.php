@@ -64,10 +64,20 @@ class SettingsController extends Controller {
 			'wantNameIdEncrypted' => $this->l10n->t('Indicates a requirement for the NameID received by this SP to be encrypted.'),
 			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XMLs.'),
 		];
+		$generalSettings = [
+			'uid_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the UID to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+
+		];
+
 		$params = [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
+			'general' => $generalSettings,
 		];
 
 		return new Http\TemplateResponse($this->appName, 'settings', $params, 'blank');

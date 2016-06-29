@@ -34,6 +34,18 @@ $(function() {
 		}
 	});
 
+	$('#user-saml-general input[type="text"], #user-saml-general textarea').change(function(e) {
+		var el = $(this);
+		$.when(el.focusout()).then(function() {
+			var key = $(this).attr('name');
+			setSAMLConfigValue('general', key, $(this).val());
+		});
+		if (e.keyCode === 13) {
+			var key = $(this).attr('name');
+			setSAMLConfigValue('general', key, $(this).val());
+		}
+	});
+
 	$('#user-saml-security input[type="checkbox"]').change(function(e) {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {

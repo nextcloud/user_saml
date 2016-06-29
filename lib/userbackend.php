@@ -140,7 +140,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function isSessionActive() {
-		if($this->session->exists('user_saml.samlUserData')) {
+		if($this->getCurrentUserId() !== '') {
 			return true;
 		}
 		return false;
@@ -164,8 +164,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getCurrentUserId() {
-		// FIXME: Don't harcode
-		return $this->session->get('user_saml.samlUserData')['urn:oid:0.9.2342.19200300.100.1.1'][0];
+		$samlData = $this->session->get('user_saml.samlUserData');
+		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping', '');
+
+		if($uidMapping !== '' && isset($samlData[$uidMapping])) {
+			return $samlData[$uidMapping][0];
+		}
+
+		return '';
 	}
 
 
