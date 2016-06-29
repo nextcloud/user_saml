@@ -57,10 +57,10 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @UseSession
+	 * @NoCSRFRequired
 	 */
 	public function login() {
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
-		$auth->login(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		$ssoUrl = $auth->login(null, array(), false, false, true);
 		$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
 		return new Http\RedirectResponse($ssoUrl);
@@ -90,7 +90,7 @@ class SAMLController extends Controller {
 	 * @UseSession
 	 */
 	public function assertionConsumerService() {
-		$AuthNRequestID = $this->session->get('AuthNRequestID');
+		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '') {
 			return;
 		}
