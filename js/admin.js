@@ -45,6 +45,19 @@ $(function() {
 		}
 	});
 
+	$('#user-saml-general input[type="checkbox"]').change(function(e) {
+		var el = $(this);
+		$.when(el.focusout()).then(function() {
+			var key = $(this).attr('name');
+			if($(this).val() === "0") {
+				$(this).val("1");
+			} else {
+				$(this).val("0");
+			}
+			setSAMLConfigValue('general', key, $(this).val());
+		});
+	});
+
 	$('#user-saml-security input[type="checkbox"]').change(function(e) {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {

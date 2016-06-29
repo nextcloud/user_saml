@@ -39,6 +39,7 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getSession(),
 	\OC::$server->getDb()
 );
+$userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
 

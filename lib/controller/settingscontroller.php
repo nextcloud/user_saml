@@ -80,7 +80,10 @@ class SettingsController extends Controller {
 				'type' => 'line',
 				'required' => true,
 			],
-
+			'require_provisioned_account' => [
+				'text' => $this->l10n->t('Only allow authentication if an account is existent on some other backend. (e.g. LDAP)'),
+				'type' => 'checkbox',
+			],
 		];
 
 		$params = [

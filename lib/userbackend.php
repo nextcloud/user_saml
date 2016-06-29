@@ -42,6 +42,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $session;
 	/** @var IDb */
 	private $db;
+	/** @var \OCP\UserInterface[] */
+	private $backends;
 
 	/**
 	 * @param IConfig $config
@@ -72,7 +74,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
-		return (bool)((\OC_User_Backend::CHECK_PASSWORD | \OC_User_Backend::GET_DISPLAYNAME)
+		return (bool)((\OC_User_Backend::CHECK_PASSWORD)
 			& $actions);
 	}
 
@@ -136,7 +138,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function userExists($uid) {
-		return true;
+		if($backend = $this->getActualUserBackend($uid)) {
+			return $backend->userExists($uid);
+		}
+
+		if($this->autoprovisionAllowed()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -210,7 +220,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping', '');
 
 		if($uidMapping !== '' && isset($samlData[$uidMapping])) {
-			return $samlData[$uidMapping][0];
+			$uid = $samlData[$uidMapping][0];
+			if($this->userExists($uid)) {
+				return $uid;
+			}
 		}
 
 		return '';
@@ -224,6 +237,41 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function getBackendName() {
 		return 'user_saml';
+	}
+
+	/**
+	 * Whether autoprovisioning is enabled or not
+	 *
+	 * @return bool
+	 */
+	private function autoprovisionAllowed() {
+		return $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0') === '0';
+	}
+
+	/**
+	 * Gets the actual user backend of the user
+	 *
+	 * @param string $uid
+	 * @return null|UserInterface
+	 */
+	public function getActualUserBackend($uid) {
+		foreach($this->backends as $backend) {
+			if($backend->userExists($uid)) {
+				return $backend;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Registers the used backends, used later to get the actual user backend
+	 * of the user.
+	 *
+	 * @param \OCP\UserInterface[] $backends
+	 */
+	public function registerBackends(array $backends) {
+		$this->backends = $backends;
 	}
 
 }

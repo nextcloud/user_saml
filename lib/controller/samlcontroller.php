@@ -108,6 +108,16 @@ class SAMLController extends Controller {
 			exit();
 		}
 
+		// Check whether the user actually exists, if not redirect to an error page
+		// explaining the issue.
+		$uidMapping = \OC::$server->getConfig()->getAppValue('user_saml', 'general-uid_mapping', '');
+		if(isset($auth->getAttributes()[$uidMapping])) {
+			$uid = $auth->getAttributes()[$uidMapping][0];
+			$userExists = \OC::$server->getUserManager()->userExists($uid);
+			if(!$userExists) {
+				return new Http\RedirectResponse(\OC::$server->getURLGenerator()->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			}
+		}
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
@@ -134,5 +144,13 @@ class SAMLController extends Controller {
 		$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
 		$this->userSession->logout();
 		$auth->logout($returnTo, $parameters, $nameId, $sessionIndex);
+	}
+
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 */
+	public function notProvisioned() {
+		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
 	}
 }

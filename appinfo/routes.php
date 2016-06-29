@@ -50,6 +50,11 @@ namespace OCA\User_SAML\AppInfo;
 				'url' => '/saml/sls',
 				'verb' => 'GET',
 			],
+			[
+				'name' => 'SAML#notProvisioned',
+				'url' => '/saml/notProvisioned',
+				'verb' => 'GET',
+			],
 		]
 	]
 );

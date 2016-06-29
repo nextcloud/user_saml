@@ -72,7 +72,6 @@ class SAMLSettings {
 			],
 		];
 
-
 		$spx509cert = $this->config->getAppValue('user_saml', 'sp-x509cert', '');
 		$spxprivateKey = $this->config->getAppValue('user_saml', 'sp-privateKey', '');
 		if($spx509cert !== '') {
