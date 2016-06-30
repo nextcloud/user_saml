@@ -7,6 +7,27 @@
 	<charset>utf8</charset>
 
 	<table>
+		<name>*dbprefix*user_saml_users</name>
+		<declaration>
+			<field>
+				<name>uid</name>
+				<type>text</type>
+				<default></default>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+
+			<field>
+				<name>displayname</name>
+				<type>text</type>
+				<default></default>
+				<notnull>true</notnull>
+				<length>255</length>
+			</field>
+		</declaration>
+	</table>
+
+	<table>
 		<!-- Copied table from core: Nextcloud 9 does not support application
 		specific passwords and so we -->
 		<name>*dbprefix*user_saml_auth_token</name>

@@ -27,15 +27,12 @@ use OCP\IDb;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IURLGenerator;
 use OCP\ISession;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
 	private $config;
-	/** @var ILogger */
-	private $logger;
 	/** @var IURLGenerator */
 	private $urlGenerator;
 	/** @var ISession */
@@ -47,21 +44,59 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 	/**
 	 * @param IConfig $config
-	 * @param ILogger $logger
 	 * @param IURLGenerator $urlGenerator
 	 * @param ISession $session
 	 * @param IDb $db
 	 */
 	public function __construct(IConfig $config,
-								ILogger $logger,
 								IURLGenerator $urlGenerator,
 								ISession $session,
 								IDb $db) {
 		$this->config = $config;
-		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
 		$this->db = $db;
+	}
+
+	/**
+	 * Whether $uid exists in the database
+	 *
+	 * @param string $uid
+	 * @return bool
+	 */
+	private function userExistsInDatabase($uid) {
+		/* @var $qb IQueryBuilder */
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('token')
+			->from('user_saml_users')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1);
+		$result = $qb->execute();
+		$users = $result->fetchAll();
+		$result->closeCursor();
+
+		return !empty($users);
+	}
+
+	/**
+	 * Creates an user if it does not exists
+	 *
+	 * @param string $uid
+	 */
+	public function createUserIfNotExists($uid) {
+		if(!$this->userExistsInDatabase($uid)) {
+			$values = [
+				'uid' => $uid,
+			];
+
+			/* @var $qb IQueryBuilder */
+			$qb = $this->db->getQueryBuilder();
+			$qb->insert('user_saml_users');
+			foreach($values as $column => $value) {
+				$qb->setValue($column, $qb->createNamedParameter($value));
+			}
+			$qb->execute();
+		}
 	}
 
 	/**
@@ -107,7 +142,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		return false;
 	}
 
-
 	/**
 	 * delete a user
 	 * @param string $uid The username of the user to delete
@@ -115,6 +149,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function deleteUser($uid) {
+		if($this->userExistsInDatabase($uid)) {
+			/* @var $qb IQueryBuilder */
+			$qb = $this->db->getQueryBuilder();
+			$qb->delete('user_saml_users')
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->execute();
+			return true;
+		}
 		return false;
 	}
 
@@ -128,7 +170,27 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getUsers($search = '', $limit = null, $offset = null) {
-		return false;
+		/* @var $qb IQueryBuilder */
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('uid', 'displayname')
+			->from('user_saml_users')
+			->where(
+				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
+			)
+			->setMaxResults($limit);
+		if($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$result = $qb->execute();
+		$users = $result->fetchAll();
+		$result->closeCursor();
+
+		$uids = [];
+		foreach($users as $user) {
+			$uids[] = $user['uid'];
+		}
+
+		return $uids;
 	}
 
 	/**
@@ -140,12 +202,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function userExists($uid) {
 		if($backend = $this->getActualUserBackend($uid)) {
 			return $backend->userExists($uid);
-		}
-
-		if($this->autoprovisionAllowed()) {
-			return true;
 		} else {
-			return false;
+			return $this->userExistsInDatabase($uid);
 		}
 	}
 
@@ -169,7 +227,26 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
-		return [];
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('uid', 'displayname')
+			->from('user_saml_users')
+			->where(
+				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
+			)
+			->setMaxResults($limit);
+		if($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$result = $qb->execute();
+		$users = $result->fetchAll();
+		$result->closeCursor();
+
+		$uids = [];
+		foreach($users as $user) {
+			$uids[$user['uid']] = $user['displayname'];
+		}
+
+		return $uids;
 	}
 
 	/**
@@ -178,6 +255,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function hasUserListings() {
+		if($this->autoprovisionAllowed()) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -244,7 +325,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 *
 	 * @return bool
 	 */
-	private function autoprovisionAllowed() {
+	public function autoprovisionAllowed() {
 		return $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0') === '0';
 	}
 
