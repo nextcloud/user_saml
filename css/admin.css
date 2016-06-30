@@ -1,11 +1,30 @@
 #user-saml input[type="text"],textarea {
+	max-width: 600px;
 	width: 100%;
-}
-
-#user-saml input.required {
-	background-color: lightgoldenrodyellow;
 }
 
 #user-saml input[type="checkbox"] {
 	vertical-align:middle;
+}
+
+#user-saml h4 {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 12px 0;
+}
+
+#user-saml-settings > div {
+	margin-bottom: 10px;
+}
+
+.indent {
+	padding-left: 14px;
+}
+
+#user-saml-settings .toggle {
+	clear: both;
+	padding: 7px 0;
+	cursor: pointer;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	opacity: .5;
 }

@@ -6,7 +6,6 @@ function setSAMLConfigValue(category, setting, value) {
 
 $(function() {
 	// Enable tabs
-	$('#user-saml-settings').tabs();
 	$('input:checkbox[value="1"]').attr('checked', true);
 
 	$('#user-saml-sp input[type="text"], #user-saml-sp textarea').change(function(e) {
@@ -69,5 +68,37 @@ $(function() {
 			}
 			setSAMLConfigValue('security', key, $(this).val());
 		});
+	});
+
+	$('#user-saml-settings .toggle').on('click', function() {
+		var el = $(this),
+			nextSibling = el.parent().next(),
+			parentSettingId = el.closest('div').attr('id'),
+			text = '';
+		switch(parentSettingId) {
+			case 'user-saml-security':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide security settings ...';
+				} else {
+					text = 'Show security settings ...';
+				}
+				break;
+			case 'user-saml-idp':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide optional Identity Provider settings ...';
+				} else {
+					text = 'Show optional Identity Provider settings ...';
+				}
+				break;
+			case 'user-saml-sp':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide Service Provider settings ...';
+				} else {
+					text = 'Show Service Provider settings ...';
+				}
+				break;
+		}
+		el.html(t('user_saml', text));
+		nextSibling.toggleClass('hidden');
 	});
 });
