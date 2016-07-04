@@ -34,7 +34,6 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 
 $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getConfig(),
-	\OC::$server->getLogger(),
 	\OC::$server->getURLGenerator(),
 	\OC::$server->getSession(),
 	\OC::$server->getDb()

@@ -22,6 +22,7 @@
 namespace OCA\User_SAML\Controller;
 
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IRequest;
@@ -35,6 +36,8 @@ class SAMLController extends Controller {
 	private $userSession;
 	/** @var SAMLSettings */
 	private $SAMLSettings;
+	/** @var UserBackend */
+	private $userBackend;
 
 	/**
 	 * @param string $appName
@@ -42,16 +45,19 @@ class SAMLController extends Controller {
 	 * @param ISession $session
 	 * @param IUserSession $userSession
 	 * @param SAMLSettings $SAMLSettings
+	 * @param UserBackend $userBackend
 	 */
 	public function __construct($appName,
 								IRequest $request,
 								ISession $session,
 								IUserSession $userSession,
-								SAMLSettings $SAMLSettings) {
+								SAMLSettings $SAMLSettings,
+								UserBackend $userBackend) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
 		$this->SAMLSettings = $SAMLSettings;
+		$this->userBackend = $userBackend;
 	}
 
 	/**
@@ -114,8 +120,10 @@ class SAMLController extends Controller {
 		if(isset($auth->getAttributes()[$uidMapping])) {
 			$uid = $auth->getAttributes()[$uidMapping][0];
 			$userExists = \OC::$server->getUserManager()->userExists($uid);
-			if(!$userExists) {
+			if(!$userExists && !$this->userBackend->autoprovisionAllowed()) {
 				return new Http\RedirectResponse(\OC::$server->getURLGenerator()->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			} elseif(!$userExists && $this->userBackend->autoprovisionAllowed()) {
+				$this->userBackend->createUserIfNotExists($uid);
 			}
 		}
 

@@ -25,6 +25,7 @@ use OCA\User_SAML\Controller\AuthSettingsController;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Controller\SettingsController;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
@@ -66,7 +67,13 @@ class Application extends App {
 				$server->getRequest(),
 				$server->getSession(),
 				$server->getUserSession(),
-				new SAMLSettings($server->getURLGenerator(), $server->getConfig())
+				new SAMLSettings($server->getURLGenerator(), $server->getConfig()),
+				new UserBackend(
+					$server->getConfig(),
+					$server->getURLGenerator(),
+					$server->getSession(),
+					$server->getDb()
+				)
 			);
 		});
 	}
