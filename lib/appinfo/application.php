@@ -24,6 +24,7 @@ namespace OCA\User_SAML\AppInfo;
 use OCA\User_SAML\Controller\AuthSettingsController;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Controller\SettingsController;
+use OCA\User_SAML\MiddleWare\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
@@ -76,5 +77,16 @@ class Application extends App {
 				)
 			);
 		});
+
+		/**
+		 * Middleware
+		 */
+		$container->registerService('OnlyLoggedInMiddleware', function(IAppContainer $c){
+			return new OnlyLoggedInMiddleware(
+				$c->query('ControllerMethodReflector'),
+				$c->query('ServerContainer')->getUserSession()
+			);
+		});
+		$container->registerMiddleware('OnlyLoggedInMiddleware');
 	}
 }

@@ -63,6 +63,7 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @UseSession
+	 * @OnlyUnauthenticatedUsers
 	 */
 	public function login() {
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
@@ -93,6 +94,7 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @UseSession
+	 * @OnlyUnauthenticatedUsers
 	 */
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
@@ -142,7 +144,7 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
+	 * @NoAdminRequired
 	 */
 	public function singleLogoutService() {
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
@@ -157,6 +159,7 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @NoCSRFRequired
+	 * @OnlyUnauthenticatedUsers
 	 */
 	public function notProvisioned() {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
