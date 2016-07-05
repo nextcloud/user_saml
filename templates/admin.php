@@ -80,7 +80,7 @@ style('user_saml', 'admin');
 		</div>
 
 		<a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')) ?>" class="button"><?php p($l->t('Download metadata XML')) ?></a>
-		<!-- FIXME: Add test settings -->
-		<a class="button"><?php p($l->t('Test settings')) ?></a>
+		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
+		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>
 </form>

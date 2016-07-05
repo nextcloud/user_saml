@@ -70,6 +70,22 @@ $(function() {
 		});
 	});
 
+	$('#user-saml').change(function() {
+		// Checks on each request whether the settings make sense or not
+		$.ajax({
+			url: OC.generateUrl('/apps/user_saml/saml/metadata'),
+			type: 'GET'
+		}).fail(function (e) {
+			if(e.status === 500) {
+				$('#user-saml-settings-complete').addClass('hidden');
+				$('#user-saml-settings-incomplete').removeClass('hidden');
+			}
+		}).success(function (e) {
+			$('#user-saml-settings-complete').removeClass('hidden');
+			$('#user-saml-settings-incomplete').addClass('hidden');
+		})
+	});
+
 	$('#user-saml-settings .toggle').on('click', function() {
 		var el = $(this),
 			nextSibling = el.parent().next(),
