@@ -67,7 +67,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function userExistsInDatabase($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('token')
+		$qb->select('uid')
 			->from('user_saml_users')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
