@@ -22,7 +22,6 @@
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
 \OCP\App::registerAdmin('user_saml', 'admin');
-\OCP\App::registerPersonal('user_saml', 'personal');
 
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
