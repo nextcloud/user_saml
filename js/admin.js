@@ -115,6 +115,11 @@ $(function() {
 				break;
 		}
 		el.html(t('user_saml', text));
-		nextSibling.toggleClass('hidden');
+
+		if (nextSibling.is(":visible")) {
+			nextSibling.slideUp();
+		} else {
+			nextSibling.slideDown();
+		}
 	});
 });
