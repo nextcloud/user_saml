@@ -5,7 +5,7 @@ style('user_saml', 'admin');
 /** @var array $_ */
 ?>
 <form id="user-saml" class="section" action="#" method="post">
-	<h2><?php p($l->t('SAML')); ?></h2>
+	<h2 class="inlineblock"><?php p($l->t('SAML')); ?></h2>
 	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">Saved</div>
 
 	<div id="user-saml-settings">
