@@ -26,9 +26,9 @@ namespace OCA\User_SAML\Settings;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\Settings\IAdmin;
+use OCP\Settings\ISettings;
 
-class Admin implements IAdmin {
+class Admin implements ISettings {
 	/** @var IL10N */
 	private $l10n;
 
