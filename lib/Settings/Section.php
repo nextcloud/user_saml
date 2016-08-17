@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
  *
+ * @author Lukas Reschke <lukas@statuscode.ch>
+ *
  * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,7 +21,37 @@
  *
  */
 
-$app = new \OCA\User_SAML\AppInfo\Application();
-/** @var \OCA\User_SAML\Controller\SettingsController $controller */
-$controller = $app->getContainer()->query('SettingsController');
-return $controller->displayAdminPanel()->render();
+namespace OCA\User_SAML\Settings;
+
+use OCP\IL10N;
+use OCP\Settings\ISection;
+
+class Section implements ISection {
+	/** @var IL10N */
+	private $l;
+
+	public function __construct(IL10N $l) {
+		$this->l = $l;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getID() {
+		return 'saml';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getName() {
+		return $this->l->t('SAML authentication');
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getPriority() {
+		return 75;
+	}
+}
