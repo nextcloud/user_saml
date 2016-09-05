@@ -25,6 +25,7 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XMLs." : "Geeft aan of de SP alle ontvangen XMLs zal valideren.",
     "Attribute to map the UID to." : "Attribuut om de UID op te mappen.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Sta alleen authenticatie toe als een account bestaat op een ander backend (bijv. LDAP).",
+    "SAML authentication" : "SAML authenticatie",
     "SAML" : "SAML",
     "General" : "Algemeen",
     "Service Provider Data" : "Service Provider gegevens",
