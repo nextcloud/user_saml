@@ -4,7 +4,7 @@
     "Values" : "Valeurs",
     "Attributes not found" : "Attributs non trouvés",
     "Saved" : "Sauvegardé",
-    "Disconnect" : "Déconnection",
+    "Disconnect" : "Déconnexion",
     "Error while loading browser sessions and device tokens" : "Erreur lors du chargement des jetons de la session du navigateur et de l'appareil",
     "Error while creating device token" : "Erreur lors de la création du jeton de l'appareil",
     "Error while deleting the token" : "Erreur lors de la suppression du jeton",
