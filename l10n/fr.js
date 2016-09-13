@@ -43,6 +43,7 @@ OC.L10N.register(
     "Download metadata XML" : "Télécharger les méta-données XML",
     "Metadata invalid" : "Méta-données invalides",
     "Metadata valid" : "Méta-données valides",
+    "App passwords" : "Mots de passe de l'application",
     "You've linked these apps." : "Vous avez lié ces applications.",
     "An app password is a passcode that gives an app or device permissions to access your %s account." : "Un mot de passe d'application est un mot de passe qui autorise à une application ou à un appareil l'accès à votre %s compte.",
     "App name" : "Nom de l'application",
