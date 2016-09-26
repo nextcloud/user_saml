@@ -2,8 +2,6 @@
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
  *
- * @author Lukas Reschke <lukas@statuscode.ch>
- *
  * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,40 +19,38 @@
  *
  */
 
-namespace OCA\User_SAML\Settings;
+namespace OCA\User_SAML\Tests\Settings;
 
-use OCP\IL10N;
-use OCP\Settings\ISection;
+class SectionTest extends \Test\TestCase  {
+	/** @var \OCA\User_SAML\Settings\Section */
+	private $section;
+	/** @var \OCP\IL10N */
+	private $l10n;
 
-class Section implements ISection {
-	/** @var IL10N */
-	private $l;
+	public function setUp() {
+		$this->l10n = $this->createMock(\OCP\IL10N::class);
+		$this->section = new \OCA\User_SAML\Settings\Section(
+			$this->l10n
+		);
 
-	/**
-	 * @param IL10N $l
-	 */
-	public function __construct(IL10N $l) {
-		$this->l = $l;
+		return parent::setUp();
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getID() {
-		return 'saml';
+	public function testGetId() {
+		$this->assertSame('saml', $this->section->getID());
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName() {
-		return $this->l->t('SAML authentication');
+	public function testGetName() {
+		$this->l10n
+			->expects($this->once())
+			->method('t')
+			->with('SAML authentication')
+			->willReturn('SAML authentication');
+
+		$this->assertSame('SAML authentication', $this->section->getName());
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getPriority() {
-		return 75;
+	public function testGetPriority() {
+		$this->assertSame(75, $this->section->getPriority());
 	}
 }

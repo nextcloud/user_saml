@@ -63,6 +63,6 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession()
 			);
 		});
-		$container->registerMiddleware('OnlyLoggedInMiddleware');
+		$container->registerMiddleWare('OnlyLoggedInMiddleware');
 	}
 }
