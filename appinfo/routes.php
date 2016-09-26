@@ -24,11 +24,6 @@ namespace OCA\User_SAML\AppInfo;
 (new Application())->registerRoutes(
 	$this,
 	[
-		'resources' => [
-			'AuthSettings' => [
-				'url' => '/authtokens'
-			],
-		],
 		'routes' => [
 			[
 				'name' => 'SAML#login',
@@ -55,7 +50,7 @@ namespace OCA\User_SAML\AppInfo;
 				'url' => '/saml/notProvisioned',
 				'verb' => 'GET',
 			],
-		]
+		],
 	]
 );
 
