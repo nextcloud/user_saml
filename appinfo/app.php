@@ -24,6 +24,7 @@ require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
+$userSession = \OC::$server->getUserSession();
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config
@@ -46,11 +47,12 @@ try {
 	return;
 }
 
-// Since with Nextcloud 9 we don't have an unique entry point this is a little
-// bit hacky and won't necessarily detect all situations. So we inject some magic
-// Javascript that does the work for us.
-if(!OC_User::isLoggedIn()) {
-	\OCP\Util::addHeader('script', ['src' => $urlGenerator->linkTo('user_saml', 'js/preauth.js')], '');
+$redirectSituation = false;
+
+// All requests that are not authenticated and match against the "/login" route are
+// redirected to the SAML login endpoint
+if(!$userSession->isLoggedIn() && \OC::$server->getRequest()->getPathInfo() === '/login') {
+	$redirectSituation = true;
 }
 
 // If a request to OCS or remote.php is sent by the official desktop clients it can
@@ -58,9 +60,13 @@ if(!OC_User::isLoggedIn()) {
 // require the usage of application specific passwords there.
 $currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-	if(!OC_User::isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
-		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
-		header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
-		exit();
+	if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
+		$redirectSituation = true;
 	}
+}
+
+if($redirectSituation === true) {
+	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
+	exit();
 }
