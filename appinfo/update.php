@@ -26,5 +26,5 @@ $installedVersion = $config->getAppValue('user_saml', 'installed_version');
 // has been changed with 1.2.1. To not break existing installations the value gets
 // manually changed on update.
 if (version_compare($installedVersion, '1.2.1', '<')) {
-	$config->setAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
+	$config->setAppValue('user_saml', 'general-use_saml_auth_for_desktop', '1');
 }
