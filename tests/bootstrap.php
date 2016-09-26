@@ -19,7 +19,13 @@
  *
  */
 
-$app = new \OCA\User_SAML\AppInfo\Application();
-/** @var \OCA\User_SAML\Controller\SettingsController $controller */
-$controller = $app->getContainer()->query('SettingsController');
-return $controller->displayPersonalPanel()->render();
+if (!defined('PHPUNIT_RUN')) {
+	define('PHPUNIT_RUN', 1);
+}
+require_once __DIR__.'/../../../lib/base.php';
+\OC::$loader->addValidRoot(\OC::$SERVERROOT . '/tests');
+\OC_App::loadApp('user_saml');
+if(!class_exists('PHPUnit_Framework_TestCase')) {
+	require_once('PHPUnit/Autoload.php');
+}
+OC_Hook::clear();
