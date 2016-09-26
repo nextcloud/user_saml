@@ -12,6 +12,7 @@ OC.L10N.register(
     "Error while deleting the token" : "Chyba při mazání tokenu",
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovatele služby",
     "Private key of the Service Provider" : "Privátní klíč poskytovatele služby",
+    "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikuje že nameID <samlp:logoutRequest> odeslané tímto poskytovatelm služeb bude šifrováno.",
     "Whether the metadata should be signed." : "Zda mají být metadata podepisována.",
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indikuje požadavek poskytovatele služby na přijetí NameID v zašifrované podobě.",
     "Indicates if the SP will validate all received XMLs." : "Indikuje, zda poskytovatel služby ověří všechna přijatá XML.",
