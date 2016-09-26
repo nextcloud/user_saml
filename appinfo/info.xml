@@ -5,9 +5,9 @@
 	<description>Authenticates user against a SAML backend, such as Shibboleth.</description>
 	<licence>AGPL</licence>
 	<author>Lukas Reschke</author>
-	<version>1.1.0</version>
+	<version>1.2.1</version>
 	<dependencies>
-		<owncloud min-version="9.1" max-version="9.1" />
+		<owncloud min-version="9.1" max-version="9.2" />
 	</dependencies>
 	<namespace>User_SAML</namespace>
 	<types>

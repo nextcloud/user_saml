@@ -31,7 +31,7 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 );
 
 $userBackend = new \OCA\User_SAML\UserBackend(
-	\OC::$server->getConfig(),
+	$config,
 	\OC::$server->getURLGenerator(),
 	\OC::$server->getSession(),
 	\OC::$server->getDb()
@@ -58,10 +58,17 @@ if(!$userSession->isLoggedIn() && \OC::$server->getRequest()->getPathInfo() === 
 // If a request to OCS or remote.php is sent by the official desktop clients it can
 // be intercepted as it supports SAML. All other clients don't yet and thus we
 // require the usage of application specific passwords there.
-$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
-if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-	if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
-		$redirectSituation = true;
+//
+// However, it is an opt-in setting to use SAML for the desktop clients. For better
+// UX (users don't have to reauthenticate) we default to disallow the access via
+// SAML at the moment.
+$useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
+if($useSamlForDesktopClients === '1') {
+	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
+	if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
+		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
+			$redirectSituation = true;
+		}
 	}
 }
 
