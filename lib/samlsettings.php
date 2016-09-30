@@ -57,6 +57,10 @@ class SAMLSettings {
 				'wantNameId' => ($this->config->getAppValue('user_saml', 'security-wantNameId', '0') === '1') ? true : false,
 				'wantNameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-wantNameIdEncrypted', '0') === '1') ? true : false,
 				'wantXMLValidation' => ($this->config->getAppValue('user_saml', 'security-wantXMLValidation', '0') === '1') ? true : false,
+				'requestedAuthnContext' => [
+					\OneLogin_Saml2_Constants::AC_PASSWORD_PROTECTED,
+					\OneLogin_Saml2_Constants::AC_WINDOWS,
+				],
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
