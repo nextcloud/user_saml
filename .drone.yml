@@ -55,8 +55,9 @@ pipeline:
       - phpunit --configuration phpunit.xml
 
       # Create coverage report
-      - wget https://scrutinizer-ci.com/ocular.phar
-      - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+      - wget https://codecov.io/bash -O codecov.sh
+      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
     when:
       matrix:
         TESTS: php5.6
