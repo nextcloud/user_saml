@@ -19,12 +19,11 @@
  *
  */
 
-namespace OCA\User_SAML\MiddleWare;
+namespace OCA\User_SAML\Middleware;
 
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\NotFoundResponse;
-use \OCP\AppFramework\Middleware;
-use \OCP\AppFramework\Utility\IControllerMethodReflector;
+use OCP\AppFramework\Middleware;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IUserSession;
 
 /**
@@ -34,9 +33,15 @@ use OCP\IUserSession;
  * @package OCA\User_SAML\MiddleWare
  */
 class OnlyLoggedInMiddleware extends Middleware {
+	/** @var IControllerMethodReflector */
 	private $reflector;
+	/** @var IUserSession */
 	private $userSession;
 
+	/**
+	 * @param IControllerMethodReflector $reflector
+	 * @param IUserSession $userSession
+	 */
 	public function __construct(IControllerMethodReflector $reflector,
 								IUserSession $userSession) {
 		$this->reflector = $reflector;
@@ -54,6 +59,13 @@ class OnlyLoggedInMiddleware extends Middleware {
 		}
 	}
 
+	/**
+	 * @param \OCP\AppFramework\Controller $controller
+	 * @param string $methodName
+	 * @param \Exception $exception
+	 * @return JSONResponse
+	 * @throws \Exception
+	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
 		if($exception->getMessage() === 'User is already logged-in') {
 			return new JSONResponse('User is already logged-in', 403);
@@ -61,6 +73,4 @@ class OnlyLoggedInMiddleware extends Middleware {
 
 		throw $exception;
 	}
-
-
 }
