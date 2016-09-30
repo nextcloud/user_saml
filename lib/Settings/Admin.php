@@ -26,27 +26,21 @@ namespace OCA\User_SAML\Settings;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IL10N;
-use OCP\IURLGenerator;
 use OCP\Settings\ISettings;
 
 class Admin implements ISettings {
 	/** @var IL10N */
 	private $l10n;
-	/** @var IURLGenerator */
-	private $urlGenerator;
 	/** @var Defaults */
 	private $defaults;
 
 	/**
 	 * @param IL10N $l10n
-	 * @param IURLGenerator $urlGenerator
 	 * @param Defaults $defaults
 	 */
 	public function __construct(IL10N $l10n,
-								IURLGenerator $urlGenerator,
 								Defaults $defaults) {
 		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
 		$this->defaults = $defaults;
 	}
 
