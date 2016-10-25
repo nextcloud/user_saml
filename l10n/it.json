@@ -4,10 +4,6 @@
     "Values" : "Valori",
     "Attributes not found" : "Attributi non trovati",
     "Saved" : "Salvato",
-    "Disconnect" : "Disconnetti",
-    "Error while loading browser sessions and device tokens" : "Errore durante il caricamento delle sessioni del browser e dei token di dispositivo",
-    "Error while creating device token" : "Errore durante la creazione del token",
-    "Error while deleting the token" : "Errore durante l'eliminazione del token",
     "X.509 certificate of the Service Provider" : "Certificato X.509 del fornitore di servizi",
     "Private key of the Service Provider" : "Chiave privata del fornitore di servizi",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica che il nameID della <samlp:logoutRequest> inviata da questo SP sarà cifrato.",
@@ -23,6 +19,7 @@
     "Indicates if the SP will validate all received XMLs." : "Indica se lo SP convaliderà tutti gli XML ricevuti.",
     "Attribute to map the UID to." : "Attributo a cui associare l'UID.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Consenti l'autenticazione solo se un account esiste in un altro motore. (ad es. LDAP)",
+    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utilizza autenticazione SAML per i client desktop di %s (richiede una nuova autenticazione degli utenti)",
     "SAML authentication" : "Autenticazione SAML",
     "SAML" : "SAML",
     "General" : "Generale",
@@ -45,14 +42,6 @@
     "Metadata invalid" : "Metadati non validi",
     "Metadata valid" : "Metadati validi",
     "Account not provisioned." : "Account non generato.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Il tuo account non è stato generato, l'accesso a questo servizio è perciò impossibile",
-    "App passwords" : "Password di applicazione",
-    "You've linked these apps." : "Hai collegato queste applicazioni.",
-    "An app password is a passcode that gives an app or device permissions to access your %s account." : "Una password di applicazione è un codice di sicurezza che fornisce a un'applicazione o a un dispositivo i permessi per accedere al tuo account %s.",
-    "App name" : "Nome applicazione",
-    "Create new app password" : "Crea nuova password di applicazione",
-    "Use the credentials below to configure your app or device." : "Utilizza le credenziali in basso per configurare la tua applicazione o dispositivo.",
-    "Password" : "Password",
-    "Done" : "Fine"
+    "Your account is not provisioned, access to this service is thus not possible." : "Il tuo account non è stato generato, l'accesso a questo servizio è perciò impossibile"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -4,10 +4,6 @@
     "Values" : "Werte",
     "Attributes not found" : "Eigenschaften nicht gefunden",
     "Saved" : "Gespeichert",
-    "Disconnect" : "Trennen",
-    "Error while loading browser sessions and device tokens" : "Fehler beim Laden der Browser-Sitzungen und Gerätetoken",
-    "Error while creating device token" : "Fehler beim Erstellen des Gerätetokens",
-    "Error while deleting the token" : "Fehler beim Löschen des Tokens",
     "X.509 certificate of the Service Provider" : "X.509-Zertifikat des Service-Providers",
     "Private key of the Service Provider" : "Privater Schlüssel des Service-Providers",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Zeigt an, dass die nameID des <samlp:logoutRequest> von diesem SP verschlüsselt versandt werden.",
@@ -23,6 +19,7 @@
     "Indicates if the SP will validate all received XMLs." : "Zeigt an, ob der SP alle empfangenen XMLs prüfen wird.",
     "Attribute to map the UID to." : "Attribut dem die UID zugeordnet werden soll.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Einloggen nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
+    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML-Authentifizierung für die %s Desktop-Clients nutzen (erfordert eine Neu-Authentifizierung der Nutzer)",
     "SAML authentication" : "SAML-Authentifizierung",
     "SAML" : "SAML",
     "General" : "Allgemein",
@@ -45,14 +42,6 @@
     "Metadata invalid" : "Matadaten ungültig",
     "Metadata valid" : "Matedaten gültig",
     "Account not provisioned." : "Account nicht provisioniert.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt, Zugriff ist deshalb nicht möglich.",
-    "App passwords" : "App-Passwörter",
-    "You've linked these apps." : "Diese Apps sind verbunden.",
-    "An app password is a passcode that gives an app or device permissions to access your %s account." : "Ein App-Passwort ist ein Passwort, dass einer App oder einem Gerät erlaubt auf dein %s-Konto zuzugreifen.",
-    "App name" : "App-Name",
-    "Create new app password" : "Neues App-Passwort erstellen",
-    "Use the credentials below to configure your app or device." : "Nutze die unten angebenen Anmeldeinformationen, um deine App oder dein Gerät zu konfigurieren.",
-    "Password" : "Passwort",
-    "Done" : "Fertig"
+    "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt, Zugriff ist deshalb nicht möglich."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

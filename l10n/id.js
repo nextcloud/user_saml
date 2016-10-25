@@ -6,10 +6,6 @@ OC.L10N.register(
     "Values" : "Nilai",
     "Attributes not found" : "Atribut tidak ditemukan",
     "Saved" : "Tersimpan",
-    "Disconnect" : "Putusakan",
-    "Error while loading browser sessions and device tokens" : "Terjadi kesalahan saat memuat sesi browser dan token perangkat",
-    "Error while creating device token" : "Terjadi kesalahan saat membuat token perangkat",
-    "Error while deleting the token" : "Terjadi kesalahan saat menghapus token",
     "X.509 certificate of the Service Provider" : "Sertifikat X.509 Penyedia Layanan",
     "Private key of the Service Provider" : "Kunci pribadi Penyedia Layanan",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Mengindikasikan bahwa nameID dari <samlp:logoutRequest> dikirimkan oleh SP ini akan dienkripsi",
@@ -45,14 +41,6 @@ OC.L10N.register(
     "Metadata invalid" : "Metadata tidak sah",
     "Metadata valid" : "Metadata sah",
     "Account not provisioned." : "Akun tidak ditetapkan.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin.",
-    "App passwords" : "Sandi aplikasi",
-    "You've linked these apps." : "Anda telah menghubungkan aplikasi ini.",
-    "An app password is a passcode that gives an app or device permissions to access your %s account." : "Sandi aplikasi adalah kode kunci yang memberikan aplikasi atau perangkat izin untuk mengakses akun %s Anda.",
-    "App name" : "Nama aplikasi",
-    "Create new app password" : "Buat sandi aplikasi baru",
-    "Use the credentials below to configure your app or device." : "Gunakan kredensial berikut untuk mengkonfigurasi aplikasi atau perangkat.",
-    "Password" : "Sandi",
-    "Done" : "Selesai"
+    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin."
 },
 "nplurals=1; plural=0;");
