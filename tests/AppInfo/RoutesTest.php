@@ -19,34 +19,43 @@
  *
  */
 
-namespace OCA\User_SAML\AppInfo;
+namespace OCA\User_SAML\Tests\AppInfo;
 
-return [
-	'routes' => [
-		[
-			'name' => 'SAML#login',
-			'url' => '/saml/login',
-			'verb' => 'GET',
-		],
-		[
-			'name' => 'SAML#getMetadata',
-			'url' => '/saml/metadata',
-			'verb' => 'GET',
-		],
-		[
-			'name' => 'SAML#assertionConsumerService',
-			'url' => '/saml/acs',
-			'verb' => 'POST',
-		],
-		[
-			'name' => 'SAML#singleLogoutService',
-			'url' => '/saml/sls',
-			'verb' => 'GET',
-		],
-		[
-			'name' => 'SAML#notProvisioned',
-			'url' => '/saml/notProvisioned',
-			'verb' => 'GET',
-		],
-	],
-];
+use Test\TestCase;
+
+class Test extends TestCase  {
+	public function testFile() {
+		$routes = require_once __DIR__ . '/../../appinfo/routes.php';
+
+		$expected = [
+			'routes' => [
+				[
+					'name' => 'SAML#login',
+					'url' => '/saml/login',
+					'verb' => 'GET',
+				],
+				[
+					'name' => 'SAML#getMetadata',
+					'url' => '/saml/metadata',
+					'verb' => 'GET',
+				],
+				[
+					'name' => 'SAML#assertionConsumerService',
+					'url' => '/saml/acs',
+					'verb' => 'POST',
+				],
+				[
+					'name' => 'SAML#singleLogoutService',
+					'url' => '/saml/sls',
+					'verb' => 'GET',
+				],
+				[
+					'name' => 'SAML#notProvisioned',
+					'url' => '/saml/notProvisioned',
+					'verb' => 'GET',
+				],
+			],
+		];
+		$this->assertSame($expected, $routes);
+	}
+}
