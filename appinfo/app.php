@@ -21,6 +21,13 @@
 
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
+// If we run in CLI mode do not setup the app as it can fail the OCC execution
+// since the URLGenerator isn't accessible.
+if(OC::$CLI) {
+	return;
+}
+
+
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
@@ -32,7 +39,7 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 
 $userBackend = new \OCA\User_SAML\UserBackend(
 	$config,
-	\OC::$server->getURLGenerator(),
+	$urlGenerator,
 	\OC::$server->getSession(),
 	\OC::$server->getDb()
 );
@@ -41,17 +48,33 @@ OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
 
 // Setting up the one login config may fail, if so, do not catch the requests later.
-try {
-	$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
-} catch(OneLogin_Saml2_Error $e) {
+$returnScript = false;
+$type = '';
+switch($config->getAppValue('user_saml', 'type')) {
+	case 'saml':
+		try {
+			$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
+		} catch (OneLogin_Saml2_Error $e) {
+			$returnScript = true;
+		}
+		$type = 'saml';
+		break;
+	case 'environment-variable':
+		\OC::$server->getSession()->set('user_saml.samlUserData', $_SERVER);
+		$type = 'environment-variable';
+		break;
+}
+
+if($returnScript === true) {
 	return;
 }
 
 $redirectSituation = false;
-
 // All requests that are not authenticated and match against the "/login" route are
 // redirected to the SAML login endpoint
-if(!$userSession->isLoggedIn() && \OC::$server->getRequest()->getPathInfo() === '/login') {
+if(!$userSession->isLoggedIn() &&
+	\OC::$server->getRequest()->getPathInfo() === '/login' &&
+	$type === 'saml') {
 	$redirectSituation = true;
 }
 

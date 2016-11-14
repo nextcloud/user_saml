@@ -28,3 +28,9 @@ $installedVersion = $config->getAppValue('user_saml', 'installed_version');
 if (version_compare($installedVersion, '1.2.1', '<')) {
 	$config->setAppValue('user_saml', 'general-use_saml_auth_for_desktop', '1');
 }
+
+// Versions below 1.2.2 don't have the choice between environment variable or
+// native SAML integration as the default was SAML back then.
+if (version_compare($installedVersion, '1.2.2', '<')) {
+	$config->setAppValue('user_saml', 'type', 'saml');
+}

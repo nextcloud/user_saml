@@ -4,11 +4,30 @@ style('user_saml', 'admin');
 
 /** @var array $_ */
 ?>
-<form id="user-saml" class="section" action="#" method="post">
-	<h2 class="inlineblock"><?php p($l->t('SAML')); ?></h2>
+<form id="user-saml" class="section" action="#" method="post" data-type="<?php p($_['type']) ?>">
+	<h2 class="inlineblock"><?php p($l->t('SSO & SAML authentication')); ?></h2>
 	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">Saved</div>
 
 	<div id="user-saml-settings">
+		<div id="user-saml-choose-type">
+			<?php p($l->t('Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.')) ?>
+			<br/>
+			<button id="user-saml-choose-saml"><?php p($l->t('Use built-in SAML authentication')) ?></button>
+			<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
+		</div>
+
+		<div class="warning hidden" id="user-saml-warning-admin-user">
+			<?php p(
+				$l->t(
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore.',
+					[
+						$theme->getEntity()
+					]
+				)
+			)
+			?>
+		</div>
+
 		<div id="user-saml-general">
 			<h3><?php p($l->t('General')) ?></h3>
 			<?php foreach($_['general'] as $key => $attribute): ?>
@@ -26,6 +45,7 @@ style('user_saml', 'admin');
 
 			<!-- FIXME: Add "Disable timeout from SAML" switch (checked by default)-->
 		</div>
+
 		<div id="user-saml-sp">
 			<h3><?php p($l->t('Service Provider Data')) ?></h3>
 			<p>
@@ -71,6 +91,13 @@ style('user_saml', 'admin');
 				<?php endforeach; ?>
 				<h4><?php p($l->t('Signatures and encryption required')) ?></h4>
 				<?php foreach($_['security-required'] as $key => $text): ?>
+					<p>
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
+					</p>
+				<?php endforeach; ?>
+				<h4><?php p($l->t('General')) ?></h4>
+				<?php foreach($_['security-general'] as $key => $text): ?>
 					<p>
 						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>

@@ -21,12 +21,16 @@
 
 namespace OCA\User_SAML\Controller;
 
+use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\IConfig;
 use OCP\IRequest;
 use OCP\ISession;
+use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\IUserSession;
 
 class SAMLController extends Controller {
@@ -38,6 +42,12 @@ class SAMLController extends Controller {
 	private $SAMLSettings;
 	/** @var UserBackend */
 	private $userBackend;
+	/** @var IConfig */
+	private $config;
+	/** @var IURLGenerator */
+	private $urlGenerator;
+	/** @var IUserManager */
+	private $userManager;
 
 	/**
 	 * @param string $appName
@@ -46,29 +56,92 @@ class SAMLController extends Controller {
 	 * @param IUserSession $userSession
 	 * @param SAMLSettings $SAMLSettings
 	 * @param UserBackend $userBackend
+	 * @param IConfig $config
+	 * @param IURLGenerator $urlGenerator
+	 * @param IUserManager $userManager
 	 */
 	public function __construct($appName,
 								IRequest $request,
 								ISession $session,
 								IUserSession $userSession,
 								SAMLSettings $SAMLSettings,
-								UserBackend $userBackend) {
+								UserBackend $userBackend,
+								IConfig $config,
+								IURLGenerator $urlGenerator,
+								IUserManager $userManager) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
 		$this->SAMLSettings = $SAMLSettings;
 		$this->userBackend = $userBackend;
+		$this->config = $config;
+		$this->urlGenerator = $urlGenerator;
+		$this->userManager = $userManager;
+	}
+
+	/**
+	 * @param array $auth
+	 * @throws NoUserFoundException
+	 */
+	private function autoprovisionIfPossible(array $auth) {
+		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+		if(isset($auth[$uidMapping])) {
+			if(is_array($auth[$uidMapping])) {
+				$uid = $auth[$uidMapping][0];
+			} else {
+				$uid = $auth[$uidMapping];
+			}
+
+			$userExists = $this->userManager->userExists($uid);
+			if($userExists === true) {
+				return;
+			}
+
+			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
+			if(!$userExists && !$autoProvisioningAllowed) {
+				throw new NoUserFoundException();
+			} elseif(!$userExists && $autoProvisioningAllowed) {
+				$this->userBackend->createUserIfNotExists($uid);
+				return;
+			}
+		}
+
+		throw new NoUserFoundException();
 	}
 
 	/**
 	 * @PublicPage
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
+	 *
+	 * @return Http\RedirectResponse
+	 * @throws \Exception
 	 */
 	public function login() {
-		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
-		$ssoUrl = $auth->login(null, array(), false, false, true);
-		$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
+		$type = $this->config->getAppValue($this->appName, 'type');
+		switch($type) {
+			case 'saml':
+				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+				$ssoUrl = $auth->login(null, [], false, false, true);
+				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
+				break;
+			case 'environment-variable':
+				$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
+				try {
+					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
+				} catch (NoUserFoundException $e) {
+					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+				}
+				break;
+			default:
+				throw new \Exception(
+					sprintf(
+						'Type of "%s" is not supported for user_saml',
+						$type
+					)
+				);
+		}
+
 		return new Http\RedirectResponse($ssoUrl);
 	}
 
@@ -111,6 +184,7 @@ class SAMLController extends Controller {
 		if (!empty($errors)) {
 			print_r('<p>'.implode(', ', $errors).'</p>');
 		}
+
 		if (!$auth->isAuthenticated()) {
 			echo "<p>Not authenticated</p>";
 			exit();
@@ -118,15 +192,11 @@ class SAMLController extends Controller {
 
 		// Check whether the user actually exists, if not redirect to an error page
 		// explaining the issue.
-		$uidMapping = \OC::$server->getConfig()->getAppValue('user_saml', 'general-uid_mapping', '');
-		if(isset($auth->getAttributes()[$uidMapping])) {
-			$uid = $auth->getAttributes()[$uidMapping][0];
-			$userExists = \OC::$server->getUserManager()->userExists($uid);
-			if(!$userExists && !$this->userBackend->autoprovisionAllowed()) {
-				return new Http\RedirectResponse(\OC::$server->getURLGenerator()->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
-			} elseif(!$userExists && $this->userBackend->autoprovisionAllowed()) {
-				$this->userBackend->createUserIfNotExists($uid);
-			}
+		try {
+			$this->autoprovisionIfPossible($auth->getAttributes());
+		} catch (NoUserFoundException $e) {
+			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+
 		}
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());

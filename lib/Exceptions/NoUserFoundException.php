@@ -19,38 +19,12 @@
  *
  */
 
-namespace OCA\User_SAML\Tests\Settings;
+namespace OCA\User_SAML\Exceptions;
 
-class SectionTest extends \Test\TestCase  {
-	/** @var \OCA\User_SAML\Settings\Section */
-	private $section;
-	/** @var \OCP\IL10N */
-	private $l10n;
-
-	public function setUp() {
-		$this->l10n = $this->createMock(\OCP\IL10N::class);
-		$this->section = new \OCA\User_SAML\Settings\Section(
-			$this->l10n
-		);
-
-		return parent::setUp();
-	}
-
-	public function testGetId() {
-		$this->assertSame('saml', $this->section->getID());
-	}
-
-	public function testGetName() {
-		$this->l10n
-			->expects($this->once())
-			->method('t')
-			->with('SSO & SAML authentication')
-			->willReturn('SAML authentication');
-
-		$this->assertSame('SAML authentication', $this->section->getName());
-	}
-
-	public function testGetPriority() {
-		$this->assertSame(75, $this->section->getPriority());
-	}
+/**
+ * Class NoUserFoundException is thrown when no user has been found
+ *
+ * @package OCA\User_SAML\Exceptions
+ */
+class NoUserFoundException extends \Exception {
 }

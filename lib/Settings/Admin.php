@@ -25,6 +25,7 @@ namespace OCA\User_SAML\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\ISettings;
 
@@ -33,15 +34,20 @@ class Admin implements ISettings {
 	private $l10n;
 	/** @var Defaults */
 	private $defaults;
+	/** @var IConfig */
+	private $config;
 
 	/**
 	 * @param IL10N $l10n
 	 * @param Defaults $defaults
+	 * @param IConfig $config
 	 */
 	public function __construct(IL10N $l10n,
-								Defaults $defaults) {
+								Defaults $defaults,
+								IConfig $config) {
 		$this->l10n = $l10n;
 		$this->defaults = $defaults;
+		$this->config = $config;
 	}
 
 	/**
@@ -67,6 +73,9 @@ class Admin implements ISettings {
 			'wantNameIdEncrypted' => $this->l10n->t('Indicates a requirement for the NameID received by this SP to be encrypted.'),
 			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XMLs.'),
 		];
+		$securityGeneral = [
+			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
+		];
 		$generalSettings = [
 			'uid_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
@@ -77,17 +86,23 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Only allow authentication if an account is existent on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
 			],
-			'use_saml_auth_for_desktop' => [
+		];
+
+		$type = $this->config->getAppValue('user_saml', 'type');
+		if($type === 'saml') {
+			$generalSettings['use_saml_auth_for_desktop'] = [
 				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
 				'type' => 'checkbox',
-			],
-		];
+			];
+		}
 
 		$params = [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
+			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
+			'type' => $type,
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);
