@@ -25,6 +25,7 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\ISession;
@@ -91,6 +92,36 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('UnknownValue');
 		$this->samlController->login();
 	}
+
+	public function testLoginWithEnvVariableAndNotExistingUidInSettingsArray() {
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('environment-variable');
+		$this->session
+			->expects($this->once())
+			->method('get')
+			->with('user_saml.samlUserData')
+			->willReturn([
+				'foo' => 'bar',
+				'bar' => 'foo',
+			]);
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->with('user_saml', 'general-uid_mapping')
+			->willReturn('uid');
+		$this->urlGenerator
+			->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.notProvisioned')
+			->willReturn('https://nextcloud.com/notProvisioned/');
+
+		$expected = new RedirectResponse('https://nextcloud.com/notProvisioned/');
+		$this->assertEquals($expected, $this->samlController->login());
+	}
+
 
 	public function testLoginWithEnvVariableAndExistingUser() {
 		$this->config
@@ -242,5 +273,10 @@ class SAMLControllerTest extends TestCase  {
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
 		$this->assertEquals($expected, $this->samlController->login());
+	}
+
+	public function testNotProvisioned() {
+		$expected = new TemplateResponse('user_saml', 'notProvisioned', [], 'guest');
+		$this->assertEquals($expected, $this->samlController->notProvisioned());
 	}
 }
