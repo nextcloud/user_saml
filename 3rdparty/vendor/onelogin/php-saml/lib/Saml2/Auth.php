@@ -102,7 +102,10 @@ class OneLogin_Saml2_Auth
      */
     public function setStrict($value)
     {
-        assert('is_bool($value)');
+        if (! (is_bool($value))) {
+            throw new Exception('Invalid value passed to setStrict()');
+        }
+
         $this->_settings->setStrict($value);
     }
 
@@ -196,7 +199,7 @@ class OneLogin_Saml2_Auth
 
                 $security = $this->_settings->getSecurityData();
                 if (isset($security['logoutResponseSigned']) && $security['logoutResponseSigned']) {
-                    $signature = $this->buildResponseSignature($logoutResponse, $parameters['RelayState'], $security['signatureAlgorithm']);
+                    $signature = $this->buildResponseSignature($logoutResponse, isset($parameters['RelayState'])? $parameters['RelayState']: null, $security['signatureAlgorithm']);
                     $parameters['SigAlg'] = $security['signatureAlgorithm'];
                     $parameters['Signature'] = $signature;
                 }
@@ -472,9 +475,20 @@ class OneLogin_Saml2_Auth
         $objKey = new XMLSecurityKey($signAlgorithm, array('type' => 'private'));
         $objKey->loadKey($key, false);
 
-        $msg = 'SAMLRequest='.urlencode($samlRequest);
-        $msg .= '&RelayState='.urlencode($relayState);
-        $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+        $security = $this->_settings->getSecurityData();
+        if ($security['lowercaseUrlencoding']) {
+            $msg = 'SAMLRequest='.rawurlencode($samlRequest);
+            if (isset($relayState)) {
+                $msg .= '&RelayState='.rawurlencode($relayState);
+            }
+            $msg .= '&SigAlg=' . rawurlencode($signAlgorithm);
+        } else {
+            $msg = 'SAMLRequest='.urlencode($samlRequest);
+            if (isset($relayState)) {
+                $msg .= '&RelayState='.urlencode($relayState);
+            }
+            $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+        }
         $signature = $objKey->signData($msg);
         return base64_encode($signature);
     }
@@ -505,9 +519,20 @@ class OneLogin_Saml2_Auth
         $objKey = new XMLSecurityKey($signAlgorithm, array('type' => 'private'));
         $objKey->loadKey($key, false);
 
-        $msg = 'SAMLResponse='.urlencode($samlResponse);
-        $msg .= '&RelayState='.urlencode($relayState);
-        $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+        $security = $this->_settings->getSecurityData();
+        if ($security['lowercaseUrlencoding']) {
+            $msg = 'SAMLResponse='.rawurlencode($samlResponse);
+            if (isset($relayState)) {
+                $msg .= '&RelayState='.rawurlencode($relayState);
+            }
+            $msg .= '&SigAlg=' . rawurlencode($signAlgorithm);
+        } else {
+            $msg = 'SAMLResponse='.urlencode($samlResponse);
+            if (isset($relayState)) {
+                $msg .= '&RelayState='.urlencode($relayState);
+            }
+            $msg .= '&SigAlg=' . urlencode($signAlgorithm);
+        }
         $signature = $objKey->signData($msg);
         return base64_encode($signature);
     }
