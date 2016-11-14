@@ -34,27 +34,6 @@ class Application extends App {
 		$container = $this->getContainer();
 
 		/**
-		 * Controller
-		 */
-		$container->registerService('SAMLController', function(IAppContainer $c) {
-			/** @var \OC\Server $server */
-			$server = $c->query('ServerContainer');
-			return new SAMLController(
-				$c->getAppName(),
-				$server->getRequest(),
-				$server->getSession(),
-				$server->getUserSession(),
-				new SAMLSettings($server->getURLGenerator(), $server->getConfig()),
-				new UserBackend(
-					$server->getConfig(),
-					$server->getURLGenerator(),
-					$server->getSession(),
-					$server->getDb()
-				)
-			);
-		});
-
-		/**
 		 * Middleware
 		 */
 		$container->registerService('OnlyLoggedInMiddleware', function(IAppContainer $c){

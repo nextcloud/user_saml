@@ -48,7 +48,7 @@ class Section implements ISection {
 	 * {@inheritdoc}
 	 */
 	public function getName() {
-		return $this->l->t('SAML authentication');
+		return $this->l->t('SSO & SAML authentication');
 	}
 
 	/**

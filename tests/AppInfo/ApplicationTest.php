@@ -47,7 +47,6 @@ class ApplicationTest extends \Test\TestCase  {
 
 	public function queryData() {
 		return [
-			['SAMLController', SAMLController::class],
 			['OnlyLoggedInMiddleware', OnlyLoggedInMiddleware::class],
 		];
 

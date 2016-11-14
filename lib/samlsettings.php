@@ -43,7 +43,7 @@ class SAMLSettings {
 
 	public function getOneLoginSettingsArray() {
 		$settings = [
-		//	'debug' => true,
+			'debug' => true,
 		//	'strict' => true,
 			'security' => [
 				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-nameIdEncrypted', '0') === '1') ? true : false,
@@ -57,6 +57,7 @@ class SAMLSettings {
 				'wantNameId' => ($this->config->getAppValue('user_saml', 'security-wantNameId', '0') === '1') ? true : false,
 				'wantNameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-wantNameIdEncrypted', '0') === '1') ? true : false,
 				'wantXMLValidation' => ($this->config->getAppValue('user_saml', 'security-wantXMLValidation', '0') === '1') ? true : false,
+				'requestedAuthnContext' => false,
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),

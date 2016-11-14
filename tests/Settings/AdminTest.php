@@ -23,6 +23,7 @@ namespace OCA\User_SAML\Tests\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
+use OCP\IConfig;
 use OCP\IL10N;
 
 class AdminTest extends \Test\TestCase  {
@@ -32,30 +33,30 @@ class AdminTest extends \Test\TestCase  {
 	private $l10n;
 	/** @var Defaults|\PHPUnit_Framework_MockObject_MockObject */
 	private $defaults;
+	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	private $config;
 
 	public function setUp() {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->admin = new \OCA\User_SAML\Settings\Admin(
 			$this->l10n,
-			$this->defaults
+			$this->defaults,
+			$this->config
 		);
 
 		return parent::setUp();
 	}
 
-	public function testGetForm() {
+	public function formDataProvider() {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
 			->will($this->returnCallback(function($text, $parameters = array()) {
 				return vsprintf($text, $parameters);
 			}));
-		$this->defaults
-			->expects($this->once())
-			->method('getName')
-			->willReturn('Nextcloud');
 
 		$serviceProviderFields = [
 			'x509cert' => 'X.509 certificate of the Service Provider',
@@ -98,6 +99,38 @@ class AdminTest extends \Test\TestCase  {
 			'security-required' => $securityRequiredFields,
 			'general' => $generalSettings,
 		];
+
+		return $params;
+	}
+
+	public function testGetFormWithoutType() {
+		$this->config
+			->expects($this->once())
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('');
+
+		$params = $this->formDataProvider();
+		unset($params['general']['use_saml_auth_for_desktop']);
+		$params['type'] = '';
+
+		$expected = new TemplateResponse('user_saml', 'admin', $params);
+		$this->assertEquals($expected, $this->admin->getForm());
+	}
+
+	public function testGetFormWithSaml() {
+		$this->defaults
+			->expects($this->once())
+			->method('getName')
+			->willReturn('Nextcloud');
+		$this->config
+			->expects($this->once())
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('saml');
+
+		$params = $this->formDataProvider();
+		$params['type'] = 'saml';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());

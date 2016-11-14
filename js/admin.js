@@ -5,6 +5,31 @@ function setSAMLConfigValue(category, setting, value) {
 }
 
 $(function() {
+	// Hide depending on the setup state
+	var type = $('#user-saml').data('type');
+	if(type !== '') {
+		$('#user-saml-choose-type').addClass('hidden');
+		$('#user-saml-warning-admin-user').removeClass('hidden');
+	} else {
+		$('#user-saml div:gt(2)').addClass('hidden');
+		$('#user-saml-settings .button').addClass('hidden');
+	}
+	if(type === 'environment-variable') {
+		$('#user-saml div:gt(4)').addClass('hidden');
+		$('#user-saml-settings .button').addClass('hidden');
+	}
+
+	$('#user-saml-choose-saml').click(function(e) {
+		e.preventDefault();
+		OC.AppConfig.setValue('user_saml', 'type', 'saml');
+		location.reload();
+	});
+	$('#user-saml-choose-env').click(function(e) {
+		e.preventDefault();
+		OC.AppConfig.setValue('user_saml', 'type', 'environment-variable');
+		location.reload();
+	});
+
 	// Enable tabs
 	$('input:checkbox[value="1"]').attr('checked', true);
 
@@ -71,19 +96,21 @@ $(function() {
 	});
 
 	$('#user-saml').change(function() {
-		// Checks on each request whether the settings make sense or not
-		$.ajax({
-			url: OC.generateUrl('/apps/user_saml/saml/metadata'),
-			type: 'GET'
-		}).fail(function (e) {
-			if(e.status === 500) {
-				$('#user-saml-settings-complete').addClass('hidden');
-				$('#user-saml-settings-incomplete').removeClass('hidden');
-			}
-		}).success(function (e) {
-			$('#user-saml-settings-complete').removeClass('hidden');
-			$('#user-saml-settings-incomplete').addClass('hidden');
-		})
+		if(type === 'saml') {
+			// Checks on each request whether the settings make sense or not
+			$.ajax({
+				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
+				type: 'GET'
+			}).fail(function (e) {
+				if (e.status === 500) {
+					$('#user-saml-settings-complete').addClass('hidden');
+					$('#user-saml-settings-incomplete').removeClass('hidden');
+				}
+			}).success(function (e) {
+				$('#user-saml-settings-complete').removeClass('hidden');
+				$('#user-saml-settings-incomplete').addClass('hidden');
+			})
+		}
 	});
 
 	$('#user-saml-settings .toggle').on('click', function() {
