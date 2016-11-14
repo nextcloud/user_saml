@@ -21,6 +21,12 @@
 
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
+// If we run in CLI mode do not setup the app as it can fail the OCC execution
+// since the URLGenerator isn't accessible.
+if(OC::$CLI) {
+	return;
+}
+
 \OCP\App::registerAdmin('user_saml', 'admin');
 \OCP\App::registerPersonal('user_saml', 'personal');
 
