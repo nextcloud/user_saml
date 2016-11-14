@@ -77,6 +77,9 @@ class AdminTest extends \Test\TestCase  {
 			'wantNameIdEncrypted' => 'Indicates a requirement for the NameID received by this SP to be encrypted.',
 			'wantXMLValidation' => 'Indicates if the SP will validate all received XMLs.',
 		];
+		$securityGeneral = [
+			'lowercaseUrlencoding' => 'ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.',
+		];
 		$generalSettings = [
 			'uid_mapping' => [
 				'text' => 'Attribute to map the UID to.',
@@ -97,6 +100,7 @@ class AdminTest extends \Test\TestCase  {
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
+			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
 		];
 

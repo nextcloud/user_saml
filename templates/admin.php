@@ -96,6 +96,13 @@ style('user_saml', 'admin');
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
 					</p>
 				<?php endforeach; ?>
+				<h4><?php p($l->t('General')) ?></h4>
+				<?php foreach($_['security-general'] as $key => $text): ?>
+					<p>
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
+					</p>
+				<?php endforeach; ?>
 			</div>
 		</div>
 

@@ -58,6 +58,7 @@ class SAMLSettings {
 				'wantNameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-wantNameIdEncrypted', '0') === '1') ? true : false,
 				'wantXMLValidation' => ($this->config->getAppValue('user_saml', 'security-wantXMLValidation', '0') === '1') ? true : false,
 				'requestedAuthnContext' => false,
+				'lowercaseUrlencoding' => ($this->config->getAppValue('user_saml', 'security-lowercaseUrlencoding', '0') === '1') ? true : false,
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),

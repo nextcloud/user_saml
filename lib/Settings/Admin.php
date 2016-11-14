@@ -73,6 +73,9 @@ class Admin implements ISettings {
 			'wantNameIdEncrypted' => $this->l10n->t('Indicates a requirement for the NameID received by this SP to be encrypted.'),
 			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XMLs.'),
 		];
+		$securityGeneral = [
+			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
+		];
 		$generalSettings = [
 			'uid_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
@@ -97,6 +100,7 @@ class Admin implements ISettings {
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
+			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
 			'type' => $type,
 		];
