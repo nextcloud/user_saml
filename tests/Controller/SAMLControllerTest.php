@@ -93,6 +93,36 @@ class SAMLControllerTest extends TestCase  {
 		$this->samlController->login();
 	}
 
+	public function testLoginWithEnvVariableAndNotExistingUidInSettingsArray() {
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('environment-variable');
+		$this->session
+			->expects($this->once())
+			->method('get')
+			->with('user_saml.samlUserData')
+			->willReturn([
+				'foo' => 'bar',
+				'bar' => 'foo',
+			]);
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->with('user_saml', 'general-uid_mapping')
+			->willReturn('uid');
+		$this->urlGenerator
+			->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.notProvisioned')
+			->willReturn('https://nextcloud.com/notProvisioned/');
+
+		$expected = new RedirectResponse('https://nextcloud.com/notProvisioned/');
+		$this->assertEquals($expected, $this->samlController->login());
+	}
+
+
 	public function testLoginWithEnvVariableAndExistingUser() {
 		$this->config
 			->expects($this->at(0))
