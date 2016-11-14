@@ -25,6 +25,7 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\ISession;
@@ -242,5 +243,10 @@ class SAMLControllerTest extends TestCase  {
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
 		$this->assertEquals($expected, $this->samlController->login());
+	}
+
+	public function testNotProvisioned() {
+		$expected = new TemplateResponse('user_saml', 'notProvisioned', [], 'guest');
+		$this->assertEquals($expected, $this->samlController->notProvisioned());
 	}
 }
