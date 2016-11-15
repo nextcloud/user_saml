@@ -22,8 +22,6 @@ OC.L10N.register(
     "Attribute to map the UID to." : "Attributo a cui associare l'UID.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Consenti l'autenticazione solo se un account esiste in un altro motore. (ad es. LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utilizza autenticazione SAML per i client desktop di %s (richiede una nuova autenticazione degli utenti)",
-    "SAML authentication" : "Autenticazione SAML",
-    "SAML" : "SAML",
     "General" : "Generale",
     "Service Provider Data" : "Dati del fornitore di servizi",
     "If your Service Provider should use certificates you can optionally specify them here." : "Se il tuo fornitore di servizi utilizza i certificati, puoi specificarli qui.",

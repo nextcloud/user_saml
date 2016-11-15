@@ -20,7 +20,6 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Mengindikasikan keharusan untuk elemen NameID yang diterima oleh SP ini untuk dienkripsi.",
     "Indicates if the SP will validate all received XMLs." : "Mengindikasikan apabila SP akan menvalidasi semua XML yang diterima.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Hanya izinkan otentikasi apabila akun ada dalam backend yang lain. (cth. LDAP)",
-    "SAML" : "SAML",
     "General" : "Umum",
     "Service Provider Data" : "Data Penyedia Layanan",
     "If your Service Provider should use certificates you can optionally specify them here." : "Apabila Penyedia Layanan Anda harus menggunakan sertifikat Anda dapat menentukannya disini secara opsional.",

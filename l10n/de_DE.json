@@ -20,8 +20,6 @@
     "Attribute to map the UID to." : "Attribut dem die UID zugeordnet werden soll.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Einloggen nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML-Authentifizierung für die %s Desktop-Clients nutzen (erfordert eine Neu-Authentifizierung der Nutzer)",
-    "SAML authentication" : "SAML-Authentifizierung",
-    "SAML" : "SAML",
     "General" : "Allgemein",
     "Service Provider Data" : "Diensteanbieter-Daten",
     "If your Service Provider should use certificates you can optionally specify them here." : "Sollte Ihr Diensteanbieter Zertifikate benutzen dann haben Sie hier die Möglichkeit diese anzugeben.",

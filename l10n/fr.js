@@ -21,8 +21,6 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XMLs." : "Indique si le SP validera tous les XMLs reçus.",
     "Attribute to map the UID to." : "Attribut pour relier l'UID.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
-    "SAML authentication" : "Authentification SAML",
-    "SAML" : "SAML",
     "General" : "Général",
     "Service Provider Data" : "Service du Fournisseur de Données",
     "If your Service Provider should use certificates you can optionally specify them here." : "Si votre fournisseur de service utilise des certificats, vous pouvez les spécifier ici.",

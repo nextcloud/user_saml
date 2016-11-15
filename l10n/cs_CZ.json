@@ -20,8 +20,6 @@
     "Attribute to map the UID to." : "Atribut k přiřazení UID.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet již existuje i někde jinde. (např. LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Použít SAML pro %s desktopové klienty (vyžaduje novou autentizaci uživatele)",
-    "SAML authentication" : "SAML ověření",
-    "SAML" : "SAML",
     "General" : "Obecné",
     "Service Provider Data" : "Poskytovatel datových služeb",
     "If your Service Provider should use certificates you can optionally specify them here." : "Pokud by měl váš poskytovatel služeb používat certifikáty, můžete je zde specifikovat.",

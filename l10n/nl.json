@@ -20,8 +20,6 @@
     "Attribute to map the UID to." : "Attribuut om de UID op te mappen.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Sta alleen authenticatie toe als een account bestaat op een ander backend (bijv. LDAP).",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Gebruik SAML authenticatie voor de %s desktop clients (vereist gebruiker herauthenticatie)",
-    "SAML authentication" : "SAML authenticatie",
-    "SAML" : "SAML",
     "General" : "Algemeen",
     "Service Provider Data" : "Service Provider gegevens",
     "If your Service Provider should use certificates you can optionally specify them here." : "Als je Service Provider certificaten moet gebruiken, kun je die hier optioneel opgeven.",
