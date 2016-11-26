@@ -1,8 +1,4 @@
 { "translations": {
-    "User attributes:" : "Attributi utente:",
-    "Name" : "Nome",
-    "Values" : "Valori",
-    "Attributes not found" : "Attributi non trovati",
     "Saved" : "Salvato",
     "X.509 certificate of the Service Provider" : "Certificato X.509 del fornitore di servizi",
     "Private key of the Service Provider" : "Chiave privata del fornitore di servizi",

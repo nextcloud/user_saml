@@ -1,8 +1,4 @@
 { "translations": {
-    "User attributes:" : "Atribut pengguna:",
-    "Name" : "Nama",
-    "Values" : "Nilai",
-    "Attributes not found" : "Atribut tidak ditemukan",
     "Saved" : "Tersimpan",
     "X.509 certificate of the Service Provider" : "Sertifikat X.509 Penyedia Layanan",
     "Private key of the Service Provider" : "Kunci pribadi Penyedia Layanan",

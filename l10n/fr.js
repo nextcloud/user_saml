@@ -1,10 +1,6 @@
 OC.L10N.register(
     "user_saml",
     {
-    "User attributes:" : "Attributs de l'utilisateur:",
-    "Name" : "Nom",
-    "Values" : "Valeurs",
-    "Attributes not found" : "Attributs non trouvés",
     "Saved" : "Sauvegardé",
     "X.509 certificate of the Service Provider" : "Certificat X.509 du fournisseur de service",
     "Private key of the Service Provider" : "Clé privée du fournisseur de service",
@@ -42,6 +38,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Signatures et chiffrement obligatoire",
     "Download metadata XML" : "Télécharger les méta-données XML",
     "Metadata invalid" : "Méta-données invalides",
-    "Metadata valid" : "Méta-données valides"
+    "Metadata valid" : "Méta-données valides",
+    "Account not provisioned." : "Compte non approvisionné."
 },
 "nplurals=2; plural=(n > 1);");

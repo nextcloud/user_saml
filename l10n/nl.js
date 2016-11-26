@@ -1,10 +1,6 @@
 OC.L10N.register(
     "user_saml",
     {
-    "User attributes:" : "Gebruikersattributen:",
-    "Name" : "Naam",
-    "Values" : "Waarden",
-    "Attributes not found" : "Attributen niet gevonden",
     "Saved" : "Bewaard",
     "X.509 certificate of the Service Provider" : "X.509 certificaat ban de Service Provider",
     "Private key of the Service Provider" : "Privésleutel van de Service Provider",

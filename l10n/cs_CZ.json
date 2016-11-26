@@ -1,8 +1,4 @@
 { "translations": {
-    "User attributes:" : "Uživatelské atributy:",
-    "Name" : "Jméno",
-    "Values" : "Hodnoty",
-    "Attributes not found" : "Atributy nenalezeny",
     "Saved" : "Uloženo",
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovatele služby",
     "Private key of the Service Provider" : "Privátní klíč poskytovatele služby",
