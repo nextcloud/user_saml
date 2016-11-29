@@ -31,8 +31,17 @@
     "Identifier of the IdP entity (must be a URI)" : "Identificador da entidade IdP (deve ser um URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL do IdP onde o SP enviará a mensagem de solicitação de autenticação",
     "Show optional Identity Provider settings ..." : "Mostrar configurações opcionais de Provedor de Identidade ...",
+    "URL Location of the IdP where the SP will send the SLO Request" : "Localização da URL do IdP onde o SP esta será enviada por requisição SLO",
+    "Public X.509 certificate of the IdP" : "Certificado X.509 publico do IdP",
     "Security settings" : "Configurações de segurança",
+    "For increased security we recommend enabling the following settings if supported by your environment." : "Para aumentar a segurança recomendamos habilitar e seguras as configurações se seu ambiente suportar",
+    "Show security settings ..." : "Mostrar configurações de segurança...",
+    "Signatures and encryption offered" : "Assinaturas e criptografias oferecidas",
+    "Signatures and encryption required" : "Assinaturas e criptografia necessárias",
+    "Download metadata XML" : "Download metadata XML",
     "Metadata invalid" : "Armazenamento inválido",
-    "Metadata valid" : "Armazenamento válido"
+    "Metadata valid" : "Armazenamento válido",
+    "Account not provisioned." : "Conta não provisionada",
+    "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. Acesso a esse serviço não é possível"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
