@@ -17,7 +17,10 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XMLs." : "Indique si le SP validera tous les XMLs reçus.",
     "Attribute to map the UID to." : "Attribut pour relier l'UID.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
+    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utiliser l'authentification SAML pour le client bureau de %s (requiert une ré-authentification de l'utilisateur)",
     "SSO & SAML authentication" : "Authentification SSO & SAML",
+    "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Veuillez choisir si vous voulez vous authentifier en utilisant le fournisseur SAML intégré à Nextcloud ou si vous voulez vous authentifier avec une variable d'environnement.",
+    "Use built-in SAML authentication" : "Utiliser l'authentification SAML intégrée",
     "Use environment variable" : "Utiliser une variable d’environnement",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Assurez-vous de configurer un utilisateur administratif qui peut accéder à l'instance par SSO. La connexion avec votre compte %s habituel ne sera plus possible.",
     "General" : "Général",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "Download metadata XML" : "Télécharger les méta-données XML",
     "Metadata invalid" : "Méta-données invalides",
     "Metadata valid" : "Méta-données valides",
-    "Account not provisioned." : "Compte non approvisionné."
+    "Account not provisioned." : "Compte non approvisionné.",
+    "Your account is not provisioned, access to this service is thus not possible." : "Votre compte n'est pas approvisionné, l'accès à ce service n'est donc pas possible."
 },
 "nplurals=2; plural=(n > 1);");
