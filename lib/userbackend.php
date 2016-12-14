@@ -23,7 +23,7 @@ namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDb;
+use OCP\IDBConnection;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -37,7 +37,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $urlGenerator;
 	/** @var ISession */
 	private $session;
-	/** @var IDb */
+	/** @var IDBConnection */
 	private $db;
 	/** @var \OCP\UserInterface[] */
 	private $backends;
@@ -46,12 +46,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
 	 * @param ISession $session
-	 * @param IDb $db
+	 * @param IDBConnection $db
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
 								ISession $session,
-								IDb $db) {
+								IDBConnection $db) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
