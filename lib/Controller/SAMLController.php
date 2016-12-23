@@ -85,6 +85,8 @@ class SAMLController extends Controller {
 	 */
 	private function autoprovisionIfPossible(array $auth) {
 		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+		$displayName = $auth['urn:oid:2.5.4.42'][0] . ' ' . $auth['urn:oid:1.2.40.0.10.2.1.1.261.20'][0];
+
 		if(isset($auth[$uidMapping])) {
 			if(is_array($auth[$uidMapping])) {
 				$uid = $auth[$uidMapping][0];
@@ -101,7 +103,7 @@ class SAMLController extends Controller {
 			if(!$userExists && !$autoProvisioningAllowed) {
 				throw new NoUserFoundException();
 			} elseif(!$userExists && $autoProvisioningAllowed) {
-				$this->userBackend->createUserIfNotExists($uid);
+				$this->userBackend->createUserIfNotExists($uid,$displayName);
 				return;
 			}
 		}

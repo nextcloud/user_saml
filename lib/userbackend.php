@@ -83,10 +83,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 *
 	 * @param string $uid
 	 */
-	public function createUserIfNotExists($uid) {
+	public function createUserIfNotExists($uid,$displayname="") {
 		if(!$this->userExistsInDatabase($uid)) {
 			$values = [
 				'uid' => $uid,
+                                'displayname' => $displayname,
 			];
 
 			/* @var $qb IQueryBuilder */
@@ -109,7 +110,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
-		return (bool)((\OC_User_Backend::CHECK_PASSWORD)
+		return (bool)((\OC_User_Backend::CHECK_PASSWORD|OC_USER_BACKEND_GET_DISPLAYNAME)
 			& $actions);
 	}
 
@@ -214,7 +215,19 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getDisplayName($uid) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('displayname')
+			->from('user_saml_users')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1);
+		$result = $qb->execute();
+		$users = $result->fetchAll();
+		
+		if ($users[0]['displayname']) {
+		return $users[0]['displayname'];
+		} else {
 		return false;
+		}
 	}
 
 	/**
@@ -230,9 +243,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid', 'displayname')
 			->from('user_saml_users')
-			->where(
-				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
-			)
+			->where( $qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
+                        ->orwhere ( $qb->expr()->iLike('displayname', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
 			->setMaxResults($limit);
 		if($offset !== null) {
 			$qb->setFirstResult($offset);
