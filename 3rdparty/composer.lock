@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "993f6c41684d235f66993e52d9b7dce0",
     "content-hash": "bf3d6d016eca22c120719d73eb98378d",
     "packages": [
         {
             "name": "onelogin/php-saml",
-            "version": "2.10.1",
+            "version": "2.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/onelogin/php-saml.git",
-                "reference": "1017afe7fe6da1def37cc92af37434fbba893d03"
+                "reference": "f9543a05494633671ec587ae1611238dae6edfd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/1017afe7fe6da1def37cc92af37434fbba893d03",
-                "reference": "1017afe7fe6da1def37cc92af37434fbba893d03",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/f9543a05494633671ec587ae1611238dae6edfd4",
+                "reference": "f9543a05494633671ec587ae1611238dae6edfd4",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +58,7 @@
                 "onelogin",
                 "saml"
             ],
-            "time": "2016-10-26 11:31:56"
+            "time": "2016-11-15T15:34:53+00:00"
         }
     ],
     "packages-dev": [],

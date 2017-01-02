@@ -34,15 +34,20 @@ class OneLogin_Saml2_LogoutRequest
     /**
      * Constructs the Logout Request object.
      *
-     * @param OneLogin_Saml2_Settings $settings Settings
-     * @param string|null             $request A UUEncoded Logout Request.
-     * @param string|null             $nameId   The NameID that will be set in the LogoutRequest.
-     * @param string|null             $sessionIndex  The SessionIndex (taken from the SAML Response in the SSO process).
+     * @param OneLogin_Saml2_Settings $settings     Settings
+     * @param string|null             $request      A UUEncoded Logout Request.
+     * @param string|null             $nameId       The NameID that will be set in the LogoutRequest.
+     * @param string|null             $sessionIndex The SessionIndex (taken from the SAML Response in the SSO process).
+     * @param string|null             $nameIdFormat The NameID Format will be set in the LogoutRequest.
      */
-    public function __construct(OneLogin_Saml2_Settings $settings, $request = null, $nameId = null, $sessionIndex = null)
+    public function __construct(OneLogin_Saml2_Settings $settings, $request = null, $nameId = null, $sessionIndex = null, $nameIdFormat = null)
     {
-
         $this->_settings = $settings;
+
+        $baseURL = $this->_settings->getBaseURL();
+        if (!empty($baseURL)) {
+            OneLogin_Saml2_Utils::setBaseURL($baseURL);
+        }
 
         if (!isset($request) || empty($request)) {
 
@@ -62,7 +67,9 @@ class OneLogin_Saml2_LogoutRequest
             }
 
             if (!empty($nameId)) {
-                $nameIdFormat = $spData['NameIDFormat'];
+                if (empty($nameIdFormat)) {
+                    $nameIdFormat = $spData['NameIDFormat'];
+                }
                 $spNameQualifier = null;
             } else {
                 $nameId = $idpData['entityId'];
