@@ -1,17 +1,17 @@
 [
     {
         "name": "onelogin/php-saml",
-        "version": "2.10.1",
-        "version_normalized": "2.10.1.0",
+        "version": "2.10.2",
+        "version_normalized": "2.10.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/onelogin/php-saml.git",
-            "reference": "1017afe7fe6da1def37cc92af37434fbba893d03"
+            "reference": "f9543a05494633671ec587ae1611238dae6edfd4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/1017afe7fe6da1def37cc92af37434fbba893d03",
-            "reference": "1017afe7fe6da1def37cc92af37434fbba893d03",
+            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/f9543a05494633671ec587ae1611238dae6edfd4",
+            "reference": "f9543a05494633671ec587ae1611238dae6edfd4",
             "shasum": ""
         },
         "require": {
@@ -33,7 +33,7 @@
             "ext-mcrypt": "Install mcrypt and php5-mcrypt libs in order to support encryption",
             "lib-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)"
         },
-        "time": "2016-10-26 11:31:56",
+        "time": "2016-11-15T15:34:53+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
