@@ -56,6 +56,11 @@ class OneLogin_Saml2_Response
     {
         $this->_settings = $settings;
 
+        $baseURL = $this->_settings->getBaseURL();
+        if (!empty($baseURL)) {
+            OneLogin_Saml2_Utils::setBaseURL($baseURL);
+        }
+
         $this->response = base64_decode($response);
 
         $this->document = new DOMDocument();
@@ -480,6 +485,21 @@ class OneLogin_Saml2_Response
     }
 
     /**
+     * Gets the NameID Format provided by the SAML response from the IdP.
+     *
+     * @return string Name ID Format
+     */
+    public function getNameIdFormat()
+    {
+        $nameIdFormat = null;
+        $nameIdData = $this->getNameIdData();
+        if (!empty($nameIdData) && isset($nameIdData['Format'])) {
+            $nameIdFormat = $nameIdData['Format'];
+        }
+        return $nameIdFormat;
+    }
+
+    /**
      * Gets the SessionNotOnOrAfter from the AuthnStatement.
      * Could be used to set the local session expiration
      * 
@@ -844,9 +864,21 @@ class OneLogin_Saml2_Response
 
             # Fix possible issue with saml namespace
             if (!$decrypted->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml') &&
+              !$decrypted->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml2') &&
               !$decrypted->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns') &&
-              !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml')) {
-                $decrypted->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', OneLogin_Saml2_Constants::NS_SAML);
+              !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml') &&
+              !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml2')
+              ) {
+
+                if (strpos($encryptedAssertion->tagName, 'saml2:') !== false) {
+                    $ns = 'xmlns:saml2';
+                } else if (strpos($encryptedAssertion->tagName, 'saml:') != false) {
+                    $ns = 'xmlns:saml';
+                } else {
+                    $ns = 'xmlns';
+                }
+
+                $decrypted->setAttributeNS('http://www.w3.org/2000/xmlns/', $ns, OneLogin_Saml2_Constants::NS_SAML);
             }
 
             $container->replaceChild($decrypted, $encryptedAssertion);
