@@ -23,8 +23,9 @@ require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
 // If we run in CLI mode do not setup the app as it can fail the OCC execution
 // since the URLGenerator isn't accessible.
+$cli = false;
 if(OC::$CLI) {
-	return;
+	$cli = true;
 }
 
 
@@ -72,7 +73,8 @@ if($returnScript === true) {
 $redirectSituation = false;
 // All requests that are not authenticated and match against the "/login" route are
 // redirected to the SAML login endpoint
-if(!$userSession->isLoggedIn() &&
+if(!$cli &&
+	!$userSession->isLoggedIn() &&
 	\OC::$server->getRequest()->getPathInfo() === '/login' &&
 	$type === 'saml') {
 	$redirectSituation = true;

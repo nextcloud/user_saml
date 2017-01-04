@@ -51,7 +51,7 @@ pipeline:
       - cd ../server/apps/$APP_NAME
 
       # Run phpunit tests
-      - cd tests/
+      - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
       # Create coverage report
@@ -74,7 +74,7 @@ pipeline:
       - cd ../server/apps/$APP_NAME
 
       # Run phpunit tests
-      - cd tests/
+      - cd tests/unit/
       - phpunit --configuration phpunit.xml
     when:
       matrix:
@@ -95,11 +95,31 @@ pipeline:
       - cd ../server/apps/$APP_NAME
 
       # Run phpunit tests
-      - cd tests/
+      - cd tests/unit/
       - phpunit --configuration phpunit.xml
     when:
       matrix:
         TESTS: php7.1
+  shibboleth-integration-tests:
+    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-2
+    environment:
+      - CORE_BRANCH=master
+    commands:
+      - /start.sh &
+      - sleep 3
+      - scl enable rh-php56 bash
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
+      - chown -R apache:apache /var/www/html/
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+    when:
+      matrix:
+        TESTS: shibboleth-integration-tests
 
 matrix:
   include:
@@ -108,3 +128,4 @@ matrix:
     - TESTS: php7.1
     - TESTS: check-app-compatbility
     - TESTS: signed-off-check
+    - TESTS: shibboleth-integration-tests
