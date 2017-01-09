@@ -97,7 +97,12 @@ class FeatureContext implements Context {
 	 * @When I send a GET request to :url
 	 */
 	public function iSendAGetRequestTo($url) {
-		$this->response = $this->client->request('GET', $url);
+		try {
+			$this->response = $this->client->request('GET', $url);
+		} catch (\GuzzleHttp\Exception\ClientException $e) {
+			echo $e->getResponse()->getBody();
+			throw $e;
+		}
 	}
 
 	/**
