@@ -1,8 +1,42 @@
-function setSAMLConfigValue(category, setting, value) {
-	OC.msg.startSaving('#user-saml-save-indicator');
-	OC.AppConfig.setValue('user_saml', category+'-'+setting, value);
-	OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
-}
+(function(OCA) {
+	OCA.User_SAML = OCA.User_SAML || {};
+
+	/**
+	 * @namespace OCA.User_SAML.Admin
+	 */
+	OCA.User_SAML.Admin = {
+		chooseEnv: function() {
+			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.chooseEnv, this));
+				return;
+			}
+
+			OC.AppConfig.setValue('user_saml', 'type', 'environment-variable');
+			location.reload();
+		},
+
+		chooseSaml: function() {
+			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.chooseSaml, this));
+				return;
+			}
+
+			OC.AppConfig.setValue('user_saml', 'type', 'saml');
+			location.reload();
+		},
+
+		setSamlConfigValue: function(category, setting, value) {
+			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
+				return;
+			}
+
+			OC.msg.startSaving('#user-saml-save-indicator');
+			OC.AppConfig.setValue('user_saml', category+'-'+setting, value);
+			OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
+		}
+	}
+})(OCA);
 
 $(function() {
 	// Hide depending on the setup state
@@ -21,13 +55,11 @@ $(function() {
 
 	$('#user-saml-choose-saml').click(function(e) {
 		e.preventDefault();
-		OC.AppConfig.setValue('user_saml', 'type', 'saml');
-		location.reload();
+		OCA.User_SAML.Admin.chooseSaml();
 	});
 	$('#user-saml-choose-env').click(function(e) {
 		e.preventDefault();
-		OC.AppConfig.setValue('user_saml', 'type', 'environment-variable');
-		location.reload();
+		OCA.User_SAML.Admin.chooseEnv();
 	});
 
 	// Enable tabs
@@ -37,11 +69,11 @@ $(function() {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('sp', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('sp', key, $(this).val());
 		});
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('sp', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('sp', key, $(this).val());
 		}
 	});
 
@@ -49,11 +81,11 @@ $(function() {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('idp', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('idp', key, $(this).val());
 		});
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('idp', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('idp', key, $(this).val());
 		}
 	});
 
@@ -61,11 +93,11 @@ $(function() {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('general', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
 		});
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
-			setSAMLConfigValue('general', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
 		}
 	});
 
@@ -78,7 +110,7 @@ $(function() {
 			} else {
 				$(this).val("0");
 			}
-			setSAMLConfigValue('general', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
 		});
 	});
 
@@ -91,7 +123,7 @@ $(function() {
 			} else {
 				$(this).val("0");
 			}
-			setSAMLConfigValue('security', key, $(this).val());
+			OCA.User_SAML.Admin.setSamlConfigValue('security', key, $(this).val());
 		});
 	});
 

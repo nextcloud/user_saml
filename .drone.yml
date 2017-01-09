@@ -101,7 +101,7 @@ pipeline:
       matrix:
         TESTS: php7.1
   shibboleth-integration-tests:
-    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-2
+    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-3
     environment:
       - CORE_BRANCH=master
     commands:
