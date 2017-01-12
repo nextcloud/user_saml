@@ -17,6 +17,7 @@ class ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc
         'OneLogin_Saml2_Response' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Response.php',
         'OneLogin_Saml2_Settings' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Settings.php',
         'OneLogin_Saml2_Utils' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Utils.php',
+        'OneLogin_Saml2_ValidationError' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Error.php',
         'OneLogin_Saml_AuthRequest' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml/AuthRequest.php',
         'OneLogin_Saml_Metadata' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml/Metadata.php',
         'OneLogin_Saml_Response' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml/Response.php',

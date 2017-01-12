@@ -152,7 +152,7 @@ class OneLogin_Saml2_Utils
      * @param string  $cert  A x509 unformated cert
      * @param bool    $heads True if we want to include head and footer
      *
-     * @return string $x509 Formated cert
+     * @return string $x509 Formatted cert
      */
 
     public static function formatCert($cert, $heads = true)
@@ -177,7 +177,7 @@ class OneLogin_Saml2_Utils
      * @param string  $key   A private key
      * @param bool    $heads True if we want to include head and footer
      *
-     * @return string $rsaKey Formated private key
+     * @return string $rsaKey Formatted private key
      */
 
     public static function formatPrivateKey($key, $heads = true)
@@ -880,7 +880,7 @@ class OneLogin_Saml2_Utils
      *
      * @param string $x509cert x509 cert
      *
-     * @return null|string Formated fingerprint
+     * @return null|string Formatted fingerprint
      */
     public static function calculateX509Fingerprint($x509cert, $alg='sha1')
     {
@@ -928,7 +928,7 @@ class OneLogin_Saml2_Utils
      *
      * @param string $fingerprint fingerprint
      *
-     * @return string Formated fingerprint
+     * @return string Formatted fingerprint
      */
     public static function formatFingerPrint($fingerprint)
     {
@@ -1005,12 +1005,18 @@ class OneLogin_Saml2_Utils
 
         $statusEntry = self::query($dom, '/samlp:Response/samlp:Status');
         if ($statusEntry->length != 1) {
-            throw new Exception('Missing valid Status on response');
+            throw new OneLogin_Saml2_ValidationError(
+                "Missing Status on response",
+                OneLogin_Saml2_ValidationError::MISSING_STATUS
+            );
         }
 
         $codeEntry = self::query($dom, '/samlp:Response/samlp:Status/samlp:StatusCode', $statusEntry->item(0));
         if ($codeEntry->length != 1) {
-            throw new Exception('Missing valid Status Code on response');
+            throw new OneLogin_Saml2_ValidationError(
+                "Missing Status Code on response",
+                OneLogin_Saml2_ValidationError::MISSING_STATUS_CODE
+            );
         }
         $code = $codeEntry->item(0)->getAttribute('Value');
         $status['code'] = $code;
@@ -1050,12 +1056,18 @@ class OneLogin_Saml2_Utils
 
         $symmetricKey = $enc->locateKey($encryptedData);
         if (!$symmetricKey) {
-            throw new Exception('Could not locate key algorithm in encrypted data.');
+            throw new OneLogin_Saml2_ValidationError(
+                'Could not locate key algorithm in encrypted data.',
+                OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
+            );
         }
 
         $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
         if (!$symmetricKeyInfo) {
-            throw new Exception('Could not locate <dsig:KeyInfo> for the encrypted key.');
+            throw new OneLogin_Saml2_ValidationError(
+                "Could not locate <dsig:KeyInfo> for the encrypted key.",
+                OneLogin_Saml2_ValidationError::KEYINFO_NOT_FOUND_IN_ENCRYPTED_DATA
+            );
         }
 
         $inputKeyAlgo = $inputKey->getAlgorithm();
@@ -1067,11 +1079,12 @@ class OneLogin_Saml2_Utils
             }
 
             if ($inputKeyAlgo !== $symKeyInfoAlgo) {
-                throw new Exception(
+                throw new OneLogin_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
                     var_export($inputKeyAlgo, true) . '; message was: ' .
-                    var_export($symKeyInfoAlgo, true)
+                    var_export($symKeyInfoAlgo, true),
+                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
                 );
             }
 
@@ -1080,7 +1093,10 @@ class OneLogin_Saml2_Utils
             $keySize = $symmetricKey->getSymmetricKeySize();
             if ($keySize === null) {
                 // To protect against "key oracle" attacks
-                throw new Exception('Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true));
+                throw new OneLogin_Saml2_ValidationError(
+                    'Unknown key size for encryption algorithm: ' . var_export($symmetricKey->type, true),
+                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR                                        
+                );
             }
 
             $key = $encKey->decryptKey($symmetricKeyInfo);
@@ -1101,10 +1117,11 @@ class OneLogin_Saml2_Utils
         } else {
             $symKeyAlgo = $symmetricKey->getAlgorithm();
             if ($inputKeyAlgo !== $symKeyAlgo) {
-                throw new Exception(
+                throw new OneLogin_Saml2_ValidationError(
                     'Algorithm mismatch between input key and key in message. ' .
                     'Key was: ' . var_export($inputKeyAlgo, true) . '; message was: ' .
-                    var_export($symKeyAlgo, true)
+                    var_export($symKeyAlgo, true),
+                    OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR                                        
                 );
             }
             $symmetricKey = $inputKey;
@@ -1118,12 +1135,18 @@ class OneLogin_Saml2_Utils
         $newDoc->formatOutput = true;
         $newDoc = self::loadXML($newDoc, $xml);
         if (!$newDoc) {
-            throw new Exception('Failed to parse decrypted XML.');
+            throw new OneLogin_Saml2_ValidationError(
+                'Failed to parse decrypted XML.',
+                OneLogin_Saml2_ValidationError::INVALID_XML_FORMAT                                        
+            );
         }
  
         $decryptedElement = $newDoc->firstChild->firstChild;
         if ($decryptedElement === null) {
-            throw new Exception('Missing encrypted element.');
+            throw new OneLogin_Saml2_ValidationError(
+                'Missing encrypted element.',
+                OneLogin_Saml2_ValidationError::MISSING_ENCRYPTED_ELEMENT                                        
+            );
         }
 
         return $decryptedElement;
@@ -1167,12 +1190,13 @@ class OneLogin_Saml2_Utils
      * @param string             $key           The private key
      * @param string             $cert          The public
      * @param string             $signAlgorithm Signature algorithm method
+     * @param string             $digestAlgorithm Digest algorithm method
      *
      * @return string
      *
      * @throws Exception
      */
-    public static function addSign($xml, $key, $cert, $signAlgorithm = XMLSecurityKey::RSA_SHA1)
+    public static function addSign($xml, $key, $cert, $signAlgorithm = XMLSecurityKey::RSA_SHA1, $digestAlgorithm = XMLSecurityDSig::SHA1)
     {
         if ($xml instanceof DOMDocument) {
             $dom = $xml;
@@ -1197,7 +1221,7 @@ class OneLogin_Saml2_Utils
 
         $objXMLSecDSig->addReferenceList(
             array($rootNode),
-            XMLSecurityDSig::SHA1,
+            $digestAlgorithm,
             array('http://www.w3.org/2000/09/xmldsig#enveloped-signature', XMLSecurityDSig::EXC_C14N),
             array('id_name' => 'ID')
         );
