@@ -100,8 +100,8 @@ pipeline:
     when:
       matrix:
         TESTS: php7.1
-  shibboleth-integration-tests:
-    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-3
+  integration-tests:
+    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-5
     environment:
       - CORE_BRANCH=master
     commands:
@@ -119,7 +119,7 @@ pipeline:
       - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
     when:
       matrix:
-        TESTS: shibboleth-integration-tests
+        TESTS: integration-tests
 
 matrix:
   include:
@@ -128,4 +128,4 @@ matrix:
     - TESTS: php7.1
     - TESTS: check-app-compatbility
     - TESTS: signed-off-check
-    - TESTS: shibboleth-integration-tests
+    - TESTS: integration-tests

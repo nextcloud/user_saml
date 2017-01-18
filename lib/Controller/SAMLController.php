@@ -127,6 +127,7 @@ class SAMLController extends Controller {
 				break;
 			case 'environment-variable':
 				$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
+				$this->session->set('user_saml.samlUserData', $_SERVER);
 				try {
 					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
 				} catch (NoUserFoundException $e) {
