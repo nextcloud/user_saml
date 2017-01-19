@@ -36,8 +36,9 @@ class FeatureContext implements Context {
 
 	/** @BeforeScenario */
 	public function before() {
+		$jar = new \GuzzleHttp\Cookie\FileCookieJar('/tmp/cookies_' . md5(openssl_random_pseudo_bytes(12)));
 		$this->client = new \GuzzleHttp\Client([
-			'cookies' => true,
+			'cookies' => $jar,
 			'verify' => false,
 			'allow_redirects' => [
 				'referer'         => true,
@@ -222,4 +223,10 @@ class FeatureContext implements Context {
 		);
 	}
 
+	/**
+	 * @Given The environment variable :key is set to :value
+	 */
+	public function theEnvironmentVariableIsSetTo($key, $value)  {
+		file_put_contents(__DIR__ . '/../../../../../../.htaccess', "\nSetEnv $key $value\n", FILE_APPEND);
+	}
 }
