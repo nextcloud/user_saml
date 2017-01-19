@@ -60,7 +60,6 @@ switch($config->getAppValue('user_saml', 'type')) {
 		$type = 'saml';
 		break;
 	case 'environment-variable':
-		\OC::$server->getSession()->set('user_saml.samlUserData', $_SERVER);
 		$type = 'environment-variable';
 		break;
 }
@@ -74,7 +73,7 @@ $redirectSituation = false;
 // redirected to the SAML login endpoint
 if(!$userSession->isLoggedIn() &&
 	\OC::$server->getRequest()->getPathInfo() === '/login' &&
-	$type === 'saml') {
+	$type !== '') {
 	$redirectSituation = true;
 }
 
