@@ -19,4 +19,7 @@
 		<admin>\OCA\User_SAML\Settings\Admin</admin>
 		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
 	</settings>
+	<documentation>
+		<admin>admin-sso</admin>
+	</documentation>
 </info>
