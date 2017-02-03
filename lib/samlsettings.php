@@ -44,6 +44,7 @@ class SAMLSettings {
 	public function getOneLoginSettingsArray() {
 		$settings = [
 			'strict' => true,
+			'debug' => $this->config->getSystemValue('debug', false),
 			'security' => [
 				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-nameIdEncrypted', '0') === '1') ? true : false,
 				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', 'security-authnRequestsSigned', '0') === '1') ? true : false,

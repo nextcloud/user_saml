@@ -27,10 +27,10 @@ use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
-use OCP\IUserBackend;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
@@ -52,6 +52,8 @@ class SAMLControllerTest extends TestCase  {
 	private $urlGenerator;
 	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
+	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
+	private $logger;
 	/** @var SAMLController */
 	private $samlController;
 
@@ -66,6 +68,7 @@ class SAMLControllerTest extends TestCase  {
 		$this->config = $this->createMock(IConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->logger = $this->createMock(ILogger::class);
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -76,7 +79,8 @@ class SAMLControllerTest extends TestCase  {
 			$this->userBackend,
 			$this->config,
 			$this->urlGenerator,
-			$this->userManager
+			$this->userManager,
+			$this->logger
 		);
 	}
 
