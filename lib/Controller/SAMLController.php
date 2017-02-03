@@ -27,6 +27,7 @@ use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -48,6 +49,8 @@ class SAMLController extends Controller {
 	private $urlGenerator;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var ILogger */
+	private $logger;
 
 	/**
 	 * @param string $appName
@@ -59,6 +62,7 @@ class SAMLController extends Controller {
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
+	 * @param ILogger $logger
 	 */
 	public function __construct($appName,
 								IRequest $request,
@@ -68,7 +72,8 @@ class SAMLController extends Controller {
 								UserBackend $userBackend,
 								IConfig $config,
 								IURLGenerator $urlGenerator,
-								IUserManager $userManager) {
+								IUserManager $userManager,
+								ILogger $logger) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
@@ -77,6 +82,7 @@ class SAMLController extends Controller {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -169,6 +175,8 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
+	 *
+	 * @return Http\RedirectResponse|void
 	 */
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
@@ -181,14 +189,14 @@ class SAMLController extends Controller {
 
 		$errors = $auth->getErrors();
 
-		// FIXME: Appframworkize
 		if (!empty($errors)) {
-			print_r('<p>'.implode(', ', $errors).'</p>');
+			foreach($errors as $error) {
+				$this->logger->error($error, ['app' => $this->appName]);
+			}
 		}
 
 		if (!$auth->isAuthenticated()) {
-			echo "<p>Not authenticated</p>";
-			exit();
+			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
 		// Check whether the user actually exists, if not redirect to an error page
@@ -197,7 +205,6 @@ class SAMLController extends Controller {
 			$this->autoprovisionIfPossible($auth->getAttributes());
 		} catch (NoUserFoundException $e) {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
-
 		}
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
