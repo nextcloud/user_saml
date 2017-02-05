@@ -18,6 +18,7 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utiliser l'authentification SAML pour le client bureau de %s (requiert une ré-authentification de l'utilisateur)",
     "SSO & SAML authentication" : "Authentification SSO & SAML",
+    "Open documentation" : "Voir la documentation",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Veuillez choisir si vous voulez vous authentifier en utilisant le fournisseur SAML intégré à Nextcloud ou si vous voulez vous authentifier avec une variable d'environnement.",
     "Use built-in SAML authentication" : "Utiliser l'authentification SAML intégrée",
     "Use environment variable" : "Utiliser une variable d’environnement",

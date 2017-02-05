@@ -18,6 +18,7 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Sta alleen authenticatie toe als een account bestaat op een ander backend (bijv. LDAP).",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Gebruik SAML authenticatie voor de %s desktop clients (vereist gebruiker herauthenticatie)",
     "SSO & SAML authentication" : "SSO & SAML authenticatie",
+    "Open documentation" : "Open documentatie",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Kies of je wilt authenticeren via de in Nextcloud ingebouwde SAML provider, of dat je wilt authenticeren tegen een omgevingsvariabele",
     "Use built-in SAML authentication" : "Ingebouwde SAML authenticatie gebruiken",
     "Use environment variable" : "Gebruik een omgevingsvariabele",

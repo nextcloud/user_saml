@@ -20,6 +20,7 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Solo permita la autenticación si la cuenta existe en algún otro punto. (p.e. LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar la autenticación SAML para los clientes de escritorio %s (necesita una re-autenticación del usuario)",
     "SSO & SAML authentication" : "Autenticación SSO & SAML",
+    "Open documentation" : "Abrir documentación",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Por favor elija si desea autenticar usando el proveedor SAML nativo en Nextcloud o si desea autenticar contra una variable del entorno.",
     "Use built-in SAML authentication" : "Use la autenticación nativa SAML",
     "Use environment variable" : "Usar variable de entorno",
