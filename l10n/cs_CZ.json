@@ -18,6 +18,7 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet již existuje i někde jinde. (např. LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Použít SAML pro %s desktopové klienty (vyžaduje novou autentizaci uživatele)",
     "SSO & SAML authentication" : "SSO & SAML ověření",
+    "Open documentation" : "Otevřít dokumentaci",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Vyberte prosím zda chcete ověřovat za použití dodané zabudované SAML funkce v Nextcloud nebo zda chcete ověřovat za pomoci proměnné prostředí.",
     "Use built-in SAML authentication" : "Použít zabudované SAML ověření",
     "Use environment variable" : "Použít proměnné prostředí",
