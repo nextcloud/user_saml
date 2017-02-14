@@ -193,6 +193,7 @@ class SAMLController extends Controller {
 			foreach($errors as $error) {
 				$this->logger->error($error, ['app' => $this->appName]);
 			}
+			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
 		}
 
 		if (!$auth->isAuthenticated()) {
