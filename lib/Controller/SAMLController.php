@@ -99,15 +99,19 @@ class SAMLController extends Controller {
 			}
 
 			$userExists = $this->userManager->userExists($uid);
+			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if($userExists === true) {
+				if($autoProvisioningAllowed) {
+					$this->userBackend->updateAttributes($uid, $auth);
+				}
 				return;
 			}
 
-			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if(!$userExists && !$autoProvisioningAllowed) {
 				throw new NoUserFoundException();
 			} elseif(!$userExists && $autoProvisioningAllowed) {
 				$this->userBackend->createUserIfNotExists($uid);
+				$this->userBackend->updateAttributes($uid, $auth);
 				return;
 			}
 		}

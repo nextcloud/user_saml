@@ -87,6 +87,18 @@ class Admin implements ISettings {
 				'type' => 'checkbox',
 			],
 		];
+		$attributeMappingSettings = [
+			'displayName_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the displayname to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+			'email_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the email address to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+		];
 
 		$type = $this->config->getAppValue('user_saml', 'type');
 		if($type === 'saml') {
@@ -102,6 +114,7 @@ class Admin implements ISettings {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
+			'attributeMappings' => $attributeMappingSettings,
 			'type' => $type,
 		];
 

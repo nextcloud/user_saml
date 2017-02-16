@@ -24,6 +24,7 @@ namespace OCA\User_SAML;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\IUserManager;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -39,6 +40,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $session;
 	/** @var IDBConnection */
 	private $db;
+	/** @var IUserManager */
+	private $userManager;
 	/** @var \OCP\UserInterface[] */
 	private $backends;
 
@@ -47,15 +50,18 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param IURLGenerator $urlGenerator
 	 * @param ISession $session
 	 * @param IDBConnection $db
+	 * @param IUserManager $userManager
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
 								ISession $session,
-								IDBConnection $db) {
+								IDBConnection $db,
+								IUserManager $userManager) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
 		$this->db = $db;
+		$this->userManager = $userManager;
 	}
 
 	/**
@@ -109,8 +115,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
-		return (bool)((\OC_User_Backend::CHECK_PASSWORD)
-			& $actions);
+		$availableActions = \OC_User_Backend::CHECK_PASSWORD;
+		if($this->autoprovisionAllowed()
+			&& $this->config->getAppValue('user_saml', 'saml-attribute-mapping-displayName_mapping', '') !== '') {
+
+			$availableActions |= \OC_User_Backend::GET_DISPLAYNAME;
+		}
+
+		return (bool)($availableActions & $actions);
 	}
 
 	/**
@@ -207,13 +219,48 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 	}
 
+	public function setDisplayName($uid, $displayName) {
+		if($backend = $this->getActualUserBackend($uid)) {
+			return $backend->setDisplayName($uid, $displayName);
+		}
+
+		if ($this->userExistsInDatabase($uid)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->update('user_saml_users')
+				->set('displayname', $qb->createNamedParameter($displayName))
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->execute();
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
-	 * get display name of the user
+	 * Get display name of the user
+	 *
 	 * @param string $uid user ID of the user
 	 * @return string display name
 	 * @since 4.5.0
 	 */
 	public function getDisplayName($uid) {
+		if($backend = $this->getActualUserBackend($uid)) {
+			return $backend->getDisplayName($uid);
+		} else {
+			if($this->userExistsInDatabase($uid)) {
+				$qb = $this->db->getQueryBuilder();
+				$qb->select('displayname')
+					->from('user_saml_users')
+					->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+					->setMaxResults(1);
+				$result = $qb->execute();
+				$users = $result->fetchAll();
+				if (isset($users[0]['displayname'])) {
+					return $users[0]['displayname'];
+				}
+			}
+		}
+
 		return false;
 	}
 
@@ -232,6 +279,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			->from('user_saml_users')
 			->where(
 				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
+			)
+			->orWhere(
+				$qb->expr()->iLike('displayname', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
 			)
 			->setMaxResults($limit);
 		if($offset !== null) {
@@ -360,4 +410,58 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->backends = $backends;
 	}
 
+	private function getAttributeValue($name, array $attributes) {
+		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
+
+		if(count($keys) === 1 && $keys[1] === '') {
+			throw new \InvalidArgumentException('Attribute is not configured');
+		}
+
+		$value = '';
+		foreach($keys as $key) {
+			if (isset($attributes[$key])) {
+				if (is_array($attributes[$key])) {
+					if($value !== '') {
+						$value .= ' ';
+					}
+					$value .= $attributes[$key][0];
+				} else {
+					if($value !== '') {
+						$value .= ' ';
+					}
+					$value .= $attributes[$key];
+				}
+			}
+		}
+
+		return $value;
+	}
+
+	public function updateAttributes($uid,
+									 array $attributes) {
+		$user = $this->userManager->get($uid);
+		try {
+			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$newEmail = null;
+		}
+		try {
+			$newDisplayname = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$newDisplayname = null;
+		}
+
+		if ($user !== null) {
+			$currentEmail = (string)$user->getEMailAddress();
+			if ($newEmail !== null
+				&& $currentEmail !== $newEmail) {
+				$user->setEMailAddress($newEmail);
+			}
+			$currentDisplayname = (string)$this->getDisplayName($uid);
+			if($newDisplayname !== null
+				&& $currentDisplayname !== $newDisplayname) {
+				$this->setDisplayName($uid, $newDisplayname);
+			}
+		}
+	}
 }
