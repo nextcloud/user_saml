@@ -181,10 +181,13 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then I should be logged-in to Nextcloud as user :userId
+	 * @Then The user value :key should be :value
+	 *
+	 * @param string $key
+	 * @param string $value
 	 * @throws UnexpectedValueException
 	 */
-	public function iShouldBeLoggedInToNextcloudAsUser($userId)  {
+	public function thUserValueShouldBe($key, $value)  {
 		$this->response = $this->client->request(
 			'GET',
 			'http://localhost/ocs/v1.php/cloud/user',
@@ -196,17 +199,24 @@ class FeatureContext implements Context {
 		);
 
 		$xml = simplexml_load_string($this->response->getBody());
+		/** @var array $responseArray */
 		$responseArray = json_decode(json_encode((array)$xml), true);
-		if($responseArray['data']['display-name'] !== $userId) {
+		foreach($responseArray['data'] as $arrayKey => $arrayValue) {
+			if(count($responseArray['data'][$arrayKey]) === 0) {
+				$responseArray['data'][$arrayKey] = '';
+			}
+		}
+
+		$actualValue = $responseArray['data'][$key];
+		if($actualValue !== $value) {
 			throw new UnexpectedValueException(
 				sprintf(
 					'Expected %s as value but got %s',
-					$userId,
-					$responseArray['data']['display-name']
+					$value,
+					$actualValue
 				)
 			);
 		}
-
 	}
 
 	/**

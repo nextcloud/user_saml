@@ -79,6 +79,26 @@ style('user_saml', 'admin');
 				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-x509cert', '')) ?></textarea></p>
 			</div>
 		</div>
+
+		<div id="user-saml-attribute-mapping" class="hidden">
+			<h3><?php p($l->t('Attribute mapping')) ?></h3>
+			<p>
+				<?php print_unescaped($l->t('If you want to optionally map SAML attributes to the user you can configure these here.')) ?>
+				<span class="toggle"><?php p($l->t('Show attribute mapping settings ...')) ?></span>
+			</p>
+
+			<div class="hidden">
+				<?php foreach($_['attributeMappings'] as $key => $attribute): ?>
+					<?php
+					if($attribute['type'] === 'line'): ?>
+					<p>
+						<input name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'saml-attribute-mapping-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+					</p>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 		<div id="user-saml-security">
 			<h3><?php p($l->t('Security settings')) ?></h3>
 			<p>

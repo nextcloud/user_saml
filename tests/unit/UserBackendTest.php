@@ -27,6 +27,7 @@ use OCP\IDBConnection;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserBackend;
+use OCP\IUserManager;
 use Test\TestCase;
 
 class UserBackendTest extends TestCase   {
@@ -38,7 +39,9 @@ class UserBackendTest extends TestCase   {
 	private $session;
 	/** @var IDBConnection|\PHPUnit_Framework_MockObject_MockObject */
 	private $db;
-	/** @var IUserBackend|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	private $userManager;
+	/** @var IUserBackend */
 	private $userBackend;
 
 	public function setUp() {
@@ -48,12 +51,14 @@ class UserBackendTest extends TestCase   {
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->userBackend = new UserBackend(
 			$this->config,
 			$this->urlGenerator,
 			$this->session,
-			$this->db
+			$this->db,
+			$this->userManager
 		);
 	}
 

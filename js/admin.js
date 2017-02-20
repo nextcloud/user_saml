@@ -53,6 +53,10 @@ $(function() {
 		$('#user-saml-settings .button').addClass('hidden');
 	}
 
+	if($('#user-saml-general-require_provisioned_account').val() === '0') {
+		$('#user-saml-attribute-mapping').toggleClass('hidden');
+	}
+
 	$('#user-saml-choose-saml').click(function(e) {
 		e.preventDefault();
 		OCA.User_SAML.Admin.chooseSaml();
@@ -110,6 +114,9 @@ $(function() {
 			} else {
 				$(this).val("0");
 			}
+			if(key === 'require_provisioned_account') {
+				$('#user-saml-attribute-mapping').toggleClass('hidden');
+			}
 			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
 		});
 	});
@@ -125,6 +132,18 @@ $(function() {
 			}
 			OCA.User_SAML.Admin.setSamlConfigValue('security', key, $(this).val());
 		});
+	});
+
+	$('#user-saml-attribute-mapping input[type="text"], #user-saml-attribute-mapping textarea').change(function(e) {
+		var el = $(this);
+		$.when(el.focusout()).then(function() {
+			var key = $(this).attr('name');
+			OCA.User_SAML.Admin.setSamlConfigValue('saml-attribute-mapping', key, $(this).val());
+		});
+		if (e.keyCode === 13) {
+			var key = $(this).attr('name');
+			OCA.User_SAML.Admin.setSamlConfigValue('saml-attribute-mapping', key, $(this).val());
+		}
 	});
 
 	$('#user-saml').change(function() {
@@ -170,6 +189,13 @@ $(function() {
 					text = 'Hide Service Provider settings ...';
 				} else {
 					text = 'Show Service Provider settings ...';
+				}
+				break;
+			case 'user-saml-attribute-mapping':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide attribute mapping settings ...';
+				} else {
+					text = 'Show attribute mapping settings ...';
 				}
 				break;
 		}

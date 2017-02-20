@@ -95,6 +95,18 @@ class AdminTest extends \Test\TestCase  {
 				'type' => 'checkbox',
 			],
 		];
+		$attributeMappingSettings = [
+			'displayName_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the displayname to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+			'email_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the email address to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+		];
 
 		$params = [
 			'sp' => $serviceProviderFields,
@@ -102,6 +114,7 @@ class AdminTest extends \Test\TestCase  {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
+			'attributeMappings' => $attributeMappingSettings,
 		];
 
 		return $params;
