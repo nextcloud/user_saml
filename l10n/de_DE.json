@@ -23,7 +23,7 @@
     "Open documentation" : "Dokumentation öffnen",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Bitte auswählen ob die Authentifizierung via in Nextcloud integriertem SAML erfolgen soll oder gegen eine Umgebungsvariable.",
     "Use built-in SAML authentication" : "Integrierte SAML-Authentifizierung benutzen",
-    "Use environment variable" : "Umgebungsvariable benutzen",
+    "Use environment variable" : "Nutze Umgebungsvariable",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Es muss ein Benutzer mit Admin-Rechten vorhanden sein, der sich via SSO einloggen kann. Eine Anmeldung mit Ihrem normalen Zugang %s wird nicht mehr möglich sein.",
     "General" : "Allgemein",
     "Service Provider Data" : "Diensteanbieter-Daten",
