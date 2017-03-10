@@ -98,6 +98,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'group_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users groups to.'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$type = $this->config->getAppValue('user_saml', 'type');
