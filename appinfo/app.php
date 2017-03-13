@@ -53,6 +53,10 @@ OC_User::handleApacheAuth();
 $shib_target = $urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode(\OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue());
 
 $loginButtonText = $config->getAppValue('user_saml', 'general-login_button_text', 'SAML');
+if ($loginButtonText === '') {
+	$loginButtonText = 'SAML';
+}
+
 \OC_App::registerLogIn([
 	'href' => $shib_target,
 	'name' => $loginButtonText
