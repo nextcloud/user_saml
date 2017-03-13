@@ -94,6 +94,11 @@ class AdminTest extends \Test\TestCase  {
 				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
 				'type' => 'checkbox',
 			],
+			'login_button_text' => [
+				'text' => 'Text shown on the Alternative Logins Button.',
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
