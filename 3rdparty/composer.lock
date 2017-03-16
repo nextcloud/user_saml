@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "onelogin/php-saml",
-            "version": "2.10.3",
+            "version": "2.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/onelogin/php-saml.git",
-                "reference": "eb6cfbca928106205558a596988923da0e47bd9d"
+                "reference": "3319d7707f342e38291eee6b01a4a5f8df1b333b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/eb6cfbca928106205558a596988923da0e47bd9d",
-                "reference": "eb6cfbca928106205558a596988923da0e47bd9d",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/3319d7707f342e38291eee6b01a4a5f8df1b333b",
+                "reference": "3319d7707f342e38291eee6b01a4a5f8df1b333b",
                 "shasum": ""
             },
             "require": {
@@ -58,7 +58,7 @@
                 "onelogin",
                 "saml"
             ],
-            "time": "2017-01-11T17:18:41+00:00"
+            "time": "2017-03-13T09:56:49+00:00"
         }
     ],
     "packages-dev": [],
