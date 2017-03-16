@@ -16,6 +16,7 @@ return array(
     'OneLogin_Saml2_Response' => $vendorDir . '/onelogin/php-saml/lib/Saml2/Response.php',
     'OneLogin_Saml2_Settings' => $vendorDir . '/onelogin/php-saml/lib/Saml2/Settings.php',
     'OneLogin_Saml2_Utils' => $vendorDir . '/onelogin/php-saml/lib/Saml2/Utils.php',
+    'OneLogin_Saml2_ValidationError' => $vendorDir . '/onelogin/php-saml/lib/Saml2/Error.php',
     'OneLogin_Saml_AuthRequest' => $vendorDir . '/onelogin/php-saml/lib/Saml/AuthRequest.php',
     'OneLogin_Saml_Metadata' => $vendorDir . '/onelogin/php-saml/lib/Saml/Metadata.php',
     'OneLogin_Saml_Response' => $vendorDir . '/onelogin/php-saml/lib/Saml/Response.php',
