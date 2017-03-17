@@ -82,6 +82,16 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'displaynamefirstpart_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the first part of the displayname (eg given name)'),
+				'type' => 'line',
+				'required' => false,
+			],
+			'displaynamesecondpart_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the second part of the displayname (eg last name).'),
+				'type' => 'line',
+				'required' => false,
+			],
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account is existent on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',

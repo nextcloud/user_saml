@@ -85,12 +85,33 @@ class SAMLController extends Controller {
 	 */
 	private function autoprovisionIfPossible(array $auth) {
 		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+		$displaynamefirstpartMapping = $this->config->getAppValue('user_saml','general-displaynamefirstpart_mapping');
+		$displaynamesecondpartMapping = $this->config->getAppValue('user_saml','general-displaynamesecondpart_mapping');
+
 		if(isset($auth[$uidMapping])) {
 			if(is_array($auth[$uidMapping])) {
 				$uid = $auth[$uidMapping][0];
 			} else {
 				$uid = $auth[$uidMapping];
 			}
+
+			$displayName='';
+			if(isset($auth[$displaynamefirstpartMapping])) {
+				if(is_array($auth[$displaynamefirstpartMapping])) {
+					$displayName = $auth[$displaynamefirstpartMapping][0];
+				} else {
+					$displayName = $auth[$displaynamefirstpartMapping];
+				}
+			}
+
+			if(isset($auth[$displaynamesecondpartMapping])) {
+				if(is_array($auth[$displaynamesecondpartMapping])) {
+					$displayName .= " " . $auth[$displaynamesecondpartMapping][0];
+				} else {
+					$displayName .= " " . $auth[$displaynamesecondpartMapping];
+				}
+			}
+
 
 			$userExists = $this->userManager->userExists($uid);
 			if($userExists === true) {
@@ -101,7 +122,7 @@ class SAMLController extends Controller {
 			if(!$userExists && !$autoProvisioningAllowed) {
 				throw new NoUserFoundException();
 			} elseif(!$userExists && $autoProvisioningAllowed) {
-				$this->userBackend->createUserIfNotExists($uid);
+				$this->userBackend->createUserIfNotExists($uid,$displayName);
 				return;
 			}
 		}
