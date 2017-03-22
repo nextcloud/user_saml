@@ -50,6 +50,6 @@ OC.L10N.register(
     "Metadata invalid" : "Metadaten sind ungültig",
     "Metadata valid" : "Metadaten sind gültig",
     "Account not provisioned." : "Konto nicht bereitgestellt.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Ihr Konto wird nicht bereitgestellt, Zugriff ist deshalb nicht möglich."
+    "Your account is not provisioned, access to this service is thus not possible." : "Ihr Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich."
 },
 "nplurals=2; plural=(n != 1);");
