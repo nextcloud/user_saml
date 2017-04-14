@@ -4,7 +4,7 @@
     "Private key of the Service Provider" : "Privat nøkkel for tjenesteleverandøren",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Forteller om <samlp:logoutRequest> av denne SPen er kryptert.",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Forteller om <samlp:logoutRequest> av denne SPen er signert.",
-    "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "Forteller om <samlp:logoutResponse> av denne SPen er signert.",
+    "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "Forteller om <samlp:logoutResponse> av denne SP-en er signert.",
     "Whether the metadata should be signed." : "Om metadataene skal være signert.",
     "Open documentation" : "Åpne dokumentasjonen",
     "General" : "Generelt",
