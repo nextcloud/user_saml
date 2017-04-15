@@ -7,6 +7,7 @@
     "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "Forteller om <samlp:logoutResponse> av denne SP-en er signert.",
     "Whether the metadata should be signed." : "Om metadataene skal være signert.",
     "Open documentation" : "Åpne dokumentasjonen",
+    "Use environment variable" : "Bruk miljøvariabel",
     "General" : "Generelt",
     "Service Provider Data" : "Tjenesteleverandørdata",
     "If your Service Provider should use certificates you can optionally specify them here." : "Hvis din tjenesteleverandør skal bruke sertifikater kan du velge å spesifisere dem her.",
