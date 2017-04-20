@@ -8,7 +8,7 @@
     "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "Indica se as mensagens <samlp:logoutResponse> enviadas por este SP serão assinadas.",
     "Whether the metadata should be signed." : "Se os metadados devem ser assinados.",
     "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "Indica uma solicitação para os elementos <samlp:Response>, <samlp:LogoutRequest> e <samlp:LogoutResponse> recebidos por este SP a serem assinados.",
-    "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Indica uma solicitação para que os elementos <saml:Assertion> recebidos por este SP sejam assinados. [Metadados do SP oferecerá esta informação]",
+    "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Indica uma solicitação para que os elementos <saml:Assertion> recebidos por este SP sejam assinados. [Metadados do SP oferecerão esta informação]",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Indica uma solicitação para os elementos <saml:Assertion> recebidos por este SP serem criptografados.",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Indica uma solicitação para que o elemento NameID no SAMLResponse recebido por este SP esteja presente.",
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indica uma solicitação para que o NameID recebido por este SP seja criptografado.",
