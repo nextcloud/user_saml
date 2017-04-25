@@ -17,9 +17,9 @@
 	</types>
 	<settings>
 		<admin>\OCA\User_SAML\Settings\Admin</admin>
-		<admin-section>https://docs.nextcloud.com/server/12/admin_manual/configuration_server/sso_configuration.html</admin-section>
+		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
 	</settings>
 	<documentation>
-		<admin>admin-sso</admin>
+		<admin>https://docs.nextcloud.com/server/12/admin_manual/configuration_server/sso_configuration.html</admin>
 	</documentation>
 </info>
