@@ -10,6 +10,7 @@ OC.L10N.register(
     "Use environment variable" : "Usar variable d'entornu",
     "General" : "Xeneral",
     "Service Provider Data" : "Datos del fornidor de servicios",
+    "Show Service Provider settings ..." : "Amosar axustes del fornidor de servicios...",
     "Identifier of the IdP entity (must be a URI)" : "Identificador de la entidá IdP (ha ser una URI)",
     "Security settings" : "Axustes de seguranza",
     "Show security settings ..." : "Amosar axustes de seguranza...",
