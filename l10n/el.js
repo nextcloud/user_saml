@@ -12,6 +12,7 @@ OC.L10N.register(
     "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "Υποδεικνύει μία απαίτηση για το<samlp:Response>,<samlp:LogoutRequest>και<samlp:LogoutResponse>των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Προαπαιτείται για το <saml:Assertion> των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.[Τα μεταδεδομένα του SP θα προσφέρουν αυτές τις πληροφορίες]",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
+    "General" : "Γενικά",
     "Security settings" : "Ρυθμίσεις ασφαλείας",
     "Show security settings ..." : "Προβολή ρυθμίσεων ασφαλείας ...",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
