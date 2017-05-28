@@ -18,6 +18,7 @@ OC.L10N.register(
     "Service Provider Data" : "Tjenesteleverandørdata",
     "If your Service Provider should use certificates you can optionally specify them here." : "Hvis din tjenesteleverandør skal bruke sertifikater kan du velge å spesifisere dem her.",
     "Show Service Provider settings ..." : "Vis tjenesteleverandørens innstillinger",
+    "Identity Provider Data" : "Identitetstilbyder-data",
     "Configure your IdP settings here." : "Konfigurer dine IdP innstillinger her.",
     "Public X.509 certificate of the IdP" : "Offentlig X.509 sertificat for IdP",
     "Security settings" : "Sikkerhetsinnstillinger",
