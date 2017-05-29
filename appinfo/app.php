@@ -35,7 +35,8 @@ $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
-	$config
+	$config,
+  $request
 );
 
 $userBackend = new \OCA\User_SAML\UserBackend(
