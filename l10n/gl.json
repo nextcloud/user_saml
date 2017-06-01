@@ -34,7 +34,7 @@
     "Identifier of the IdP entity (must be a URI)" : "Identificador da entidade IdP (ten que ser un URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL obxectivo do IdP onde o SP enviará a mensaxe de solicitude de autenticación",
     "Show optional Identity Provider settings ..." : "Amosar, opcionalmente, os axustes do provedor da identidade ...",
-    "URL Location of the IdP where the SP will send the SLO Request" : "Enderezo URL do IdP onde o SP enviará as peticións SLO",
+    "URL Location of the IdP where the SP will send the SLO Request" : "Enderezo URL do IdP onde o SP enviará as solicitudes SLO",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 do IdP",
     "Attribute mapping" : "Asignación de atributos",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Se, opcionalmente, quere asignar atributos SAML ao usuario, pode configuralos aquí.",
