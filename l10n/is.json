@@ -1,0 +1,24 @@
+{ "translations": {
+    "Saved" : "Vistað",
+    "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
+    "Private key of the Service Provider" : "Einkalykill internetþjónustu",
+    "Whether the metadata should be signed." : "Hvort undirrita eigi lýsigögnin.",
+    "SSO & SAML authentication" : "SSO & SAML auðkenning",
+    "Open documentation" : "Opna hjálparskjöl",
+    "Use built-in SAML authentication" : "Nota innbyggða SAML-auðkenningu",
+    "Use environment variable" : "Nota umhverfisbreytu",
+    "General" : "Almennt",
+    "Service Provider Data" : "Gögn um internetþjónustu",
+    "Show Service Provider settings ..." : "Birta stillingar internetþjónustu ...",
+    "Public X.509 certificate of the IdP" : "Opinbert X.509-skilríki fyrir IdP",
+    "Attribute mapping" : "Vörpun eiginda",
+    "Security settings" : "Öryggisstillingar",
+    "Show security settings ..." : "Birta öryggisstillingar ...",
+    "Signatures and encryption offered" : "Undirritanir og dulritun í boði",
+    "Signatures and encryption required" : "Krafist er undirritunar og dulritununar",
+    "Download metadata XML" : "Sækja XML-lýsigögn",
+    "Metadata invalid" : "Lýsigögn eru ógild",
+    "Metadata valid" : "Lýsigögn eru gild",
+    "Account not provisioned." : "Aðgangur ekki tilbúinn."
+},"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
+}
