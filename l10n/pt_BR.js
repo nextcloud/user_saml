@@ -36,7 +36,7 @@ OC.L10N.register(
     "Identifier of the IdP entity (must be a URI)" : "Identificador da entidade IdP (deve ser uma URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL do IdP para onde o SP enviará a mensagem de solicitação de autenticação",
     "Show optional Identity Provider settings ..." : "Mostrar configurações opcionais do Provedor de Identidade...",
-    "URL Location of the IdP where the SP will send the SLO Request" : "Localização da URL do IdP para onde o SP enviará a requisição SLO",
+    "URL Location of the IdP where the SP will send the SLO Request" : "Localização da URL do IdP para onde o SP enviará a solicitação SLO",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 do IdP",
     "Attribute mapping" : "Mapeamento de atributo",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Se você opcionalmente deseja mapear atributos SAML para o usuário, pode configurar eles aqui.",
