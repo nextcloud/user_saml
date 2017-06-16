@@ -24,7 +24,7 @@ OC.L10N.register(
     "SSO & SAML authentication" : "Autenticação SSO & SAML",
     "Open documentation" : "Abrir documentação",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Por favor, escolha se deseja autenticar usando o provedor SAML integrado no Nextcloud ou se deseja autenticar com uma variável de ambiente.",
-    "Use built-in SAML authentication" : "Usar a autenticação SAML embutida",
+    "Use built-in SAML authentication" : "Usar a autenticação built-in SAML",
     "Use environment variable" : "Usar variável de ambiente",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Certifique-se de configurar um usuário administrativo que pode acessar a instância via SSO. Fazer login com sua conta normal %s não será mais possível.",
     "General" : "Geral",
