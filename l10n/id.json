@@ -17,23 +17,23 @@
     "General" : "Umum",
     "Service Provider Data" : "Data Penyedia Layanan",
     "If your Service Provider should use certificates you can optionally specify them here." : "Apabila Penyedia Layanan Anda harus menggunakan sertifikat Anda dapat menentukannya disini secara opsional.",
-    "Show Service Provider settings ..." : "Lihat pengaturan Penyedia Layanan ...",
     "Identity Provider Data" : "Identitas Penyedia Data",
     "Configure your IdP settings here." : "Konfigurasi pengaturan IdP Anda disini.",
     "Identifier of the IdP entity (must be a URI)" : "Pengidentifikasian entitas IdP (harus berupa URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Target URL IdP dimana SP akan mengirim Pesan Permintaan Otentikasi",
-    "Show optional Identity Provider settings ..." : "Lihat pengaturan Penyedia Identitas opsional ...",
     "URL Location of the IdP where the SP will send the SLO Request" : "Lokasi URL IdP dimana SP akan mengirim Permintaan SLO",
     "Public X.509 certificate of the IdP" : "Sertifikat publik X.509 IdP",
     "Security settings" : "Pengaturan keamanan",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Untuk menambah keamanan kami merekomendasikan mengaktifkan pengaturan berikut apabila lingkungan Anda mendukungnya.",
-    "Show security settings ..." : "Lihat pengaturan keamanan ...",
     "Signatures and encryption offered" : "Tanda dan enkripsi ditawarkan",
     "Signatures and encryption required" : "Tanda dan enkripsi diperlukan",
     "Download metadata XML" : "Unduh metadata XML",
     "Metadata invalid" : "Metadata tidak sah",
     "Metadata valid" : "Metadata sah",
     "Account not provisioned." : "Akun tidak ditetapkan.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin."
+    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin.",
+    "Show Service Provider settings ..." : "Lihat pengaturan Penyedia Layanan ...",
+    "Show optional Identity Provider settings ..." : "Lihat pengaturan Penyedia Identitas opsional ...",
+    "Show security settings ..." : "Lihat pengaturan keamanan ..."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

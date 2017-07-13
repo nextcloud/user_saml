@@ -17,9 +17,9 @@ OC.L10N.register(
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Βεβαιωθείτε ότι έχετε διαμορφώσει έναν χρήστη διαχείρισης ο οποίος μπορεί να έχει άμεση  πρόσβαση μέσω SSO.Σύνδεση στον τακτικό λογαριασμό σας %sδε θα είναι δυνατή πλέον.",
     "General" : "Γενικά",
     "Security settings" : "Ρυθμίσεις ασφαλείας",
-    "Show security settings ..." : "Προβολή ρυθμίσεων ασφαλείας ...",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
     "Metadata invalid" : "Μη έγκυρα μεταδεδομένα",
-    "Metadata valid" : "Έγκυρα μεταδεδομένα"
+    "Metadata valid" : "Έγκυρα μεταδεδομένα",
+    "Show security settings ..." : "Προβολή ρυθμίσεων ασφαλείας ..."
 },
 "nplurals=2; plural=(n != 1);");
