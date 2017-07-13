@@ -15,12 +15,12 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Använd den inbyggda SAML-autentiseringen",
     "General" : "Allmänt",
     "Service Provider Data" : "Leverantörsdata",
-    "Show Service Provider settings ..." : "Visa leverantörsinställningar",
     "Security settings" : "Säkerhetsinställningar",
-    "Show security settings ..." : "Visa säkerhetsinställningar ...",
     "Signatures and encryption required" : "Signaturer och kryptering krävs",
     "Download metadata XML" : "Ladda ned metadata XML-fil",
     "Metadata invalid" : "Metadata ogiltig",
-    "Metadata valid" : "Metadata giltig"
+    "Metadata valid" : "Metadata giltig",
+    "Show Service Provider settings ..." : "Visa leverantörsinställningar",
+    "Show security settings ..." : "Visa säkerhetsinställningar ..."
 },
 "nplurals=2; plural=(n != 1);");

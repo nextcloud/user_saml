@@ -8,14 +8,14 @@
     "Use environment variable" : "Usar variable d'entornu",
     "General" : "Xeneral",
     "Service Provider Data" : "Datos del fornidor de servicios",
-    "Show Service Provider settings ..." : "Amosar axustes del fornidor de servicios...",
     "Identifier of the IdP entity (must be a URI)" : "Identificador de la entidá IdP (ha ser una URI)",
     "Security settings" : "Axustes de seguranza",
-    "Show security settings ..." : "Amosar axustes de seguranza...",
     "Signatures and encryption offered" : "Ufriéronse robles y cifráu",
     "Signatures and encryption required" : "Ríquense robles y cifráu",
     "Download metadata XML" : "Baxar XML de datos meta",
     "Metadata invalid" : "Datos meta non válidos",
-    "Metadata valid" : "Datos meta válidos"
+    "Metadata valid" : "Datos meta válidos",
+    "Show Service Provider settings ..." : "Amosar axustes del fornidor de servicios...",
+    "Show security settings ..." : "Amosar axustes de seguranza..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
