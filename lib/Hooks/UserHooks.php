@@ -41,7 +41,7 @@ class UserHooks {
             $urlGenerator,
             $config
         );
-        if ($config->getAppValue('user_saml', 'type')=='saml' && $this->userSession->getSession()->exists('user_saml.samlNameId')) {
+        if ($config->getAppValue('user_saml', 'type')==='saml' && $this->userSession->getSession()->exists('user_saml.samlNameId')) {
             $csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
             header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.logout') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
             exit();
