@@ -18,16 +18,16 @@ OC.L10N.register(
     "General" : "Të përgjithshme",
     "Service Provider Data" : "Të dhënat e ofruesit të shërbimit",
     "If your Service Provider should use certificates you can optionally specify them here." : "Nëse Ofruesi i Shërbimit tuaj duhet të përdori çertifikata ju mund ti specifikoni ato këtu.",
-    "Show Service Provider settings ..." : "Trego konfigurimet e Ofruesit të Shërbimit",
     "Identity Provider Data" : "Identifiko Ofruesin e të Dhënave",
     "Configure your IdP settings here." : "Konfiguroni  rregullimet e IdP tuaj këtu",
     "Identifier of the IdP entity (must be a URI)" : "Identifikues i ekzistencës së IdP(duhet të jetë një URI)",
     "Security settings" : "Konfigurimet e sigurisë",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Për të rritur nivelin e sigurisë ne ju rekomandojmë të mundësoni konfigurimet në vijim nëse ato suportohen nga mjedisi juaj.",
-    "Show security settings ..." : "Trego konfigurimet e sigurisë ...",
     "Signatures and encryption offered" : "Firmat dhe enkriptimi janë ofruara",
     "Signatures and encryption required" : "Kërkohet firma dhe enkriptimi",
     "Metadata invalid" : "Metadata jo e vlefshme",
-    "Metadata valid" : "Metadata e vlefshme"
+    "Metadata valid" : "Metadata e vlefshme",
+    "Show Service Provider settings ..." : "Trego konfigurimet e Ofruesit të Shërbimit",
+    "Show security settings ..." : "Trego konfigurimet e sigurisë ..."
 },
 "nplurals=2; plural=(n != 1);");
