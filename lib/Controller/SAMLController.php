@@ -214,6 +214,8 @@ class SAMLController extends Controller {
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
+		$this->session->set('user_saml.samlNameIdFormat', $auth->getNameIdFormat());
+		$this->session->set('user_saml.samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 
@@ -228,15 +230,62 @@ class SAMLController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @UseSession
+	 * @return Http\RedirectResponse
+	 */
+	public function logout() {
+		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		$returnTo = \OC::$server->getURLGenerator()->linkToRouteAbsolute('core.login.logout').'?requesttoken='.urlencode($csrfToken->getEncryptedValue());
+		$parameters = array();
+		$nameId = $this->session->get('user_saml.samlNameId');
+		$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
+		$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');
+		$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
+		$sloBuiltUrl = $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, true, $nameIdFormat, $nameIdNameQualifier);
+		$this->session->set('user_saml.LogoutRequestID', $auth->getLastRequestID());
+		$response = new Http\RedirectResponse($sloBuiltUrl);
+		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @UseSession
+	 * @NoCSRFRequired
+	 * @return Http\RedirectResponse
 	 */
 	public function singleLogoutService() {
 		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
-		$returnTo = null;
-		$parameters = array();
-		$nameId = $this->session->get('user_saml.samlNameId');
-		$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-		$this->userSession->logout();
-		$auth->logout($returnTo, $parameters, $nameId, $sessionIndex);
+		$LogoutRequestID = $this->session->get('user_saml.LogoutRequestID');
+		if($LogoutRequestID === '') {
+			$LogoutRequestID=null;
+		}
+
+		$destroySessionCallback = function() {
+			$this->session->remove('user_saml.AuthNRequestID');
+			$this->session->remove('user_saml.LogoutRequestID');
+			$this->session->remove('user_saml.samlUserData');
+			$this->session->remove('user_saml.samlNameId');
+			$this->session->remove('user_saml.samlNameIdFormat');
+			$this->session->remove('user_saml.samlNameIdNameQualifier');
+			$this->session->remove('user_saml.samlSessionIndex');
+			$this->session->remove('user_saml.samlSessionExpiration');
+			return true;
+		};
+
+		$auth->processSLO(false, $LogoutRequestID, false, $destroySessionCallback);
+		$errors = $auth->getErrors();
+		if (!empty($errors)) {
+			foreach($errors as $error) {
+				$this->logger->error($error, ['app' => $this->appName]);
+			}
+			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
+		}
+
+
+		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->linkToRouteAbsolute('core.login.logout').'?requesttoken='.urlencode($csrfToken->getEncryptedValue()));
+		return $response;
 	}
 
 	/**
