@@ -45,6 +45,11 @@ class Test extends TestCase  {
 					'verb' => 'POST',
 				],
 				[
+					'name' => 'SAML#logout',
+					'url' => '/saml/logout',
+					'verb' => 'GET',
+				],
+				[
 					'name' => 'SAML#singleLogoutService',
 					'url' => '/saml/sls',
 					'verb' => 'GET',
