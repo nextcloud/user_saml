@@ -391,9 +391,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return null|UserInterface
 	 */
 	public function getActualUserBackend($uid) {
-		foreach($this->backends as $backend) {
-			if($backend->userExists($uid)) {
-				return $backend;
+		if($this->backends !== null) {
+			foreach ( $this->backends as $backend ) {
+				if ( $backend->userExists( $uid ) ) {
+					return $backend;
+				}
 			}
 		}
 
