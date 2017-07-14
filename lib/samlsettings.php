@@ -94,13 +94,13 @@ class SAMLSettings {
 
 		$idpmetadataXml = $this->config->getAppValue('user_saml', 'idp-metadata.xml', '');
 		if($idpmetadataXml !== '') {
-			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseXML($idpmetadataXml, $settings['idp']['entityId']);
+			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseXML($idpmetadataXml, $this->config->getAppValue('user_saml', 'idp-entityId'));
 			$settings = \OneLogin_Saml2_IdPMetadataParser::injectIntoSettings($settings, $idpmetadataParsed);
 		}
 
 		$idpmetadataUrl = $this->config->getAppValue('user_saml', 'idp-metadata.url', '');
 		if($idpmetadataUrl !== '') {
-			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseRemoteXML($idpmetadataUrl, $settings['idp']['entityId']);
+			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseRemoteXML($idpmetadataUrl, $this->config->getAppValue('user_saml', 'idp-entityId'));
 			$settings = \OneLogin_Saml2_IdPMetadataParser::injectIntoSettings($settings, $idpmetadataParsed);
 		}
 
