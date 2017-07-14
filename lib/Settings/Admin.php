@@ -71,7 +71,7 @@ class Admin implements ISettings {
 			'wantAssertionsEncrypted' => $this->l10n->t('Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted.'),
 			'wantNameId' => $this->l10n->t(' Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present.'),
 			'wantNameIdEncrypted' => $this->l10n->t('Indicates a requirement for the NameID received by this SP to be encrypted.'),
-			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XMLs.'),
+			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XML.'),
 		];
 		$securityGeneral = [
 			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
@@ -83,7 +83,7 @@ class Admin implements ISettings {
 				'required' => true,
 			],
 			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account is existent on some other backend. (e.g. LDAP)'),
+				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
 			],
 		];
