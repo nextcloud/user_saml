@@ -77,6 +77,8 @@ style('user_saml', 'admin');
 			<div class="hidden">
 				<p><input name="singleLogoutService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleLogoutService.url', '')) ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?>"/></p>
 				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-x509cert', '')) ?></textarea></p>
+                <p><input name="metadata.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-metadata.url', '')) ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP metadata')) ?>"/></p>
+                <p><textarea name="metadata.xml" placeholder="<?php p($l->t('XML metadata for IdP')) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-metadata.xml', '')) ?></textarea></p>
 			</div>
 		</div>
 

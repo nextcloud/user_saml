@@ -66,12 +66,6 @@ class SAMLSettings {
 					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.assertionConsumerService'),
 				],
 			],
-			'idp' => [
-				'entityId' => $this->config->getAppValue('user_saml', 'idp-entityId', ''),
-				'singleSignOnService' => [
-					'url' => $this->config->getAppValue('user_saml', 'idp-singleSignOnService.url', ''),
-				],
-			],
 		];
 
 		$spx509cert = $this->config->getAppValue('user_saml', 'sp-x509cert', '');
@@ -96,6 +90,28 @@ class SAMLSettings {
 			$settings['sp']['singleLogoutService'] = [
 				'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService'),
 			];
+		}
+
+		$idpmetadataXml = $this->config->getAppValue('user_saml', 'idp-metadata.xml', '');
+		if($idpmetadataXml !== '') {
+			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseXML($idpmetadataXml, $settings['idp']['entityId']);
+			$settings = \OneLogin_Saml2_IdPMetadataParser::injectIntoSettings($settings, $idpmetadataParsed);
+		}
+
+		$idpmetadataUrl = $this->config->getAppValue('user_saml', 'idp-metadata.url', '');
+		if($idpmetadataUrl !== '') {
+			$idpmetadataParsed = \OneLogin_Saml2_IdPMetadataParser::parseRemoteXML($idpmetadataUrl, $settings['idp']['entityId']);
+			$settings = \OneLogin_Saml2_IdPMetadataParser::injectIntoSettings($settings, $idpmetadataParsed);
+		}
+
+		$idpentityId = $this->config->getAppValue('user_saml', 'idp-entityId', '');
+		if($idpentityId !== '') {
+			$settings['idp']['entityId'] = $idpentityId;
+		}
+
+		$idpssoUrl = $this->config->getAppValue('user_saml', 'idp-singleSignOnService.url', '');
+		if($idpssoUrl !== '') {
+			$settings['idp']['singleSignOnService']['url'] = $idpssoUrl;
 		}
 
 		return $settings;
