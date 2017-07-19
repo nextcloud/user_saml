@@ -14,8 +14,6 @@ OC.L10N.register(
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Mengindikasikan keharusan elemen <saml:Assertion> yang diterima SP ini untuk dienkripsi.",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Mengindikasikan keharusan untuk elemen NameID di SAMLResponse yang diterima oleh SP ini untuk hadir.",
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Mengindikasikan keharusan untuk elemen NameID yang diterima oleh SP ini untuk dienkripsi.",
-    "Indicates if the SP will validate all received XMLs." : "Mengindikasikan apabila SP akan menvalidasi semua XML yang diterima.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Hanya izinkan otentikasi apabila akun ada dalam backend yang lain. (cth. LDAP)",
     "General" : "Umum",
     "Service Provider Data" : "Data Penyedia Layanan",
     "If your Service Provider should use certificates you can optionally specify them here." : "Apabila Penyedia Layanan Anda harus menggunakan sertifikat Anda dapat menentukannya disini secara opsional.",
@@ -34,6 +32,8 @@ OC.L10N.register(
     "Metadata valid" : "Metadata sah",
     "Account not provisioned." : "Akun tidak ditetapkan.",
     "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin.",
+    "Indicates if the SP will validate all received XMLs." : "Mengindikasikan apabila SP akan menvalidasi semua XML yang diterima.",
+    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Hanya izinkan otentikasi apabila akun ada dalam backend yang lain. (cth. LDAP)",
     "Show Service Provider settings ..." : "Lihat pengaturan Penyedia Layanan ...",
     "Show optional Identity Provider settings ..." : "Lihat pengaturan Penyedia Identitas opsional ...",
     "Show security settings ..." : "Lihat pengaturan keamanan ..."
