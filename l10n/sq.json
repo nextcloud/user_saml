@@ -7,8 +7,6 @@
     "Whether the metadata should be signed." : "Nëse  duhet të nënshkruhet metadata",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Tregon nje kërkesë të elementëve të marrë nga kjo SP  për tu enkriptuar.",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Tregon një kërkesë për elementin NameID nëSAMLResponse e marrë nga kjo SP për tu prezantuar.",
-    "Indicates if the SP will validate all received XMLs." : "Tregon nëse SP do të konfirmoj të gjitha XMLt e ardhura.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Lejo autentifikimin vetëm nëse llogaria është ekzistente në disa backend-e të tjerë.(e.g.LDAP)",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Përdor vërtetimin SAML  për desktopët klient %s( kërkon ri-vërtetimin e përdoruesit)",
     "SSO & SAML authentication" : "Identifikim SSO & SAML",
     "Use environment variable" : "Përdor variablin e mjedisit",
@@ -25,6 +23,8 @@
     "Signatures and encryption required" : "Kërkohet firma dhe enkriptimi",
     "Metadata invalid" : "Metadata jo e vlefshme",
     "Metadata valid" : "Metadata e vlefshme",
+    "Indicates if the SP will validate all received XMLs." : "Tregon nëse SP do të konfirmoj të gjitha XMLt e ardhura.",
+    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Lejo autentifikimin vetëm nëse llogaria është ekzistente në disa backend-e të tjerë.(e.g.LDAP)",
     "Show Service Provider settings ..." : "Trego konfigurimet e Ofruesit të Shërbimit",
     "Show security settings ..." : "Trego konfigurimet e sigurisë ..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
