@@ -17,6 +17,7 @@ OC.L10N.register(
     "Identity Provider Data" : "身份提供者的数据",
     "Attribute mapping" : "属性映射",
     "Security settings" : "安全设置",
+    "Show security settings…" : "显示安全设置...",
     "Metadata invalid" : "元数据无效",
     "Metadata valid" : "元数据有效",
     "Show security settings ..." : "显示安全设置..."
