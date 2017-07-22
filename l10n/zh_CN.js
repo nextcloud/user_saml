@@ -20,6 +20,7 @@ OC.L10N.register(
     "Show security settings…" : "显示安全设置...",
     "Metadata invalid" : "元数据无效",
     "Metadata valid" : "元数据有效",
+    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "身份验证将在后台设置账户后生效。（如：LDAP轻量目录访问协议）",
     "Show security settings ..." : "显示安全设置..."
 },
 "nplurals=1; plural=0;");
