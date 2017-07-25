@@ -111,15 +111,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return boolean
 	 *
 	 * Returns the supported actions as int to be
-	 * compared with \OC_User_Backend::CREATE_USER etc.
+	 * compared with \OC\User\Backend::CREATE_USER etc.
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
-		$availableActions = \OC_User_Backend::CHECK_PASSWORD;
+		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
 		if($this->autoprovisionAllowed()
 			&& $this->config->getAppValue('user_saml', 'saml-attribute-mapping-displayName_mapping', '') !== '') {
 
-			$availableActions |= \OC_User_Backend::GET_DISPLAYNAME;
+			$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
 		}
 
 		return (bool)($availableActions & $actions);
