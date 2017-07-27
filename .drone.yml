@@ -237,3 +237,5 @@ matrix:
     - TESTS: signed-off-check
     - TESTS: integration-tests
     - TESTS: integration-tests-stable12
+
+branches: [ master, stable* ]
