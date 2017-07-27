@@ -107,3 +107,5 @@ matrix:
     - TESTS: check-app-compatbility
     - TESTS: signed-off-check
     - TESTS: integration-tests
+
+branches: [ master, stable* ]
