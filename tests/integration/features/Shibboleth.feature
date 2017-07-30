@@ -63,6 +63,7 @@ Feature: Shibboleth
     And I should be redirected to "http://localhost/index.php/apps/files/"
     Then The user value "id" should be "student1"
     Then The user value "email" should be ""
+    Then The user value "display-name" should be "Default Displayname student1"
 
   Scenario: Authenticating using Shibboleth with SAML in provisioning mode and custom mapped attributes
     Given The setting "type" is set to "saml"

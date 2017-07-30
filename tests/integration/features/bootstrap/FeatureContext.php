@@ -226,7 +226,7 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password /opt/rh/rh-php56/root/usr/bin/php %s user:add %s --password-from-env',
+				'sudo -u apache OC_PASS=password /opt/rh/rh-php56/root/usr/bin/php %s user:add %s --displayname "Default Displayname '.$uid.'" --password-from-env',
 				__DIR__ . '/../../../../../../occ',
 				$uid
 			)
