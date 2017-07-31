@@ -117,6 +117,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function implementsActions($actions) {
 		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
 		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
+		$availableActions |= \OC\User\Backend::SET_DISPLAYNAME;
 		return (bool)($availableActions & $actions);
 	}
 
