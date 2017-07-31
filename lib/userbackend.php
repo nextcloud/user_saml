@@ -391,9 +391,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return null|UserInterface
 	 */
 	public function getActualUserBackend($uid) {
-		foreach($this->backends as $backend) {
-			if($backend->userExists($uid)) {
-				return $backend;
+		if($this->backends !== null) {
+			foreach ( $this->backends as $backend ) {
+				if ( $backend->userExists( $uid ) ) {
+					return $backend;
+				}
 			}
 		}
 
@@ -413,7 +415,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function getAttributeValue($name, array $attributes) {
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
 
-		if(count($keys) === 1 && $keys[1] === '') {
+		if(count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
 
