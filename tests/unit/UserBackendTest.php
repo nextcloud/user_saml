@@ -24,6 +24,7 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCA\User_SAML\UserBackend;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserBackend;
@@ -41,6 +42,8 @@ class UserBackendTest extends TestCase   {
 	private $db;
 	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
+	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	private $groupManager;
 	/** @var IUserBackend */
 	private $userBackend;
 
@@ -52,13 +55,15 @@ class UserBackendTest extends TestCase   {
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);
 
 		$this->userBackend = new UserBackend(
 			$this->config,
 			$this->urlGenerator,
 			$this->session,
 			$this->db,
-			$this->userManager
+			$this->userManager,
+			$this->groupManager
 		);
 	}
 

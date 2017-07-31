@@ -43,11 +43,24 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	$urlGenerator,
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),
-	\OC::$server->getUserManager()
+	\OC::$server->getUserManager(),
+	\OC::$server->getGroupManager()
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 OC_User::handleApacheAuth();
+
+$shib_target = $urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode(\OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue());
+
+$loginButtonText = $config->getAppValue('user_saml', 'general-login_button_text', 'SAML');
+if ($loginButtonText === '') {
+	$loginButtonText = 'SAML';
+}
+
+\OC_App::registerLogIn([
+	'href' => $shib_target,
+	'name' => $loginButtonText
+]);
 
 // Setting up the one login config may fail, if so, do not catch the requests later.
 $returnScript = false;
@@ -70,16 +83,6 @@ if($returnScript === true) {
 	return;
 }
 
-$redirectSituation = false;
-// All requests that are not authenticated and match against the "/login" route are
-// redirected to the SAML login endpoint
-if(!$cli &&
-	!$userSession->isLoggedIn() &&
-	\OC::$server->getRequest()->getPathInfo() === '/login' &&
-	$type !== '') {
-	$redirectSituation = true;
-}
-
 // If a request to OCS or remote.php is sent by the official desktop clients it can
 // be intercepted as it supports SAML. All other clients don't yet and thus we
 // require the usage of application specific passwords there.
@@ -87,18 +90,16 @@ if(!$cli &&
 // However, it is an opt-in setting to use SAML for the desktop clients. For better
 // UX (users don't have to reauthenticate) we default to disallow the access via
 // SAML at the moment.
+
+$redirectSituation = false;
 $useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
 if($useSamlForDesktopClients === '1') {
 	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 	if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
 		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
-			$redirectSituation = true;
+			$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+			header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
+			exit();
 		}
 	}
-}
-
-if($redirectSituation === true) {
-	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
-	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
-	exit();
 }

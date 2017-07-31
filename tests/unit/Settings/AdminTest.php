@@ -94,6 +94,11 @@ class AdminTest extends \Test\TestCase  {
 				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
 				'type' => 'checkbox',
 			],
+			'login_button_text' => [
+				'text' => 'Text shown on the Alternative Logins Button.',
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
@@ -103,6 +108,11 @@ class AdminTest extends \Test\TestCase  {
 			],
 			'email_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the email address to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+			'group_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users groups to.'),
 				'type' => 'line',
 				'required' => true,
 			],

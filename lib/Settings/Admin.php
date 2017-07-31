@@ -82,6 +82,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'login_button_text' => [
+				'text' => $this->l10n->t('Text shown on the Alternative Logins Button.'),
+				'type' => 'line',
+				'required' => true,
+			],
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
@@ -95,6 +100,11 @@ class Admin implements ISettings {
 			],
 			'email_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the email address to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+			'group_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users groups to.'),
 				'type' => 'line',
 				'required' => true,
 			],
