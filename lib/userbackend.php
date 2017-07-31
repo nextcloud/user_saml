@@ -25,6 +25,7 @@ use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
+use OCP\IGroupManager;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -42,6 +43,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private $backends;
 
@@ -51,17 +54,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param ISession $session
 	 * @param IDBConnection $db
 	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
 								ISession $session,
 								IDBConnection $db,
-								IUserManager $userManager) {
+								IUserManager $userManager,
+								IGroupManager $groupManager) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
 		$this->db = $db;
 		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
 	}
 
 	/**
@@ -413,7 +419,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function getAttributeValue($name, array $attributes) {
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
 
-		if(count($keys) === 1 && $keys[1] === '') {
+		if(count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
 
@@ -421,10 +427,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		foreach($keys as $key) {
 			if (isset($attributes[$key])) {
 				if (is_array($attributes[$key])) {
-					if($value !== '') {
-						$value .= ' ';
+					foreach ($attributes[$key] as $attribute_part_value) {
+						if($value !== '') {
+							$value .= ' ';
+						}
+						$value .= $attribute_part_value;
 					}
-					$value .= $attributes[$key][0];
 				} else {
 					if($value !== '') {
 						$value .= ' ';
@@ -451,6 +459,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$newDisplayname = null;
 		}
 
+		try {
+			$newGroups = $this->getAttributeValue('saml-attribute-mapping-group_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$newGroups = null;
+		}
+
+
 		if ($user !== null) {
 			$currentEmail = (string)$user->getEMailAddress();
 			if ($newEmail !== null
@@ -461,6 +476,18 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			if($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
 				$this->setDisplayName($uid, $newDisplayname);
+			}
+			if ($newGroups !==null) {
+				$groups = explode(' ', $newGroups);
+				foreach ($groups as $group) {
+					if (!($this->groupManager->groupExists($group))) {
+						$this->groupManager->createGroup($group);
+					}
+					$groupInBackend = $this->groupManager->get($group);
+					if (!$groupInBackend->inGroup($user)) {
+						$groupInBackend->addUser($user);
+					}
+				}
 			}
 		}
 	}
