@@ -116,12 +116,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function implementsActions($actions) {
 		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
-		if($this->autoprovisionAllowed()
-			&& $this->config->getAppValue('user_saml', 'saml-attribute-mapping-displayName_mapping', '') !== '') {
-
-			$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
-		}
-
+		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -413,7 +408,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function getAttributeValue($name, array $attributes) {
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
 
-		if(count($keys) === 1 && $keys[1] === '') {
+		if(count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
 
@@ -460,7 +455,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$currentDisplayname = (string)$this->getDisplayName($uid);
 			if($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
-				$this->setDisplayName($uid, $newDisplayname);
+				$user->setDisplayName($newDisplayname);
 			}
 		}
 	}
