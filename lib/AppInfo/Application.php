@@ -21,10 +21,7 @@
 
 namespace OCA\User_SAML\AppInfo;
 
-use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
-use OCA\User_SAML\SAMLSettings;
-use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
