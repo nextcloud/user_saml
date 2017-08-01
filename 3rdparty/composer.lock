@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "onelogin/php-saml",
-            "version": "2.10.5",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/onelogin/php-saml.git",
-                "reference": "3319d7707f342e38291eee6b01a4a5f8df1b333b"
+                "reference": "818d6ee07e3797fd7e4006bff01bd2abc295cb65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/3319d7707f342e38291eee6b01a4a5f8df1b333b",
-                "reference": "3319d7707f342e38291eee6b01a4a5f8df1b333b",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/818d6ee07e3797fd7e4006bff01bd2abc295cb65",
+                "reference": "818d6ee07e3797fd7e4006bff01bd2abc295cb65",
                 "shasum": ""
             },
             "require": {
@@ -32,7 +32,7 @@
                 "phpunit/phpunit": "4.8",
                 "satooshi/php-coveralls": "1.0.1",
                 "sebastian/phpcpd": "*",
-                "squizlabs/php_codesniffer": "*"
+                "squizlabs/php_codesniffer": "2.9.0"
             },
             "suggest": {
                 "ext-gettext": "Install gettext and php5-gettext libs to handle translations",
@@ -58,7 +58,7 @@
                 "onelogin",
                 "saml"
             ],
-            "time": "2017-03-13T09:56:49+00:00"
+            "time": "2017-07-21T20:16:31+00:00"
         }
     ],
     "packages-dev": [],
