@@ -25,6 +25,7 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\Hooks\UserHooks;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 
@@ -43,5 +44,14 @@ class Application extends App {
 			);
 		});
 		$container->registerMiddleWare('OnlyLoggedInMiddleware');
+
+		/**
+		 * UserSession Hooks
+		 */
+		$container->registerService('UserHooks', function($c) {
+			return new UserHooks(
+				$c->query('ServerContainer')->getUserSession()
+			);
+		});
 	}
 }

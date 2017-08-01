@@ -60,6 +60,11 @@ switch($config->getAppValue('user_saml', 'type')) {
 			$returnScript = true;
 		}
 		$type = 'saml';
+
+		// Register UserHooks to handle SLO
+		$app=new \OCA\User_SAML\AppInfo\Application();
+		$app->getContainer()->query('UserHooks')->register();
+
 		break;
 	case 'environment-variable':
 		$type = 'environment-variable';
