@@ -20,7 +20,7 @@
     "Attribute to map the email address to." : "Atributi për të hartuar adresën e postës elektronike në.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Përdor vërtetimin SAML  për desktopët klient %s( kërkon ri-vërtetimin e përdoruesit)",
     "SSO & SAML authentication" : "Identifikim SSO & SAML",
-    "Open documentation" : "Dokumentacioni i hapur",
+    "Open documentation" : "Dokumentacion i hapur",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Ju lutem zgjidhni nëse doni të vërtetoni përdorimin e ofruesit SAML të ndërtuar në Nextcloud ose nëse dëshironi të vërtetoni kundër një ndryshoreje mjedisi.",
     "Use built-in SAML authentication" : "Përdor identifikimin me SAML",
     "Use environment variable" : "Përdor variablin e mjedisit",
