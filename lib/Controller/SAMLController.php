@@ -141,6 +141,11 @@ class SAMLController extends Controller {
 				$this->session->set('user_saml.samlUserData', $_SERVER);
 				try {
 					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
+					$user = $this->userManager->get($this->userBackend->getCurrentUserId());
+					if(!($user instanceof IUser)) {
+						throw new NoUserFoundException();
+					}
+					$user->updateLastLoginTimestamp();
 				} catch (NoUserFoundException $e) {
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
 				}
