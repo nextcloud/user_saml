@@ -95,9 +95,6 @@ class UserBackendTest extends TestCase   {
 			->willReturn($user);
 		$user
 			->expects($this->once())
-			->method('updateLastLoginTimestamp');
-		$user
-			->expects($this->once())
 			->method('getEMailAddress')
 			->willReturn(null);
 		$user
@@ -143,9 +140,6 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('updateLastLoginTimestamp');
 		$user
 			->expects($this->once())
 			->method('getEMailAddress')

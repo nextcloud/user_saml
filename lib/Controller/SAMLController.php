@@ -31,6 +31,7 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
@@ -212,6 +213,15 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
+		try {
+			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
+			if(!($user instanceof IUser)) {
+				throw new \InvalidArgumentException('User is not valid');
+			}
+			$user->updateLastLoginTimestamp();
+		} catch (\Exception $e) {
+			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+		}
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());

@@ -447,7 +447,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		if ($user !== null) {
-			$user->updateLastLoginTimestamp();
 			$currentEmail = (string)$user->getEMailAddress();
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
