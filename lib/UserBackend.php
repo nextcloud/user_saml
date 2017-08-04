@@ -43,7 +43,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IUserManager */
 	private $userManager;
 	/** @var \OCP\UserInterface[] */
-	private $backends;
+	private static $backends = [];
 
 	/**
 	 * @param IConfig $config
@@ -70,7 +70,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @return bool
 	 */
-	private function userExistsInDatabase($uid) {
+	protected function userExistsInDatabase($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
@@ -386,7 +386,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return null|UserInterface
 	 */
 	public function getActualUserBackend($uid) {
-		foreach($this->backends as $backend) {
+		foreach(self::$backends as $backend) {
 			if($backend->userExists($uid)) {
 				return $backend;
 			}
@@ -402,7 +402,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param \OCP\UserInterface[] $backends
 	 */
 	public function registerBackends(array $backends) {
-		$this->backends = $backends;
+		self::$backends = $backends;
 	}
 
 	private function getAttributeValue($name, array $attributes) {

@@ -26,6 +26,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\IUserManager;
 use Test\TestCase;
@@ -41,7 +42,7 @@ class UserBackendTest extends TestCase   {
 	private $db;
 	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
-	/** @var IUserBackend */
+	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;
 
 	public function setUp() {
@@ -52,17 +53,110 @@ class UserBackendTest extends TestCase   {
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+	}
 
-		$this->userBackend = new UserBackend(
-			$this->config,
-			$this->urlGenerator,
-			$this->session,
-			$this->db,
-			$this->userManager
-		);
+	public function getMockedBuilder(array $mockedFunctions = []) {
+		if($mockedFunctions !== []) {
+			$this->userBackend = $this->getMockBuilder(UserBackend::class)
+				->setConstructorArgs([
+					$this->config,
+					$this->urlGenerator,
+					$this->session,
+					$this->db,
+					$this->userManager
+				])
+				->setMethods($mockedFunctions)
+				->getMock();
+		} else {
+			$this->userBackend = new UserBackend(
+				$this->config,
+				$this->urlGenerator,
+				$this->session,
+				$this->db,
+				$this->userManager
+			);
+		}
 	}
 
 	public function testGetBackendName() {
+		$this->getMockedBuilder();
 		$this->assertSame('user_saml', $this->userBackend->getBackendName());
+	}
+
+	public function testUpdateAttributesWithoutAttributes() {
+		$this->getMockedBuilder(['getDisplayName']);
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('ExistingUser')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('getEMailAddress')
+			->willReturn(null);
+		$user
+			->expects($this->never())
+			->method('setEMailAddress');
+		$this->userBackend
+			->expects($this->once())
+			->method('getDisplayName')
+			->with('ExistingUser')
+			->willReturn('');
+		$this->userBackend->updateAttributes('ExistingUser', []);
+	}
+
+	public function testUpdateAttributesWithoutValidUser() {
+		$this->getMockedBuilder();
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('ExistingUser')
+			->willReturn(null);
+		$this->userBackend->updateAttributes('ExistingUser', []);
+	}
+
+	public function testUpdateAttributes() {
+		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
+			->willReturn('email');
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
+			->willReturn('displayname');
+
+
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('ExistingUser')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('getEMailAddress')
+			->willReturn('old@example.com');
+		$user
+			->expects($this->once())
+			->method('setEMailAddress')
+			->with('new@example.com');
+		$this->userBackend
+			->expects($this->once())
+			->method('getDisplayName')
+			->with('ExistingUser')
+			->willReturn('');
+		$this->userBackend
+			->expects($this->once())
+			->method('setDisplayName')
+			->with('ExistingUser', 'New Displayname');
+		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname']);
 	}
 }
