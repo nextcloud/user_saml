@@ -213,6 +213,10 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
+		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
+		$this->session->set('user_saml.samlNameId', $auth->getNameId());
+		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
+		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 		try {
 			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
 			if(!($user instanceof IUser)) {
@@ -222,10 +226,6 @@ class SAMLController extends Controller {
 		} catch (\Exception $e) {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
-		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
-		$this->session->set('user_saml.samlNameId', $auth->getNameId());
-		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
-		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 
 		$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
