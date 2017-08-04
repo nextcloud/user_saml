@@ -234,6 +234,28 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then The last login timestamp of :uid should not be empty
+	 *
+	 * @param string $uid
+	 * @throws UnexpectedValueException
+	 */
+	public function theLastLoginTimestampOfShouldNotBeEmpty($uid) {
+		$response = shell_exec(
+			sprintf(
+				'sudo -u apache OC_PASS=password /opt/rh/rh-php56/root/usr/bin/php %s user:lastseen %s',
+				__DIR__ . '/../../../../../../occ',
+				$uid
+			)
+		);
+
+		$response = trim($response);
+		$expectedStringStart = "$uid`s last login: ";
+		if(substr($response, 0, strlen($expectedStringStart)) !== $expectedStringStart) {
+			throw new UnexpectedValueException("Expected last login message, found instead '$response'");
+		}
+	}
+
+	/**
 	 * @Given The environment variable :key is set to :value
 	 */
 	public function theEnvironmentVariableIsSetTo($key, $value)  {

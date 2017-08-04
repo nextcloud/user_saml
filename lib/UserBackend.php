@@ -43,7 +43,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IUserManager */
 	private $userManager;
 	/** @var \OCP\UserInterface[] */
-	private $backends;
+	private $backends = [];
 
 	/**
 	 * @param IConfig $config
@@ -70,7 +70,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @return bool
 	 */
-	private function userExistsInDatabase($uid) {
+	protected function userExistsInDatabase($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
@@ -447,6 +447,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		if ($user !== null) {
+			$user->updateLastLoginTimestamp();
 			$currentEmail = (string)$user->getEMailAddress();
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
