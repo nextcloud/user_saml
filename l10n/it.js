@@ -28,6 +28,7 @@ OC.L10N.register(
     "General" : "Generale",
     "Service Provider Data" : "Dati del fornitore di servizi",
     "If your Service Provider should use certificates you can optionally specify them here." : "Se il tuo fornitore di servizi utilizza i certificati, puoi specificarli qui.",
+    "Show Service Provider settings…" : "Mostra impostazioni fornitore di servizi...",
     "Identity Provider Data" : "Dati del fornitore di identità",
     "Configure your IdP settings here." : "Configura qui le tue impostazioni IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Identificatore dell'entità IdP (deve essere un URI)",
