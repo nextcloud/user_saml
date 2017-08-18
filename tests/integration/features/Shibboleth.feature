@@ -105,13 +105,13 @@ Feature: Shibboleth
     And The setting "security-wantAssertionsSigned" is set to "1"
     And The setting "saml-attribute-mapping-email_mapping" is set to "urn:oid:0.9.2342.19200300.100.1.3"
     And The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"
-    When I send a GET request to "http://localhost/index.php/settings/user"
+    When I send a GET request to "http://localhost/index.php/settings/help"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/settings/user"
+    And I should be redirected to "http://localhost/index.php/settings/help"
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "display-name" should be "Stud Ent"
