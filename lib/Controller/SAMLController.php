@@ -135,6 +135,7 @@ class SAMLController extends Controller {
 				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
+				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
 				break;
 			case 'environment-variable':
 				$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
@@ -232,7 +233,13 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
-		$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+		$originalUrl = $this->session->get('user_saml.OriginalUrl');
+		if($originalUrl !== null && $originalUrl !== '') {
+			$response = new Http\RedirectResponse($originalUrl);
+		} else {
+			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+		}
+		$this->session->remove('user_saml.OriginalUrl');
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
 		// to be there.
 		if($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
