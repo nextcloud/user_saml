@@ -31,6 +31,7 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
@@ -157,6 +158,20 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAbsoluteURL')
 			->with('/')
 			->willReturn('https://nextcloud.com/absolute/');
+		$this->userBackend
+			->expects($this->once())
+			->method('getCurrentUserId')
+			->willReturn('MyUid');
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('MyUid')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('updateLastLoginTimestamp');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
 		$this->assertEquals($expected, $this->samlController->login());
@@ -187,6 +202,20 @@ class SAMLControllerTest extends TestCase  {
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(true);
+		$this->userBackend
+			->expects($this->once())
+			->method('getCurrentUserId')
+			->willReturn('MyUid');
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('MyUid')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('updateLastLoginTimestamp');
 		$this->urlGenerator
 			->expects($this->once())
 			->method('getAbsoluteURL')
@@ -235,8 +264,74 @@ class SAMLControllerTest extends TestCase  {
 			->expects($this->at(1))
 			->method('createUserIfNotExists')
 			->with('MyUid');
+		$this->userBackend
+			->expects($this->once())
+			->method('getCurrentUserId')
+			->willReturn('MyUid');
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('MyUid')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('updateLastLoginTimestamp');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
+		$this->assertEquals($expected, $this->samlController->login());
+	}
+
+	public function testLoginWithEnvVariableAndNotExistingUserWithMalfunctioningBackend() {
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('environment-variable');
+		$this->session
+			->expects($this->once())
+			->method('get')
+			->with('user_saml.samlUserData')
+			->willReturn([
+				'foo' => 'bar',
+				'uid' => 'MyUid',
+				'bar' => 'foo',
+			]);
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->with('user_saml', 'general-uid_mapping')
+			->willReturn('uid');
+		$this->userManager
+			->expects($this->once())
+			->method('userExists')
+			->with('MyUid')
+			->willReturn(false);
+		$this->urlGenerator
+			->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.notProvisioned')
+			->willReturn('https://nextcloud.com/notprovisioned/');
+		$this->userBackend
+			->expects($this->at(0))
+			->method('autoprovisionAllowed')
+			->willReturn(true);
+		$this->userBackend
+			->expects($this->at(1))
+			->method('createUserIfNotExists')
+			->with('MyUid');
+		$this->userBackend
+			->expects($this->once())
+			->method('getCurrentUserId')
+			->willReturn('MyUid');
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('MyUid')
+			->willReturn(null);
+
+		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
 		$this->assertEquals($expected, $this->samlController->login());
 	}
 

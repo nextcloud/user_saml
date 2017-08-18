@@ -19,6 +19,7 @@ Feature: Shibboleth
     And The response should be a SAML redirect page that gets submitted
     And I should be redirected to "http://localhost/index.php/apps/files/"
     And The user value "id" should be "student1"
+    And The last login timestamp of "student1" should not be empty
 
   Scenario: Authenticating using Shibboleth with SAML and check if user exists on backend and not existing user
     Given The setting "type" is set to "saml"
@@ -63,6 +64,8 @@ Feature: Shibboleth
     And I should be redirected to "http://localhost/index.php/apps/files/"
     Then The user value "id" should be "student1"
     Then The user value "email" should be ""
+    And The user value "display-name" should be "Default displayname of student1"
+    And The last login timestamp of "student1" should not be empty
 
   Scenario: Authenticating using Shibboleth with SAML in provisioning mode and custom mapped attributes
     Given The setting "type" is set to "saml"
@@ -87,3 +90,4 @@ Feature: Shibboleth
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "display-name" should be "Stud Ent"
+    And The last login timestamp of "student1" should not be empty

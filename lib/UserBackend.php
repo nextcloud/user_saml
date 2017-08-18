@@ -43,7 +43,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IUserManager */
 	private $userManager;
 	/** @var \OCP\UserInterface[] */
-	private $backends;
+	private static $backends = [];
 
 	/**
 	 * @param IConfig $config
@@ -70,7 +70,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @return bool
 	 */
-	private function userExistsInDatabase($uid) {
+	protected function userExistsInDatabase($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
@@ -111,17 +111,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return boolean
 	 *
 	 * Returns the supported actions as int to be
-	 * compared with \OC_User_Backend::CREATE_USER etc.
+	 * compared with \OC\User\Backend::CREATE_USER etc.
 	 * @since 4.5.0
 	 */
 	public function implementsActions($actions) {
-		$availableActions = \OC_User_Backend::CHECK_PASSWORD;
-		if($this->autoprovisionAllowed()
-			&& $this->config->getAppValue('user_saml', 'saml-attribute-mapping-displayName_mapping', '') !== '') {
-
-			$availableActions |= \OC_User_Backend::GET_DISPLAYNAME;
-		}
-
+		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
+		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -391,7 +386,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return null|UserInterface
 	 */
 	public function getActualUserBackend($uid) {
-		foreach($this->backends as $backend) {
+		foreach(self::$backends as $backend) {
 			if($backend->userExists($uid)) {
 				return $backend;
 			}
@@ -407,7 +402,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param \OCP\UserInterface[] $backends
 	 */
 	public function registerBackends(array $backends) {
-		$this->backends = $backends;
+		self::$backends = $backends;
 	}
 
 	private function getAttributeValue($name, array $attributes) {

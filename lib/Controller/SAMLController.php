@@ -31,6 +31,7 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
@@ -140,6 +141,11 @@ class SAMLController extends Controller {
 				$this->session->set('user_saml.samlUserData', $_SERVER);
 				try {
 					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
+					$user = $this->userManager->get($this->userBackend->getCurrentUserId());
+					if(!($user instanceof IUser)) {
+						throw new NoUserFoundException();
+					}
+					$user->updateLastLoginTimestamp();
 				} catch (NoUserFoundException $e) {
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
 				}
@@ -216,6 +222,15 @@ class SAMLController extends Controller {
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
+		try {
+			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
+			if(!($user instanceof IUser)) {
+				throw new \InvalidArgumentException('User is not valid');
+			}
+			$user->updateLastLoginTimestamp();
+		} catch (\Exception $e) {
+			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+		}
 
 		$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"

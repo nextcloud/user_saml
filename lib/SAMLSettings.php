@@ -23,6 +23,7 @@ namespace OCA\User_SAML;
 
 use OCP\AppFramework\Http;
 use OCP\IConfig;
+use OCP\IRequest;
 use OCP\IURLGenerator;
 
 class SAMLSettings {
@@ -30,21 +31,27 @@ class SAMLSettings {
 	private $urlGenerator;
 	/** @var IConfig */
 	private $config;
+	/** @var IRequest */
+	private $request;
 
 	/**
 	 * @param IURLGenerator $urlGenerator
 	 * @param IConfig $config
+	 * @param IRequest $request
 	 */
 	public function __construct(IURLGenerator $urlGenerator,
-								IConfig $config) {
+								IConfig $config,
+								IRequest $request) {
 		$this->urlGenerator = $urlGenerator;
 		$this->config = $config;
+		$this->request = $request;
 	}
 
 	public function getOneLoginSettingsArray() {
 		$settings = [
 			'strict' => true,
 			'debug' => $this->config->getSystemValue('debug', false),
+			'baseurl' => $this->request->getServerProtocol() . '://' . $this->request->getServerHost(),
 			'security' => [
 				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-nameIdEncrypted', '0') === '1') ? true : false,
 				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', 'security-authnRequestsSigned', '0') === '1') ? true : false,

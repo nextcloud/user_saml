@@ -371,6 +371,11 @@ class OneLogin_Saml2_Settings
             $this->_security['wantNameId'] = true;
         }
 
+        // Relax Destination validation
+        if (!isset($this->_security['relaxDestinationValidation'])) {
+            $this->_security['relaxDestinationValidation'] = false;
+        }
+
         // encrypt expected
         if (!isset($this->_security['wantAssertionsEncrypted'])) {
             $this->_security['wantAssertionsEncrypted'] = false;
@@ -384,9 +389,14 @@ class OneLogin_Saml2_Settings
             $this->_security['wantXMLValidation'] = true;
         }
 
-        // Algorithm
+        // SignatureAlgorithm
         if (!isset($this->_security['signatureAlgorithm'])) {
             $this->_security['signatureAlgorithm'] = XMLSecurityKey::RSA_SHA1;
+        }
+
+        // DigestAlgorithm
+        if (!isset($this->_security['digestAlgorithm'])) {
+            $this->_security['digestAlgorithm'] = XMLSecurityDSig::SHA1;
         }
 
         if (!isset($this->_security['lowercaseUrlencoding'])) {
@@ -835,7 +845,8 @@ class OneLogin_Saml2_Settings
             }
 
             $signatureAlgorithm = $this->_security['signatureAlgorithm'];
-            $metadata = OneLogin_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata, $signatureAlgorithm);
+            $digestAlgorithm = $this->_security['digestAlgorithm'];
+            $metadata = OneLogin_Saml2_Metadata::signMetadata($metadata, $keyMetadata, $certMetadata, $signatureAlgorithm, $digestAlgorithm);
         }
         return $metadata;
     }

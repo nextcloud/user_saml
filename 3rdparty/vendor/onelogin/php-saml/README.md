@@ -10,6 +10,9 @@ and supported by OneLogin Inc.
 Warning
 -------
 
+Update php-saml to 2.10.4, this version includes a security patch related to
+[signature validations on LogoutRequests/LogoutResponses](https://github.com/onelogin/php-saml/commit/949359f5cad5e1d085c4e5447d9aa8f49a6e82a1)
+
 Update php-saml to 2.10.0, this version includes a security patch that contains extra validations that will prevent signature wrapping attacks. [CVE-2016-1000253](https://github.com/distributedweaknessfiling/DWF-Database-Artifacts/blob/ab8ae6e845eb506fbeb10a7e4ccb379f0b4222ca/DWF/2016/1000253/CVE-2016-1000253.json)
 
 php-saml < v2.10.0 is vulnerable and allows signature wrapping!
@@ -458,6 +461,10 @@ $advancedSettings = array (
         // (In order to validate the xml, 'strict' and 'wantXMLValidation' must be true).
         'wantXMLValidation' => true,
 
+        // If true, SAMLResponses with an empty value at its Destination
+        // attribute will not be rejected for this fact.
+        'relaxDestinationValidation' => false,
+
         // Algorithm that the toolkit will use on signing process. Options:
         //    'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
         //    'http://www.w3.org/2000/09/xmldsig#dsa-sha1'
@@ -465,6 +472,13 @@ $advancedSettings = array (
         //    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha384'
         //    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha512'
         'signatureAlgorithm' => 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+
+        // Algorithm that the toolkit will use on digest process. Options:
+        //    'http://www.w3.org/2000/09/xmldsig#sha1'
+        //    'http://www.w3.org/2001/04/xmlenc#sha256'
+        //    'http://www.w3.org/2001/04/xmldsig-more#sha384'
+        //    'http://www.w3.org/2001/04/xmlenc#sha512'
+        'digestAlgorithm' => 'http://www.w3.org/2000/09/xmldsig#sha1',
 
         // ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses
         // uppercase. Turn it True for ADFS compatibility on signature verification
@@ -1060,6 +1074,23 @@ When the PHP application is behind a proxy or a load balancer we can execute set
 Also a developer can use setSelfProtocol, setSelfHost, setSelfPort and getBaseURLPath to define a specific value to be returned by isHTTPS, getSelfHost, getSelfPort and getBaseURLPath. And define a setBasePath to be used on the getSelfURL and getSelfRoutedURLNoQuery to replace the data extracted from $_SERVER["REQUEST_URI"].
 
 At the settings the developer will be able to set a 'baseurl' parameter that automatically will use setBaseURL to set values for setSelfProtocol, setSelfHost, setSelfPort and setBaseURLPath.
+
+
+### Working behind load balancer ###
+
+Is possible that asserting request URL and Destination attribute of SAML response fails when working behind load balancer with SSL offload.
+
+You should be able to workaround this by configuring your server so that it is aware of the proxy and returns the original url when requested.
+
+Or by using the method described on the previous section.
+
+
+### Reply attacks ###
+
+In order to avoid reply attacks, you can store the ID of the SAML messages already processed, to avoid processing them twice. Since the Messages expires and will be invalidated due that fact, you don't need to store those IDs longer than the time frame that you currently accepting.
+
+Get the ID of the last processed message/assertion with the getLastMessageId/getLastAssertionId method of the Auth object.
+
 
 ### Main classes and methods ###
 

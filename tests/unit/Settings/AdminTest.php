@@ -75,7 +75,7 @@ class AdminTest extends \Test\TestCase  {
 			'wantAssertionsEncrypted' => 'Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted.',
 			'wantNameId' => ' Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present.',
 			'wantNameIdEncrypted' => 'Indicates a requirement for the NameID received by this SP to be encrypted.',
-			'wantXMLValidation' => 'Indicates if the SP will validate all received XMLs.',
+			'wantXMLValidation' => 'Indicates if the SP will validate all received XML.',
 		];
 		$securityGeneral = [
 			'lowercaseUrlencoding' => 'ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.',
@@ -87,7 +87,7 @@ class AdminTest extends \Test\TestCase  {
 				'required' => true,
 			],
 			'require_provisioned_account' => [
-				'text' => 'Only allow authentication if an account is existent on some other backend. (e.g. LDAP)',
+				'text' => 'Only allow authentication if an account exists on some other backend. (e.g. LDAP)',
 				'type' => 'checkbox',
 			],
 			'use_saml_auth_for_desktop' => [

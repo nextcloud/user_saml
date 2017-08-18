@@ -45,6 +45,13 @@ class OneLogin_Saml2_Response
     private $_error;
 
     /**
+     * NotOnOrAfter value of a valid SubjectConfirmationData node
+     *
+     * @var DateTime
+     */
+    private $_validSCDNotOnOrAfter;
+
+    /**
      * Constructs the SAML Response object.
      *
      * @param OneLogin_Saml2_Settings $settings Settings.
@@ -200,7 +207,7 @@ class OneLogin_Saml2_Response
                 }
 
                 // Validate Asserion timestamps
-                $this->validateTimestamps();                
+                $this->validateTimestamps();
 
                 // Validate AuthnStatement element exists and is unique
                 if (!$this->checkOneAuthnStatement()) {
@@ -223,10 +230,12 @@ class OneLogin_Saml2_Response
                 if ($this->document->documentElement->hasAttribute('Destination')) {
                     $destination = trim($this->document->documentElement->getAttribute('Destination'));
                     if (empty($destination)) {
-                        throw new OneLogin_Saml2_ValidationError(
-                            "The response has an empty Destination value",
-                            OneLogin_Saml2_ValidationError::EMPTY_DESTINATION
-                        );
+                        if (!$security['relaxDestinationValidation']) {
+                            throw new OneLogin_Saml2_ValidationError(
+                                "The response has an empty Destination value",
+                                OneLogin_Saml2_ValidationError::EMPTY_DESTINATION
+                            );
+                        }
                     } else {
                         if (strpos($destination, $currentURL) !== 0) {
                             $currentURLNoRouted = OneLogin_Saml2_Utils::getSelfURLNoQuery();
@@ -243,9 +252,13 @@ class OneLogin_Saml2_Response
 
                 // Check audience
                 $validAudiences = $this->getAudiences();
-                if (!empty($validAudiences) && !in_array($spEntityId, $validAudiences)) {
+                if (!empty($validAudiences) && !in_array($spEntityId, $validAudiences, true)) {
                     throw new OneLogin_Saml2_ValidationError(
-                        "$spEntityId is not a valid audience for this Response",
+                        sprintf(
+                            "Invalid audience for this Response (expected '%s', got '%s')",
+                            $spEntityId,
+                            implode(',', $validAudiences)
+                        ),
                         OneLogin_Saml2_ValidationError::WRONG_AUDIENCE
                     );
                 }
@@ -256,7 +269,7 @@ class OneLogin_Saml2_Response
                     $trimmedIssuer = trim($issuer);
                     if (empty($trimmedIssuer) || $trimmedIssuer !== $idPEntityId) {
                         throw new OneLogin_Saml2_ValidationError(
-                            "Invalid issuer in the Assertion/Response",
+                            "Invalid issuer in the Assertion/Response (expected '$idPEntityId', got '$trimmedIssuer')",
                             OneLogin_Saml2_ValidationError::WRONG_ISSUER
                         );
                     }
@@ -264,7 +277,7 @@ class OneLogin_Saml2_Response
 
                 // Check the session Expiration
                 $sessionExpiration = $this->getSessionNotOnOrAfter();
-                if (!empty($sessionExpiration) &&  $sessionExpiration <= time()) {
+                if (!empty($sessionExpiration) && $sessionExpiration + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= time()) {
                     throw new OneLogin_Saml2_ValidationError(
                         "The attributes have expired, based on the SessionNotOnOrAfter of the AttributeStatement of this Response",
                         OneLogin_Saml2_ValidationError::SESSION_EXPIRED
@@ -297,15 +310,20 @@ class OneLogin_Saml2_Response
                         }
                         if ($scnData->hasAttribute('NotOnOrAfter')) {
                             $noa = OneLogin_Saml2_Utils::parseSAML2Time($scnData->getAttribute('NotOnOrAfter'));
-                            if ($noa <= time()) {
+                            if ($noa + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT <= time()) {
                                 continue;
                             }
                         }
                         if ($scnData->hasAttribute('NotBefore')) {
                             $nb = OneLogin_Saml2_Utils::parseSAML2Time($scnData->getAttribute('NotBefore'));
-                            if ($nb > time()) {
+                            if ($nb > time() + OneLogin_Saml2_Constants::ALLOWED_CLOCK_DRIFT) {
                                 continue;
                             }
+                        }
+
+                        // Save NotOnOrAfter value
+                        if ($scnData->hasAttribute('NotOnOrAfter')) {
+                            $this->_validSCDNotOnOrAfter = $noa;
                         }
                         $anySubjectConfirmation = true;
                         break;
@@ -384,8 +402,46 @@ class OneLogin_Saml2_Response
     }
 
     /**
+     * @return the ID of the Response
+     */
+    public function getId()
+    {
+        $id = null;
+        if ($this->document->documentElement->hasAttribute('ID')) {
+            $id = $this->document->documentElement->getAttribute('ID');
+        }
+        return $id;
+    }
+
+    /**
+     * @return the ID of the assertion in the Response
+     */
+    public function getAssertionId()
+    {
+        if (!$this->validateNumAssertions()) {
+            throw new IllegalArgumentException("SAML Response must contain 1 Assertion.");
+        }
+        $assertionNodes = $this->_queryAssertion("");
+        $id = null;
+        if ($assertionNodes->length == 1) {
+            if ($assertionNodes->item(0)->hasAttribute('ID')) {
+                $id = $assertionNodes->item(0)->getAttribute('ID');
+            }
+        }
+        return $id;
+    }
+
+    /**
+     * @return the NotOnOrAfter value of the valid SubjectConfirmationData *         node if any
+     */
+    public function getAssertionNotOnOrAfter()
+    {
+        return $this->_validSCDNotOnOrAfter;
+    }
+
+    /**
      * Checks if the Status is success
-     * 
+     *
      * @throws $statusExceptionMsg If status is not success
      */
     public function checkStatus()
@@ -439,7 +495,7 @@ class OneLogin_Saml2_Response
 
     /**
      * Gets the audiences.
-     * 
+     *
      * @return array @audience The valid audiences of the response
      */
     public function getAudiences()
@@ -459,7 +515,7 @@ class OneLogin_Saml2_Response
 
     /**
      * Gets the Issuers (from Response and Assertion).
-     * 
+     *
      * @return array @issuers The issuers of the assertion/response
      */
     public function getIssuers()
@@ -467,13 +523,15 @@ class OneLogin_Saml2_Response
         $issuers = array();
 
         $responseIssuer = OneLogin_Saml2_Utils::query($this->document, '/samlp:Response/saml:Issuer');
-        if ($responseIssuer->length == 1) {
-            $issuers[] = $responseIssuer->item(0)->textContent;
-        } else {
-            throw new OneLogin_Saml2_ValidationError(
-                "Issuer of the Response not found or multiple.",
-                OneLogin_Saml2_ValidationError::ISSUER_NOT_FOUND_IN_RESPONSE
-            );
+        if ($responseIssuer->length > 0) {
+            if ($responseIssuer->length == 1) {
+                $issuers[] = $responseIssuer->item(0)->textContent;
+            } else {
+                throw new OneLogin_Saml2_ValidationError(
+                    "Issuer of the Response is multiple.",
+                    OneLogin_Saml2_ValidationError::ISSUER_MULTIPLE_IN_RESPONSE
+                );
+            }
         }
 
         $assertionIssuer = $this->_queryAssertion('/saml:Issuer');
@@ -586,7 +644,7 @@ class OneLogin_Saml2_Response
     /**
      * Gets the SessionNotOnOrAfter from the AuthnStatement.
      * Could be used to set the local session expiration
-     * 
+     *
      * @return int|null The SessionNotOnOrAfter value
      */
     public function getSessionNotOnOrAfter()
@@ -604,7 +662,7 @@ class OneLogin_Saml2_Response
      * Could be used to be stored in the local session in order
      * to be used in a future Logout Request that the SP could
      * send to the SP, to set what specific session must be deleted
-     * 
+     *
      * @return string|null The SessionIndex value
      */
 
@@ -620,7 +678,7 @@ class OneLogin_Saml2_Response
 
     /**
      * Gets the Attributes from the AttributeStatement element.
-     * 
+     *
      * @return array The attributes of the SAML Assertion
      */
     public function getAttributes()
@@ -706,7 +764,6 @@ class OneLogin_Saml2_Response
             $signNodes = $this->document->getElementsByTagName('Signature');
         }
         foreach ($signNodes as $signNode) {
-            
             $responseTag = '{'.OneLogin_Saml2_Constants::NS_SAMLP.'}Response';
             $assertionTag = '{'.OneLogin_Saml2_Constants::NS_SAML.'}Assertion';
 
@@ -747,7 +804,7 @@ class OneLogin_Saml2_Response
                         throw new OneLogin_Saml2_ValidationError(
                             'Found an invalid Signed Element. SAML Response rejected',
                             OneLogin_Saml2_ValidationError::INVALID_SIGNED_ELEMENT
-                        );                        
+                        );
                     }
 
                     if (in_array($sei, $verifiedSeis)) {
@@ -772,7 +829,7 @@ class OneLogin_Saml2_Response
             if (!$this->validateSignedElements($signedElements)) {
                 throw new OneLogin_Saml2_ValidationError(
                     'Found an unexpected Signature Element. SAML Response rejected',
-                    OneLogin_Saml2_ValidationError::UNEXPECTED_SIGNED_ELEMENT
+                    OneLogin_Saml2_ValidationError::UNEXPECTED_SIGNED_ELEMENTS
                 );
             }
         }
@@ -953,7 +1010,7 @@ class OneLogin_Saml2_Response
         if (!$encData) {
             throw new OneLogin_Saml2_ValidationError(
                 "Cannot locate encrypted assertion",
-                OneLogin_Saml2_ValidationError::MISSING_ENCRYPTED_ELEMENT                                        
+                OneLogin_Saml2_ValidationError::MISSING_ENCRYPTED_ELEMENT
             );
         }
         
@@ -962,7 +1019,7 @@ class OneLogin_Saml2_Response
         if (!$objKey = $objenc->locateKey()) {
             throw new OneLogin_Saml2_ValidationError(
                 "Unknown algorithm",
-                OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR                                        
+                OneLogin_Saml2_ValidationError::KEY_ALGORITHM_ERROR
             );
         }
 
@@ -987,7 +1044,6 @@ class OneLogin_Saml2_Response
         if ($decrypted instanceof DOMDocument) {
             return $decrypted;
         } else {
-
             $encryptedAssertion = $decrypted->parentNode;
             $container = $encryptedAssertion->parentNode;
 
@@ -998,10 +1054,9 @@ class OneLogin_Saml2_Response
               !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml') &&
               !$container->hasAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:saml2')
               ) {
-
                 if (strpos($encryptedAssertion->tagName, 'saml2:') !== false) {
                     $ns = 'xmlns:saml2';
-                } else if (strpos($encryptedAssertion->tagName, 'saml:') != false) {
+                } else if (strpos($encryptedAssertion->tagName, 'saml:') !== false) {
                     $ns = 'xmlns:saml';
                 } else {
                     $ns = 'xmlns';
@@ -1025,7 +1080,7 @@ class OneLogin_Saml2_Response
         return $this->_error;
     }
 
-    /* 
+    /*
      * Returns the SAML Response document (If contains an encrypted assertion, decrypts it)
      *
      * @return DomDocument SAML Response

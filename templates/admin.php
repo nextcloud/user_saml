@@ -54,7 +54,7 @@ style('user_saml', 'admin');
 			<h3><?php p($l->t('Service Provider Data')) ?></h3>
 			<p>
 				<?php print_unescaped($l->t('If your Service Provider should use certificates you can optionally specify them here.')) ?>
-				<span class="toggle"><?php p($l->t('Show Service Provider settings ...')) ?></span>
+				<span class="toggle"><?php p($l->t('Show Service Provider settings…')) ?></span>
 			</p>
 
 			<div class="hidden">
@@ -73,7 +73,7 @@ style('user_saml', 'admin');
 
 			<p><input name="entityId" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-entityId', '')) ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
 			<p><input name="singleSignOnService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleSignOnService.url', '')) ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
-			<p><span class="toggle"><?php p($l->t('Show optional Identity Provider settings ...')) ?></span></p>
+			<p><span class="toggle"><?php p($l->t('Show optional Identity Provider settings…')) ?></span></p>
 			<div class="hidden">
 				<p><input name="singleLogoutService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleLogoutService.url', '')) ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?>"/></p>
 				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-x509cert', '')) ?></textarea></p>
@@ -84,7 +84,7 @@ style('user_saml', 'admin');
 			<h3><?php p($l->t('Attribute mapping')) ?></h3>
 			<p>
 				<?php print_unescaped($l->t('If you want to optionally map SAML attributes to the user you can configure these here.')) ?>
-				<span class="toggle"><?php p($l->t('Show attribute mapping settings ...')) ?></span>
+				<span class="toggle"><?php p($l->t('Show attribute mapping settings…')) ?></span>
 			</p>
 
 			<div class="hidden">
@@ -103,7 +103,7 @@ style('user_saml', 'admin');
 			<h3><?php p($l->t('Security settings')) ?></h3>
 			<p>
 				<?php print_unescaped($l->t('For increased security we recommend enabling the following settings if supported by your environment.')) ?>
-				<span class="toggle"><?php p($l->t('Show security settings ...')) ?></span>
+				<span class="toggle"><?php p($l->t('Show security settings…')) ?></span>
 			</p>
 			<div class="indent hidden">
 				<h4><?php p($l->t('Signatures and encryption offered')) ?></h4>
