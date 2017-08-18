@@ -28,7 +28,6 @@ if(OC::$CLI) {
 	$cli = true;
 }
 
-
 $urlGenerator = \OC::$server->getURLGenerator();
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
@@ -99,7 +98,20 @@ if($useSamlForDesktopClients === '1') {
 }
 
 if($redirectSituation === true) {
+	$params = $request->getParams();
+	$originalUrl = '';
+	if(isset($params['redirect_url'])) {
+		$originalUrl = $urlGenerator->getAbsoluteURL($params['redirect_url']);
+	}
+
 	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
-	header('Location: '.$urlGenerator->linkToRouteAbsolute('user_saml.SAML.login') .'?requesttoken='. urlencode($csrfToken->getEncryptedValue()));
+	$targetUrl = $urlGenerator->linkToRouteAbsolute(
+		'user_saml.SAML.login',
+		[
+			'requesttoken' => $csrfToken->getEncryptedValue(),
+			'originalUrl' => $originalUrl,
+		]
+	);
+	header('Location: '.$targetUrl);
 	exit();
 }
