@@ -7,6 +7,7 @@ OC.L10N.register(
     "Whether the metadata should be signed." : "Si los datos meta deberíen roblase.",
     "SSO & SAML authentication" : "Autenticación SSO y SAML",
     "Open documentation" : "Abrir documentación",
+    "Use built-in SAML authentication" : "Usar autenticación integrada SAML",
     "Use environment variable" : "Usar variable d'entornu",
     "General" : "Xeneral",
     "Service Provider Data" : "Datos del fornidor de servicios",
