@@ -12,6 +12,7 @@
     "Public X.509 certificate of the IdP" : "Opinbert X.509-skilríki fyrir IdP",
     "Attribute mapping" : "Vörpun eiginda",
     "Security settings" : "Öryggisstillingar",
+    "Show security settings…" : "Birta öryggisstillingar…",
     "Signatures and encryption offered" : "Undirritanir og dulritun í boði",
     "Signatures and encryption required" : "Krafist er undirritunar og dulritununar",
     "Download metadata XML" : "Sækja XML-lýsigögn",
