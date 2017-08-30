@@ -321,19 +321,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	/**
-	 * Creates an attribute which is added to the logout hyperlink. It can
-	 * supply any attribute(s) which are valid for <a>.
-	 *
-	 * @return string with one or more HTML attributes.
-	 * @since 6.0.0
+	 * {@inheritdoc}
 	 */
-	public function getLogoutAttribute() {
+	public function getLogoutUrl() {
 		$slo = $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', '');
 		if($slo === '') {
-			return 'style="display:none;"';
+			return '';
 		}
 
-		return 'href="'.$this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService').'?requesttoken='.urlencode(\OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue()).'"';
+		return $this->urlGenerator->linkToRouteAbsolute(
+			'user_saml.SAML.singleLogoutService',
+			[
+				'requesttoken' => \OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue(),
+			]
+		);
 	}
 
 	/**
