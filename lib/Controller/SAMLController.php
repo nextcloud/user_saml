@@ -250,15 +250,24 @@ class SAMLController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 *
+	 * @return Http\RedirectResponse
 	 */
 	public function singleLogoutService() {
-		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
-		$returnTo = null;
-		$parameters = array();
-		$nameId = $this->session->get('user_saml.samlNameId');
-		$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-		$this->userSession->logout();
-		$auth->logout($returnTo, $parameters, $nameId, $sessionIndex);
+		if($this->request->passesCSRFCheck()) {
+			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+			$returnTo = null;
+			$parameters = array();
+			$nameId = $this->session->get('user_saml.samlNameId');
+			$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
+			$this->userSession->logout();
+			$targetUrl = $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, true);
+		} else {
+			$targetUrl = $this->urlGenerator->getAbsoluteURL('/');
+		}
+
+		return new Http\RedirectResponse($targetUrl);
 	}
 
 	/**
