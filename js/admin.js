@@ -57,11 +57,15 @@ $(function() {
 
 	$('#user-saml-choose-saml').click(function(e) {
 		e.preventDefault();
-		OCA.User_SAML.Admin.chooseSaml();
+		if(type === '') {
+			OCA.User_SAML.Admin.chooseSaml();
+		}
 	});
 	$('#user-saml-choose-env').click(function(e) {
 		e.preventDefault();
-		OCA.User_SAML.Admin.chooseEnv();
+		if(type === '') {
+			OCA.User_SAML.Admin.chooseEnv();
+		}
 	});
 
 	// Enable tabs
