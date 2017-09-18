@@ -35,7 +35,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "SP에서 SLO 요청 메시지를 보낼 IdP 대상 URL",
     "Public X.509 certificate of the IdP" : "IdP의 공개 X.509 인증서",
     "Attribute mapping" : "속성 매핑",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "SAML 속성을 추가로 매핑하려면 여기에서 설정하십시오.",
     "Security settings" : "보안 설정",
     "For increased security we recommend enabling the following settings if supported by your environment." : "보안을 강화하기 위해서 환경에서 지원하는 경우 다음 설정을 사용할 것을 추천합니다.",
     "Signatures and encryption offered" : "서명과 암호화 제공됨",
@@ -50,6 +49,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "서비스 공급자 설정 보이기 ...",
     "Show optional Identity Provider settings ..." : "추가 인증 공급자 설정 보이기 ...",
     "Show security settings ..." : "보안 설정 보이기 ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "SAML 속성을 추가로 매핑하려면 여기에서 설정하십시오.",
     "Show attribute mapping settings ..." : "속성 매핑 설정 보이기 ..."
 },
 "nplurals=1; plural=0;");

@@ -37,7 +37,6 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "Posizione dell'URL dell'IdP dove lo SP invierà la richiesta SLO",
     "Public X.509 certificate of the IdP" : "Certificato X.509 dell'IdP",
     "Attribute mapping" : "Associazione degli attributi",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Se vuoi associare, in modo facoltativo, gli attributi SAML all'utente, puoi configurarli qui.",
     "Show attribute mapping settings…" : "Mostra le impostazioni di associazione degli attributi...",
     "Security settings" : "Impostazioni di sicurezza",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Per una maggiore sicurezza, consigliamo di abilitare le seguenti impostazioni, se supportate dal tuo ambiente.",
@@ -54,6 +53,7 @@
     "Show Service Provider settings ..." : "Mostra impostazioni fornitore di servizi...",
     "Show optional Identity Provider settings ..." : "Mostra impostazioni opzionali del fornitore di identità...",
     "Show security settings ..." : "Mostra impostazioni di sicurezza...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Se vuoi associare, in modo facoltativo, gli attributi SAML all'utente, puoi configurarli qui.",
     "Show attribute mapping settings ..." : "Mostra le impostazioni di associazione degli attributi..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

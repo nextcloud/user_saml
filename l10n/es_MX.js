@@ -39,7 +39,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Ubicación del URL del IdP donde el SP enviará la Solicitud SLO",
     "Public X.509 certificate of the IdP" : "Certificado X.509 público del IdP",
     "Attribute mapping" : "Mapeo del atributo",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si, de manera opcional, deseas mapear atributos SAML al usuario, los puedes configurar aquí.",
     "Show attribute mapping settings…" : "Mostrar las configuraciones del mapeo de atributos...",
     "Security settings" : "Configuraciones de seguridad",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Para mayor seguridad te recomendamos habilitar las siguientes configuraciones si están soportados en tu ambiente.",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "Mostrar las configuraciones del proveedor de servicios ...",
     "Show optional Identity Provider settings ..." : "Mostrar las configuraciones opcionales para Proveedor de Identidad ...",
     "Show security settings ..." : "Mostrar las configuraciones de seguridad ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si, de manera opcional, deseas mapear atributos SAML al usuario, los puedes configurar aquí.",
     "Show attribute mapping settings ..." : "Mostrar las configuraciones del mapeo del atributo"
 },
 "nplurals=2; plural=(n != 1);");

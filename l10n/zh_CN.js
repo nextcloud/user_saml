@@ -26,7 +26,6 @@ OC.L10N.register(
     "Configure your IdP settings here." : "在这里配置你的 ldP 设置。",
     "Show optional Identity Provider settings…" : "显示可选的身份提供者设置...",
     "Attribute mapping" : "属性映射",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "如果你想映射 SAML 属性到用户，可在此设置。",
     "Show attribute mapping settings…" : "显示属性映射设置...",
     "Security settings" : "安全设置",
     "For increased security we recommend enabling the following settings if supported by your environment." : "为了提升安全性，如果你的环境支持，建议启用以下设置。",
@@ -40,6 +39,7 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "身份验证将在后台设置账户后生效。（如：LDAP轻量目录访问协议）",
     "Show Service Provider settings ..." : "显示服务供应商设置...",
     "Show security settings ..." : "显示安全设置...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "如果你想映射 SAML 属性到用户，可在此设置。",
     "Show attribute mapping settings ..." : "显示属性映射设置..."
 },
 "nplurals=1; plural=0;");
