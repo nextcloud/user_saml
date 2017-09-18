@@ -53,7 +53,7 @@ $(function() {
 		$('#user-saml-settings .button').addClass('hidden');
 	}
 
-	if($('#user-saml-general-require_provisioned_account').val() === '0') {
+	if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
 		$('#user-saml-attribute-mapping').toggleClass('hidden');
 	}
 
