@@ -11,8 +11,7 @@
 				return;
 			}
 
-			OC.AppConfig.setValue('user_saml', 'type', 'environment-variable');
-			location.reload();
+			OCP.AppConfig.setValue('user_saml', 'type', 'environment-variable', {success: function() {location.reload();}});
 		},
 
 		chooseSaml: function() {
@@ -21,8 +20,7 @@
 				return;
 			}
 
-			OC.AppConfig.setValue('user_saml', 'type', 'saml');
-			location.reload();
+			OCP.AppConfig.setValue('user_saml', 'type', 'saml', {success: function() {location.reload();}});
 		},
 
 		setSamlConfigValue: function(category, setting, value) {
