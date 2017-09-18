@@ -11,8 +11,7 @@
 				return;
 			}
 
-			OC.AppConfig.setValue('user_saml', 'type', 'environment-variable');
-			location.reload();
+			OCP.AppConfig.setValue('user_saml', 'type', 'environment-variable', {success: function() {location.reload();}});
 		},
 
 		chooseSaml: function() {
@@ -21,8 +20,7 @@
 				return;
 			}
 
-			OC.AppConfig.setValue('user_saml', 'type', 'saml');
-			location.reload();
+			OCP.AppConfig.setValue('user_saml', 'type', 'saml', {success: function() {location.reload();}});
 		},
 
 		setSamlConfigValue: function(category, setting, value) {
@@ -53,17 +51,21 @@ $(function() {
 		$('#user-saml-settings .button').addClass('hidden');
 	}
 
-	if($('#user-saml-general-require_provisioned_account').val() === '0') {
+	if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
 		$('#user-saml-attribute-mapping').toggleClass('hidden');
 	}
 
 	$('#user-saml-choose-saml').click(function(e) {
 		e.preventDefault();
-		OCA.User_SAML.Admin.chooseSaml();
+		if(type === '') {
+			OCA.User_SAML.Admin.chooseSaml();
+		}
 	});
 	$('#user-saml-choose-env').click(function(e) {
 		e.preventDefault();
-		OCA.User_SAML.Admin.chooseEnv();
+		if(type === '') {
+			OCA.User_SAML.Admin.chooseEnv();
+		}
 	});
 
 	// Enable tabs

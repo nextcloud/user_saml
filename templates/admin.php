@@ -83,7 +83,7 @@ style('user_saml', 'admin');
 		<div id="user-saml-attribute-mapping" class="hidden">
 			<h3><?php p($l->t('Attribute mapping')) ?></h3>
 			<p>
-				<?php print_unescaped($l->t('If you want to optionally map SAML attributes to the user you can configure these here.')) ?>
+				<?php print_unescaped($l->t('If you want to optionally map attributes to the user you can configure these here.')) ?>
 				<span class="toggle"><?php p($l->t('Show attribute mapping settings…')) ?></span>
 			</p>
 
