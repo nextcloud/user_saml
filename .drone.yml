@@ -23,6 +23,25 @@ pipeline:
     when:
       matrix:
         TESTS: check-app-compatbility
+  check-app-compatbility-older-stable12:
+    image: nextcloudci/php5.6:php5.6-3
+    environment:
+      - APP_NAME=user_saml
+      - CORE_BRANCH=v12.0.1
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+
+      # Code checker
+      - ./occ app:check-code $APP_NAME -c strong-comparison
+      - ./occ app:check-code $APP_NAME -c deprecation
+      - cd apps/$APP_NAME/
+    when:
+      matrix:
+        TESTS: check-app-compatbility-older-stable12
   check-app-compatbility-stable12:
     image: nextcloudci/php5.6:php5.6-3
     environment:
@@ -219,6 +238,26 @@ pipeline:
     when:
       matrix:
         TESTS: integration-tests-stable12
+  integration-tests-older-stable12:
+    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-5
+    environment:
+      - CORE_BRANCH=v12.0.1
+    commands:
+      - /start.sh &
+      - sleep 3
+      - scl enable rh-php56 bash
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
+      - chown -R apache:apache /var/www/html/
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+    when:
+      matrix:
+        TESTS: integration-tests-older-stable12
 
 matrix:
   include:
@@ -230,6 +269,8 @@ matrix:
     - TESTS: php7.1-stable12
     - TESTS: check-app-compatbility
     - TESTS: check-app-compatbility-stable12
+    - TESTS: check-app-compatbility-older-stable12
     - TESTS: signed-off-check
     - TESTS: integration-tests
     - TESTS: integration-tests-stable12
+    - TESTS: integration-tests-older-stable12
