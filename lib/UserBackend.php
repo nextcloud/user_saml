@@ -338,6 +338,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	/**
+	 * Logout attribute for Nextcloud < 12.0.3
+	 *
+	 * @return string
+	 */
+	public function getLogoutAttribute() {
+		return 'style="display:none;"';
+	}
+
+	/**
 	 * Return the id of the current user
 	 * @return string
 	 * @since 6.0.0
