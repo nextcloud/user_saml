@@ -39,7 +39,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL du fournisseur d'identité où le fournisseur de service enverra la requête de déconnexion SLO",
     "Public X.509 certificate of the IdP" : "Certificat public X.509 de l'IdP",
     "Attribute mapping" : "Mappage des attributs",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si vous préférez relier les attributs SAML à l'utilisateur, vous pouvez les configurer ici.",
     "Show attribute mapping settings…" : "Montrer les paramètres du mappage des attributs...",
     "Security settings" : "Paramètres de sécurité",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pour augmenté la sécurité nous recommandons d'activer les paramètres suivant si ils sont supportés par votre environnement.",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "Afficher les options du fournisseur de service...",
     "Show optional Identity Provider settings ..." : "Afficher les paramètres optionnels du fournisseur d'identité",
     "Show security settings ..." : "Afficher les paramètres de sécurité",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si vous préférez relier les attributs SAML à l'utilisateur, vous pouvez les configurer ici.",
     "Show attribute mapping settings ..." : "Montrer les paramètres du mappage des attributs..."
 },
 "nplurals=2; plural=(n > 1);");
