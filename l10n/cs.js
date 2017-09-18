@@ -39,7 +39,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Umístění URL IdP, kam SP odešle SLO požadavek",
     "Public X.509 certificate of the IdP" : "Veřejný X.509 certifikát poskytovatele přihlašovacích údajů",
     "Attribute mapping" : "Mapování atributů",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Pokud chcete mapovat SAML atributy na uživatele, můžete to nastavit zde.",
     "Show attribute mapping settings…" : "Zobrazit nastavení mapování atributů ...",
     "Security settings" : "Bezpečnostní nastavení",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pro zvýšení bezpečnosti doporučujeme povolení následujících možností, pokud jsou tyto podporovány ve vašem prostředí.",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "Zobrazit nastavení poskytovatele služeb ...",
     "Show optional Identity Provider settings ..." : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů ...",
     "Show security settings ..." : "Zobrazit bezpečnostní nastavení ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Pokud chcete mapovat SAML atributy na uživatele, můžete to nastavit zde.",
     "Show attribute mapping settings ..." : "Zobrazit nastavení mapování atributů ..."
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");

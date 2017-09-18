@@ -37,7 +37,6 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "URL locatie van de IdP waar de SP het SLO Request naartoe zal versturen",
     "Public X.509 certificate of the IdP" : "Publiek X.509 certificaat van de IdP",
     "Attribute mapping" : "mapping toekennen",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Optionele SAML mapping toekenning instellen.",
     "Show attribute mapping settings…" : "Attribuut instellingen weergeven...",
     "Security settings" : "Beveiligingsinstellingen",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Voor verhoogde beveiliging adviseren we om de volgende instellingen te activeren als die door jouw omgeving worden ondersteund.",
@@ -54,6 +53,7 @@
     "Show Service Provider settings ..." : "Tonen Service Provider instellingen ...",
     "Show optional Identity Provider settings ..." : "Tonen optionele Identity Provider instellingen ...",
     "Show security settings ..." : "Tonen beveiligingsinstellingen ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Optionele SAML mapping toekenning instellen.",
     "Show attribute mapping settings ..." : "Mapping instellingen weergeven ..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

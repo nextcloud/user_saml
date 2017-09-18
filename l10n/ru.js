@@ -39,7 +39,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL адрес IdP, куда SP будет оправлять запросы SLO.",
     "Public X.509 certificate of the IdP" : "Открытый сертификат X.509 ldP",
     "Attribute mapping" : "Привязка атрибутов",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Здесь можно настроить дополнительную привязку пользователю атрибутов SAML. ",
     "Show attribute mapping settings…" : "Показать настройки привязки атрибутов…",
     "Security settings" : "Настройки безопасности",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Для повышения безопасности рекомендуем использовать следующие настройки, если они поддерживаются вашим окружением.",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "Показать настройки поставщика услуг...",
     "Show optional Identity Provider settings ..." : "Показать дополнительные настройки провайдера идентификации",
     "Show security settings ..." : "Показать настройки безопасности ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Здесь можно настроить дополнительную привязку пользователю атрибутов SAML. ",
     "Show attribute mapping settings ..." : "Показать настройки привязки атрибутов…"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

@@ -39,7 +39,6 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Vendndodhja URL e IDP ku PS do të dërgojë Kërkesën SLO",
     "Public X.509 certificate of the IdP" : "Çertifikatë publike X.509 e IdP",
     "Attribute mapping" : "Përcaktimi i atributeve",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Nëse dëshironi të maponi në mënyrë opsionale atributet SAML tek përdoruesi, ju mund t'i konfiguroni ato këtu.",
     "Show attribute mapping settings…" : "Trego konfigurimet e përcaktimit të atributeve...",
     "Security settings" : "Konfigurimet e sigurisë",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Për të rritur nivelin e sigurisë ne ju rekomandojmë të mundësoni konfigurimet në vijim nëse ato suportohen nga mjedisi juaj.",
@@ -56,6 +55,7 @@ OC.L10N.register(
     "Show Service Provider settings ..." : "Trego konfigurimet e Ofruesit të Shërbimit",
     "Show optional Identity Provider settings ..." : "Trego konfigurimet opsionale të Dhënësit të Identitetit ...",
     "Show security settings ..." : "Trego konfigurimet e sigurisë ...",
+    "If you want to optionally map SAML attributes to the user you can configure these here." : "Nëse dëshironi të maponi në mënyrë opsionale atributet SAML tek përdoruesi, ju mund t'i konfiguroni ato këtu.",
     "Show attribute mapping settings ..." : "Trego konfigurimet e përcaktimit të atributeve ..."
 },
 "nplurals=2; plural=(n != 1);");
