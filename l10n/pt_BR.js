@@ -39,6 +39,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Localização da URL do IdP para onde o SP enviará a solicitação SLO",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 do IdP",
     "Attribute mapping" : "Mapeamento de atributo",
+    "If you want to optionally map attributes to the user you can configure these here." : "Aqui você pode opcionalmente mapear atributos aos usuários.",
     "Show attribute mapping settings…" : "Mostrar configurações de mapeamento de atributos...",
     "Security settings" : "Configurações de segurança",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Para aumentar a segurança recomendamos habilitar as seguinte configurações se seu ambiente suportar",
