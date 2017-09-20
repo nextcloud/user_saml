@@ -37,6 +37,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "URL plats för IdP'n där SP'n kommer skicka en SLO-begäran",
     "Public X.509 certificate of the IdP" : "Publikt X.509-certifikat av IdP'n",
     "Attribute mapping" : "Attributmappning",
+    "If you want to optionally map attributes to the user you can configure these here." : "Om du vill mappa attributen till användaren kan du konfigurera dessa här",
     "Show attribute mapping settings…" : "Visa inställningar för attributmappning",
     "Security settings" : "Säkerhetsinställningar",
     "For increased security we recommend enabling the following settings if supported by your environment." : "För ökad säkerhet rekommenderar vi att följande inställningar aktiveras om de stöds av din miljö.",

@@ -39,6 +39,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Hizmet sağlayıcının SLO İsteğini gödereceği Kimlik Sağlayıcı adresini yazın",
     "Public X.509 certificate of the IdP" : "Kimlik Sağlayıcının herkese açık X.509 sertifikası",
     "Attribute mapping" : "Öznitelik eşleştirme",
+    "If you want to optionally map attributes to the user you can configure these here." : "Öznitelikler isteğe bağlı olarak kullanıcı ile buradan eşleştirilebilir.",
     "Show attribute mapping settings…" : "Öznitelik eşleştirme ayarlarını görüntüle…",
     "Security settings" : "Güvenlik ayarları",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Arttırılmış güvenlik için ortamınız tarafından destekleniyorsa şu seçenekleri etkinleştirmeniz önerilir.",
