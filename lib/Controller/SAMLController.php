@@ -208,7 +208,7 @@ class SAMLController extends Controller {
 		}
 
 		if (!$auth->isAuthenticated()) {
-			$this->logger->info('Auth failed');
+			$this->logger->info('Auth failed', ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
@@ -217,7 +217,7 @@ class SAMLController extends Controller {
 		try {
 			$this->autoprovisionIfPossible($auth->getAttributes());
 		} catch (NoUserFoundException $e) {
-			$this->logger->info('User not found');
+			$this->logger->info('User not found', ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
@@ -232,7 +232,7 @@ class SAMLController extends Controller {
 			}
 			$user->updateLastLoginTimestamp();
 		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => 'user_saml']);
+			$this->logger->logException($e, ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
