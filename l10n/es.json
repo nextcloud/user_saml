@@ -37,6 +37,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "Dirección URL de el IdP donde el SP enviará las peticiones SLO",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 del IdP",
     "Attribute mapping" : "Definición de atributos",
+    "If you want to optionally map attributes to the user you can configure these here." : "Si opcionalmente quieres mapear atributos al usuario puedes configurar éstos aquí.",
     "Show attribute mapping settings…" : "Mostrar configuración de mapeado de atributos",
     "Security settings" : "Configuración de seguridad",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Para incrementar la seguridad recomendamos activar los siguientes ajustes si son soportados por su entorno.",
