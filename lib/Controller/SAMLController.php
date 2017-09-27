@@ -186,6 +186,7 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
+	 * @NoSameSiteCookieRequired
 	 *
 	 * @return Http\RedirectResponse|void
 	 */
