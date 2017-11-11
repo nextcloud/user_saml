@@ -2,7 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Lagret",
-    "X.509 certificate of the Service Provider" : "X.509 sertifikat for tjenesteleverandøren",
+    "X.509 certificate of the Service Provider" : "X.509-sertifikat for tjenesteleverandøren",
     "Private key of the Service Provider" : "Privat nøkkel for tjenesteleverandøren",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Forteller om <samlp:logoutRequest> av denne SPen er kryptert.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Forteller om <samlp:logoutRequest>-meldinger sendt av denne SP-en vil bli signert. [Metadataen til SP-en vil ha denne infoen å by på]",
