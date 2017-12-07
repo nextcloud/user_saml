@@ -465,6 +465,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$currentDisplayname = (string)$this->getDisplayName($uid);
 			if($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
+				\OC_Hook::emit('OC_User', 'changeUser',
+					[
+						'user' => $user,
+						'feature' => 'displayName',
+						'value' => $newDisplayname
+					]
+				);
 				$this->setDisplayName($uid, $newDisplayname);
 			}
 		}
