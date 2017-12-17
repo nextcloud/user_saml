@@ -15,7 +15,7 @@
     "Indicates if the SP will validate all received XML." : "Wskazuje czy SP zatwierdzi wszystkie odebrane XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Dane ADFS URL-Encodes SAML są małymi literami a narzędzie standardowo obsługuje duże litery. Włącz dla ADFS kompatybilność weryfikacji podpisu.",
     "Attribute to map the UID to." : "Atrybut do mapowania UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Pozwól na autentykację tylko wtedy, jeśli konto istnieje na jakiejś innej platformie (np. LDAP)",
+    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Pozwól na uwierzytelnienie tylko wtedy, jeśli konto istnieje na jakiejś innej platformie (np. LDAP)",
     "Attribute to map the displayname to." : "Atrybut do mapowania wyświetlanej nazwy użytkownika.",
     "Attribute to map the email address to." : "Atrybut do zamapowania adresu e-mail.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Użyj uwierzytelnienia LDAP dla %s klienta stacji roboczej (wymaga ponownego uwierzytelnienia)",
