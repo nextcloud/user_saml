@@ -99,6 +99,12 @@ class SAMLController extends Controller {
 				$uid = $auth[$uidMapping];
 			}
 
+			// make sure that a valid UID is given
+			if (empty($uid)) {
+				$this->logger->error('Uid "' . $uid . '" is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
+				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
+			}
+
 			$userExists = $this->userManager->userExists($uid);
 			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if($userExists === true) {
