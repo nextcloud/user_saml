@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.2
+
+- update display name in accounts table correctly
+- improve error messages and logging
+
+
 ## 1.4.0
 
 ### Fixed
