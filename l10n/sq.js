@@ -55,8 +55,8 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Lejo autentifikimin vetëm nëse llogaria është ekzistente në disa backend-e të tjerë.(e.g.LDAP)",
     "Show Service Provider settings ..." : "Trego konfigurimet e Ofruesit të Shërbimit",
     "Show optional Identity Provider settings ..." : "Trego konfigurimet opsionale të Dhënësit të Identitetit ...",
-    "Show security settings ..." : "Trego konfigurimet e sigurisë ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Nëse dëshironi të maponi në mënyrë opsionale atributet SAML tek përdoruesi, ju mund t'i konfiguroni ato këtu.",
-    "Show attribute mapping settings ..." : "Trego konfigurimet e përcaktimit të atributeve ..."
+    "Show attribute mapping settings ..." : "Trego konfigurimet e përcaktimit të atributeve ...",
+    "Show security settings ..." : "Trego konfigurimet e sigurisë ..."
 },
 "nplurals=2; plural=(n != 1);");

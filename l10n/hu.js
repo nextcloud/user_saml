@@ -55,8 +55,8 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Csak akkor engedd az autentikációt, ha egy másik háttérszolgáltatásban is létezik a fiók. (pl: LDAP)",
     "Show Service Provider settings ..." : "Szolgáltatói beállítások mutatása ...",
     "Show optional Identity Provider settings ..." : "Opcionális Azonosító szolgáltatási paraméterek mutatása ...",
-    "Show security settings ..." : "Biztonsági beállítások megjelenítése ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Ha opcionális összerendelést szeretnél a SAML attribútumokkal és a felhasználóval, állítsd be itt.",
-    "Show attribute mapping settings ..." : "Attribútum összerendelési beállítások mutatása ..."
+    "Show attribute mapping settings ..." : "Attribútum összerendelési beállítások mutatása ...",
+    "Show security settings ..." : "Biztonsági beállítások megjelenítése ..."
 },
 "nplurals=2; plural=(n != 1);");

@@ -55,8 +55,8 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Només permetre l'autenticació si hi ha un compte en un altre suport. (p. ex., LDAP)",
     "Show Service Provider settings ..." : "Dades del proveïdor de serveis",
     "Show optional Identity Provider settings ..." : "Dades del proveïdor de serveis",
-    "Show security settings ..." : "Mostra la configuració de seguretat ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Si voleu assignar automàticament atributs SAML a l'usuari, podeu configurar-los aquí.",
-    "Show attribute mapping settings ..." : "Mostra la configuració del mapa d'atributs ..."
+    "Show attribute mapping settings ..." : "Mostra la configuració del mapa d'atributs ...",
+    "Show security settings ..." : "Mostra la configuració de seguretat ..."
 },
 "nplurals=2; plural=(n != 1);");

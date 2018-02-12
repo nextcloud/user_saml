@@ -53,8 +53,8 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "다른 백엔드(예: LDAP)에 계정이 있을 때에만 인증을 허용합니다.",
     "Show Service Provider settings ..." : "서비스 공급자 설정 보이기 ...",
     "Show optional Identity Provider settings ..." : "추가 인증 공급자 설정 보이기 ...",
-    "Show security settings ..." : "보안 설정 보이기 ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "SAML 속성을 추가로 매핑하려면 여기에서 설정하십시오.",
-    "Show attribute mapping settings ..." : "속성 매핑 설정 보이기 ..."
+    "Show attribute mapping settings ..." : "속성 매핑 설정 보이기 ...",
+    "Show security settings ..." : "보안 설정 보이기 ..."
 },"pluralForm" :"nplurals=1; plural=0;"
 }
