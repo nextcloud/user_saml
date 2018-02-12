@@ -55,8 +55,8 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "აუტენტიფიკაციის უფლება დართეთ მხოლოდ მაშინ, თუ ანგარიში არსებობს რაიმე სხვა ბექენდზეც. (მაგ. LDAP-ზე)",
     "Show Service Provider settings ..." : "სერვისის მომწოდებლის პარამეტრების ჩვენება ...",
     "Show optional Identity Provider settings ..." : "არა-აუცილებელი იდენტობის პროვაიდერის პარამეტრების ჩვენება ...",
-    "Show security settings ..." : "უსაფრთხოების პარამეტრების ჩვენება ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "არაა აუცილებელი, მაგრამ თუ გსურთ SAML ატრიბუტების მიბმა მომხმარებელთან, შეგიძლიათ კონფიგურაცია შეასრულოთ აქ.",
-    "Show attribute mapping settings ..." : "ატრიბუტების მიბმის პარამეტრების ჩვენება ..."
+    "Show attribute mapping settings ..." : "ატრიბუტების მიბმის პარამეტრების ჩვენება ...",
+    "Show security settings ..." : "უსაფრთხოების პარამეტრების ჩვენება ..."
 },
 "nplurals=1; plural=0;");

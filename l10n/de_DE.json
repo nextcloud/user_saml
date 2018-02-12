@@ -53,8 +53,8 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Anmeldung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
     "Show Service Provider settings ..." : "Zeige die Diensteanbieter-Einstellungen…",
     "Show optional Identity Provider settings ..." : "Zeige optionale Autorisierungsdienst-Einstellungen",
-    "Show security settings ..." : "Zeige Sicherheitseinstellungen…",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Wenn Sie optional SAML-Attribute dem Nutzer zuordnen möchten, können Sie dies hier einstellen.",
-    "Show attribute mapping settings ..." : "Einstellungen der Attribute-Zuordnung anzeigen …"
+    "Show attribute mapping settings ..." : "Einstellungen der Attribute-Zuordnung anzeigen …",
+    "Show security settings ..." : "Zeige Sicherheitseinstellungen…"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

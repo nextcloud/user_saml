@@ -55,8 +55,8 @@ OC.L10N.register(
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet již existuje i někde jinde. (např. LDAP)",
     "Show Service Provider settings ..." : "Zobrazit nastavení poskytovatele služeb ...",
     "Show optional Identity Provider settings ..." : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů ...",
-    "Show security settings ..." : "Zobrazit bezpečnostní nastavení ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Pokud chcete mapovat SAML atributy na uživatele, můžete to nastavit zde.",
-    "Show attribute mapping settings ..." : "Zobrazit nastavení mapování atributů ..."
+    "Show attribute mapping settings ..." : "Zobrazit nastavení mapování atributů ...",
+    "Show security settings ..." : "Zobrazit bezpečnostní nastavení ..."
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");
