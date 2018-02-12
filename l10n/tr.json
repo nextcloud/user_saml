@@ -53,8 +53,8 @@
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Bir hesap yalnız başka bir arka sistemde varsa (LDAP gibi) kimliği doğrulansın",
     "Show Service Provider settings ..." : "Hizmet Sağlayıcı Ayarlarını Görüntüle ...",
     "Show optional Identity Provider settings ..." : "İsteğe bağlı ek Kimlik Sağlayıcı ayarları ...",
-    "Show security settings ..." : "Güvenlik ayarlarını görüntüle ...",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "SAML öznitelikleri isteğe bağlı olarak kullanıcı ile buradan eşleştirilebilir.",
-    "Show attribute mapping settings ..." : "Öznitelik eşleştirme ayarlarını görüntüle ..."
+    "Show attribute mapping settings ..." : "Öznitelik eşleştirme ayarlarını görüntüle ...",
+    "Show security settings ..." : "Güvenlik ayarlarını görüntüle ..."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
