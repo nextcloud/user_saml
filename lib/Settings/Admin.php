@@ -78,7 +78,8 @@ class Admin implements ISettings {
 		];
 		$generalSettings = [
 			'uid_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the UID to.'),
+				'text' => 'User.LastName',
+				'label' => $this->l10n->t('Attribute to map the UID to.'),
 				'type' => 'line',
 				'required' => true,
 			],
@@ -89,12 +90,14 @@ class Admin implements ISettings {
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the displayname to.'),
+				'text' => 'User.FirstName User.LastName',
+				'label' => $this->l10n->t('Attribute to map the displayname to.'),
 				'type' => 'line',
 				'required' => true,
 			],
 			'email_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the email address to.'),
+				'text' =>'User.Email',
+				'label' => $this->l10n->t('Attribute to map the email address to.'),
 				'type' => 'line',
 				'required' => true,
 			],
@@ -105,6 +108,11 @@ class Admin implements ISettings {
 			$generalSettings['use_saml_auth_for_desktop'] = [
 				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
 				'type' => 'checkbox',
+			];
+			$generalSettings['sign_out_secret'] = [
+				'text' => $this->l10n->t('Shared secret'),
+				'label' => $this->l10n->t('Shared secret to enable endpoint to logout all temporary sessions of a user'),
+				'type' => 'line',
 			];
 		}
 

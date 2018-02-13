@@ -44,6 +44,11 @@ return [
 			'verb' => 'GET',
 		],
 		[
+			'name' => 'SAML#singleSignOut',
+			'url' => '/saml/signOut',
+			'verb' => 'POST',
+		],
+		[
 			'name' => 'SAML#notProvisioned',
 			'url' => '/saml/notProvisioned',
 			'verb' => 'GET',
