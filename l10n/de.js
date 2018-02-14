@@ -26,7 +26,7 @@ OC.L10N.register(
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Bitte auswählen ob die Autorisierung mittels in Nextcloud integriertem SAML oder gegen eine Umgebungsvariable erfolgen soll.",
     "Use built-in SAML authentication" : "Integrierte SAML-Autorisierung benutzen",
     "Use environment variable" : "Umgebungsvariable benutzen",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Es muss ein Benutzer mit Administrator-Rechten vorhanden sein, der sich mittels SSO anmelden kann. Eine Anmeldung mit Deinem normalen Zugang %s ist dann nicht merh möglich.",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Es muss ein Benutzer mit Administrator-Rechten vorhanden sein, der sich mittels SSO anmelden kann. Eine Anmeldung mit Deinem normalen Zugang %s ist dann nicht mehr möglich.",
     "General" : "Allgemein",
     "Service Provider Data" : "Diensteanbieter-Daten",
     "If your Service Provider should use certificates you can optionally specify them here." : "Sollte Dein Diensteanbieter Zertifikate benutzen dann hast Du hier die Möglichkeit diese anzugeben.",
