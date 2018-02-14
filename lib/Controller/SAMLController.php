@@ -21,11 +21,15 @@
 
 namespace OCA\User_SAML\Controller;
 
+use OC\Authentication\Token\DefaultToken;
+use OC\Authentication\Token\IProvider;
+use OC\Authentication\Token\IToken;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -50,6 +54,8 @@ class SAMLController extends Controller {
 	private $urlGenerator;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var IProvider */
+	private $tokenProvider;
 	/** @var ILogger */
 	private $logger;
 
@@ -63,6 +69,7 @@ class SAMLController extends Controller {
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
+	 * @param IProvider $tokenProvider
 	 * @param ILogger $logger
 	 */
 	public function __construct($appName,
@@ -74,6 +81,7 @@ class SAMLController extends Controller {
 								IConfig $config,
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
+								IProvider $tokenProvider,
 								ILogger $logger) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -83,6 +91,7 @@ class SAMLController extends Controller {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
+		$this->tokenProvider = $tokenProvider;
 		$this->logger = $logger;
 	}
 
@@ -278,6 +287,36 @@ class SAMLController extends Controller {
 		}
 
 		return new Http\RedirectResponse($targetUrl);
+	}
+
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 *
+	 * @param string $secret
+	 * @param string $uid
+	 * @return JSONResponse
+	 */
+	public function singleSignOut($secret, $uid) {
+		$sharedSecret = $this->config->getAppValue('user_saml', 'general-sign_out_secret', '');
+		if ($sharedSecret === '' || $sharedSecret !== $secret) {
+			return new JSONResponse([], Http::STATUS_BAD_REQUEST);
+		}
+
+		$user = $this->userManager->get($uid);
+		if (!$user instanceof IUser) {
+			return new JSONResponse([], Http::STATUS_NOT_FOUND);
+		}
+
+		$tokens = $this->tokenProvider->getTokenByUser($user);
+		foreach ($tokens as $token) {
+			/** @var DefaultToken $token */
+			if ($token->getType() === IToken::TEMPORARY_TOKEN) {
+				$this->tokenProvider->invalidateTokenById($user, $token->getId());
+			}
+		}
+
+		return new JSONResponse();
 	}
 
 	/**
