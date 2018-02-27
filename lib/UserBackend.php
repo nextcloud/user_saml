@@ -421,12 +421,18 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		self::$backends = $backends;
 	}
 
-	private function getAttributeValue($name, array $attributes) {
+	private function getAttributeKeys($name)
+	{
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
 
-		if(count($keys) === 1 && $keys[0] === '') {
+		if (count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
+		return $keys;
+	}
+
+	private function getAttributeValue($name, array $attributes) {
+		$keys = $this->getAttributeKeys($name);
 
 		$value = '';
 		foreach($keys as $key) {
@@ -443,6 +449,23 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 						$value .= ' ';
 					}
 					$value .= $attributes[$key];
+				}
+			}
+		}
+
+		return $value;
+	}
+
+	private function getAttributeArrayValue($name, array $attributes) {
+		$keys = $this->getAttributeKeys($name);
+
+		$value = array();
+		foreach($keys as $key) {
+			if (isset($attributes[$key])) {
+				if (is_array($attributes[$key])) {
+					$value = array_merge($value, array_values($attributes[$key]));
+				} else {
+					$value[] = $attributes[$key];
 				}
 			}
 		}
@@ -473,7 +496,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$newGroups = $this->getAttributeValue('saml-attribute-mapping-group_mapping', $attributes);
+			$newGroups = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newGroups = null;
 		}
@@ -486,7 +509,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setEMailAddress($newEmail);
 			}
 			$currentDisplayname = (string)$this->getDisplayName($uid);
-			if($newDisplayname !== null
+			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
 				\OC_Hook::emit('OC_User', 'changeUser',
 					[
@@ -502,16 +525,22 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setQuota($newQuota);
 			}
 
-			if ($newGroups !==null) {
-				$groups = explode(' ', $newGroups);
-				foreach ($groups as $group) {
-					if (!($this->groupManager->groupExists($group))) {
-						$this->groupManager->createGroup($group);
+			if ($newGroups !== null) {
+				$groupManager = $this->groupManager;
+				$oldGroups = $groupManager->getUserGroupIds($user);
+
+				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
+				$groupsToRemove = array_diff($oldGroups, $newGroups);
+
+				foreach ($groupsToAdd as $group) {
+					if (!($groupManager->groupExists($group))) {
+						$groupManager->createGroup($group);
 					}
-					$groupInBackend = $this->groupManager->get($group);
-					if (!$groupInBackend->inGroup($user)) {
-						$groupInBackend->addUser($user);
-					}
+					$groupManager->get($group)->addUser($user);
+				}
+
+				foreach ($groupsToRemove as $group) {
+					$groupManager->get($group)->removeUser($user);
 				}
 			}
 		}
