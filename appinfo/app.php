@@ -81,6 +81,12 @@ if($returnScript === true) {
 	return;
 }
 
+$app = new \OCA\User_SAML\AppInfo\Application();
+$dispatcher = \OC::$server->getEventDispatcher();
+if ($type === 'environment-variable') {
+	$app->registerDavAuth();
+}
+
 $redirectSituation = false;
 
 $user = $userSession->getUser();
