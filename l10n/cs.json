@@ -41,7 +41,7 @@
     "Show attribute mapping settings…" : "Zobrazit nastavení mapování atributů ...",
     "Security settings" : "Bezpečnostní nastavení",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pro zvýšení bezpečnosti doporučujeme povolení následujících možností, pokud jsou tyto podporovány ve vašem prostředí.",
-    "Show security settings…" : "Zobrazit bezpečnostní nastavení ...",
+    "Show security settings…" : "Zobrazit nastavení zabezpečení…",
     "Signatures and encryption offered" : "Podpisy a šifrování nabízeno",
     "Signatures and encryption required" : "Podpisy a šifrování vyžadováno",
     "Download metadata XML" : "Stahovat metadata XML",
