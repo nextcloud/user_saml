@@ -29,6 +29,7 @@ if(OC::$CLI) {
 }
 
 $urlGenerator = \OC::$server->getURLGenerator();
+$l = \OC::$server->getL10N('user_saml');
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
@@ -71,6 +72,22 @@ if($returnScript === true) {
 }
 
 $redirectSituation = false;
+
+$user = $userSession->getUser();
+if ($user !== null) {
+	$enabled = $user->isEnabled();
+	if ($enabled === false) {
+		$targetUrl = $urlGenerator->linkToRouteAbsolute(
+			'user_saml.SAML.genericError',
+			[
+				'message' => $l->t('This user account is disabled, please contact your administrator.')
+			]
+		);
+		header('Location: '.$targetUrl);
+		exit();
+	}
+}
+
 // All requests that are not authenticated and match against the "/login" route are
 // redirected to the SAML login endpoint
 if(!$cli &&
