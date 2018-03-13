@@ -27,6 +27,7 @@ use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
+use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
@@ -55,6 +56,8 @@ class SAMLControllerTest extends TestCase  {
 	private $userManager;
 	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
 	private $logger;
+	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
+	private $l;
 	/** @var SAMLController */
 	private $samlController;
 
@@ -70,6 +73,13 @@ class SAMLControllerTest extends TestCase  {
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->logger = $this->createMock(ILogger::class);
+		$this->l = $this->createMock(IL10N::class);
+
+		$this->l->expects($this->any())->method('t')->willReturnCallback(
+			function($param) {
+				return $param;
+			}
+		);
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -81,7 +91,8 @@ class SAMLControllerTest extends TestCase  {
 			$this->config,
 			$this->urlGenerator,
 			$this->userManager,
-			$this->logger
+			$this->logger,
+			$this->l
 		);
 	}
 
@@ -377,5 +388,23 @@ class SAMLControllerTest extends TestCase  {
 	public function testNotProvisioned() {
 		$expected = new TemplateResponse('user_saml', 'notProvisioned', [], 'guest');
 		$this->assertEquals($expected, $this->samlController->notProvisioned());
+	}
+
+	/**
+	 * @dataProvider dataTestGenericError
+	 *
+	 * @param string $messageSend
+	 * @param string $messageExpected
+	 */
+	public function testGenericError($messageSend, $messageExpected) {
+		$expected = new TemplateResponse('user_saml', 'error', ['message' => $messageExpected], 'guest');
+		$this->assertEquals($expected, $this->samlController->genericError($messageSend));
+	}
+
+	public function dataTestGenericError() {
+		return [
+			['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'],
+			['messageSend' => 'test message', 'messageExpected' => 'test message'],
+		];
 	}
 }
