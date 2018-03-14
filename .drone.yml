@@ -8,7 +8,7 @@ pipeline:
     image: nextcloudci/php5.6:php5.6-3
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -46,7 +46,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -61,7 +61,7 @@ pipeline:
     image: nextcloudci/php5.6:php5.6-3
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
       - DB=sqlite
     commands:
       - apt update && apt-get -y install php5-xdebug
@@ -86,7 +86,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -104,7 +104,7 @@ pipeline:
     image: nextcloudci/php7.1:php7.1-12
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -182,7 +182,7 @@ pipeline:
   integration-tests:
     image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-5
     environment:
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable13
     commands:
       - /start.sh &
       - sleep 3
