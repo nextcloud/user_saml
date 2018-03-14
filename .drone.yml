@@ -75,13 +75,13 @@ pipeline:
       matrix:
         TESTS: php7.1
   integration-tests:
-    image: nextcloudci/user_saml_shibboleth:user_saml_shibboleth-5
+    image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
     environment:
       - CORE_BRANCH=master
     commands:
       - /start.sh &
       - sleep 3
-      - scl enable rh-php56 bash
+      - scl enable rh-php70 bash
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
