@@ -27,6 +27,7 @@ use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
+use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
@@ -52,6 +53,8 @@ class SAMLController extends Controller {
 	private $userManager;
 	/** @var ILogger */
 	private $logger;
+	/** @var IL10N */
+	private $l;
 
 	/**
 	 * @param string $appName
@@ -64,6 +67,7 @@ class SAMLController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
 	 * @param ILogger $logger
+	 * @param IL10N $l
 	 */
 	public function __construct($appName,
 								IRequest $request,
@@ -74,7 +78,8 @@ class SAMLController extends Controller {
 								IConfig $config,
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
-								ILogger $logger) {
+								ILogger $logger,
+								IL10N $l) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
@@ -84,6 +89,7 @@ class SAMLController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
+		$this->l = $l;
 	}
 
 	/**
@@ -97,6 +103,12 @@ class SAMLController extends Controller {
 				$uid = $auth[$uidMapping][0];
 			} else {
 				$uid = $auth[$uidMapping];
+			}
+
+			// make sure that a valid UID is given
+			if (empty($uid)) {
+				$this->logger->error('Uid "' . $uid . '" is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
+				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
 			}
 
 			$userExists = $this->userManager->userExists($uid);
@@ -281,5 +293,20 @@ class SAMLController extends Controller {
 	 */
 	public function notProvisioned() {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
+	}
+
+
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @OnlyUnauthenticatedUsers
+	 * @param string $message
+	 * @return Http\TemplateResponse
+	 */
+	public function genericError($message) {
+		if (empty($message)) {
+			$message = $this->l->t('Unknown error, please check the log file for more details.');
+		}
+		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 }
