@@ -99,6 +99,13 @@ class SAMLController extends Controller {
 
 			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if(!$userExists && !$autoProvisioningAllowed) {
+				// it is possible that the user was not logged in before and
+				// thus is not known to the original backend. A search can
+				// help with it and make the user known
+				$this->userManager->search($uid);
+				if($this->userManager->userExists($uid)) {
+					return;
+				}
 				throw new NoUserFoundException();
 			} elseif(!$userExists && $autoProvisioningAllowed) {
 				$this->userBackend->createUserIfNotExists($uid);
