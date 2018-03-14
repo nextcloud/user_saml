@@ -48,5 +48,10 @@ return [
 			'url' => '/saml/notProvisioned',
 			'verb' => 'GET',
 		],
+		[
+			'name' => 'SAML#genericError',
+			'url' => '/saml/error',
+			'verb' => 'GET',
+		],
 	],
 ];

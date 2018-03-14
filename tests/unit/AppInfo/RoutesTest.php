@@ -54,6 +54,11 @@ class Test extends TestCase  {
 					'url' => '/saml/notProvisioned',
 					'verb' => 'GET',
 				],
+				[
+					'name' => 'SAML#genericError',
+					'url' => '/saml/error',
+					'verb' => 'GET',
+				],
 			],
 		];
 		$this->assertSame($expected, $routes);

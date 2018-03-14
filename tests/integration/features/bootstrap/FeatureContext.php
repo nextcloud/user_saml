@@ -56,7 +56,7 @@ class FeatureContext implements Context {
 		foreach($users as $user) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache /opt/rh/rh-php56/root/usr/bin/php %s user:delete %s',
+					'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s user:delete %s',
 					__DIR__ . '/../../../../../../occ',
 					$user
 				)
@@ -66,7 +66,7 @@ class FeatureContext implements Context {
 		foreach($this->changedSettings as $setting) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache /opt/rh/rh-php56/root/usr/bin/php %s config:app:delete user_saml %s',
+					'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s config:app:delete user_saml %s',
 					__DIR__ . '/../../../../../../occ',
 					$setting
 				)
@@ -86,7 +86,7 @@ class FeatureContext implements Context {
 		$this->changedSettings[] = $settingName;
 		shell_exec(
 			sprintf(
-				'sudo -u apache /opt/rh/rh-php56/root/usr/bin/php %s config:app:set --value="%s" user_saml %s',
+				'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s config:app:set --value="%s" user_saml %s',
 				__DIR__ . '/../../../../../../occ',
 				$value,
 				$settingName
@@ -234,7 +234,7 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password /opt/rh/rh-php56/root/usr/bin/php %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'sudo -u apache OC_PASS=password /opt/rh/rh-php70/root/usr/bin/php %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
 				__DIR__ . '/../../../../../../occ',
 				$uid
 			)
@@ -250,7 +250,7 @@ class FeatureContext implements Context {
 	public function theLastLoginTimestampOfShouldNotBeEmpty($uid) {
 		$response = shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password /opt/rh/rh-php56/root/usr/bin/php %s user:lastseen %s',
+				'sudo -u apache OC_PASS=password /opt/rh/rh-php70/root/usr/bin/php %s user:lastseen %s',
 				__DIR__ . '/../../../../../../occ',
 				$uid
 			)
