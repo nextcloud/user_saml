@@ -133,7 +133,11 @@ class UserBackendTest extends TestCase   {
 			->method('getAppValue')
 			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
 			->willReturn('displayname');
-
+		$this->config
+			->expects($this->at(2))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
+			->willReturn('quota');
 
 		$this->userManager
 			->expects($this->once())
@@ -148,6 +152,10 @@ class UserBackendTest extends TestCase   {
 			->expects($this->once())
 			->method('setEMailAddress')
 			->with('new@example.com');
+		$user
+			->expects($this->once())
+			->method('setQuota')
+			->with('50MB');
 		$this->userBackend
 			->expects($this->once())
 			->method('getDisplayName')
@@ -157,6 +165,58 @@ class UserBackendTest extends TestCase   {
 			->expects($this->once())
 			->method('setDisplayName')
 			->with('ExistingUser', 'New Displayname');
-		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname']);
+		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '50MB']);
 	}
+
+	public function testUpdateAttributesQuotaDefaultFallback() {
+		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
+		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		$user = $this->createMock(IUser::class);
+
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
+			->willReturn('email');
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
+			->willReturn('displayname');
+		$this->config
+			->expects($this->at(2))
+			->method('getAppValue')
+			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
+			->willReturn('quota');
+
+		$this->userManager
+			->expects($this->once())
+			->method('get')
+			->with('ExistingUser')
+			->willReturn($user);
+		$user
+			->expects($this->once())
+			->method('getEMailAddress')
+			->willReturn('old@example.com');
+		$user
+			->expects($this->once())
+			->method('setEMailAddress')
+			->with('new@example.com');
+		$user
+			->expects($this->once())
+			->method('setQuota')
+			->with('default');
+		$this->userBackend
+			->expects($this->once())
+			->method('getDisplayName')
+			->with('ExistingUser')
+			->willReturn('');
+		$this->userBackend
+			->expects($this->once())
+			->method('setDisplayName')
+			->with('ExistingUser', 'New Displayname');
+		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
+	}
+
+
 }
