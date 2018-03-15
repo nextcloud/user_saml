@@ -457,6 +457,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 		try {
 			$newQuota = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			if ($newQuota === '') {
+				$newQuota = 'default';
+			}
 		} catch (\InvalidArgumentException $e) {
 			$newQuota = null;
 		}
