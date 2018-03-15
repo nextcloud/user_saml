@@ -455,6 +455,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		} catch (\InvalidArgumentException $e) {
 			$newDisplayname = null;
 		}
+		try {
+			$newQuota = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			if ($newQuota === '') {
+				$newQuota = 'default';
+			}
+		} catch (\InvalidArgumentException $e) {
+			$newQuota = null;
+		}
 
 		if ($user !== null) {
 			$currentEmail = (string)$user->getEMailAddress();
@@ -473,6 +481,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 					]
 				);
 				$this->setDisplayName($uid, $newDisplayname);
+			}
+
+			if ($newQuota !== null) {
+				$user->setQuota($newQuota);
 			}
 		}
 	}

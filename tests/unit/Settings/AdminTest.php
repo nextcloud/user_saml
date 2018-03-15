@@ -106,6 +106,11 @@ class AdminTest extends \Test\TestCase  {
 				'type' => 'line',
 				'required' => true,
 			],
+			'quota_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the quota to.'),
+				'type' => 'line',
+				'required' => false,
+			],
 		];
 
 		$params = [
