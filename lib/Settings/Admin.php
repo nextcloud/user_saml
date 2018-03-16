@@ -86,6 +86,10 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
 			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
+				'type' => 'checkbox',
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
