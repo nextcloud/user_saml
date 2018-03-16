@@ -94,6 +94,10 @@ class AdminTest extends \Test\TestCase  {
 				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
 				'type' => 'checkbox',
 			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
+				'type' => 'checkbox',
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
