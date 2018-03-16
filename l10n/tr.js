@@ -1,7 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Kullanıcı hesabı devre dışı bırakılmış. Lütfen yöneticiniz ile görüşün.",
     "Saved" : "Kaydedildi",
+    "Unknown error, please check the log file for more details." : "Bilinmeyen bir sorun çıktı. Ayrıntılı bilgi almak için günlük dosyalarına bakın.",
     "X.509 certificate of the Service Provider" : "Hizmet sağlayıcının X.509 sertifikası",
     "Private key of the Service Provider" : "Hizmet sağlayıcının özel anahtarı",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Bu hizmet sağlayıcı tarafından gönderilen <samlp:logoutRequest> NameID değerinin şifrelenmiş olup olmayacağını gösterir.",

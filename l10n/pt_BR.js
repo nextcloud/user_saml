@@ -1,7 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Esta conta de usuário está desabilitada, contacte o administrador.",
     "Saved" : "Salvo",
+    "Unknown error, please check the log file for more details." : "Erro desconhecido, verifique o log para mais detalhes.",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do Provedor de Serviços",
     "Private key of the Service Provider" : "Chave privada do Provedor de Serviços",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que o ID do nome do <samlp:logoutRequest> enviado por este SP será criptografado.",
