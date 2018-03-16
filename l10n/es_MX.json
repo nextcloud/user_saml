@@ -1,5 +1,7 @@
 { "translations": {
+    "This user account is disabled, please contact your administrator." : "Esta cuenta de usuario se encuentra deshabilitada, por favor contacta a tu administrador.",
     "Saved" : "Guardado",
+    "Unknown error, please check the log file for more details." : "Error desonocido, por favor revisa el archivo de bitácora para más detalles.",
     "X.509 certificate of the Service Provider" : "certificado X.509 del Proveedor de Servicio",
     "Private key of the Service Provider" : "Llave privada del Proveedor de Servicio",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que el nameID de <samlp:logoutRequest> enviado por este SP será encriptado. ",
