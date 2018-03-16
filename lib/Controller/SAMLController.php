@@ -316,4 +316,57 @@ class SAMLController extends Controller {
 		}
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
+
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @OnlyUnauthenticatedUsers
+	 * @param string $redirectUrl
+	 * @return Http\TemplateResponse
+	 */
+	public function selectUserBackEnd($redirectUrl) {
+		$loginUrls = [
+			'directLogin' => $this->getDirectLoginUrl(),
+			'ssoLogin' => $this->getSSOUrl($redirectUrl)
+		];
+		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
+	}
+
+	/**
+	 * get SSO URL
+	 *
+	 * @param $redirectUrl
+	 * @return string
+	 */
+	private function getSSOUrl($redirectUrl) {
+
+		$originalUrl = '';
+		if(!empty($redirectUrl)) {
+			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
+		}
+
+
+		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
+			'user_saml.SAML.login',
+			[
+				'requesttoken' => $csrfToken->getEncryptedValue(),
+				'originalUrl' => $originalUrl,
+			]
+		);
+
+		return $ssoUrl;
+
+	}
+
+	/**
+	 * get SSO URL
+	 *
+	 * @return string
+	 */
+	private function getDirectLoginUrl() {
+		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', ['direct' => '1']);
+		return $directUrl;
+	}
+
 }

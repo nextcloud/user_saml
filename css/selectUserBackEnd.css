@@ -1,0 +1,36 @@
+#saml-select-user-back-end {
+	color: white;
+}
+
+#saml-select-user-back-end h1 {
+	font-size: 16px;
+	padding: 20px 0;
+}
+
+.login-option {
+	background-color: #0082c9;
+	border: 1px solid #fff;
+	font-weight: 600;
+	/*padding: 13px 20px;*/
+	height: 40px;
+
+	margin: 15px 0;
+	min-width: 269px;
+	border-radius: 3px;
+	font-size: 20px;
+	color: white;
+}
+
+.login-option a {
+	display:inline-block;
+    width:100%;
+    line-height:40px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.login-option .icon-confirm-white {
+	float: right;
+	line-height: 40px;
+}
+

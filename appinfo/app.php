@@ -94,6 +94,10 @@ if(!$cli &&
 	!$userSession->isLoggedIn() &&
 	\OC::$server->getRequest()->getPathInfo() === '/login' &&
 	$type !== '') {
+	$params = $request->getParams();
+	if (isset($params['direct'])) {
+		return;
+	}
 	$redirectSituation = true;
 }
 
@@ -112,6 +116,26 @@ if($useSamlForDesktopClients === '1') {
 			$redirectSituation = true;
 		}
 	}
+}
+
+$multipleUserBackEnds = $config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
+
+if ($redirectSituation === true && $multipleUserBackEnds === '1') {
+	$params = $request->getParams();
+	$redirectUrl = '';
+	if(isset($params['redirect_url'])) {
+		$redirectUrl = $params['redirect_url'];
+	}
+
+	$targetUrl = $urlGenerator->linkToRouteAbsolute(
+		'user_saml.SAML.selectUserBackEnd',
+		[
+			'redirectUrl' => $redirectUrl
+		]
+	);
+	header('Location: '.$targetUrl);
+	exit();
+
 }
 
 if($redirectSituation === true) {
