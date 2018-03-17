@@ -20,6 +20,7 @@
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
     "Attribute to map the displayname to." : "Attribut pour relier le nom d'utilisateur.",
     "Attribute to map the email address to." : "Attribut pour relier l'adresse mail.",
+    "Attribute to map the quota to." : "Attribut pour relier le quota.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utiliser l'authentification SAML pour le client bureau de %s (requiert une ré-authentification de l'utilisateur)",
     "SSO & SAML authentication" : "Authentification SSO & SAML",
     "Open documentation" : "Voir la documentation",
