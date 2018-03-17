@@ -22,6 +22,7 @@ OC.L10N.register(
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Permitir la autenticación solo si una cuenta existe en algún otro motor (LDAP, p. ej.).",
     "Attribute to map the displayname to." : "Atributo para definir el nombre mostrado",
     "Attribute to map the email address to." : "Atributo para definir la dirección de correo electrónico",
+    "Attribute to map the quota to." : "Atributo para asignar la cuota a.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar la autenticación SAML para los clientes de escritorio %s (necesita una re-autenticación del usuario)",
     "SSO & SAML authentication" : "Autenticación SSO & SAML",
     "Open documentation" : "Abrir documentación",
