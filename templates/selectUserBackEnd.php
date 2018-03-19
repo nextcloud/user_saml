@@ -7,7 +7,7 @@ style('user_saml', 'selectUserBackEnd');
 
 <div id="saml-select-user-back-end">
 
-<h1>Chose login option:</h1>
+<h1>Choose login option:</h1>
 
 <div class="login-option">
 	<a href="<?php p($_['directLogin']['url']); ?>"><?php p($_['directLogin']['display-name']); ?></a>
