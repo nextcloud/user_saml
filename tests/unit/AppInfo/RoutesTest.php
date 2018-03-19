@@ -59,6 +59,11 @@ class Test extends TestCase  {
 					'url' => '/saml/error',
 					'verb' => 'GET',
 				],
+				[
+					'name' => 'SAML#selectUserBackEnd',
+					'url' => '/saml/selectUserBackEnd',
+					'verb' => 'GET',
+				],
 			],
 		];
 		$this->assertSame($expected, $routes);

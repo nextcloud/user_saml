@@ -53,5 +53,10 @@ return [
 			'url' => '/saml/error',
 			'verb' => 'GET',
 		],
+		[
+			'name' => 'SAML#selectUserBackEnd',
+			'url' => '/saml/selectUserBackEnd',
+			'verb' => 'GET',
+		],
 	],
 ];

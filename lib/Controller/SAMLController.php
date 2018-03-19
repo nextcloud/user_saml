@@ -316,4 +316,77 @@ class SAMLController extends Controller {
 		}
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
+
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @OnlyUnauthenticatedUsers
+	 * @param string $redirectUrl
+	 * @return Http\TemplateResponse
+	 */
+	public function selectUserBackEnd($redirectUrl) {
+		$loginUrls = [
+			'directLogin' => [
+				'url' => $this->getDirectLoginUrl(),
+				'display-name' => $this->l->t('Direct log in')
+				],
+			'ssoLogin' => [
+				'url' => $this->getSSOUrl($redirectUrl),
+				'display-name' => $this->getSSODisplayName(),
+				]
+		];
+		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
+	}
+
+	/**
+	 * get SSO URL
+	 *
+	 * @param $redirectUrl
+	 * @return string
+	 */
+	private function getSSOUrl($redirectUrl) {
+
+		$originalUrl = '';
+		if(!empty($redirectUrl)) {
+			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
+		}
+
+
+		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
+			'user_saml.SAML.login',
+			[
+				'requesttoken' => $csrfToken->getEncryptedValue(),
+				'originalUrl' => $originalUrl,
+			]
+		);
+
+		return $ssoUrl;
+
+	}
+
+	/**
+	 * return the display name of the SSO identity provider
+	 *
+	 * @return string
+	 */
+	protected function getSSODisplayName() {
+		$displayName = $this->config->getAppValue('user_saml', 'general-idp0_display_name');
+		if (empty($displayName)) {
+			$displayName = $this->l->t('SSO & SAML log in');
+		}
+
+		return $displayName;
+	}
+
+	/**
+	 * get Nextcloud login URL
+	 *
+	 * @return string
+	 */
+	private function getDirectLoginUrl() {
+		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', ['direct' => '1']);
+		return $directUrl;
+	}
+
 }
