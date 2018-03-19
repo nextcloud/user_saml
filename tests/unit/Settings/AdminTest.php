@@ -81,6 +81,11 @@ class AdminTest extends \Test\TestCase  {
 			'lowercaseUrlencoding' => 'ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.',
 		];
 		$generalSettings = [
+			'idp0_display_name' => [
+				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
+				'type' => 'line',
+				'required' => false,
+			],
 			'uid_mapping' => [
 				'text' => 'Attribute to map the UID to.',
 				'type' => 'line',
@@ -92,6 +97,10 @@ class AdminTest extends \Test\TestCase  {
 			],
 			'use_saml_auth_for_desktop' => [
 				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
+				'type' => 'checkbox',
+			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
 			],
 		];

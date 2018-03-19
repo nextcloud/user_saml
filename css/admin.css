@@ -5,6 +5,7 @@
 
 #user-saml input[type="checkbox"] {
 	vertical-align:middle;
+	cursor: pointer;
 }
 
 #user-saml h4 {
