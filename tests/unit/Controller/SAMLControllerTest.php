@@ -407,4 +407,27 @@ class SAMLControllerTest extends TestCase  {
 			['messageSend' => 'test message', 'messageExpected' => 'test message'],
 		];
 	}
+
+	/**
+	 * @dataProvider dataTestGetSSODisplayName
+	 *
+	 * @param string $configuredDisplayName
+	 * @param string $expected
+	 */
+	public function testGetSSODisplayName($configuredDisplayName, $expected) {
+		$this->config->expects($this->any())->method('getAppValue')
+			->with('user_saml', 'general-idp0_display_name')
+			->willReturn($configuredDisplayName);
+
+		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName');
+
+		$this->assertSame($expected, $result);
+	}
+
+	public function dataTestGetSSODisplayName() {
+		return [
+			['My identity provider', 'My identity provider'],
+			['', 'SSO & SAML log in']
+		];
+	}
 }

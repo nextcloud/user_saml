@@ -319,8 +319,14 @@ class SAMLController extends Controller {
 	 */
 	public function selectUserBackEnd($redirectUrl) {
 		$loginUrls = [
-			'directLogin' => $this->getDirectLoginUrl(),
-			'ssoLogin' => $this->getSSOUrl($redirectUrl)
+			'directLogin' => [
+				'url' => $this->getDirectLoginUrl(),
+				'display-name' => $this->l->t('Direct log in')
+				],
+			'ssoLogin' => [
+				'url' => $this->getSSOUrl($redirectUrl),
+				'display-name' => $this->getSSODisplayName(),
+				]
 		];
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
 	}
@@ -350,6 +356,20 @@ class SAMLController extends Controller {
 
 		return $ssoUrl;
 
+	}
+
+	/**
+	 * return the display name of the SSO identity provider
+	 *
+	 * @return string
+	 */
+	protected function getSSODisplayName() {
+		$displayName = $this->config->getAppValue('user_saml', 'general-idp0_display_name');
+		if (empty($displayName)) {
+			$displayName = $this->l->t('SSO & SAML log in');
+		}
+
+		return $displayName;
 	}
 
 	/**
