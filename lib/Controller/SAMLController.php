@@ -373,7 +373,7 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * get SSO URL
+	 * get Nextcloud login URL
 	 *
 	 * @return string
 	 */
