@@ -77,6 +77,11 @@ class Admin implements ISettings {
 			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
 		];
 		$generalSettings = [
+			'idp0_display_name' => [
+				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
+				'type' => 'line',
+				'required' => false,
+			],
 			'uid_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
 				'type' => 'line',
