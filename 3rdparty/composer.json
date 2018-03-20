@@ -1,4 +1,8 @@
 {
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true
+    },
     "require": {
         "onelogin/php-saml": "^2.9"
     }
