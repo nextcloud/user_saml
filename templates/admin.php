@@ -23,9 +23,10 @@ style('user_saml', 'admin');
 		<div class="warning hidden" id="user-saml-warning-admin-user">
 			<?php p(
 				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore.',
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
 					[
-						$theme->getEntity()
+						$theme->getEntity(),
+						$_['general']['allow_multiple_user_back_ends']['text']
 					]
 				)
 			)
