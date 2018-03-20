@@ -16,7 +16,7 @@ The following providers are supported and tested at the moment:
 	* Any other provider that authenticates using the environment variable
 
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.]]></description>
-	<version>1.4.0</version>
+	<version>1.5.0</version>
 	<licence>AGPL</licence>
 	<author>Lukas Reschke</author>
 	<namespace>User_SAML</namespace>
@@ -28,6 +28,7 @@ While theoretically any other authentication provider implementing either one of
 	</documentation>
 	<category>auth</category>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/1.png</screenshot>
+	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/2.png</screenshot>
 	<website>https://github.com/nextcloud/user_saml</website>
 	<bugs>https://github.com/nextcloud/user_saml/issues</bugs>
 	<repository type="git">https://github.com/nextcloud/user_saml.git</repository>
