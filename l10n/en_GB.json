@@ -1,5 +1,7 @@
 { "translations": {
+    "This user account is disabled, please contact your administrator." : "This user account is disabled, please contact your administrator.",
     "Saved" : "Saved",
+    "Unknown error, please check the log file for more details." : "Unknown error, please check the log file for more details.",
     "X.509 certificate of the Service Provider" : "X.509 certificate of the Service Provider",
     "Private key of the Service Provider" : "Private key of the Service Provider",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted.",
@@ -18,6 +20,7 @@
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Only allow authentication if an account exists on some other backend. (e.g. LDAP)",
     "Attribute to map the displayname to." : "Attribute to map the displayname to.",
     "Attribute to map the email address to." : "Attribute to map the email address to.",
+    "Attribute to map the quota to." : "Attribute to map the quota to.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Use SAML auth for the %s desktop clients (requires user re-authentication)",
     "SSO & SAML authentication" : "SSO & SAML authentication",
     "Open documentation" : "Open documentation",
