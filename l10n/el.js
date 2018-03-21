@@ -13,7 +13,6 @@ OC.L10N.register(
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Προαπαιτείται για το <saml:Assertion> των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.[Τα μεταδεδομένα του SP θα προσφέρουν αυτές τις πληροφορίες]",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
     "Use environment variable" : "Χρησιμοποιήστε μεταβλητή περιβάλλοντος",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Βεβαιωθείτε ότι έχετε διαμορφώσει έναν χρήστη διαχείρισης ο οποίος μπορεί να έχει άμεση  πρόσβαση μέσω SSO.Σύνδεση στον τακτικό λογαριασμό σας %sδε θα είναι δυνατή πλέον.",
     "General" : "Γενικά",
     "Security settings" : "Ρυθμίσεις ασφαλείας",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Metadata valid" : "Έγκυρα μεταδεδομένα",
     "Indicates if the SP will validate all received XMLs." : "Υποδεικνύει εάν το SP θα επικυρώσει όλες τις ληφθείσες XML.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Να επιτρέπεται η πιστοποίηση μόνον εάν ένας λογαριασμός υπάρχει σε κάποιο άλλο backend. (πχ. LDAP)",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Βεβαιωθείτε ότι έχετε διαμορφώσει έναν χρήστη διαχείρισης ο οποίος μπορεί να έχει άμεση  πρόσβαση μέσω SSO.Σύνδεση στον τακτικό λογαριασμό σας %sδε θα είναι δυνατή πλέον.",
     "Show security settings ..." : "Προβολή ρυθμίσεων ασφαλείας ..."
 },
 "nplurals=2; plural=(n != 1);");
