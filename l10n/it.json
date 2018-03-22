@@ -31,6 +31,7 @@
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Scegli se vuoi autenticarti utilizzando il fornitore SAML integratore in Nextcloud o se vuoi autenticarti utilizzando una variabile d'ambiente.",
     "Use built-in SAML authentication" : "Usa autenticazione SAML integrata",
     "Use environment variable" : "Usa variabile d'ambiente",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Assicurati di configurare un utente amministrativo che possa accedere all'istanza tramite SSO. L'accesso con il tuo account normale %s non sarà più possibile a meno che tu abbia abilitato \"%s\"",
     "General" : "Generale",
     "Service Provider Data" : "Dati del fornitore di servizi",
     "If your Service Provider should use certificates you can optionally specify them here." : "Se il tuo fornitore di servizi utilizza i certificati, puoi specificarli qui.",
