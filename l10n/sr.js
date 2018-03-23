@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Сачувано",
+    "SSO & SAML log in" : "SSO & SAML пријава",
     "X.509 certificate of the Service Provider" : "X.509 сертификат добављача услуга",
     "Private key of the Service Provider" : "Приватни кључ добављача услуга",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Назначава да ће се nameID од <samlp:logoutRequest> који шаље добављач услуга бити шифрован.",
