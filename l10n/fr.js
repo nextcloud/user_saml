@@ -4,6 +4,7 @@ OC.L10N.register(
     "This user account is disabled, please contact your administrator." : "Ce compte utilisateur est désactivé, veuillez contacter votre administrateur.",
     "Saved" : "Sauvegardé",
     "Unknown error, please check the log file for more details." : "Erreur inconnue, veuillez vérifier le fichier journal pour plus de détails.",
+    "Direct log in" : "Connexion direct ",
     "SSO & SAML log in" : "Connexion SSO & SAML",
     "X.509 certificate of the Service Provider" : "Certificat X.509 du fournisseur de service",
     "Private key of the Service Provider" : "Clé privée du fournisseur de service",
