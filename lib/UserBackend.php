@@ -25,6 +25,7 @@ use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
+use OCP\IGroupManager;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -42,6 +43,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
 
@@ -51,17 +54,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param ISession $session
 	 * @param IDBConnection $db
 	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
 								ISession $session,
 								IDBConnection $db,
-								IUserManager $userManager) {
+								IUserManager $userManager,
+								IGroupManager $groupManager) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
 		$this->db = $db;
 		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
 	}
 
 	/**
@@ -415,26 +421,51 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		self::$backends = $backends;
 	}
 
-	private function getAttributeValue($name, array $attributes) {
+	private function getAttributeKeys($name)
+	{
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $name, ''));
 
-		if(count($keys) === 1 && $keys[0] === '') {
+		if (count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
 		}
+		return $keys;
+	}
+
+	private function getAttributeValue($name, array $attributes) {
+		$keys = $this->getAttributeKeys($name);
 
 		$value = '';
 		foreach($keys as $key) {
 			if (isset($attributes[$key])) {
 				if (is_array($attributes[$key])) {
-					if($value !== '') {
-						$value .= ' ';
+					foreach ($attributes[$key] as $attribute_part_value) {
+						if($value !== '') {
+							$value .= ' ';
+						}
+						$value .= $attribute_part_value;
 					}
-					$value .= $attributes[$key][0];
 				} else {
 					if($value !== '') {
 						$value .= ' ';
 					}
 					$value .= $attributes[$key];
+				}
+			}
+		}
+
+		return $value;
+	}
+
+	private function getAttributeArrayValue($name, array $attributes) {
+		$keys = $this->getAttributeKeys($name);
+
+		$value = array();
+		foreach($keys as $key) {
+			if (isset($attributes[$key])) {
+				if (is_array($attributes[$key])) {
+					$value = array_merge($value, array_values($attributes[$key]));
+				} else {
+					$value[] = $attributes[$key];
 				}
 			}
 		}
@@ -464,6 +495,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$newQuota = null;
 		}
 
+		try {
+			$newGroups = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$newGroups = null;
+		}
+
+
 		if ($user !== null) {
 			$currentEmail = (string)$user->getEMailAddress();
 			if ($newEmail !== null
@@ -471,7 +509,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setEMailAddress($newEmail);
 			}
 			$currentDisplayname = (string)$this->getDisplayName($uid);
-			if($newDisplayname !== null
+			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
 				\OC_Hook::emit('OC_User', 'changeUser',
 					[
@@ -485,6 +523,25 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 			if ($newQuota !== null) {
 				$user->setQuota($newQuota);
+			}
+
+			if ($newGroups !== null) {
+				$groupManager = $this->groupManager;
+				$oldGroups = $groupManager->getUserGroupIds($user);
+
+				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
+				$groupsToRemove = array_diff($oldGroups, $newGroups);
+
+				foreach ($groupsToAdd as $group) {
+					if (!($groupManager->groupExists($group))) {
+						$groupManager->createGroup($group);
+					}
+					$groupManager->get($group)->addUser($user);
+				}
+
+				foreach ($groupsToRemove as $group) {
+					$groupManager->get($group)->removeUser($user);
+				}
 			}
 		}
 	}
