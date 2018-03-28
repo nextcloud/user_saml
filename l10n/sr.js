@@ -1,7 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Овај кориснички налог је искључен. Контактирајте администратора.",
     "Saved" : "Сачувано",
+    "Unknown error, please check the log file for more details." : "Непозната грешка. Проверите дневнике за више детаља.",
+    "Direct log in" : "Директна пријава",
     "SSO & SAML log in" : "SSO & SAML пријава",
     "X.509 certificate of the Service Provider" : "X.509 сертификат добављача услуга",
     "Private key of the Service Provider" : "Приватни кључ добављача услуга",
@@ -17,10 +20,12 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Назначава захтев да NameID елемент који прима овај добављач услуга буде шифрован.",
     "Indicates if the SP will validate all received XML." : "Назначава да ли ће добављач услуга валидирати сав примљени XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Енкодује SAML податке малим словима, а тулкит подразумевано користи велика слова. Укључити за ADFS компатибилност при верификацији потписа.",
+    "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Опциони натпис за опслужиоца идентитета (подразумевано: „SSO & SAML log in“)",
     "Attribute to map the UID to." : "Атрибут на који се UID мапира.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Дозволи проверу идентитета само ако налог постоји на неком другом позадинском механизму (нпр. LDAP)",
     "Attribute to map the displayname to." : "Атрибут на који се displayname мапира.",
     "Attribute to map the email address to." : "Атрибут на који се мапира адреса е-поште.",
+    "Attribute to map the quota to." : "Атрибут на који се мапира квота.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Користи SAML проверу идентитета за %s десктоп клијенте (захтева поновну проверу идентитета)",
     "SSO & SAML authentication" : "SSO & SAML провера идентитета",
     "Open documentation" : "Отвори документацију",
