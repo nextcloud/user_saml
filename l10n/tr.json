@@ -25,6 +25,7 @@
     "Attribute to map the displayname to." : "Görüntülenecek ad değerinin eşleştirileceği öznitelik.",
     "Attribute to map the email address to." : "E-posta adresi değerinin eşleştirileceği özellik.",
     "Attribute to map the quota to." : "Kime kotası değerinin eşleştirileceği öznitelik.",
+    "Attribute to map the users groups to." : "Kulanıcı grupları değerinin eşleştirileceği öznitelik.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s masaüstü istemcileri için SAML kimlik doğrulaması kullanılsın (kullanıcının kimliğini yeniden doğrulaması gerekir)",
     "SSO & SAML authentication" : "SSO ve SAML kimlik doğrulaması",
     "Open documentation" : "Belgeleri aç",
