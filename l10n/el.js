@@ -2,6 +2,9 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Αποθηκεύτηκαν",
+    "Unknown error, please check the log file for more details." : "Άγνωστο σφάλμα, παρακαλούμε ελέξτε το ιστορικό για περισσότερες λεπτομέρειες.",
+    "Direct log in" : "Άμεση είσοδος",
+    "SSO & SAML log in" : "Είσοδος SSO & SAML",
     "X.509 certificate of the Service Provider" : "Το πιστοποιητικό  του Παρόχου Υπηρεσιών X.509",
     "Private key of the Service Provider" : "Ιδιωτικό κλειδί για τον παροχέα δικτύου",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Υποδεικνύει ότι το αναγνωριστικό όνομα του <samlp:logoutRequest> που αποστέλλονται από αυτό το SP θα κρυπτογραφηθούν.",
@@ -11,6 +14,7 @@ OC.L10N.register(
     "Whether the metadata should be signed." : "Εάν τα μεταδεδομένα πρέπει να είναι υπογεγραμένα.",
     "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "Υποδεικνύει μία απαίτηση για το<samlp:Response>,<samlp:LogoutRequest>και<samlp:LogoutResponse>των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Προαπαιτείται για το <saml:Assertion> των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.[Τα μεταδεδομένα του SP θα προσφέρουν αυτές τις πληροφορίες]",
+    "SSO & SAML authentication" : "Πιστοποίηση SSO & SAML",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
     "Use environment variable" : "Χρησιμοποιήστε μεταβλητή περιβάλλοντος",
     "General" : "Γενικά",
