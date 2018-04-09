@@ -123,6 +123,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function implementsActions($actions) {
 		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
 		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
+		$availableActions |= \OC\User\Backend::GET_HOME;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -169,6 +170,28 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 				->execute();
 			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the user's home directory, if home directory mapping is set up.
+	 *
+	 * @param string $uid the username	
+	 * @return string
+	 */
+	public function getHome($uid) {
+		if($this->userExistsInDatabase($uid)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('home')
+				->from('user_saml_users')
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->setMaxResults(1);
+			$result = $qb->execute();
+			$users = $result->fetchAll();
+			if (isset($users[0]['home'])) {
+				return $users[0]['home'];
+			}
 		}
 		return false;
 	}
@@ -234,6 +257,21 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			return true;
 		}
 
+		return false;
+	}
+
+	public function setHome($uid, $home) {
+		if ($this->userExistsInDatabase($uid)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->update('user_saml_users')
+				->set('home', $qb->createNamedParameter($home))
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->execute();
+			//Prepare file system
+			\OC_Util::setupFS($uid);
+			\OC::$server->getUserFolder($uid);
+			return true;
+		}
 		return false;
 	}
 
@@ -501,8 +539,19 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$newGroups = null;
 		}
 
+		try {
+			$newHome = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$newHome = null;
+		}
 
 		if ($user !== null) {
+			$currentHome = (string)$this->getHome($uid);
+			if ($newHome !== null
+				&& $currentHome !== $newHome) {
+				$this->setHome($uid, $newHome);
+			}
+
 			$currentEmail = (string)$user->getEMailAddress();
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
