@@ -23,6 +23,7 @@ OC.L10N.register(
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nom d'affichage facultatif du fournisseur d'identité (par défaut : \"Connexion SSO & SAML\")",
     "Attribute to map the UID to." : "Attribut pour relier l'UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
+    "Allow the use of multiple user back-ends (e.g. LDAP)" : "Autoriser l'utilisation de plusieurs systèmes d'authentification (ex: LDAP)",
     "Attribute to map the displayname to." : "Attribut pour relier le nom d'utilisateur.",
     "Attribute to map the email address to." : "Attribut pour relier l'adresse mail.",
     "Attribute to map the quota to." : "Attribut pour relier le quota.",
