@@ -117,6 +117,12 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'home_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users home to.'),
+				'type' => 'line',
+				'required' => true,
+			],
+
 		];
 
 		$type = $this->config->getAppValue('user_saml', 'type');
