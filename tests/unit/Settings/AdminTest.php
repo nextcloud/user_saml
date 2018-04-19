@@ -129,6 +129,11 @@ class AdminTest extends \Test\TestCase  {
 				'type' => 'line',
 				'required' => true,
 			],
+			'home_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users home to.'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$params = [

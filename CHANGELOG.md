@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 2.0.1
+
+### Changed
+
+- add attribute mapping for the users home directory when creating a new user
+
+
 ## 2.0.0
 
 ### Changed
