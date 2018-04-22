@@ -27,7 +27,7 @@
     "General" : "Основные",
     "Service Provider Data" : "Данные поставщика услуг (SP)",
     "If your Service Provider should use certificates you can optionally specify them here." : "Если вашему SP следует использовать сертификаты, вы сможете дополнительно указать из тут.",
-    "Show Service Provider settings…" : "Показать настройки поставщика услуг...",
+    "Show Service Provider settings…" : "Показать настройки поставщика услуг…",
     "Identity Provider Data" : "Данные провайдера идентификации (IdP)",
     "Configure your IdP settings here." : "Настройте тут параметры вашего IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Идентификатор записи IdP (в формате URI)",
@@ -40,7 +40,7 @@
     "Show attribute mapping settings…" : "Показать настройки привязки атрибутов…",
     "Security settings" : "Настройки безопасности",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Для повышения безопасности рекомендуем использовать следующие настройки, если они поддерживаются вашим окружением.",
-    "Show security settings…" : "Показать настройки безопасности ...",
+    "Show security settings…" : "Показать настройки безопасности…",
     "Signatures and encryption offered" : "Предложены подписи и шихрование",
     "Signatures and encryption required" : "Требуется подпись и шифрование",
     "Download metadata XML" : "Скачать метаданные XML",
@@ -51,10 +51,10 @@
     "Indicates if the SP will validate all received XMLs." : "Указывает, будет ли SP проверять все полученные XML.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Позволять аутентификацию только если учётная запись существует на другом внутреннем интерфейсе (например, LDAP).",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Убедитесь что настроен пользователь с правами администратора, который может получить доступ к экземпляру через SSO. Вход в систему с обычной учётной записью %s далее будет невозможен.",
-    "Show Service Provider settings ..." : "Показать настройки поставщика услуг...",
+    "Show Service Provider settings ..." : "Показать настройки поставщика услуг…",
     "Show optional Identity Provider settings ..." : "Показать дополнительные настройки провайдера идентификации",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Здесь можно настроить дополнительную привязку пользователю атрибутов SAML. ",
     "Show attribute mapping settings ..." : "Показать настройки привязки атрибутов…",
-    "Show security settings ..." : "Показать настройки безопасности ..."
+    "Show security settings ..." : "Показать настройки безопасности…"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
