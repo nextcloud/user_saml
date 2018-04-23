@@ -98,6 +98,12 @@ class SAMLController extends Controller {
 	 * @throws NoUserFoundException
 	 */
 	private function autoprovisionIfPossible(array $auth) {
+
+		// nothing to do here, in case of a global scale setup
+		if ($this->config->getSystemValue('gs.enabled', false)) {
+			return;
+		}
+
 		$prefix = $this->SAMLSettings->getPrefix();
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		if(isset($auth[$uidMapping])) {
