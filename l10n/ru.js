@@ -1,7 +1,11 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Учётная запись пользователя отключена, свяжитесь с администратором сервера.",
     "Saved" : "Сохранено",
+    "Unknown error, please check the log file for more details." : "Неизвестная ошибка, обратитесь к файлу журнала для более подробных сведений.",
+    "Direct log in" : "Прямой вход в систему",
+    "SSO & SAML log in" : "Вход через SSO и SAML",
     "X.509 certificate of the Service Provider" : "X.509-сертификат поставщика услуг",
     "Private key of the Service Provider" : "Закрытый ключ поставщика услуг",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Указывает, что nameID <samlp:logoutRequest>, отправленное этим поставщиком услуг, будет зашифровано.",
