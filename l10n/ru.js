@@ -27,7 +27,7 @@ OC.L10N.register(
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Использовать SAML для настольных клиентов синхронизации %s (потребуется повторная аутентификация пользователей)",
     "SSO & SAML authentication" : "Подтверждение подлинности SSO и SAML",
     "Open documentation" : "Открыть документацию",
-    "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Выберете, хотите ли вы проверять подлинность с помощью встроенного в Nextcloud провайдера SAML или же хотите  использовать для этого переменные окружения.",
+    "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Выберите, хотите ли вы проверять подлинность с помощью встроенного в Nextcloud провайдера SAML или же хотите  использовать для этого переменные окружения.",
     "Use built-in SAML authentication" : "Использовать встроенную SAML аутентификацию",
     "Use environment variable" : "Использовать переменные окружения",
     "General" : "Основные",
