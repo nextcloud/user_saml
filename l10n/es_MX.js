@@ -27,6 +27,7 @@ OC.L10N.register(
     "Attribute to map the displayname to." : "Atributo a mapear a displayname. ",
     "Attribute to map the email address to." : "Atributo a mapear a email address.",
     "Attribute to map the quota to." : "Atributo al cual mapear la cuota. ",
+    "Attribute to map the users groups to." : "Atributo de correspondiencia de grupos de usuarios.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Por favor usa autenticación SAML para los %s clientes de escritorio (se requiere volver a autenticar)",
     "SSO & SAML authentication" : "Autenticación SSO & SAML",
     "Open documentation" : "Abrir documentación",
