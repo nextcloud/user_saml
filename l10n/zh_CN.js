@@ -1,6 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "此账户被禁用，请联系管理员。",
     "Saved" : "已保存",
     "X.509 certificate of the Service Provider" : "服务商 X.509 认证",
     "Private key of the Service Provider" : "服务商私钥",
