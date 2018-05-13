@@ -54,6 +54,13 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
+		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
+		$providers = [];
+		foreach ($providerIds as $id) {
+			$prefix = $id === '1' ? '' : $id .'-';
+			$name = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
+			$providers[$id] = $name === '' ? $this->l10n->t('Provider ') . $id : $name;
+		}
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
 			'privateKey' => $this->l10n->t('Private key of the Service Provider'),
@@ -135,6 +142,7 @@ class Admin implements ISettings {
 			'general' => $generalSettings,
 			'attributeMappings' => $attributeMappingSettings,
 			'type' => $type,
+			'providers' => $providers
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);

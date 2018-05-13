@@ -26,6 +26,25 @@
 	clear: both;
 	padding: 7px 0;
 	cursor: pointer;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	opacity: .5;
+}
+
+#user-saml .account-list {
+	margin: 10px 0 10px 0;
+	overflow:hidden;
+	padding: 10px 0 10px 0;
+}
+#user-saml .account-list li {
+	float: left;
+}
+
+#user-saml .account-list li a:not(.button) {
+	padding: 7px;
+}
+#user-saml .account-list li a.button {
+	margin-left: 20px;
+}
+#user-saml .account-list li.active a {
+	border-bottom: 1px solid #333;
+	font-weight: bold;
 }

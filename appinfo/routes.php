@@ -58,5 +58,13 @@ return [
 			'url' => '/saml/selectUserBackEnd',
 			'verb' => 'GET',
 		],
+		[
+			'name' => 'Settings#getSamlProviderSettings',
+			'url' => '/settings/providerSettings/{providerId}',
+			'verb' => 'GET',
+			'defaults' => [
+				'providerId' => '1'
+			]
+		],
 	],
 ];

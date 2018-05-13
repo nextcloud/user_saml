@@ -5,6 +5,22 @@
 	 * @namespace OCA.User_SAML.Admin
 	 */
 	OCA.User_SAML.Admin = {
+		currentConfig: '1',
+		providerIds: '1',
+
+		_getAppConfig: function (key) {
+			return $.ajax({
+				type: 'GET',
+				url: OC.linkToOCS('apps/provisioning_api/api/v1', 2) + 'config/apps' + '/user_saml/' + key + '?format=json'
+			});
+		},
+		init: function() {
+			this._getAppConfig('providerIds').done(function (data){
+				if (data.ocs.data.data !== '') {
+					OCA.User_SAML.Admin.providerIds = data.ocs.data.data;
+				}
+			});
+		},
 		chooseEnv: function() {
 			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.chooseEnv, this));
@@ -23,6 +39,32 @@
 			OCP.AppConfig.setValue('user_saml', 'type', 'saml', {success: function() {location.reload();}});
 		},
 
+		getConfigIdentifier: function() {
+			if (this.currentConfig === '1') {
+				return '';
+			}
+			return this.currentConfig + '-';
+		},
+
+		/**
+		 * Add a new provider
+		 * @returns {number} id of the provider
+		 */
+		addProvider: function(callback) {
+			var providerIds = OCA.User_SAML.Admin.providerIds.split(',');
+			var nextId = 2;
+			while($.inArray('' + nextId, providerIds) >= 0) {
+				nextId++;
+			}
+			console.log(nextId);
+			OCP.AppConfig.setValue('user_saml', 'providerIds', OCA.User_SAML.Admin.providerIds + ',' + nextId, {
+				success: function () {
+					OCA.User_SAML.Admin.providerIds += ',' + nextId;
+					callback(nextId)
+				}
+			});
+		},
+
 		setSamlConfigValue: function(category, setting, value) {
 			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
@@ -30,13 +72,14 @@
 			}
 
 			OC.msg.startSaving('#user-saml-save-indicator');
-			OC.AppConfig.setValue('user_saml', category+'-'+setting, value);
+			OCP.AppConfig.setValue('user_saml', this.getConfigIdentifier() + category + '-' + setting, value);
 			OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
 		}
 	}
 })(OCA);
 
 $(function() {
+	OCA.User_SAML.Admin.init();
 	// Hide depending on the setup state
 	var type = $('#user-saml').data('type');
 	if(type !== '') {
@@ -67,6 +110,53 @@ $(function() {
 			OCA.User_SAML.Admin.chooseEnv();
 		}
 	});
+
+	var switchProvider = function(providerId) {
+		$('.account-list li').removeClass('active');
+		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
+		OCA.User_SAML.Admin.currentConfig = providerId;
+		$.get(OC.generateUrl('/apps/user_saml/settings/providerSettings/' + providerId)).done(function(data) {
+			Object.keys(data).forEach(function(category, index){
+				var entries = data[category];
+				Object.keys(entries).forEach(function (configKey) {
+					var element = $('*[data-key="' + configKey + '"]');
+					if ($('#user-saml-' + configKey).length) {
+						element = $('#user-saml-' + configKey);
+					}
+					if ($('[name="' + configKey + '"]').length) {
+						element = $('[name="' + configKey + '"]');
+					}
+					if(element.is('input') && element.prop('type') === 'text') {
+						element.val(entries[configKey])
+					}
+					else if(element.is('textarea')) {
+						element.val(entries[configKey]);
+					}
+					else if(element.prop('type') === 'checkbox') {
+						var value = entries[configKey] === '1' ? '1' : '0';
+						element.val(value);
+					} else {
+						console.log('unable to find element for ' + configKey);
+					}
+				});
+			});
+			$('input:checkbox[value="1"]').attr('checked', true);
+			$('input:checkbox[value="0"]').attr('checked', false);
+		});
+	};
+
+	$('.account-list').on('click', 'li:not(.add-provider)', function() {
+		var providerId = '' + $(this).data('id');
+		switchProvider(providerId);
+	});
+
+	$('.account-list .add-provider').on('click', function() {
+		OCA.User_SAML.Admin.addProvider(function (nextId) {
+			$('<li data-id="' + nextId + '"><a>' + t('user_saml', 'Provider') + ' ' + nextId + '</a></li>').insertBefore('.account-list .add-provider');
+			switchProvider(nextId);
+		});
+	});
+
 
 	// Enable tabs
 	$('input:checkbox[value="1"]').attr('checked', true);
@@ -104,6 +194,13 @@ $(function() {
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
 			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
+		}
+		if(el.data('key') === 'idp0_display_name') {
+			if ($(this).val() !== '') {
+				$('.account-list li[data-id=' + OCA.User_SAML.Admin.currentConfig + '] a').text($(this).val())
+			} else {
+				$('.account-list li[data-id=' + OCA.User_SAML.Admin.currentConfig + '] a').text(t('user_saml', 'Provider') + ' ' + OCA.User_SAML.Admin.currentConfig);
+			}
 		}
 	});
 

@@ -10,6 +10,29 @@ style('user_saml', 'admin');
 	   title="<?php p($l->t('Open documentation'));?>"
 	   href="<?php p(link_to_docs('admin-sso')); ?>"></a>
 
+
+	<div class="warning hidden" id="user-saml-warning-admin-user">
+		<?php p(
+			$l->t(
+				'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
+				[
+					$theme->getEntity(),
+					$_['general']['allow_multiple_user_back_ends']['text']
+				]
+			)
+		)
+		?>
+	</div>
+
+	<ul class="account-list">
+		<?php foreach ($_['providers'] as $id => $name) { ?>
+		<li data-id="<?php p($id); ?>" class="<?php if ((string)$id === '1') { p('active'); } ?>">
+			<a href="#"><?php p($name); ?></a>
+		</li>
+		<?php } ?>
+		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> Add another account</a></li>
+	</ul>
+
 	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">Saved</div>
 
 	<div id="user-saml-settings">
@@ -20,18 +43,6 @@ style('user_saml', 'admin');
 			<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
 		</div>
 
-		<div class="warning hidden" id="user-saml-warning-admin-user">
-			<?php p(
-				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
-					[
-						$theme->getEntity(),
-						$_['general']['allow_multiple_user_back_ends']['text']
-					]
-				)
-			)
-			?>
-		</div>
 
 		<div id="user-saml-general">
 			<h3><?php p($l->t('General')) ?></h3>
