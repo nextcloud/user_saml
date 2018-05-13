@@ -30,10 +30,10 @@ style('user_saml', 'admin');
 			<a href="#"><?php p($name); ?></a>
 		</li>
 		<?php } ?>
-		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> Add another account</a></li>
+		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add another provider')); ?></a></li>
 	</ul>
 
-	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">Saved</div>
+	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
 
 	<div id="user-saml-settings">
 		<div id="user-saml-choose-type">
