@@ -59,4 +59,4 @@ OC.L10N.register(
     "Show attribute mapping settings ..." : "ატრიბუტების მიბმის პარამეტრების ჩვენება ...",
     "Show security settings ..." : "უსაფრთხოების პარამეტრების ჩვენება ..."
 },
-"nplurals=1; plural=0;");
+"nplurals=2; plural=(n==1);");
