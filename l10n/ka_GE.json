@@ -56,5 +56,5 @@
     "If you want to optionally map SAML attributes to the user you can configure these here." : "არაა აუცილებელი, მაგრამ თუ გსურთ SAML ატრიბუტების მიბმა მომხმარებელთან, შეგიძლიათ კონფიგურაცია შეასრულოთ აქ.",
     "Show attribute mapping settings ..." : "ატრიბუტების მიბმის პარამეტრების ჩვენება ...",
     "Show security settings ..." : "უსაფრთხოების პარამეტრების ჩვენება ..."
-},"pluralForm" :"nplurals=2; plural=(n==1);"
+},"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
