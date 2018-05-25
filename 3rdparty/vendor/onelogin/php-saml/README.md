@@ -2,13 +2,15 @@
 
 [![Build Status](https://api.travis-ci.org/onelogin/php-saml.png?branch=master)](http://travis-ci.org/onelogin/php-saml) [![Coverage Status](https://coveralls.io/repos/onelogin/php-saml/badge.png)](https://coveralls.io/r/onelogin/php-saml) [![License](https://poser.pugx.org/onelogin/php-saml/license.png)](https://packagist.org/packages/onelogin/php-saml)
 
-Add SAML support to your PHP softwares using this library.
-Forget those complicated libraries and use that open source library provided
+Add SAML support to your PHP software using this library.
+Forget those complicated libraries and use this open source library provided
 and supported by OneLogin Inc.
 
 
 Warning
 -------
+
+php-saml is not affected by [201803-01](https://simplesamlphp.org/security/201803-01) 
 
 Update php-saml to 2.10.4, this version includes a security patch related to
 [signature validations on LogoutRequests/LogoutResponses](https://github.com/onelogin/php-saml/commit/949359f5cad5e1d085c4e5447d9aa8f49a6e82a1)
@@ -83,9 +85,10 @@ Installation
 
  * `php >= 5.3.3` and some core extensions like `php-xml`, `php-date`, `php-zlib`.
  * `openssl`. Install the openssl library. It handles x509 certificates.
- * `mcrypt`. Install that library and its php driver if you gonna handle
+ * `mcrypt`. Install that library and its php driver if you're going to handle
    encrypted data (`nameID`, `assertions`).
  * `gettext`. Install that library and its php driver. It handles translations.
+ * `curl`. Install that library and its php driver if you plan to use the IdP Metadata parser.
 
 Since [PHP 5.3 is officially unsupported](http://php.net/eol.php) we recommend you to use a newer PHP version.
 
@@ -123,7 +126,7 @@ Compatibility
 
 This 2.0 version has a new library. The toolkit is still compatible.
 
-The old code that you used in order to add SAML support gonna continue working
+The old code that you used in order to add SAML support will continue working
 with minor changes. You only need to load the files of the `lib/Saml` folder.
 (notice that the `compatibility.php` file do that).
 
@@ -151,9 +154,12 @@ start, for example to use the static method getSelfURLNoQuery use:
 Security warning
 ----------------
 
-In production, the `strict` parameter **MUST** be set as `"true"`. Otherwise
-your environment is not secure and will be exposed to attacks.
+In production, the `strict` parameter **MUST** be set as `"true"` and the
+`signatureAlgorithm` and `digestAlgorithm` under `security` must be set to
+something other than SHA1 (see https://shattered.io/ ). Otherwise your
+environment is not secure and will be exposed to attacks.
 
+In production also we highly recommended to register on the settings the IdP certificate instead of using the fingerprint method. The fingerprint, is a hash, so at the end is open to a collision attack that can end on a siganture validation bypass. Other SAML toolkits deprecated that mechanism, we maintain it for compatibility and also to be used on test environment.
 
 Getting started
 ---------------
@@ -183,6 +189,8 @@ Sometimes we could need a signature on the metadata published by the SP, in
 this case we could use the x.509 cert previously mentioned or use a new x.509
 cert: `metadata.crt` and `metadata.key`.
 
+Use `sp_new.crt` if you are in a key rollover process and you want to
+publish that x509certificate on Service Provider metadata.
 
 #### `extlib/` ####
 
@@ -285,7 +293,7 @@ $settings = array (
     // Set a BaseURL to be used instead of try to guess
     // the BaseURL of the view that process the SAML Message.
     // Ex http://sp.example.com/
-    //    http://example.com/sp/ 
+    //    http://example.com/sp/
     'baseurl' => null,
 
     // Service Provider Data that we are deploying.
@@ -319,7 +327,7 @@ $settings = array (
                 )
         ),
         // Specifies info about where and how the <Logout Response> message MUST be
-        // returned to the requester, in this case our SP.        
+        // returned to the requester, in this case our SP.
         'singleLogoutService' => array (
             // URL Location where the <Response> from the IdP will be returned
             'url' => '',
@@ -337,6 +345,14 @@ $settings = array (
         'x509cert' => '',
         'privateKey' => '',
 
+        /*
+         * Key rollover
+         * If you plan to update the SP x509cert and privateKey
+         * you can define here the new x509cert and it will be
+         * published on the SP metadata so Identity Providers can
+         * read them and get ready for rollover.
+         */
+        // 'x509certNew' => '',
     ),
 
     // Identity Provider Data that we want connected with our SP.
@@ -366,7 +382,8 @@ $settings = array (
         'x509cert' => '',
         /*
          *  Instead of use the whole x509cert you can use a fingerprint in order to
-         *  validate a SAMLResponse.
+         *  validate a SAMLResponse, but we don't recommend to use that
+         *  method on production since is exploitable by a collision attack.
          *  (openssl x509 -noout -fingerprint -in "idp.crt" to generate it,
          *   or add for example the -sha256 , -sha384 or -sha512 parameter)
          *
@@ -379,6 +396,22 @@ $settings = array (
          */
         // 'certFingerprint' => '',
         // 'certFingerprintAlgorithm' => 'sha1',
+
+        /* In some scenarios the IdP uses different certificates for
+         * signing/encryption, or is under key rollover phase and
+         * more than one certificate is published on IdP metadata.
+         * In order to handle that the toolkit offers that parameter.
+         * (when used, 'x509cert' and 'certFingerprint' values are
+         * ignored).
+         */
+        // 'x509certMulti' => array(
+        //      'signing' => array(
+        //          0 => '<cert1-string>',
+        //      ),
+        //      'encryption' => array(
+        //          0 => '<cert2-string>',
+        //      )
+        // ),
     ),
 );
 ```
@@ -427,7 +460,6 @@ $advancedSettings = array (
         */
         'signMetadata' => false,
 
-
         /** signatures and encryptions required **/
 
         // Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest>
@@ -450,11 +482,10 @@ $advancedSettings = array (
         // this SP to be encrypted.
         'wantNameIdEncrypted' => false,
 
-
         // Authentication context.
-        // Set to false or don't present this parameter and no AuthContext will be sent in the AuthNRequest,
-        // Set true and you will get an AuthContext 'exact' 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'
-        // Set an array with the possible auth context values: array ('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509'),
+        // Set to false and no AuthContext will be sent in the AuthNRequest.
+        // Set true or don't present this parameter and you will get an AuthContext 'exact' 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'.
+        // Set an array with the possible auth context values: array ('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509').
         'requestedAuthnContext' => true,
 
         // Indicates if the SP will validate all received xmls.
@@ -471,14 +502,16 @@ $advancedSettings = array (
         //    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
         //    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha384'
         //    'http://www.w3.org/2001/04/xmldsig-more#rsa-sha512'
-        'signatureAlgorithm' => 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+        // Notice that sha1 is a deprecated algorithm and should not be used
+        'signatureAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
 
         // Algorithm that the toolkit will use on digest process. Options:
         //    'http://www.w3.org/2000/09/xmldsig#sha1'
         //    'http://www.w3.org/2001/04/xmlenc#sha256'
         //    'http://www.w3.org/2001/04/xmldsig-more#sha384'
         //    'http://www.w3.org/2001/04/xmlenc#sha512'
-        'digestAlgorithm' => 'http://www.w3.org/2000/09/xmldsig#sha1',
+        // Notice that sha1 is a deprecated algorithm and should not be used
+        'digestAlgorithm' => 'http://www.w3.org/2001/04/xmlenc#sha256',
 
         // ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses
         // uppercase. Turn it True for ADFS compatibility on signature verification
@@ -696,11 +729,12 @@ if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
 }
 
 $auth->processResponse($requestID);
+unset($_SESSION['AuthNRequestID']);
 
 $errors = $auth->getErrors();
 
 if (!empty($errors)) {
-    print_r('<p>'.implode(', ', $errors).'</p>');
+    echo '<p>', implode(', ', $errors), '</p>';
     exit();
 }
 
@@ -711,6 +745,9 @@ if (!$auth->isAuthenticated()) {
 
 $_SESSION['samlUserdata'] = $auth->getAttributes();
 $_SESSION['samlNameId'] = $auth->getNameId();
+$_SESSION['samlNameIdFormat'] = $auth->getNameIdFormat();
+$_SESSION['samlSessionIndex'] = $auth->getSessionIndex();
+
 if (isset($_POST['RelayState']) && OneLogin_Saml2_Utils::getSelfURL() != $_POST['RelayState']) {
     $auth->redirectTo($_POST['RelayState']);
 }
@@ -836,9 +873,9 @@ $auth->processSLO(false, $requestID);
 $errors = $auth->getErrors();
 
 if (empty($errors)) {
-    print_r('Sucessfully logged out');
+    echo 'Sucessfully logged out';
 } else {
-    print_r(implode(', ', $errors));
+    echo implode(', ', $errors);
 }
 ```
 
@@ -936,12 +973,14 @@ $auth = new OneLogin_Saml2_Auth();
 $auth->logout();   // Method that sent the Logout Request.
 ```
 
-Also there are three optional parameters that can be set:
-
+Also there are six optional parameters that can be set:
+* `$returnTo` - The target URL the user should be returned to after logout.
+* `$parameters` - Extra parameters to be added to the GET.
 * `$name_id` - That will be used to build the LogoutRequest. If `name_id` parameter is not set and the auth object processed a
 SAML Response with a `NameId`, then this `NameId` will be used.
 * `$session_index` - SessionIndex that identifies the session of the user.
-* `$strict` - True if we want to stay (returns the url string) False to redirect.
+* `$stay` - True if we want to stay (returns the url string) False to redirect.
+* `$nameIdFormat` - The NameID Format will be set in the LogoutRequest.
 
 The Logout Request will be sent signed or unsigned based on the security
 info of the `advanced_settings.php` (`'logoutRequestSigned'`).
@@ -959,6 +998,25 @@ to other php file.
 $newTargetUrl = 'http://example.com/loggedOut.php';
 $auth = new OneLogin_Saml2_Auth();
 $auth->logout($newTargetUrl);
+```
+A more complex logout with all the parameters:
+```
+$auth = new OneLogin_Saml2_Auth();
+$returnTo = null;
+$paramters = array();
+$nameId = null;
+$sessionIndex = null;
+$nameIdFormat = null;
+if (isset($_SESSION['samlNameId'])) {
+    $nameId = $_SESSION['samlNameId'];
+}
+if (isset($_SESSION['samlSessionIndex'])) {
+    $sessionIndex = $_SESSION['samlSessionIndex'];
+}
+if (isset($_SESSION['samlNameIdFormat'])) {
+    $nameIdFormat = $_SESSION['samlNameIdFormat'];
+}
+$auth->logout($returnTo, $paramters, $nameId, $sessionIndex, false, $nameIdFormat);
 ```
 
 If a match on the future LogoutResponse ID and the LogoutRequest ID to be sent is required, that LogoutRequest ID must to be extracted and stored.
@@ -987,8 +1045,7 @@ session_start();    // Initialize the session, we do that because
                     // Note that processResponse and processSLO
                     // methods could manipulate/close that session
 
-require_once dirname(dirname(__FILE__)).'/_toolkit_loader.php'; // Load Saml2 and
-                                                                // external libs
+require_once dirname(__DIR__).'/_toolkit_loader.php'; // Load Saml2 and external libs
 require_once 'settings.php';    // Load the setting info as an Array
 
 $auth = new OneLogin_Saml2_Auth($settingsInfo);  // Initialize the SP SAML instance
@@ -1009,7 +1066,7 @@ if (isset($_GET['sso'])) {    // SSO action.  Will send an AuthNRequest to the I
                                    // that could took place during the process
 
     if (!empty($errors)) {
-        print_r('<p>'.implode(', ', $errors).'</p>');
+        echo '<p>', implode(', ', $errors), '</p>';
     }
                                           // This check if the response was
     if (!$auth->isAuthenticated()) {      // sucessfully validated and the user
@@ -1025,9 +1082,9 @@ if (isset($_GET['sso'])) {    // SSO action.  Will send an AuthNRequest to the I
     $auth->processSLO();            // Process the Logout Request & Logout Response
     $errors = $auth->getErrors(); // Retrieves possible validation errors
     if (empty($errors)) {
-        print_r('<p>Sucessfully logged out</p>');
+        echo '<p>Sucessfully logged out</p>';
     } else {
-        print_r('<p>'.implode(', ', $errors).'</p>');
+        echo '<p>', implode(', ', $errors), '</p>';
     }
 }
 
@@ -1056,7 +1113,7 @@ if (isset($_SESSION['samlUserdata'])) {   // If there is user data we print it.
 ```
 
 #### URL-guessing methods ####
- 
+
 php-saml toolkit uses a bunch of methods in OneLogin_Saml2_Utils that try to guess the URL where the SAML messages are processed.
 
 * `getSelfHost` Returns the current host.
@@ -1085,9 +1142,29 @@ You should be able to workaround this by configuring your server so that it is a
 Or by using the method described on the previous section.
 
 
-### Reply attacks ###
+### SP Key rollover ###
 
-In order to avoid reply attacks, you can store the ID of the SAML messages already processed, to avoid processing them twice. Since the Messages expires and will be invalidated due that fact, you don't need to store those IDs longer than the time frame that you currently accepting.
+If you plan to update the SP x509cert and privateKey you can define the new x509cert as $settings['sp']['x509certNew'] and it will be
+published on the SP metadata so Identity Providers can read them and get ready for rollover.
+
+
+### IdP with multiple certificates ###
+
+In some scenarios the IdP uses different certificates for
+signing/encryption, or is under key rollover phase and more than one certificate is published on IdP metadata.
+
+In order to handle that the toolkit offers the $settings['idp']['x509certMulti'] parameter.
+
+When that parameter is used, 'x509cert' and 'certFingerprint' values will be ignored by the toolkit.
+
+The 'x509certMulti' is an array with 2 keys:
+- 'signing'. An array of certs that will be used to validate IdP signature
+- 'encryption' An array with one unique cert that will be used to encrypt data to be sent to the IdP
+
+
+### Replay attacks ###
+
+In order to avoid replay attacks, you can store the ID of the SAML messages already processed, to avoid processing them twice. Since the Messages expires and will be invalidated due that fact, you don't need to store those IDs longer than the time frame that you currently accepting.
 
 Get the ID of the last processed message/assertion with the getLastMessageId/getLastAssertionId method of the Auth object.
 
@@ -1250,6 +1327,7 @@ Configuration of the OneLogin PHP Toolkit
  * `checkSPCerts` - Checks if the x509 certs of the SP exists and are valid.
  * `getSPkey` - Returns the x509 private key of the SP.
  * `getSPcert` - Returns the x509 public cert of the SP.
+ * `getSPcertNew` - Returns the future x509 public cert of the SP.
  * `getIdPData` - Gets the IdP data.
  * `getSPData`Gets the SP data.
  * `getSecurityData` - Gets security data.
@@ -1259,6 +1337,7 @@ Configuration of the OneLogin PHP Toolkit
  * `validateMetadata` - Validates an XML SP Metadata.
  * `formatIdPCert` - Formats the IdP cert.
  * `formatSPCert` - Formats the SP cert.
+ * `formatSPCertNew` - Formats the SP cert new.
  * `formatSPKey` - Formats the SP private key.
  * `getErrors` - Returns an array with the errors, the array is empty when
    the settings is ok.
@@ -1316,6 +1395,16 @@ Auxiliary class that contains several methods
  * `addSign` - Adds signature key and senders certificate to an element
    (Message or Assertion).
  * `validateSign` - Validates a signature (Message or Assertion).
+
+##### OneLogin_Saml2_IdPMetadataParser - `IdPMetadataParser.php` #####
+
+Auxiliary class that contains several methods to retrieve and process IdP metadata
+
+ * `parseRemoteXML` - Get IdP Metadata Info from URL.
+ * `parseFileXML` - Get IdP Metadata Info from File.
+ * `parseXML` - Get IdP Metadata Info from XML.
+ * `injectIntoSettings` - Inject metadata info into php-saml settings array.
+
 
 For more info, look at the source code; each method is documented and details
 about what it does and how to use it are provided. Make sure to also check the doc folder where
@@ -1432,11 +1521,11 @@ Once the SP is configured, the metadata of the SP is published at the
 
 ### How it works ###
 
-At demo1, we saw how all the SAML Request and Responses were handler at an
+In demo1, we saw how all the SAML Request and Responses were handler at an
 unique file, the `index.php` file. This demo1 uses high-level programming.
 
-At demo2, we have several views: `index.php`, `sso.php`, `slo.php`, `consume.php`
-and `metadata.php`. As we said, we gonna use the endpoints that are defined
+In demo2, we have several views: `index.php`, `sso.php`, `slo.php`, `consume.php`
+and `metadata.php`. As we said, we will use the endpoints that are defined
 in the toolkit (`acs.php`, `sls.php` of the endpoints folder). This demo2 uses
 low-level programming.
 
