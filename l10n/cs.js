@@ -1,7 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Tento uživatelský účet byl znepřístupněn, obraťte se na správce.",
     "Saved" : "Uloženo",
+    "Direct log in" : "Přímé přihlášení",
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovatele služby",
     "Private key of the Service Provider" : "Privátní klíč poskytovatele služby",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikuje že nameID <samlp:logoutRequest> odeslané tímto poskytovatelm služeb bude šifrováno.",
