@@ -30,6 +30,7 @@ OC.L10N.register(
     "Attribute to map the users groups to." : "Attributo per associare i gruppi di utenti",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utilizza autenticazione SAML per i client desktop di %s (richiede una nuova autenticazione degli utenti)",
     "SSO & SAML authentication" : "Autenticazione SSO e SAML",
+    "Authenticate using single sign-on" : "Autenticazione con single sign-on",
     "Open documentation" : "Apri la documentazione",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Scegli se vuoi autenticarti utilizzando il fornitore SAML integratore in Nextcloud o se vuoi autenticarti utilizzando una variabile d'ambiente.",
     "Use built-in SAML authentication" : "Usa autenticazione SAML integrata",
