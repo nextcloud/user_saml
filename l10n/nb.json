@@ -44,7 +44,7 @@
     "Show attribute mapping settings…" : "Vis attributttilnytningsinnstillinger…",
     "Security settings" : "Sikkerhetsinnstillinger",
     "For increased security we recommend enabling the following settings if supported by your environment." : "For økt sikkerhet anbefaler vi at du aktiverer følgende innstillinger hvis det er støttet i ditt systemlandskap.",
-    "Show security settings…" : "Vis sikkerhetsinnstillinger…",
+    "Show security settings…" : "Vis sikkerhetsinnstillinger …",
     "Signatures and encryption offered" : "Signaturer og kryptering er tilbudt",
     "Signatures and encryption required" : "Signaturer og kryptering er påkrevd",
     "Download metadata XML" : "Last ned XML med metadata",
@@ -59,6 +59,6 @@
     "Show optional Identity Provider settings ..." : "Vis valgfrie identitetstilbyderinnstillinger…",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Hvis du valgfritt ønsker å knytte SAML-attributter til brukeren kan du sette opp disse her.",
     "Show attribute mapping settings ..." : "Vis attributttilnytningsinnstillinger…",
-    "Show security settings ..." : "Vis sikkerhetsinnstillinger…"
+    "Show security settings ..." : "Vis sikkerhetsinnstillinger …"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
