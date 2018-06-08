@@ -1,7 +1,10 @@
 <?php
-script('user_saml', 'admin');
-style('user_saml', 'admin');
-
+$customTemplate = __DIR__ . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . basename(__FILE__);
+if (file_exists($customTemplate)):
+	include $customTemplate;
+else:
+	script('user_saml', 'admin');
+	style('user_saml', 'admin');
 /** @var array $_ */
 ?>
 <form id="user-saml" class="section" action="#" method="post" data-type="<?php p($_['type']) ?>">
@@ -136,3 +139,6 @@ style('user_saml', 'admin');
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>
 </form>
+<?php
+endif;
+?>

@@ -1,10 +1,13 @@
 <?php
-style('user_saml', 'selectUserBackEnd');
+$customTemplate = __DIR__ . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . basename(__FILE__);
+if (file_exists($customTemplate)):
+	include $customTemplate;
+else:
+	style('user_saml', 'selectUserBackEnd');
 
 /** @var array $_ */
 /** @var $l \OCP\IL10N */
 ?>
-
 <div id="saml-select-user-back-end">
 
 <h1>Choose login option:</h1>
@@ -18,3 +21,6 @@ style('user_saml', 'selectUserBackEnd');
 </div>
 
 </div>
+<?php
+endif;
+?>

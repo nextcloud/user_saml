@@ -1,4 +1,5 @@
 <?php
+use OCA\User_SAML\Strategies\UserBackend\StrategyManager;
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
  *
@@ -39,7 +40,10 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$request
 );
 
-$userBackend = new \OCA\User_SAML\UserBackend(
+$userBackendStrategy = StrategyManager::getStrategy(true); 
+$userBackend = (is_null($userBackendStrategy) ? '\OCA\User_SAML\UserBackend' : $userBackendStrategy);
+
+$userBackend = new $userBackend(
 	$config,
 	$urlGenerator,
 	\OC::$server->getSession(),
