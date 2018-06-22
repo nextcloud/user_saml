@@ -1,7 +1,11 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Detta användarkontot är avstängt, kontakta din administratör.",
     "Saved" : "Sparad",
+    "Unknown error, please check the log file for more details." : "Okänt fel, kolla loggfilen för mer detaljer.",
+    "Direct log in" : "Direkt inloggning",
+    "SSO & SAML log in" : "SSO & SAML inloggning",
     "X.509 certificate of the Service Provider" : "X.509-certifikat av leverantören",
     "Private key of the Service Provider" : "Privat nyckel från leverantören",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikerar att nameID av <samlp:logoutRequest> som skickats av SP kommer att krypteras.",
@@ -16,6 +20,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indikerar ett krav för NameID mottagen av denna SP att vara krypterad.",
     "Indicates if the SP will validate all received XML." : "Indikerar om SP'n kommer validera alla mottagna XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Avkodar SAML-data som små bokstäver och verktyget använder stora bokstäver som standard. Aktivera för ADFS-kompatibilitet för signaturverifiering.",
+    "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Frivilligt visningsnamn av den identifierande aktören (standard: \"SSO & SAML inloggning\")",
     "Attribute to map the UID to." : "Attribut för att mappa UID till.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Tillåt bara tillgång om ett konto finns på någon annan backend. (t.ex. LDAP)",
     "Attribute to map the displayname to." : "Attribut att mappa visningsnamnet till",
@@ -26,6 +31,7 @@ OC.L10N.register(
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Vänligen välj om du vill autentisera med SAML-leverantören inbyggd i Nextcloud eller om du vill autentisera mot en miljövariabel.",
     "Use built-in SAML authentication" : "Använd den inbyggda SAML-autentiseringen",
     "Use environment variable" : "Använd miljövariabel",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Var säker på att konfigurera en administratörs användare som får tillträde till instansen via SSO. Inloggning med det vanliga %s konto är inte möjligt längre, om du inte slog på \"%s\"",
     "General" : "Allmänt",
     "Service Provider Data" : "Leverantörsdata",
     "If your Service Provider should use certificates you can optionally specify them here." : "Om din tjänstleverantör använder certifikat kan du välja att ange dom här.",
