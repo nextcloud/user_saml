@@ -28,6 +28,7 @@
     "Attribute to map the users groups to." : "Attribut dem die Gruppen des Benutzers zugeordnet werden sollen.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML-Autorisierung für die %s Desktop-Clients nutzen (erfordert eine Neu-Autorisierung der Nutzer)",
     "SSO & SAML authentication" : "SSO & SAML-Autorisierung",
+    "Authenticate using single sign-on" : "Einloggen mit Single-Sign-On",
     "Open documentation" : "Dokumentation öffnen",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Bitte auswählen ob die Autorisierung mittels in Nextcloud integriertem SAML  oder gegen eine Umgebungsvariable erfolgen soll.",
     "Use built-in SAML authentication" : "Integrierte SAML-Autorisierung benutzen",
