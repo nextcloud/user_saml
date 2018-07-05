@@ -24,35 +24,51 @@ style('user_saml', 'admin');
 		?>
 	</div>
 
-	<ul class="account-list">
+	<div id="user-saml-choose-type" class="hidden">
+		<?php p($l->t('Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.')) ?>
+		<br/>
+		<button id="user-saml-choose-saml"><?php p($l->t('Use built-in SAML authentication')) ?></button>
+		<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
+	</div>
+
+	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
+
+	<div id="user-saml-global" class="hidden">
+		<h3><?php p($l->t('Global settings')) ?></h3>
+		<?php foreach($_['general'] as $key => $attribute): ?>
+			<?php if($attribute['type'] === 'checkbox' && $attribute['global']): ?>
+				<p>
+					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
+				</p>
+			<?php elseif($attribute['type'] === 'line' && $attribute['global']): ?>
+				<p>
+					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+				</p>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
+
+	<ul class="account-list hidden">
 		<?php foreach ($_['providers'] as $id => $name) { ?>
 		<li data-id="<?php p($id); ?>" class="<?php if ((string)$id === '1') { p('active'); } ?>">
 			<a href="#"><?php p($name); ?></a>
 		</li>
 		<?php } ?>
-		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add another provider')); ?></a></li>
+		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add identity provider')); ?></a></li>
 	</ul>
 
-	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
+	<div id="user-saml-settings" class="hidden">
 
-	<div id="user-saml-settings">
-		<div id="user-saml-choose-type">
-			<?php p($l->t('Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.')) ?>
-			<br/>
-			<button id="user-saml-choose-saml"><?php p($l->t('Use built-in SAML authentication')) ?></button>
-			<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
-		</div>
-
-
-		<div id="user-saml-general">
+		<div id="user-saml-general" class="hidden">
 			<h3><?php p($l->t('General')) ?></h3>
 			<?php foreach($_['general'] as $key => $attribute): ?>
-				<?php if($attribute['type'] === 'checkbox'): ?>
+				<?php if($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
 						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 					</p>
-				<?php elseif($attribute['type'] === 'line'): ?>
+				<?php elseif($attribute['type'] === 'line' && !$attribute['global']): ?>
 					<p>
 						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
@@ -142,6 +158,7 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 
+		<a data-js="remove-idp" class="button"><?php p($l->t('Remove identity provider')); ?></button>
 		<a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')) ?>" class="button"><?php p($l->t('Download metadata XML')) ?></a>
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>

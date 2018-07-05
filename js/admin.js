@@ -70,9 +70,13 @@
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
 				return;
 			}
-
+			// store global config flags without idp prefix
+			var configIdentifier = this.getConfigIdentifier();
+			if (typeof global === 'undefined') {
+				configIdentifier = '';
+			}
 			OC.msg.startSaving('#user-saml-save-indicator');
-			OCP.AppConfig.setValue('user_saml', this.getConfigIdentifier() + category + '-' + setting, value);
+			OCP.AppConfig.setValue('user_saml', configIdentifier + category + '-' + setting, value);
 			OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
 		}
 	}
@@ -82,20 +86,28 @@ $(function() {
 	OCA.User_SAML.Admin.init();
 	// Hide depending on the setup state
 	var type = $('#user-saml').data('type');
-	if(type !== '') {
-		$('#user-saml-choose-type').addClass('hidden');
-		$('#user-saml-warning-admin-user').removeClass('hidden');
+	console.log(type);
+	if(type === '') {
+		$('#user-saml-choose-type').removeClass('hidden');
 	} else {
-		$('#user-saml div:gt(2)').addClass('hidden');
-		$('#user-saml-settings .button').addClass('hidden');
+		$('#user-saml-global').removeClass('hidden');
+		$('#user-saml-warning-admin-user').removeClass('hidden');
+		$('#user-saml-settings').removeClass('hidden');
+		$('#user-saml-general').removeClass('hidden');
 	}
 	if(type === 'environment-variable') {
-		$('#user-saml div:gt(4)').addClass('hidden');
+		// we need the settings div to be visible for require_providioned_account
+		$('#user-saml-settings div').addClass('hidden');
 		$('#user-saml-settings .button').addClass('hidden');
+	}
+	if (type === 'saml') {
+		$('#user-saml .account-list').removeClass('hidden');
 	}
 
 	if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
-		$('#user-saml-attribute-mapping').toggleClass('hidden');
+		$('#user-saml-attribute-mapping').removeClass('hidden');
+	} else {
+		$('#user-saml-attribute-mapping').addClass('hidden');
 	}
 
 	$('#user-saml-choose-saml').click(function(e) {
@@ -157,6 +169,9 @@ $(function() {
 		});
 	});
 
+	$('[data-js="remove-idp"]').on('click', function() {
+		OCA.User_SAML.Admin.removeProvider();
+	});
 
 	// Enable tabs
 	$('input:checkbox[value="1"]').attr('checked', true);
@@ -204,7 +219,7 @@ $(function() {
 		}
 	});
 
-	$('#user-saml-general input[type="checkbox"]').change(function(e) {
+	$('#user-saml-global input[type="checkbox"]').change(function(e) {
 		var el = $(this);
 		$.when(el.focusout()).then(function() {
 			var key = $(this).attr('name');
@@ -215,6 +230,19 @@ $(function() {
 			}
 			if(key === 'require_provisioned_account') {
 				$('#user-saml-attribute-mapping').toggleClass('hidden');
+			}
+			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val(), true);
+		});
+	});
+
+	$('#user-saml-general input[type="checkbox"]').change(function(e) {
+		var el = $(this);
+		$.when(el.focusout()).then(function() {
+			var key = $(this).attr('name');
+			if($(this).val() === "0") {
+				$(this).val("1");
+			} else {
+				$(this).val("0");
 			}
 			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val());
 		});
