@@ -8,6 +8,12 @@
 	cursor: pointer;
 }
 
+#user-saml h3 .icon-delete {
+	display: inline-block;
+	padding: 5px;
+	margin-bottom: -6px;
+}
+
 #user-saml h4 {
 	font-size: 14px;
 	font-weight: 300;

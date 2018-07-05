@@ -14,10 +14,12 @@
 				url: OC.linkToOCS('apps/provisioning_api/api/v1', 2) + 'config/apps' + '/user_saml/' + key + '?format=json'
 			});
 		},
-		init: function() {
+		init: function(callback) {
 			this._getAppConfig('providerIds').done(function (data){
 				if (data.ocs.data.data !== '') {
 					OCA.User_SAML.Admin.providerIds = data.ocs.data.data;
+					OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',')[0];
+					callback();
 				}
 			});
 		},
@@ -52,11 +54,13 @@
 		 */
 		addProvider: function(callback) {
 			var providerIds = OCA.User_SAML.Admin.providerIds.split(',');
-			var nextId = 2;
-			while($.inArray('' + nextId, providerIds) >= 0) {
-				nextId++;
+			var nextId = 1;
+			if (providerIds.indexOf('1') >= 0) {
+				nextId = 2;
+				while ($.inArray('' + nextId, providerIds) >= 0) {
+					nextId++;
+				}
 			}
-			console.log(nextId);
 			OCP.AppConfig.setValue('user_saml', 'providerIds', OCA.User_SAML.Admin.providerIds + ',' + nextId, {
 				success: function () {
 					OCA.User_SAML.Admin.providerIds += ',' + nextId;
@@ -65,14 +69,35 @@
 			});
 		},
 
-		setSamlConfigValue: function(category, setting, value) {
+		removeProvider: function(callback) {
+			var providerIds = OCA.User_SAML.Admin.providerIds.split(',');
+			if (providerIds.length > 1) {
+				var index = providerIds.indexOf(this.currentConfig);
+				if (index > -1) {
+					providerIds.splice(index, 1);
+				}
+				var config = this.currentConfig;
+				$.ajax({ url: OC.generateUrl('/apps/user_saml/settings/providerSettings/' + this.currentConfig), type: 'DELETE'})
+					.done(function(data) {
+						OCP.AppConfig.setValue('user_saml', 'providerIds', providerIds.join(','), {
+							success: function () {
+								OCA.User_SAML.Admin.providerIds = providerIds.join(',');
+								callback(config);
+							}
+						});
+					});
+
+			}
+		},
+
+		setSamlConfigValue: function(category, setting, value, global) {
 			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
 				return;
 			}
 			// store global config flags without idp prefix
 			var configIdentifier = this.getConfigIdentifier();
-			if (typeof global === 'undefined') {
+			if (global === true) {
 				configIdentifier = '';
 			}
 			OC.msg.startSaving('#user-saml-save-indicator');
@@ -83,32 +108,36 @@
 })(OCA);
 
 $(function() {
-	OCA.User_SAML.Admin.init();
-	// Hide depending on the setup state
-	var type = $('#user-saml').data('type');
-	console.log(type);
-	if(type === '') {
-		$('#user-saml-choose-type').removeClass('hidden');
-	} else {
-		$('#user-saml-global').removeClass('hidden');
-		$('#user-saml-warning-admin-user').removeClass('hidden');
-		$('#user-saml-settings').removeClass('hidden');
-		$('#user-saml-general').removeClass('hidden');
-	}
-	if(type === 'environment-variable') {
-		// we need the settings div to be visible for require_providioned_account
-		$('#user-saml-settings div').addClass('hidden');
-		$('#user-saml-settings .button').addClass('hidden');
-	}
-	if (type === 'saml') {
-		$('#user-saml .account-list').removeClass('hidden');
-	}
 
-	if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
-		$('#user-saml-attribute-mapping').removeClass('hidden');
-	} else {
-		$('#user-saml-attribute-mapping').addClass('hidden');
-	}
+	var type = $('#user-saml').data('type');
+
+	OCA.User_SAML.Admin.init(function() {
+		$('.account-list li[data-id="' + OCA.User_SAML.Admin.currentConfig + '"]').addClass('active');
+		// Hide depending on the setup state
+		if(type === '') {
+			$('#user-saml-choose-type').removeClass('hidden');
+		} else {
+			$('#user-saml-global').removeClass('hidden');
+			$('#user-saml-warning-admin-user').removeClass('hidden');
+			$('#user-saml-settings').removeClass('hidden');
+		}
+		if(type === 'environment-variable') {
+			// we need the settings div to be visible for require_providioned_account
+			$('#user-saml-settings div').addClass('hidden');
+			$('#user-saml-settings .button').addClass('hidden');
+			$('#user-saml-general').removeClass('hidden');
+		}
+		if (type === 'saml') {
+			$('#user-saml .account-list').removeClass('hidden');
+			$('#user-saml-general').removeClass('hidden');
+		}
+
+		if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
+			$('#user-saml-attribute-mapping').removeClass('hidden');
+		} else {
+			$('#user-saml-attribute-mapping').addClass('hidden');
+		}
+	});
 
 	$('#user-saml-choose-saml').click(function(e) {
 		e.preventDefault();
@@ -131,11 +160,11 @@ $(function() {
 			Object.keys(data).forEach(function(category, index){
 				var entries = data[category];
 				Object.keys(entries).forEach(function (configKey) {
-					var element = $('*[data-key="' + configKey + '"]');
-					if ($('#user-saml-' + configKey).length) {
+					var element = $('#user-saml-settings *[data-key="' + configKey + '"]');
+					if ($('#user-saml-settings #user-saml-' + configKey).length) {
 						element = $('#user-saml-' + configKey);
 					}
-					if ($('[name="' + configKey + '"]').length) {
+					if ($('#user-saml-settings  [name="' + configKey + '"]').length) {
 						element = $('[name="' + configKey + '"]');
 					}
 					if(element.is('input') && element.prop('type') === 'text') {
@@ -170,7 +199,10 @@ $(function() {
 	});
 
 	$('[data-js="remove-idp"]').on('click', function() {
-		OCA.User_SAML.Admin.removeProvider();
+		OCA.User_SAML.Admin.removeProvider(function(currentConfig) {
+			$('.account-list li[data-id="' + currentConfig + '"]').remove();
+			switchProvider(OCA.User_SAML.Admin.providerIds.split(',')[0]);
+		});
 	});
 
 	// Enable tabs

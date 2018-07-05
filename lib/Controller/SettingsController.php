@@ -78,4 +78,31 @@ class SettingsController extends Controller {
 		return $settings;
 	}
 
+	public function deleteSamlProviderSettings($providerId) {
+		$params = $this->admin->getForm()->getParams();
+		$params['idp'] = [
+			'singleLogoutService.url' => null,
+			'singleSignOnService.url' => null,
+			'idp-entityId' => null,
+		];
+		/* Fetch all config values for the given providerId */
+		foreach ($params as $category => $content) {
+			if (empty($content) || $category === 'providers') {
+				continue;
+			}
+			foreach ($content as $setting => $details) {
+				if ($details['global']) {
+					continue;
+				}
+				$prefix = $providerId === '1' ? '' : $providerId . '-';
+				$key = $prefix . $category . '-' . $setting;
+				/* use security as category instead of security-* */
+				if (strpos($category, 'security-') === 0) {
+					$category = 'security';
+				}
+				$this->config->deleteAppValue('user_saml', $key);
+			}
+		}
+	}
+
 }

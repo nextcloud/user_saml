@@ -10,6 +10,9 @@ style('user_saml', 'admin');
 	   title="<?php p($l->t('Open documentation'));?>"
 	   href="<?php p(link_to_docs('admin-sso')); ?>"></a>
 
+	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
+
+
 
 	<div class="warning hidden" id="user-saml-warning-admin-user">
 		<?php p(
@@ -31,8 +34,6 @@ style('user_saml', 'admin');
 		<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
 	</div>
 
-	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
-
 	<div id="user-saml-global" class="hidden">
 		<h3><?php p($l->t('Global settings')) ?></h3>
 		<?php foreach($_['general'] as $key => $attribute): ?>
@@ -51,17 +52,20 @@ style('user_saml', 'admin');
 
 	<ul class="account-list hidden">
 		<?php foreach ($_['providers'] as $id => $name) { ?>
-		<li data-id="<?php p($id); ?>" class="<?php if ((string)$id === '1') { p('active'); } ?>">
+		<li data-id="<?php p($id); ?>">
 			<a href="#"><?php p($name); ?></a>
 		</li>
 		<?php } ?>
+		<li><a data-js="remove-idp" class="icon-delete"><span class="hidden-visually"><?php p($l->t('Remove identity provider')); ?></span></a></li>
 		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add identity provider')); ?></a></li>
 	</ul>
 
 	<div id="user-saml-settings" class="hidden">
 
 		<div id="user-saml-general" class="hidden">
-			<h3><?php p($l->t('General')) ?></h3>
+			<h3>
+				<?php p($l->t('General')) ?>
+			</h3>
 			<?php foreach($_['general'] as $key => $attribute): ?>
 				<?php if($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
@@ -158,7 +162,6 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 
-		<a data-js="remove-idp" class="button"><?php p($l->t('Remove identity provider')); ?></button>
 		<a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')) ?>" class="button"><?php p($l->t('Download metadata XML')) ?></a>
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>

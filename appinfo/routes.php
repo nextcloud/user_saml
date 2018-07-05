@@ -66,5 +66,13 @@ return [
 				'providerId' => '1'
 			]
 		],
+		[
+			'name' => 'Settings#deleteSamlProviderSettings',
+			'url' => '/settings/providerSettings/{providerId}',
+			'verb' => 'DELETE',
+			'defaults' => [
+				'providerId' => '1'
+			]
+		],
 	],
 ];
