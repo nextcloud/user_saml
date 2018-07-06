@@ -31,7 +31,7 @@
     "General" : "Ogólne",
     "Service Provider Data" : "Dane dostawcy usług",
     "If your Service Provider should use certificates you can optionally specify them here." : "Jeśli twój dostawca usług powinien używać certyfikatów możesz je opcjonalnie tutaj ustawić.",
-    "Show Service Provider settings…" : "Pokaż ustawienia dostawcy usług...",
+    "Show Service Provider settings…" : "Pokaż ustawienia dostawcy usług…",
     "Identity Provider Data" : "Dane od dostawcy tożsamości",
     "Configure your IdP settings here." : "Tutaj skonfiguruj swoje ustawienia IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Tożsamość podmiotu IdP (musi być URI)",
@@ -41,10 +41,10 @@
     "Public X.509 certificate of the IdP" : "Publiczny certyfikat X.509 IdP",
     "Attribute mapping" : "Atrybut mapowania",
     "If you want to optionally map attributes to the user you can configure these here." : "Tutaj możesz opcjonalnie przypisać atrybuty użytkownikowi.",
-    "Show attribute mapping settings…" : "Wyświetl ustawienia atrybutów mapowania...",
+    "Show attribute mapping settings…" : "Wyświetl ustawienia atrybutów mapowania…",
     "Security settings" : "Ustawienia bezpieczeństwa",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Dla zwiększenia bezpieczeństwa zalecamy włączenie kolejnych ustawień jeśli są wspierane przez twoje środowisko.",
-    "Show security settings…" : "Pokaż ustawienia bezpieczeństwa...",
+    "Show security settings…" : "Pokaż ustawienia bezpieczeństwa…",
     "Signatures and encryption offered" : "Podpisy i szyfrowanie są oferowane",
     "Signatures and encryption required" : "Podpisy i szyfrowanie są wymagane",
     "Download metadata XML" : "Ściągnij metadane XML",
@@ -55,10 +55,10 @@
     "Indicates if the SP will validate all received XMLs." : "Oznacza czy dostawca usług ma weryfikować wszystkie otrzymane XML-e.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Zezwól na uwierzytelnienie tylko jeśli konto istnieje na innym backendzie (np. LDAP)",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Upewnij się, że skonfigurowałeś użytkownika z uprawnieniami administratora, który ma dostęp do instancji przez SSO. Zalogowanie się twoim zwykłym kontem %s nie będzie już możliwe.",
-    "Show Service Provider settings ..." : "Pokaż ustawienia dostawcy usług...",
+    "Show Service Provider settings ..." : "Pokaż ustawienia dostawcy usług…",
     "Show optional Identity Provider settings ..." : "Pokaż opcjonalne ustawienia tożsamości dostawcy usług…",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Jeśli chcesz opcjonalnie mapować atrybuty SAML do użytkownika możesz je tu skonfigurować.",
-    "Show attribute mapping settings ..." : "Wyświetl ustawienia atrybutów mapowania...",
-    "Show security settings ..." : "Pokaż ustawienia bezpieczeństwa ..."
+    "Show attribute mapping settings ..." : "Wyświetl ustawienia atrybutów mapowania…",
+    "Show security settings ..." : "Pokaż ustawienia bezpieczeństwa…"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }
