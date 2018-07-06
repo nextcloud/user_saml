@@ -55,11 +55,15 @@ class Admin implements ISettings {
 	 */
 	public function getForm() {
 		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
+		natsort($providerIds);
 		$providers = [];
 		foreach ($providerIds as $id) {
 			$prefix = $id === '1' ? '' : $id .'-';
 			$name = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
-			$providers[$id] = $name === '' ? $this->l10n->t('Provider ') . $id : $name;
+			$providers[] = [
+				'id' => $id,
+				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
+				];
 		}
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),

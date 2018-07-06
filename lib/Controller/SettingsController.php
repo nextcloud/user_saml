@@ -25,6 +25,7 @@ namespace OCA\User_SAML\Controller;
 
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IRequest;
 
@@ -103,6 +104,7 @@ class SettingsController extends Controller {
 				$this->config->deleteAppValue('user_saml', $key);
 			}
 		}
+		return new Response();
 	}
 
 }

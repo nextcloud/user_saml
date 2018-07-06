@@ -51,12 +51,12 @@ style('user_saml', 'admin');
 	</div>
 
 	<ul class="account-list hidden">
-		<?php foreach ($_['providers'] as $id => $name) { ?>
-		<li data-id="<?php p($id); ?>">
-			<a href="#"><?php p($name); ?></a>
+		<?php foreach ($_['providers'] as $provider) { ?>
+		<li data-id="<?php p($provider['id']); ?>">
+			<a href="#"><?php p($provider['name']); ?></a>
 		</li>
 		<?php } ?>
-		<li><a data-js="remove-idp" class="icon-delete"><span class="hidden-visually"><?php p($l->t('Remove identity provider')); ?></span></a></li>
+		<li class="remove-provider"><a data-js="remove-idp" class="icon-delete"><span class="hidden-visually"><?php p($l->t('Remove identity provider')); ?></span></a></li>
 		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add identity provider')); ?></a></li>
 	</ul>
 

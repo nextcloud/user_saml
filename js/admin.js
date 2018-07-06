@@ -18,7 +18,7 @@
 			this._getAppConfig('providerIds').done(function (data){
 				if (data.ocs.data.data !== '') {
 					OCA.User_SAML.Admin.providerIds = data.ocs.data.data;
-					OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',')[0];
+					OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',').sort()[0];
 					callback();
 				}
 			});
@@ -113,6 +113,9 @@ $(function() {
 
 	OCA.User_SAML.Admin.init(function() {
 		$('.account-list li[data-id="' + OCA.User_SAML.Admin.currentConfig + '"]').addClass('active');
+		if (OCA.User_SAML.Admin.providerIds.split(',').length <= 1) {
+			$('[data-js="remove-idp"]').addClass('hidden');
+		}
 		// Hide depending on the setup state
 		if(type === '') {
 			$('#user-saml-choose-type').removeClass('hidden');
@@ -155,7 +158,7 @@ $(function() {
 	var switchProvider = function(providerId) {
 		$('.account-list li').removeClass('active');
 		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
-		OCA.User_SAML.Admin.currentConfig = providerId;
+		OCA.User_SAML.Admin.currentConfig = '' + providerId;
 		$.get(OC.generateUrl('/apps/user_saml/settings/providerSettings/' + providerId)).done(function(data) {
 			Object.keys(data).forEach(function(category, index){
 				var entries = data[category];
@@ -186,15 +189,16 @@ $(function() {
 		});
 	};
 
-	$('.account-list').on('click', 'li:not(.add-provider)', function() {
+	$('.account-list').on('click', 'li:not(.add-provider):not(.remove-provider)', function() {
 		var providerId = '' + $(this).data('id');
 		switchProvider(providerId);
 	});
 
 	$('.account-list .add-provider').on('click', function() {
 		OCA.User_SAML.Admin.addProvider(function (nextId) {
-			$('<li data-id="' + nextId + '"><a>' + t('user_saml', 'Provider') + ' ' + nextId + '</a></li>').insertBefore('.account-list .add-provider');
+			$('<li data-id="' + nextId + '"><a>' + t('user_saml', 'Provider') + ' ' + nextId + '</a></li>').insertBefore('.account-list .remove-provider');
 			switchProvider(nextId);
+			$('[data-js="remove-idp"]').removeClass('hidden');
 		});
 	});
 
@@ -202,6 +206,9 @@ $(function() {
 		OCA.User_SAML.Admin.removeProvider(function(currentConfig) {
 			$('.account-list li[data-id="' + currentConfig + '"]').remove();
 			switchProvider(OCA.User_SAML.Admin.providerIds.split(',')[0]);
+			if (OCA.User_SAML.Admin.providerIds.split(',').length <= 1) {
+				$('[data-js="remove-idp"]').addClass('hidden');
+			}
 		});
 	});
 

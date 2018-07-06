@@ -139,8 +139,8 @@ class AdminTest extends \Test\TestCase  {
 			'general' => $generalSettings,
 			'attributeMappings' => $attributeMappingSettings,
 			'providers' => [
-				1 => 'Provider 1',
-				2 => 'Provider 2'
+				['id' => 1, 'name' => 'Provider 1'],
+				['id' => 2, 'name' => 'Provider 2']
 			],
 		];
 
