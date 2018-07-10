@@ -47,7 +47,37 @@ class SAMLSettings {
 		$this->request = $request;
 	}
 
+	/**
+	 * get list of the configured IDPs
+	 *
+	 * @return array
+	 */
+	public function getListOfIdps() {
+		$result = [];
+
+		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
+		natsort($providerIds);
+
+		foreach ($providerIds as $id) {
+			$prefix = $id === '1' ? '' : $id .'-';
+			$result[$id] = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
+		}
+
+		return $result;
+	}
+
+	/**
+	 * check if multiple user back ends are allowed
+	 *
+	 * @return bool
+	 */
+	public function allowMultipleUserBackEnds() {
+		$setting = $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
+		return  $setting === '1';
+	}
+
 	public function getOneLoginSettingsArray() {
+
 		$settings = [
 			'strict' => true,
 			'debug' => $this->config->getSystemValue('debug', false),

@@ -55,6 +55,8 @@ class SAMLController extends Controller {
 	private $logger;
 	/** @var IL10N */
 	private $l;
+	/** @var SAMLSettings */
+	private $settings;
 
 	/**
 	 * @param string $appName
@@ -67,6 +69,7 @@ class SAMLController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
 	 * @param ILogger $logger
+	 * @param SAMLSettings $settings
 	 * @param IL10N $l
 	 */
 	public function __construct($appName,
@@ -79,6 +82,7 @@ class SAMLController extends Controller {
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
 								ILogger $logger,
+								SAMLSettings $settings,
 								IL10N $l) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -89,6 +93,7 @@ class SAMLController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
+		$this->settings = $settings;
 		$this->l = $l;
 	}
 
@@ -325,26 +330,48 @@ class SAMLController extends Controller {
 	 * @return Http\TemplateResponse
 	 */
 	public function selectUserBackEnd($redirectUrl) {
-		$loginUrls = [
-			'directLogin' => [
-				'url' => $this->getDirectLoginUrl($redirectUrl),
+
+		$loginUrls = [];
+
+		if ($this->settings->allowMultipleUserBackEnds()) {
+			$loginUrls['directLogin'] = [
+				'url' => $this->getDirectLoginUrl(),
 				'display-name' => $this->l->t('Direct log in')
-				],
-			'ssoLogin' => [
-				'url' => $this->getSSOUrl($redirectUrl),
-				'display-name' => $this->getSSODisplayName(),
-				]
-		];
+			];
+		}
+
+		$loginUrls['ssoLogin'] = $this->getIdps($redirectUrl);
+
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
+	}
+
+	/**
+	 * get the IdPs showed at the login page
+	 *
+	 * @param $redirectUrl
+	 * @return array
+	 */
+	private function getIdps($redirectUrl) {
+		$result = [];
+		$idps = $this->settings->getListOfIdps();
+		foreach ($idps as $idpId => $displayName) {
+			$result[] = [
+				'url' => $this->getSSOUrl($redirectUrl, $idpId),
+				'display-name' => $this->getSSODisplayName($displayName),
+			];
+		}
+
+		return $result;
 	}
 
 	/**
 	 * get SSO URL
 	 *
 	 * @param $redirectUrl
+	 * @param idp identifier
 	 * @return string
 	 */
-	private function getSSOUrl($redirectUrl) {
+	private function getSSOUrl($redirectUrl, $idp) {
 
 		$originalUrl = '';
 		if(!empty($redirectUrl)) {
@@ -358,6 +385,7 @@ class SAMLController extends Controller {
 			[
 				'requesttoken' => $csrfToken->getEncryptedValue(),
 				'originalUrl' => $originalUrl,
+				'idp' => $idp
 			]
 		);
 
@@ -368,10 +396,10 @@ class SAMLController extends Controller {
 	/**
 	 * return the display name of the SSO identity provider
 	 *
+	 * @param $displayName
 	 * @return string
 	 */
-	protected function getSSODisplayName() {
-		$displayName = $this->config->getAppValue('user_saml', 'general-idp0_display_name');
+	protected function getSSODisplayName($displayName) {
 		if (empty($displayName)) {
 			$displayName = $this->l->t('SSO & SAML log in');
 		}

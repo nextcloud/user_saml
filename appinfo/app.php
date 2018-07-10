@@ -119,9 +119,11 @@ if($useSamlForDesktopClients === '1') {
 	}
 }
 
-$multipleUserBackEnds = $config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
+$multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
+$configuredIdps = $samlSettings->getListOfIdps();
+$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
 
-if ($redirectSituation === true && $multipleUserBackEnds === '1') {
+if ($redirectSituation === true && $showLoginOptions) {
 	$params = $request->getParams();
 	$redirectUrl = '';
 	if(isset($params['redirect_url'])) {
