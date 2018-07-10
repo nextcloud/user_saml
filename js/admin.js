@@ -164,11 +164,11 @@ $(function() {
 				var entries = data[category];
 				Object.keys(entries).forEach(function (configKey) {
 					var element = $('#user-saml-settings *[data-key="' + configKey + '"]');
-					if ($('#user-saml-settings #user-saml-' + configKey).length) {
-						element = $('#user-saml-' + configKey);
+					if ($('#user-saml-settings #user-saml-' + category + ' #user-saml-' + configKey).length) {
+						element = $('#user-saml-' + category + ' #user-saml-' + configKey);
 					}
-					if ($('#user-saml-settings  [name="' + configKey + '"]').length) {
-						element = $('[name="' + configKey + '"]');
+					if ($('#user-saml-settings #user-saml-' + category + ' [name="' + configKey + '"]').length) {
+						element = $('#user-saml-' + category + ' [name="' + configKey + '"]');
 					}
 					if(element.is('input') && element.prop('type') === 'text') {
 						element.val(entries[configKey])

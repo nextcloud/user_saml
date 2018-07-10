@@ -56,9 +56,10 @@ class SettingsController extends Controller {
 		 */
 		$params = $this->admin->getForm()->getParams();
 		$params['idp'] = [
-			'singleLogoutService.url' => null,
-			'singleSignOnService.url' => null,
-			'idp-entityId' => null,
+			'singleLogoutService.url' => ['required' => false],
+			'singleSignOnService.url' => ['required' => false],
+			'entityId' => ['required' => false],
+			'x509cert' => ['required' => false],
 		];
 		/* Fetch all config values for the given providerId */
 		$settings = [];
@@ -68,11 +69,11 @@ class SettingsController extends Controller {
 			}
 			foreach ($content as $setting => $details) {
 				$prefix = $providerId === '1' ? '' : $providerId . '-';
-				$key = $prefix . $category . '-' . $setting;
 				/* use security as category instead of security-* */
 				if (strpos($category, 'security-') === 0) {
 					$category = 'security';
 				}
+				$key = $prefix . $category . '-' . $setting;
 				$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
 			}
 		}
