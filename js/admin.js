@@ -19,8 +19,8 @@
 				if (data.ocs.data.data !== '') {
 					OCA.User_SAML.Admin.providerIds = data.ocs.data.data;
 					OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',').sort()[0];
-					callback();
 				}
+				callback();
 			});
 		},
 		chooseEnv: function() {
@@ -117,7 +117,7 @@ $(function() {
 			$('[data-js="remove-idp"]').addClass('hidden');
 		}
 		// Hide depending on the setup state
-		if(type === '') {
+		if(type !== 'environment-variable' && type !== 'saml') {
 			$('#user-saml-choose-type').removeClass('hidden');
 		} else {
 			$('#user-saml-global').removeClass('hidden');
