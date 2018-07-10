@@ -186,6 +186,9 @@ $(function() {
 			});
 			$('input:checkbox[value="1"]').attr('checked', true);
 			$('input:checkbox[value="0"]').attr('checked', false);
+			var xmlDownloadButton = $('#get-metadata');
+			var url = xmlDownloadButton.data('base') + '?idp=' + providerId;
+			xmlDownloadButton.attr('href', url);
 		});
 	};
 
