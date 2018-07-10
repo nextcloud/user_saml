@@ -161,6 +161,7 @@ class SAMLController extends Controller {
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
 				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
+				$this->session->set('user_saml.Idp', $idp);
 				break;
 			case 'environment-variable':
 				$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
@@ -191,9 +192,12 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @NoCSRFRequired
+	 * @param int $idp
+	 * @return Http\DataDownloadResponse
+	 * @throws \OneLogin_Saml2_Error
 	 */
-	public function getMetadata() {
-		$settings = new \OneLogin_Saml2_Settings($this->SAMLSettings->getOneLoginSettingsArray());
+	public function getMetadata($idp) {
+		$settings = new \OneLogin_Saml2_Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
 		$errors = $settings->validateMetadata($metadata);
 		if (empty($errors)) {
@@ -217,11 +221,12 @@ class SAMLController extends Controller {
 	 */
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
-		if(is_null($AuthNRequestID) || $AuthNRequestID === '') {
+		$idp = $this->session->get('user_saml.Idp');
+		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
 			return;
 		}
 
-		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
 		$errors = $auth->getErrors();
@@ -285,7 +290,8 @@ class SAMLController extends Controller {
 	 */
 	public function singleLogoutService() {
 		if($this->request->passesCSRFCheck()) {
-			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+			$idp = $this->session->get('user_saml.Idp');
+			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$returnTo = null;
 			$parameters = array();
 			$nameId = $this->session->get('user_saml.samlNameId');
