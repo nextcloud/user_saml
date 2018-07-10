@@ -76,26 +76,37 @@ class SAMLSettings {
 		return  $setting === '1';
 	}
 
-	public function getOneLoginSettingsArray() {
+	/**
+	 * get config for given IDP
+	 *
+	 * @param int $idp
+	 * @return array
+	 */
+	public function getOneLoginSettingsArray($idp) {
+
+		$prefix = '';
+		if ($idp > 1) {
+			$prefix = $idp . '-';
+		}
 
 		$settings = [
 			'strict' => true,
 			'debug' => $this->config->getSystemValue('debug', false),
 			'baseurl' => $this->request->getServerProtocol() . '://' . $this->request->getServerHost(),
 			'security' => [
-				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-nameIdEncrypted', '0') === '1') ? true : false,
-				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', 'security-authnRequestsSigned', '0') === '1') ? true : false,
-				'logoutRequestSigned' => ($this->config->getAppValue('user_saml', 'security-logoutRequestSigned', '0') === '1') ? true : false,
-				'logoutResponseSigned' => ($this->config->getAppValue('user_saml', 'security-logoutResponseSigned', '0') === '1') ? true : false,
-				'signMetadata' => ($this->config->getAppValue('user_saml', 'security-signMetadata', '0') === '1') ? true : false,
-				'wantMessagesSigned' => ($this->config->getAppValue('user_saml', 'security-wantMessagesSigned', '0') === '1') ? true : false,
-				'wantAssertionsSigned' => ($this->config->getAppValue('user_saml', 'security-wantAssertionsSigned', '0') === '1') ? true : false,
-				'wantAssertionsEncrypted' => ($this->config->getAppValue('user_saml', 'security-wantAssertionsEncrypted', '0') === '1') ? true : false,
-				'wantNameId' => ($this->config->getAppValue('user_saml', 'security-wantNameId', '0') === '1') ? true : false,
-				'wantNameIdEncrypted' => ($this->config->getAppValue('user_saml', 'security-wantNameIdEncrypted', '0') === '1') ? true : false,
-				'wantXMLValidation' => ($this->config->getAppValue('user_saml', 'security-wantXMLValidation', '0') === '1') ? true : false,
+				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', $prefix . 'security-nameIdEncrypted', '0') === '1') ? true : false,
+				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-authnRequestsSigned', '0') === '1') ? true : false,
+				'logoutRequestSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-logoutRequestSigned', '0') === '1') ? true : false,
+				'logoutResponseSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-logoutResponseSigned', '0') === '1') ? true : false,
+				'signMetadata' => ($this->config->getAppValue('user_saml', $prefix . 'security-signMetadata', '0') === '1') ? true : false,
+				'wantMessagesSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantMessagesSigned', '0') === '1') ? true : false,
+				'wantAssertionsSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantAssertionsSigned', '0') === '1') ? true : false,
+				'wantAssertionsEncrypted' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantAssertionsEncrypted', '0') === '1') ? true : false,
+				'wantNameId' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantNameId', '0') === '1') ? true : false,
+				'wantNameIdEncrypted' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantNameIdEncrypted', '0') === '1') ? true : false,
+				'wantXMLValidation' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantXMLValidation', '0') === '1') ? true : false,
 				'requestedAuthnContext' => false,
-				'lowercaseUrlencoding' => ($this->config->getAppValue('user_saml', 'security-lowercaseUrlencoding', '0') === '1') ? true : false,
+				'lowercaseUrlencoding' => ($this->config->getAppValue('user_saml', $prefix . 'security-lowercaseUrlencoding', '0') === '1') ? true : false,
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
@@ -104,15 +115,15 @@ class SAMLSettings {
 				],
 			],
 			'idp' => [
-				'entityId' => $this->config->getAppValue('user_saml', 'idp-entityId', ''),
+				'entityId' => $this->config->getAppValue('user_saml', $prefix . 'idp-entityId', ''),
 				'singleSignOnService' => [
-					'url' => $this->config->getAppValue('user_saml', 'idp-singleSignOnService.url', ''),
+					'url' => $this->config->getAppValue('user_saml', $prefix . 'idp-singleSignOnService.url', ''),
 				],
 			],
 		];
 
-		$spx509cert = $this->config->getAppValue('user_saml', 'sp-x509cert', '');
-		$spxprivateKey = $this->config->getAppValue('user_saml', 'sp-privateKey', '');
+		$spx509cert = $this->config->getAppValue('user_saml', $prefix . 'sp-x509cert', '');
+		$spxprivateKey = $this->config->getAppValue('user_saml', $prefix . 'sp-privateKey', '');
 		if($spx509cert !== '') {
 			$settings['sp']['x509cert'] = $spx509cert;
 		}
@@ -120,15 +131,15 @@ class SAMLSettings {
 			$settings['sp']['privateKey'] = $spxprivateKey;
 		}
 
-		$idpx509cert = $this->config->getAppValue('user_saml', 'idp-x509cert', '');
+		$idpx509cert = $this->config->getAppValue('user_saml', $prefix . 'idp-x509cert', '');
 		if($idpx509cert !== '') {
 			$settings['idp']['x509cert'] = $idpx509cert;
 		}
 
-		$slo = $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', '');
+		$slo = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', '');
 		if($slo !== '') {
 			$settings['idp']['singleLogoutService'] = [
-				'url' => $this->config->getAppValue('user_saml', 'idp-singleLogoutService.url', ''),
+				'url' => $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', ''),
 			];
 			$settings['sp']['singleLogoutService'] = [
 				'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService'),

@@ -149,14 +149,15 @@ class SAMLController extends Controller {
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
 	 *
+	 * @param int $idp id of the idp
 	 * @return Http\RedirectResponse
 	 * @throws \Exception
 	 */
-	public function login() {
+	public function login($idp) {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch($type) {
 			case 'saml':
-				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
 				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
