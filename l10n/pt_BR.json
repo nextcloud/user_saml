@@ -23,7 +23,7 @@
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Apenas permitir a autenticação se uma conta existir em algum outro backend. (Por ex. LDAP)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir o uso de vários backends de usuário (por ex. LDAP)",
     "Attribute to map the displayname to." : "Atributo para mapear o nome de exibição.",
-    "Attribute to map the email address to." : "Atributo para mapear o endereço de email.",
+    "Attribute to map the email address to." : "Atributo para mapear o endereço de e-mail.",
     "Attribute to map the quota to." : "Atribua a cota ao mapa.",
     "Attribute to map the users groups to." : "Atributo para mapear os grupos de usuários.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar autenticação SAML para os clientes desktop %s (a reautenticação do usuário é requerida)",
