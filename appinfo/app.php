@@ -33,10 +33,12 @@ $l = \OC::$server->getL10N('user_saml');
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
+$session = \OC::$server->getSession();
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config,
-	$request
+	$request,
+	$session
 );
 
 $userBackend = new \OCA\User_SAML\UserBackend(
@@ -45,7 +47,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),
 	\OC::$server->getUserManager(),
-	\OC::$server->getGroupManager()
+	\OC::$server->getGroupManager(),
+	$samlSettings
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);

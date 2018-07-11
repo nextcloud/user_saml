@@ -24,6 +24,7 @@ namespace OCA\User_SAML;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 
 class SAMLSettings {
@@ -33,18 +34,25 @@ class SAMLSettings {
 	private $config;
 	/** @var IRequest */
 	private $request;
+	/** @var ISession */
+	private $session;
+	/** @var array list of global settings which are valid for every idp */
+	private $globalSettings = ['general-require_provisioned_account', 'general-allow_multiple_user_back_ends', 'general-use_saml_auth_for_desktop'];
 
 	/**
 	 * @param IURLGenerator $urlGenerator
 	 * @param IConfig $config
 	 * @param IRequest $request
+	 * @param ISession $session
 	 */
 	public function __construct(IURLGenerator $urlGenerator,
 								IConfig $config,
-								IRequest $request) {
+								IRequest $request,
+								ISession $session) {
 		$this->urlGenerator = $urlGenerator;
 		$this->config = $config;
 		$this->request = $request;
+		$this->session = $session;
 	}
 
 	/**
@@ -148,5 +156,26 @@ class SAMLSettings {
 
 		return $settings;
 	}
-}
 
+	/**
+	 * calculate prefix for config values
+	 *
+	 * @param string name of the setting
+	 * @return string
+	 */
+	public function getPrefix($setting = '') {
+
+		$prefix = '';
+		if (!empty($setting) && in_array($setting, $this->globalSettings)) {
+			return $prefix;
+		}
+
+		$idp = $this->session->get('user_saml.Idp');
+		if ((int)$idp > 1) {
+			$prefix = $idp . '-';
+		}
+
+		return $prefix;
+	}
+
+}
