@@ -106,7 +106,7 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('UnknownValue');
-		$this->samlController->login();
+		$this->samlController->login(1);
 	}
 
 	public function testLoginWithEnvVariableAndNotExistingUidInSettingsArray() {
@@ -135,7 +135,7 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('https://nextcloud.com/notProvisioned/');
 
 		$expected = new RedirectResponse('https://nextcloud.com/notProvisioned/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 
@@ -185,7 +185,7 @@ class SAMLControllerTest extends TestCase  {
 			->method('updateLastLoginTimestamp');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testLoginWithEnvVariableAndExistingUserAndArray() {
@@ -234,7 +234,7 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('https://nextcloud.com/absolute/');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testLoginWithEnvVariableAndNotExistingUserWithProvisioning() {
@@ -291,7 +291,7 @@ class SAMLControllerTest extends TestCase  {
 			->method('updateLastLoginTimestamp');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testLoginWithEnvVariableAndNotExistingUserWithMalfunctioningBackend() {
@@ -343,7 +343,7 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn(null);
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testLoginWithEnvVariableAndNotExistingUserWithoutProvisioning() {
@@ -382,7 +382,7 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn(false);
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testLoginWithEnvVariableAndNotYetMappedUserWithoutProvisioning() {
@@ -433,7 +433,7 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login());
+		$this->assertEquals($expected, $this->samlController->login(1));
 	}
 
 	public function testNotProvisioned() {
@@ -466,11 +466,7 @@ class SAMLControllerTest extends TestCase  {
 	 * @param string $expected
 	 */
 	public function testGetSSODisplayName($configuredDisplayName, $expected) {
-		$this->config->expects($this->any())->method('getAppValue')
-			->with('user_saml', 'general-idp0_display_name')
-			->willReturn($configuredDisplayName);
-
-		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName');
+		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName', [$configuredDisplayName]);
 
 		$this->assertSame($expected, $result);
 	}

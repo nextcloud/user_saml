@@ -55,8 +55,6 @@ class SAMLController extends Controller {
 	private $logger;
 	/** @var IL10N */
 	private $l;
-	/** @var SAMLSettings */
-	private $settings;
 
 	/**
 	 * @param string $appName
@@ -82,7 +80,6 @@ class SAMLController extends Controller {
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
 								ILogger $logger,
-								SAMLSettings $settings,
 								IL10N $l) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -93,7 +90,6 @@ class SAMLController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
-		$this->settings = $settings;
 		$this->l = $l;
 	}
 
@@ -102,7 +98,7 @@ class SAMLController extends Controller {
 	 * @throws NoUserFoundException
 	 */
 	private function autoprovisionIfPossible(array $auth) {
-		$prefix = $this->settings->getPrefix();
+		$prefix = $this->SAMLSettings->getPrefix();
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		if(isset($auth[$uidMapping])) {
 			if(is_array($auth[$uidMapping])) {
