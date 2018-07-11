@@ -31,6 +31,7 @@ use OCP\IUserBackend;
 use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\ISession;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -108,6 +109,19 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
 			$qb->execute();
+			
+			### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
+			//trigger creation of user home and /files folder
+			$userFolder = \OC::$server->getUserFolder($uid);
+			try {
+				// copy skeleton
+				\OC_Util::copySkeleton($uid, $userFolder);
+			} catch (NotPermittedException $ex) {
+				// read only uses
+			}
+			// trigger any other initialization
+			$user = $this->userManager->get($uid);
+			\OC::$server->getEventDispatcher()->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
 		}
 	}
 
