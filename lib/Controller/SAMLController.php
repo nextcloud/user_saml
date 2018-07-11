@@ -35,6 +35,8 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCA\User_SAML\Strategies\Authentication\StrategyManager;
+use OCA\User_SAML\AppInfo\Application;
 
 class SAMLController extends Controller {
 	/** @var ISession */
@@ -148,6 +150,10 @@ class SAMLController extends Controller {
 	 * @throws \Exception
 	 */
 	public function login() {
+		if (($strategy = StrategyManager::getStrategy()) != null)
+		{
+			return $strategy->login($this->config, $this->urlGenerator, $this->logger, $this->userManager, $this->userBackend, $this->session);
+		}
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch($type) {
 			case 'saml':
@@ -388,5 +394,4 @@ class SAMLController extends Controller {
 		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', ['direct' => '1']);
 		return $directUrl;
 	}
-
 }

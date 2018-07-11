@@ -1,3 +1,6 @@
+.buildpath
+.project
+.settings/
 3rdparty/vendor/onelogin/php-saml/certs/
 3rdparty/vendor/onelogin/php-saml/demo1/
 3rdparty/vendor/onelogin/php-saml/demo2/
