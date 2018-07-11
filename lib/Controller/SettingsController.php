@@ -64,7 +64,7 @@ class SettingsController extends Controller {
 		/* Fetch all config values for the given providerId */
 		$settings = [];
 		foreach ($params as $category => $content) {
-			if (empty($content) || $category === 'providers') {
+			if (empty($content) || $category === 'providers' || $category === 'type') {
 				continue;
 			}
 			foreach ($content as $setting => $details) {
