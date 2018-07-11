@@ -73,7 +73,14 @@ class SettingsController extends Controller {
 				if (strpos($category, 'security-') === 0) {
 					$category = 'security';
 				}
-				$key = $prefix . $category . '-' . $setting;
+				// make sure we properly fetch the attribute mapping
+				// as this is the only category that has the saml- prefix on config keys
+				if (strpos($category, 'attribute-mapping') === 0) {
+					$category = 'attribute-mapping';
+					$key = $prefix . 'saml-attribute-mapping' . '-' . $setting;
+				} else {
+					$key = $prefix . $category . '-' . $setting;
+				}
 				$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
 			}
 		}

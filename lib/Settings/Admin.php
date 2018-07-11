@@ -148,7 +148,7 @@ class Admin implements ISettings {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
-			'attributeMappings' => $attributeMappingSettings,
+			'attribute-mapping' => $attributeMappingSettings,
 			'type' => $type,
 			'providers' => $providers
 		];

@@ -137,7 +137,7 @@ class AdminTest extends \Test\TestCase  {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
-			'attributeMappings' => $attributeMappingSettings,
+			'attribute-mapping' => $attributeMappingSettings,
 			'providers' => [
 				['id' => 1, 'name' => 'Provider 1'],
 				['id' => 2, 'name' => 'Provider 2']

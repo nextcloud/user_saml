@@ -120,7 +120,7 @@ style('user_saml', 'admin');
 			</p>
 
 			<div class="hidden">
-				<?php foreach($_['attributeMappings'] as $key => $attribute): ?>
+				<?php foreach($_['attribute-mapping'] as $key => $attribute): ?>
 					<?php
 					if($attribute['type'] === 'line'): ?>
 					<p>
