@@ -327,7 +327,7 @@ class SAMLController extends Controller {
 	public function selectUserBackEnd($redirectUrl) {
 		$loginUrls = [
 			'directLogin' => [
-				'url' => $this->getDirectLoginUrl(),
+				'url' => $this->getDirectLoginUrl($redirectUrl),
 				'display-name' => $this->l->t('Direct log in')
 				],
 			'ssoLogin' => [
@@ -384,8 +384,11 @@ class SAMLController extends Controller {
 	 *
 	 * @return string
 	 */
-	private function getDirectLoginUrl() {
-		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', ['direct' => '1']);
+	private function getDirectLoginUrl($redirectUrl) {
+		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
+			'direct' => '1',
+			'redirect_url' => $redirectUrl,
+		]);
 		return $directUrl;
 	}
 
