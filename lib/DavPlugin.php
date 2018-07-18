@@ -63,15 +63,5 @@ class DavPlugin extends ServerPlugin {
 				$this->session->set('user_saml.samlUserData', $this->auth);
 			}
 		}
-
-		if ($request->getMethod() === 'OPTIONS' && $request->getPath() === '') {
-			/** @var CorePlugin $corePlugin */
-			$corePlugin = $this->server->getPlugin('core');
-			// setup a fake tree for anonymous access
-			$this->server->tree = new Tree(new Directory(''));
-			$corePlugin->httpOptions($request, $response);
-			$this->server->sapi->sendResponse($response);
-			return false;
-		}
 	}
 }
