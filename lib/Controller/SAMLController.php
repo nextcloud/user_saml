@@ -67,7 +67,6 @@ class SAMLController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
 	 * @param ILogger $logger
-	 * @param SAMLSettings $settings
 	 * @param IL10N $l
 	 */
 	public function __construct($appName,
