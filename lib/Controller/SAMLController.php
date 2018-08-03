@@ -337,7 +337,7 @@ class SAMLController extends Controller {
 
 		$loginUrls = [];
 
-		if ($this->settings->allowMultipleUserBackEnds()) {
+		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
 			$loginUrls['directLogin'] = [
 				'url' => $this->getDirectLoginUrl(),
 				'display-name' => $this->l->t('Direct log in')
@@ -357,7 +357,7 @@ class SAMLController extends Controller {
 	 */
 	private function getIdps($redirectUrl) {
 		$result = [];
-		$idps = $this->settings->getListOfIdps();
+		$idps = $this->SAMLSettings->getListOfIdps();
 		foreach ($idps as $idpId => $displayName) {
 			$result[] = [
 				'url' => $this->getSSOUrl($redirectUrl, $idpId),
