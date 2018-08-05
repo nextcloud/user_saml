@@ -28,6 +28,7 @@
     "Attribute to map the users groups to." : "Attribuut om de gebruikersgroep aan te koppelen.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Gebruik SAML authenticatie voor de %s desktop clients (vereist gebruiker herauthenticatie)",
     "SSO & SAML authentication" : "SSO & SAML authenticatie",
+    "Authenticate using single sign-on" : "Authenticeren via single sign-on",
     "Open documentation" : "Open documentatie",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Kies of je wilt authenticeren via de in Nextcloud ingebouwde SAML provider, of dat je wilt authenticeren tegen een omgevingsvariabele",
     "Use built-in SAML authentication" : "Ingebouwde SAML authenticatie gebruiken",
