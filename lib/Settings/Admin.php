@@ -54,6 +54,17 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
+		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
+		natsort($providerIds);
+		$providers = [];
+		foreach ($providerIds as $id) {
+			$prefix = $id === '1' ? '' : $id .'-';
+			$name = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
+			$providers[] = [
+				'id' => $id,
+				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
+				];
+		}
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
 			'privateKey' => $this->l10n->t('Private key of the Service Provider'),
@@ -90,10 +101,13 @@ class Admin implements ISettings {
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
+				'global' => true,
 			],
 			'allow_multiple_user_back_ends' => [
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
+				'hideForEnv' => true,
+				'global' => true,
 			],
 		];
 		$attributeMappingSettings = [
@@ -124,6 +138,7 @@ class Admin implements ISettings {
 			$generalSettings['use_saml_auth_for_desktop'] = [
 				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
 				'type' => 'checkbox',
+				'global' => true,
 			];
 		}
 
@@ -133,8 +148,9 @@ class Admin implements ISettings {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
-			'attributeMappings' => $attributeMappingSettings,
+			'attribute-mapping' => $attributeMappingSettings,
 			'type' => $type,
+			'providers' => $providers
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);
