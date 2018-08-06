@@ -157,6 +157,7 @@ if($redirectSituation === true) {
 		[
 			'requesttoken' => $csrfToken->getEncryptedValue(),
 			'originalUrl' => $originalUrl,
+			'idp' => 1,
 		]
 	);
 	header('Location: '.$targetUrl);
