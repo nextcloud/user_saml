@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.0
+
+### Changelog
+
+- Allow multiple IDP's
+- Add attribute mapping for groups
+
 ## 1.5.0
 
 ### Changed
