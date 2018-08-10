@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -47,6 +48,8 @@ class UserBackendTest extends TestCase   {
 	private $groupManager;
 	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;
+	/** @var \PHPUnit_Framework_MockObject_MockObject|SAMLSettings */
+	private $SAMLSettings;
 
 	public function setUp() {
 		parent::setUp();
@@ -57,6 +60,7 @@ class UserBackendTest extends TestCase   {
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
@@ -68,7 +72,8 @@ class UserBackendTest extends TestCase   {
 					$this->session,
 					$this->db,
 					$this->userManager,
-					$this->groupManager
+					$this->groupManager,
+					$this->SAMLSettings
 				])
 				->setMethods($mockedFunctions)
 				->getMock();
@@ -79,7 +84,8 @@ class UserBackendTest extends TestCase   {
 				$this->session,
 				$this->db,
 				$this->userManager,
-				$this->groupManager
+				$this->groupManager,
+				$this->SAMLSettings
 			);
 		}
 	}

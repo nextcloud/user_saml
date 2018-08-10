@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Vistað",
+    "Direct log in" : "Bein innskráning",
     "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
     "Private key of the Service Provider" : "Einkalykill internetþjónustu",
     "Whether the metadata should be signed." : "Hvort undirrita eigi lýsigögnin.",
@@ -11,6 +12,8 @@ OC.L10N.register(
     "Use environment variable" : "Nota umhverfisbreytu",
     "General" : "Almennt",
     "Service Provider Data" : "Gögn um internetþjónustu",
+    "Show Service Provider settings…" : "Birta stillingar internetþjónustu…",
+    "Identity Provider Data" : "Gögn um auðkenningarþjónustu",
     "Public X.509 certificate of the IdP" : "Opinbert X.509-skilríki fyrir IdP",
     "Attribute mapping" : "Vörpun eiginda",
     "Security settings" : "Öryggisstillingar",

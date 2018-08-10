@@ -33,10 +33,12 @@ $l = \OC::$server->getL10N('user_saml');
 $config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
+$session = \OC::$server->getSession();
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config,
-	$request
+	$request,
+	$session
 );
 
 $userBackend = new \OCA\User_SAML\UserBackend(
@@ -45,7 +47,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),
 	\OC::$server->getUserManager(),
-	\OC::$server->getGroupManager()
+	\OC::$server->getGroupManager(),
+	$samlSettings
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
@@ -57,7 +60,7 @@ $type = '';
 switch($config->getAppValue('user_saml', 'type')) {
 	case 'saml':
 		try {
-			$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray());
+			$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray(1));
 		} catch (OneLogin_Saml2_Error $e) {
 			$returnScript = true;
 		}
@@ -119,9 +122,11 @@ if($useSamlForDesktopClients === '1') {
 	}
 }
 
-$multipleUserBackEnds = $config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
+$multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
+$configuredIdps = $samlSettings->getListOfIdps();
+$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
 
-if ($redirectSituation === true && $multipleUserBackEnds === '1') {
+if ($redirectSituation === true && $showLoginOptions) {
 	$params = $request->getParams();
 	$redirectUrl = '';
 	if(isset($params['redirect_url'])) {
@@ -152,6 +157,7 @@ if($redirectSituation === true) {
 		[
 			'requesttoken' => $csrfToken->getEncryptedValue(),
 			'originalUrl' => $originalUrl,
+			'idp' => 1,
 		]
 	);
 	header('Location: '.$targetUrl);

@@ -1,6 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
+ * @copyright Copyright (c) 2018 Jean-Baptiste Pin <jibet.pin@gmail.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -97,7 +98,8 @@ class SAMLController extends Controller {
 	 * @throws NoUserFoundException
 	 */
 	private function autoprovisionIfPossible(array $auth) {
-		$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+		$prefix = $this->SAMLSettings->getPrefix();
+		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		if(isset($auth[$uidMapping])) {
 			if(is_array($auth[$uidMapping])) {
 				$uid = $auth[$uidMapping][0];
@@ -144,17 +146,19 @@ class SAMLController extends Controller {
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
 	 *
+	 * @param int $idp id of the idp
 	 * @return Http\RedirectResponse
 	 * @throws \Exception
 	 */
-	public function login() {
+	public function login($idp) {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch($type) {
 			case 'saml':
-				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
 				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
+				$this->session->set('user_saml.Idp', $idp);
 				break;
 			case 'environment-variable':
 				$ssoUrl = $this->request->getParam('originalUrl', '');
@@ -188,9 +192,12 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @NoCSRFRequired
+	 * @param int $idp
+	 * @return Http\DataDownloadResponse
+	 * @throws \OneLogin_Saml2_Error
 	 */
-	public function getMetadata() {
-		$settings = new \OneLogin_Saml2_Settings($this->SAMLSettings->getOneLoginSettingsArray());
+	public function getMetadata($idp) {
+		$settings = new \OneLogin_Saml2_Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
 		$errors = $settings->validateMetadata($metadata);
 		if (empty($errors)) {
@@ -214,11 +221,12 @@ class SAMLController extends Controller {
 	 */
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
-		if(is_null($AuthNRequestID) || $AuthNRequestID === '') {
+		$idp = $this->session->get('user_saml.Idp');
+		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
 			return;
 		}
 
-		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
 		$errors = $auth->getErrors();
@@ -282,7 +290,8 @@ class SAMLController extends Controller {
 	 */
 	public function singleLogoutService() {
 		if($this->request->passesCSRFCheck()) {
-			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray());
+			$idp = $this->session->get('user_saml.Idp');
+			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$returnTo = null;
 			$parameters = array();
 			$nameId = $this->session->get('user_saml.samlNameId');
@@ -328,26 +337,48 @@ class SAMLController extends Controller {
 	 * @return Http\TemplateResponse
 	 */
 	public function selectUserBackEnd($redirectUrl) {
-		$loginUrls = [
-			'directLogin' => [
-				'url' => $this->getDirectLoginUrl($redirectUrl),
+
+		$loginUrls = [];
+
+		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
+			$loginUrls['directLogin'] = [
+				'url' => $this->getDirectLoginUrl(),
 				'display-name' => $this->l->t('Direct log in')
-				],
-			'ssoLogin' => [
-				'url' => $this->getSSOUrl($redirectUrl),
-				'display-name' => $this->getSSODisplayName(),
-				]
-		];
+			];
+		}
+
+		$loginUrls['ssoLogin'] = $this->getIdps($redirectUrl);
+
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
+	}
+
+	/**
+	 * get the IdPs showed at the login page
+	 *
+	 * @param $redirectUrl
+	 * @return array
+	 */
+	private function getIdps($redirectUrl) {
+		$result = [];
+		$idps = $this->SAMLSettings->getListOfIdps();
+		foreach ($idps as $idpId => $displayName) {
+			$result[] = [
+				'url' => $this->getSSOUrl($redirectUrl, $idpId),
+				'display-name' => $this->getSSODisplayName($displayName),
+			];
+		}
+
+		return $result;
 	}
 
 	/**
 	 * get SSO URL
 	 *
 	 * @param $redirectUrl
+	 * @param idp identifier
 	 * @return string
 	 */
-	private function getSSOUrl($redirectUrl) {
+	private function getSSOUrl($redirectUrl, $idp) {
 
 		$originalUrl = '';
 		if(!empty($redirectUrl)) {
@@ -361,6 +392,7 @@ class SAMLController extends Controller {
 			[
 				'requesttoken' => $csrfToken->getEncryptedValue(),
 				'originalUrl' => $originalUrl,
+				'idp' => $idp
 			]
 		);
 
@@ -371,10 +403,10 @@ class SAMLController extends Controller {
 	/**
 	 * return the display name of the SSO identity provider
 	 *
+	 * @param $displayName
 	 * @return string
 	 */
-	protected function getSSODisplayName() {
-		$displayName = $this->config->getAppValue('user_saml', 'general-idp0_display_name');
+	protected function getSSODisplayName($displayName) {
 		if (empty($displayName)) {
 			$displayName = $this->l->t('SSO & SAML log in');
 		}

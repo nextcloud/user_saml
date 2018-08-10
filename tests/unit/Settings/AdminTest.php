@@ -94,14 +94,18 @@ class AdminTest extends \Test\TestCase  {
 			'require_provisioned_account' => [
 				'text' => 'Only allow authentication if an account exists on some other backend. (e.g. LDAP)',
 				'type' => 'checkbox',
+				'global' => true,
 			],
 			'use_saml_auth_for_desktop' => [
 				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
 				'type' => 'checkbox',
+				'global' => true,
 			],
 			'allow_multiple_user_back_ends' => [
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
+				'global' => true,
+				'hideForEnv' => true,
 			],
 		];
 		$attributeMappingSettings = [
@@ -133,7 +137,11 @@ class AdminTest extends \Test\TestCase  {
 			'security-required' => $securityRequiredFields,
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
-			'attributeMappings' => $attributeMappingSettings,
+			'attribute-mapping' => $attributeMappingSettings,
+			'providers' => [
+				['id' => 1, 'name' => 'Provider 1'],
+				['id' => 2, 'name' => 'Provider 2']
+			],
 		];
 
 		return $params;
@@ -141,7 +149,20 @@ class AdminTest extends \Test\TestCase  {
 
 	public function testGetFormWithoutType() {
 		$this->config
-			->expects($this->once())
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'providerIds')
+			->willReturn('1,2');
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->willReturn('Provider 1');
+		$this->config
+			->expects($this->at(2))
+			->method('getAppValue')
+			->willReturn('Provider 2');
+		$this->config
+			->expects($this->at(3))
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('');
@@ -155,15 +176,28 @@ class AdminTest extends \Test\TestCase  {
 	}
 
 	public function testGetFormWithSaml() {
+		$this->config
+			->expects($this->at(0))
+			->method('getAppValue')
+			->with('user_saml', 'providerIds')
+			->willReturn('1,2');
+		$this->config
+			->expects($this->at(1))
+			->method('getAppValue')
+			->willReturn('Provider 1');
+		$this->config
+			->expects($this->at(2))
+			->method('getAppValue')
+			->willReturn('Provider 2');
+		$this->config
+			->expects($this->at(3))
+			->method('getAppValue')
+			->with('user_saml', 'type')
+			->willReturn('saml');
 		$this->defaults
 			->expects($this->once())
 			->method('getName')
 			->willReturn('Nextcloud');
-		$this->config
-			->expects($this->once())
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('saml');
 
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
