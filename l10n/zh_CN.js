@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "此账户被禁用，请联系管理员。",
     "Saved" : "已保存",
+    "Unknown error, please check the log file for more details." : "未知错误，请在日志文件检查更多详情。",
+    "Direct log in" : "直接登录",
+    "SSO & SAML log in" : "SSO & SAML 登录",
     "X.509 certificate of the Service Provider" : "服务商 X.509 认证",
     "Private key of the Service Provider" : "服务商私钥",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "表明 SP 发送的 <samlp:logoutRequest> nameID 将被加密.",

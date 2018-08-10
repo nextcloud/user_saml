@@ -10,40 +10,71 @@ style('user_saml', 'admin');
 	   title="<?php p($l->t('Open documentation'));?>"
 	   href="<?php p(link_to_docs('admin-sso')); ?>"></a>
 
-	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">Saved</div>
+	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
 
-	<div id="user-saml-settings">
-		<div id="user-saml-choose-type">
-			<?php p($l->t('Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.')) ?>
-			<br/>
-			<button id="user-saml-choose-saml"><?php p($l->t('Use built-in SAML authentication')) ?></button>
-			<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
-		</div>
 
-		<div class="warning hidden" id="user-saml-warning-admin-user">
-			<?php p(
-				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
-					[
-						$theme->getEntity(),
-						$_['general']['allow_multiple_user_back_ends']['text']
-					]
-				)
+
+	<div class="warning hidden" id="user-saml-warning-admin-user">
+		<?php p(
+			$l->t(
+				'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
+				[
+					$theme->getEntity(),
+					$_['general']['allow_multiple_user_back_ends']['text']
+				]
 			)
-			?>
-		</div>
+		)
+		?>
+	</div>
 
-		<div id="user-saml-general">
-			<h3><?php p($l->t('General')) ?></h3>
+	<div id="user-saml-choose-type" class="hidden">
+		<?php p($l->t('Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.')) ?>
+		<br/>
+		<button id="user-saml-choose-saml"><?php p($l->t('Use built-in SAML authentication')) ?></button>
+		<button id="user-saml-choose-env"><?php p($l->t('Use environment variable')) ?></button>
+	</div>
+
+	<div id="user-saml-global" class="hidden">
+		<h3><?php p($l->t('Global settings')) ?></h3>
+		<?php foreach($_['general'] as $key => $attribute): ?>
+			<?php if($attribute['type'] === 'checkbox' && $attribute['global']): ?>
+				<p>
+					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
+				</p>
+			<?php elseif($attribute['type'] === 'line' && $attribute['global']): ?>
+				<p>
+					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+				</p>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
+
+	<ul class="account-list hidden">
+		<?php foreach ($_['providers'] as $provider) { ?>
+		<li data-id="<?php p($provider['id']); ?>">
+			<a href="#"><?php p($provider['name']); ?></a>
+		</li>
+		<?php } ?>
+		<li class="remove-provider"><a data-js="remove-idp" class="icon-delete"><span class="hidden-visually"><?php p($l->t('Remove identity provider')); ?></span></a></li>
+		<li class="add-provider"><a href="#" class="button"><span class="icon-add"></span> <?php p($l->t('Add identity provider')); ?></a></li>
+	</ul>
+
+	<div id="user-saml-settings" class="hidden">
+
+		<div id="user-saml-general" class="hidden">
+			<h3>
+				<?php p($l->t('General')) ?>
+			</h3>
 			<?php foreach($_['general'] as $key => $attribute): ?>
-				<?php if($attribute['type'] === 'checkbox'): ?>
+				<?php if($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
-						<input type="checkbox" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 					</p>
-				<?php elseif($attribute['type'] === 'line'): ?>
+				<?php elseif($attribute['type'] === 'line' && !$attribute['global']): ?>
 					<p>
-						<input name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -72,7 +103,7 @@ style('user_saml', 'admin');
 				<?php print_unescaped($l->t('Configure your IdP settings here.')) ?>
 							</p>
 
-			<p><input name="entityId" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-entityId', '')) ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
+			<p><input data-key="idp-entityId" name="entityId" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-entityId', '')) ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
 			<p><input name="singleSignOnService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleSignOnService.url', '')) ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
 			<p><span class="toggle"><?php p($l->t('Show optional Identity Provider settings…')) ?></span></p>
 			<div class="hidden">
@@ -89,7 +120,7 @@ style('user_saml', 'admin');
 			</p>
 
 			<div class="hidden">
-				<?php foreach($_['attributeMappings'] as $key => $attribute): ?>
+				<?php foreach($_['attribute-mapping'] as $key => $attribute): ?>
 					<?php
 					if($attribute['type'] === 'line'): ?>
 					<p>
@@ -131,7 +162,10 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 
-		<a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')) ?>" class="button"><?php p($l->t('Download metadata XML')) ?></a>
+		<a id="get-metadata" data-base="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')); ?>"
+		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
+			<?php p($l->t('Download metadata XML')) ?>
+		</a>
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>
