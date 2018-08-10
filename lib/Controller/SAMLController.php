@@ -1,6 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
+ * @copyright Copyright (c) 2018 Jean-Baptiste Pin <jibet.pin@gmail.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
