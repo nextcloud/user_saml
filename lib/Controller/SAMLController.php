@@ -160,7 +160,13 @@ class SAMLController extends Controller {
 				$this->session->set('user_saml.Idp', $idp);
 				break;
 			case 'environment-variable':
-				$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
+				$originalUrl = $this->request->getParam('originalUrl', '');
+				if($originalUrl !== null && $originalUrl !== '') {
+					$ssoUrl = $originalUrl;
+					}
+				else {
+					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
+					};
 				$this->session->set('user_saml.samlUserData', $_SERVER);
 				try {
 					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
