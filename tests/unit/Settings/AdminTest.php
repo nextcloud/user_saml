@@ -169,6 +169,8 @@ class AdminTest extends \Test\TestCase  {
 
 		$params = $this->formDataProvider();
 		unset($params['general']['use_saml_auth_for_desktop']);
+		unset($params['general']['idp0_display_name']);
+		unset($params['general']['allow_multiple_user_back_ends']);
 		$params['type'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
