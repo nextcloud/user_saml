@@ -41,6 +41,16 @@
 			OCP.AppConfig.setValue('user_saml', 'type', 'saml', {success: function() {location.reload();}});
 		},
 
+		resetSettings: function() {
+			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
+				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.resetSettings, this));
+				return;
+			}
+
+			OCP.AppConfig.setValue('user_saml', 'type', '', {success: function() {location.reload();}});
+		},
+
+
 		getConfigIdentifier: function() {
 			if (this.currentConfig === '1') {
 				return '';
@@ -153,6 +163,11 @@ $(function() {
 		if(type === '') {
 			OCA.User_SAML.Admin.chooseEnv();
 		}
+	});
+
+	$('#user-saml-reset-settings').click(function(e) {
+		e.preventDefault();
+		OCA.User_SAML.Admin.resetSettings();
 	});
 
 	var switchProvider = function(providerId) {
