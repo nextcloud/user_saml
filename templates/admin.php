@@ -176,6 +176,10 @@ style('user_saml', 'admin');
 		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
 			<?php p($l->t('Download metadata XML')) ?>
 		</a>
+
+		<button id="user-saml-reset-settings"><?php p($l->t('Reset settings')) ?></button>
+
+
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>

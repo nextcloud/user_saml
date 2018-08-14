@@ -54,3 +54,7 @@
 	border-bottom: 1px solid #333;
 	font-weight: bold;
 }
+
+#user-saml-reset-settings {
+	float: right;
+}
