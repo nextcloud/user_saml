@@ -63,6 +63,7 @@ OC.L10N.register(
     "Signatures and encryption offered" : "Önerilen imza ve şifreleme",
     "Signatures and encryption required" : "Gereken imza ve şifreleme",
     "Download metadata XML" : "Üst veri XML dosyasını indir",
+    "Reset settings" : "Ayarları sıfırla",
     "Metadata invalid" : "Üst veri geçersiz",
     "Metadata valid" : "Üst veri geçerli",
     "Account not provisioned." : "Hesabınız hazır değil.",
