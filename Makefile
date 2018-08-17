@@ -27,19 +27,20 @@ appstore: clean
 	--exclude=/build \
 	--exclude=/docs \
 	--exclude=/translationfiles \
-	--exclude=/.tx \
+	--exclude=.tx \
 	--exclude=/tests \
-	--exclude=/.git \
-	--exclude=/.github \
+	--exclude=.git \
+	--exclude=.github \
 	--exclude=/l10n/l10n.pl \
 	--exclude=/CONTRIBUTING.md \
 	--exclude=/issue_template.md \
 	--exclude=/README.md \
-	--exclude=/.gitattributes \
-	--exclude=/.gitignore \
-	--exclude=/.scrutinizer.yml \
-	--exclude=/.travis.yml \
+	--exclude=.gitattributes \
+	--exclude=.gitignore \
+	--exclude=.scrutinizer.yml \
+	--exclude=.travis.yml \
 	--exclude=/Makefile \
+	--exclude=.drone.yml \
 	$(project_dir)/ $(sign_dir)/$(app_name)
 	tar -czf $(build_dir)/$(app_name)-$(version).tar.gz \
 		-C $(sign_dir) $(app_name)
