@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# 1.6.2
+
+### Changelog
+
+- Add reset button to start over with the configuration
+- Show default login screen until SSO is configured
+- updated translations
+- small fixes
+
 # 1.6.1
 
 ### Fixed
