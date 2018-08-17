@@ -1,16 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-# 1.6.2
+## 1.6.2
 
-### Changelog
+### Changed
 
 - Add reset button to start over with the configuration
 - Show default login screen until SSO is configured
 - updated translations
+
+### Fixed
+
 - small fixes
 
-# 1.6.1
+## 1.6.1
 
 ### Fixed
 
@@ -18,7 +21,7 @@ All notable changes to this project will be documented in this file.
 
 ## 1.6.0
 
-### Changelog
+### Changed
 
 - Allow multiple IDP's
 - Add attribute mapping for groups
