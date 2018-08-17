@@ -24,6 +24,8 @@ OC.L10N.register(
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet již existuje i někde jinde. (např. LDAP)",
     "Attribute to map the displayname to." : "Atribut, na který se má mapovat zobrazované jméno.",
     "Attribute to map the email address to." : "Atribut, na který se má mapovat e-mailová adresa.",
+    "Attribute to map the quota to." : "Atribut, na který namapovat kvótu",
+    "Attribute to map the users groups to." : "Atribut, na který namapovat uživatelovy skupiny",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Použít SAML pro %s desktopové klienty (vyžaduje novou autentizaci uživatele)",
     "SSO & SAML authentication" : "SSO & SAML ověření",
     "Open documentation" : "Otevřít dokumentaci",
