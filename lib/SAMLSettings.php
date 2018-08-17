@@ -80,8 +80,9 @@ class SAMLSettings {
 	 * @return bool
 	 */
 	public function allowMultipleUserBackEnds() {
+		$type = $this->config->getAppValue('user_saml', 'type');
 		$setting = $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
-		return  $setting === '1';
+		return  ($setting === '1' && $type === 'saml');
 	}
 
 	/**

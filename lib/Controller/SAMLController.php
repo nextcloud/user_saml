@@ -339,7 +339,7 @@ class SAMLController extends Controller {
 
 		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
 			$loginUrls['directLogin'] = [
-				'url' => $this->getDirectLoginUrl(),
+				'url' => $this->getDirectLoginUrl($redirectUrl),
 				'display-name' => $this->l->t('Direct log in')
 			];
 		}

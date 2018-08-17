@@ -69,6 +69,8 @@ switch($config->getAppValue('user_saml', 'type')) {
 	case 'environment-variable':
 		$type = 'environment-variable';
 		break;
+	default:
+		return;
 }
 
 if($returnScript === true) {

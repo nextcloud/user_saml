@@ -15,15 +15,25 @@ style('user_saml', 'admin');
 
 
 	<div class="warning hidden" id="user-saml-warning-admin-user">
-		<?php p(
-			$l->t(
-				'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
-				[
-					$theme->getEntity(),
-					$_['general']['allow_multiple_user_back_ends']['text']
-				]
-			)
-		)
+		<?php
+		if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
+			p(
+				$l->t(
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
+					[
+						$theme->getEntity(),
+						$_['general']['allow_multiple_user_back_ends']['text']
+					]
+				)
+			);
+		} else {
+				$l->t(
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore.',
+					[
+						$theme->getEntity(),
+										]
+				);
+		}
 		?>
 	</div>
 
@@ -42,7 +52,7 @@ style('user_saml', 'admin');
 					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
 					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 				</p>
-			<?php elseif($attribute['type'] === 'line' && $attribute['global']): ?>
+			<?php elseif($attribute['type'] === 'line' && isset($attribute['global'])): ?>
 				<p>
 					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 				</p>
@@ -72,7 +82,7 @@ style('user_saml', 'admin');
 						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 					</p>
-				<?php elseif($attribute['type'] === 'line' && !$attribute['global']): ?>
+				<?php elseif($attribute['type'] === 'line' && !isset($attribute['global'])): ?>
 					<p>
 						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
@@ -166,6 +176,10 @@ style('user_saml', 'admin');
 		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
 			<?php p($l->t('Download metadata XML')) ?>
 		</a>
+
+		<button id="user-saml-reset-settings"><?php p($l->t('Reset settings')) ?></button>
+
+
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>
