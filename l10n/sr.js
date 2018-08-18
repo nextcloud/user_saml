@@ -63,6 +63,7 @@ OC.L10N.register(
     "Signatures and encryption offered" : "Понуђено потписи и шифровање",
     "Signatures and encryption required" : "Захтевани потписи и шифровање",
     "Download metadata XML" : "Скини XML метаподатака",
+    "Reset settings" : "Ресетуј поставке",
     "Metadata invalid" : "Метаподаци неисправни",
     "Metadata valid" : "Метаподаци исправни",
     "Account not provisioned." : "Налог није добављен.",
