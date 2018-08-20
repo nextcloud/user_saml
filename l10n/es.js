@@ -63,6 +63,7 @@ OC.L10N.register(
     "Signatures and encryption offered" : "Firmas y cifrado ofrecido",
     "Signatures and encryption required" : "Firmas y cifrado necesitado",
     "Download metadata XML" : "Descargar metadatos en XML",
+    "Reset settings" : "Volver a configuración por defecto",
     "Metadata invalid" : "Metadatos inválidos",
     "Metadata valid" : "Metadatos válidos",
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
