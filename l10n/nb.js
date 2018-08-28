@@ -3,9 +3,11 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Denne brukerkontoen er avskrudd, kontakt administratoren din.",
     "Saved" : "Lagret",
+    "Provider" : "Tilbyder",
     "Unknown error, please check the log file for more details." : "Ukjent feil, sjekk loggfilen for flere detaljer.",
     "Direct log in" : "Direkte innlogging",
     "SSO & SAML log in" : "SSO- og SAML -innlogging",
+    "Provider " : "Tilbyder",
     "X.509 certificate of the Service Provider" : "X.509-sertifikat for tjenesteleverandøren",
     "Private key of the Service Provider" : "Privat nøkkel for tjenesteleverandøren",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Forteller om <samlp:logoutRequest> av denne SPen er kryptert.",
