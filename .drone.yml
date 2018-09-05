@@ -8,7 +8,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -27,7 +27,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -43,7 +43,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -61,7 +61,7 @@ pipeline:
     image: nextcloudci/php7.1:php7.1-12
     environment:
       - APP_NAME=user_saml
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -78,7 +78,7 @@ pipeline:
   integration-tests:
     image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
     environment:
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
     commands:
       - /start.sh &
       - sleep 3
