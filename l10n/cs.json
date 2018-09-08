@@ -66,9 +66,9 @@
     "Indicates if the SP will validate all received XMLs." : "Indikuje, zda poskytovatel služby ověří všechna přijatá XML.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet již existuje i někde jinde. (např. LDAP)",
     "Show Service Provider settings ..." : "Zobrazit nastavení poskytovatele služeb ...",
-    "Show optional Identity Provider settings ..." : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů ...",
+    "Show optional Identity Provider settings ..." : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů…",
     "If you want to optionally map SAML attributes to the user you can configure these here." : "Pokud chcete mapovat SAML atributy na uživatele, můžete to nastavit zde.",
-    "Show attribute mapping settings ..." : "Zobrazit nastavení mapování atributů ...",
-    "Show security settings ..." : "Zobrazit bezpečnostní nastavení ..."
+    "Show attribute mapping settings ..." : "Zobrazit nastavení mapování atributů…",
+    "Show security settings ..." : "Zobrazit nastavení zabezpečení…"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }
