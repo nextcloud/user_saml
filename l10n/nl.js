@@ -63,6 +63,7 @@ OC.L10N.register(
     "Signatures and encryption offered" : "Beschikbare handtekeningen en versleuteling",
     "Signatures and encryption required" : "Vereiste handtekeningen en versleuteling",
     "Download metadata XML" : "Downloaden metadata XML",
+    "Reset settings" : "Terugzetten instellingen",
     "Metadata invalid" : "Metadata ongeldig",
     "Metadata valid" : "Metadata geldig",
     "Account not provisioned." : "Account niet verstrekt.",
