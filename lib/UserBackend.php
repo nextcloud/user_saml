@@ -114,7 +114,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
 			$qb->execute();
-			
+
 			### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
 			//trigger creation of user home and /files folder
 			$userFolder = \OC::$server->getUserFolder($uid);
@@ -370,6 +370,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function getLogoutAttribute() {
 		return 'style="display:none;"';
+	}
+
+	/**
+	 * return user data from the idp
+	 *
+	 * @return mixed
+	 */
+	public function getUserData() {
+		return $this->session->get('user_saml.samlUserData');
 	}
 
 	/**
