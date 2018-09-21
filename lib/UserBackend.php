@@ -24,6 +24,7 @@ namespace OCA\User_SAML;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\UserInterface;
@@ -50,6 +51,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private static $backends = [];
 	/** @var SAMLSettings */
 	private $settings;
+	/** @var ILogger */
+	private $logger;
 
 	/**
 	 * @param IConfig $config
@@ -59,6 +62,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param SAMLSettings $settings
+	 * @param ILogger $logger
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
@@ -66,7 +70,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 								IDBConnection $db,
 								IUserManager $userManager,
 								IGroupManager $groupManager,
-								SAMLSettings $settings) {
+								SAMLSettings $settings,
+								ILogger $logger) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -74,6 +79,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->settings = $settings;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -378,7 +384,63 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return mixed
 	 */
 	public function getUserData() {
-		return $this->session->get('user_saml.samlUserData');
+		$userData = $this->session->get('user_saml.samlUserData');
+		$userData = $this->formatUserData($userData);
+
+		// make sure that a valid UID is given
+		if (empty($userData['uid'])) {
+			$this->logger->error('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid'], ['app' => $this->appName]);
+			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid']);
+		}
+
+
+		return $userData;
+
+	}
+
+	/**
+	 * format user data and map them to the configured attributes
+	 *
+	 * @param $attributes
+	 * @return array
+	 */
+	private function formatUserData($attributes) {
+
+		$result = [];
+
+		try {
+			$result['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['email'] = null;
+		}
+		try {
+			$result['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['displayName'] = null;
+		}
+		try {
+			$result['quota'] = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			if ($result['quota'] === '') {
+				$result['quota'] = 'default';
+			}
+		} catch (\InvalidArgumentException $e) {
+			$result['quota'] = null;
+		}
+
+		try {
+			$result['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['groups'] = null;
+		}
+
+		$prefix = $this->settings->getPrefix();
+		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
+		$result['uid'] = '';
+		if (isset($attributes[$uidMapping])) {
+			$result['uid'] = $attributes[$uidMapping][0];
+		}
+
+		return $result;
 	}
 
 	/**

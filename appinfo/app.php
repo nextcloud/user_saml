@@ -48,7 +48,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getDatabaseConnection(),
 	\OC::$server->getUserManager(),
 	\OC::$server->getGroupManager(),
-	$samlSettings
+	$samlSettings,
+	\OC::$server->getLogger()
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
