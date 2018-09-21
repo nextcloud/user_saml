@@ -6,7 +6,25 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc
 {
+    public static $prefixLengthsPsr4 = array (
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+    );
+
     public static $classMap = array (
+        'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
+        'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
+        'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
+        'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
         'OneLogin_Saml2_Auth' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Auth.php',
         'OneLogin_Saml2_AuthnRequest' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/AuthnRequest.php',
         'OneLogin_Saml2_Constants' => __DIR__ . '/..' . '/onelogin/php-saml/lib/Saml2/Constants.php',
@@ -31,6 +49,8 @@ class ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInitcc75f134f7630c1ee3a8e4d7c86f3bcc::$classMap;
 
         }, null, ClassLoader::class);
