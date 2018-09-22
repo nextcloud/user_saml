@@ -5,7 +5,7 @@ OC.L10N.register(
     "Saved" : "Sauvegardé",
     "Provider" : "Fournisseur",
     "Unknown error, please check the log file for more details." : "Erreur inconnue, veuillez vérifier le fichier journal pour plus de détails.",
-    "Direct log in" : "Connexion direct ",
+    "Direct log in" : "Connexion directe",
     "SSO & SAML log in" : "Connexion SSO & SAML",
     "Provider " : "Fournisseur",
     "X.509 certificate of the Service Provider" : "Certificat X.509 du fournisseur de service",
