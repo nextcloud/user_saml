@@ -388,7 +388,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$userData = $this->formatUserData($userData);
 
 		// make sure that a valid UID is given
-		if (empty($userData['uid'])) {
+		if (empty($userData['formatted']['uid'])) {
 			$this->logger->error('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid'], ['app' => $this->appName]);
 			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid']);
 		}
@@ -406,38 +406,38 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	private function formatUserData($attributes) {
 
-		$result = [];
+		$result = ['formatted' => [], 'raw' => $attributes];
 
 		try {
-			$result['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+			$result['formatted']['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
-			$result['email'] = null;
+			$result['formatted']['email'] = null;
 		}
 		try {
-			$result['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+			$result['formatted']['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
-			$result['displayName'] = null;
+			$result['formatted']['displayName'] = null;
 		}
 		try {
-			$result['quota'] = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
-			if ($result['quota'] === '') {
-				$result['quota'] = 'default';
+			$result['formatted']['quota'] = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			if ($result['formatted']['quota'] === '') {
+				$result['formatted']['quota'] = 'default';
 			}
 		} catch (\InvalidArgumentException $e) {
-			$result['quota'] = null;
+			$result['formatted']['quota'] = null;
 		}
 
 		try {
-			$result['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$result['formatted']['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
-			$result['groups'] = null;
+			$result['formatted']['groups'] = null;
 		}
 
 		$prefix = $this->settings->getPrefix();
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		$result['uid'] = '';
+		$result['formatted']['uid'] = '';
 		if (isset($attributes[$uidMapping])) {
-			$result['uid'] = $attributes[$uidMapping][0];
+			$result['formatted']['uid'] = $attributes[$uidMapping][0];
 		}
 
 		return $result;
