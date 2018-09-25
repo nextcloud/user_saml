@@ -389,8 +389,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 		// make sure that a valid UID is given
 		if (empty($userData['formatted']['uid'])) {
-			$this->logger->error('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid'], ['app' => $this->appName]);
-			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. ' . $uidMapping . ' was mapped to uid: ' . $userData['uid']);
+			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => $this->appName, 'uid' => $userData['uid']]);
+			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['uid']);
 		}
 
 
