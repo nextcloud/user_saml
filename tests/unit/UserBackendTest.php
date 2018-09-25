@@ -27,6 +27,7 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\ILogger;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -50,6 +51,8 @@ class UserBackendTest extends TestCase   {
 	private $userBackend;
 	/** @var \PHPUnit_Framework_MockObject_MockObject|SAMLSettings */
 	private $SAMLSettings;
+	/** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
+	private $logger;
 
 	public function setUp() {
 		parent::setUp();
@@ -61,6 +64,7 @@ class UserBackendTest extends TestCase   {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
+		$this->logger = $this->createMock(ILogger::class);
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
@@ -73,7 +77,8 @@ class UserBackendTest extends TestCase   {
 					$this->db,
 					$this->userManager,
 					$this->groupManager,
-					$this->SAMLSettings
+					$this->SAMLSettings,
+					$this->logger
 				])
 				->setMethods($mockedFunctions)
 				->getMock();
@@ -85,7 +90,8 @@ class UserBackendTest extends TestCase   {
 				$this->db,
 				$this->userManager,
 				$this->groupManager,
-				$this->SAMLSettings
+				$this->SAMLSettings,
+				$this->logger
 			);
 		}
 	}
