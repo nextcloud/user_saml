@@ -94,6 +94,7 @@ class SAMLControllerTest extends TestCase  {
 			$this->logger,
 			$this->l
 		);
+
 	}
 
 	/**
@@ -125,6 +126,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -156,6 +162,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -205,6 +216,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -254,6 +270,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -311,6 +332,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -363,6 +389,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
@@ -402,6 +433,11 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
+			->method('getSystemValue')
+			->with('gs.enabled', false)
+			->willReturn(false);
+		$this->config
+			->expects($this->at(2))
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');

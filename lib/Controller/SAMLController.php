@@ -22,6 +22,7 @@
 
 namespace OCA\User_SAML\Controller;
 
+use Firebase\JWT\JWT;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
@@ -98,6 +99,12 @@ class SAMLController extends Controller {
 	 * @throws NoUserFoundException
 	 */
 	private function autoprovisionIfPossible(array $auth) {
+
+		// nothing to do here, in case of a global scale setup
+		if ($this->config->getSystemValue('gs.enabled', false)) {
+			return;
+		}
+
 		$prefix = $this->SAMLSettings->getPrefix();
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		if(isset($auth[$uidMapping])) {
@@ -289,7 +296,16 @@ class SAMLController extends Controller {
 	 * @return Http\RedirectResponse
 	 */
 	public function singleLogoutService() {
-		if($this->request->passesCSRFCheck()) {
+
+		$pass = $this->request->passesCSRFCheck();
+		$isGlobalScaleEnabled = $this->config->getSystemValue('gs.enabled', false);
+		$gssMode = $this->config->getSystemValue('gss.mode', '');
+		if (!$pass && $isGlobalScaleEnabled && $gssMode === 'master') {
+			$jwt = $this->request->getParam('jwt', '');
+			$pass = $this->isValidJwt($jwt);
+		}
+
+		if($pass) {
 			$idp = $this->session->get('user_saml.Idp');
 			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$returnTo = null;
@@ -425,6 +441,17 @@ class SAMLController extends Controller {
 			'redirect_url' => $redirectUrl,
 		]);
 		return $directUrl;
+	}
+
+	private function isValidJwt($jwt) {
+		try {
+			$key = $this->config->getSystemValue('gss.jwt.key', '');
+			JWT::decode($jwt, $key, ['HS256']);
+		} catch (\Exception $e) {
+			return false;
+		}
+
+		return true;
 	}
 
 }

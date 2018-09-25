@@ -4,6 +4,7 @@
         "classmap-authoritative": true
     },
     "require": {
-        "onelogin/php-saml": "^2.9"
+        "onelogin/php-saml": "2.10.5",
+        "firebase/php-jwt": "^4.0"
     }
 }

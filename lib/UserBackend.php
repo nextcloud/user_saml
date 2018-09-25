@@ -24,6 +24,7 @@ namespace OCA\User_SAML;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\UserInterface;
@@ -50,6 +51,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private static $backends = [];
 	/** @var SAMLSettings */
 	private $settings;
+	/** @var ILogger */
+	private $logger;
 
 	/**
 	 * @param IConfig $config
@@ -59,6 +62,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
 	 * @param SAMLSettings $settings
+	 * @param ILogger $logger
 	 */
 	public function __construct(IConfig $config,
 								IURLGenerator $urlGenerator,
@@ -66,7 +70,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 								IDBConnection $db,
 								IUserManager $userManager,
 								IGroupManager $groupManager,
-								SAMLSettings $settings) {
+								SAMLSettings $settings,
+								ILogger $logger) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -74,6 +79,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->settings = $settings;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -114,7 +120,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
 			$qb->execute();
-			
+
 			### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
 			//trigger creation of user home and /files folder
 			$userFolder = \OC::$server->getUserFolder($uid);
@@ -370,6 +376,71 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function getLogoutAttribute() {
 		return 'style="display:none;"';
+	}
+
+	/**
+	 * return user data from the idp
+	 *
+	 * @return mixed
+	 */
+	public function getUserData() {
+		$userData = $this->session->get('user_saml.samlUserData');
+		$userData = $this->formatUserData($userData);
+
+		// make sure that a valid UID is given
+		if (empty($userData['formatted']['uid'])) {
+			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => $this->appName, 'uid' => $userData['uid']]);
+			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['uid']);
+		}
+
+
+		return $userData;
+
+	}
+
+	/**
+	 * format user data and map them to the configured attributes
+	 *
+	 * @param $attributes
+	 * @return array
+	 */
+	private function formatUserData($attributes) {
+
+		$result = ['formatted' => [], 'raw' => $attributes];
+
+		try {
+			$result['formatted']['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['formatted']['email'] = null;
+		}
+		try {
+			$result['formatted']['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['formatted']['displayName'] = null;
+		}
+		try {
+			$result['formatted']['quota'] = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			if ($result['formatted']['quota'] === '') {
+				$result['formatted']['quota'] = 'default';
+			}
+		} catch (\InvalidArgumentException $e) {
+			$result['formatted']['quota'] = null;
+		}
+
+		try {
+			$result['formatted']['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['formatted']['groups'] = null;
+		}
+
+		$prefix = $this->settings->getPrefix();
+		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
+		$result['formatted']['uid'] = '';
+		if (isset($attributes[$uidMapping])) {
+			$result['formatted']['uid'] = $attributes[$uidMapping][0];
+		}
+
+		return $result;
 	}
 
 	/**
