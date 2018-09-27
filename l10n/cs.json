@@ -8,7 +8,7 @@
     "Provider " : "Poskytovatel",
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovatele služby",
     "Private key of the Service Provider" : "Privátní klíč poskytovatele služby",
-    "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikuje že nameID <samlp:logoutRequest> odeslané tímto poskytovatelm služeb bude šifrováno.",
+    "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Značí, že nameID <samlp:logoutRequest> odeslané tímto poskytovatelem služeb bude šifrováno.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Indikuje, jestli budou zprávy <samlp:AuthnRequest> odeslané tímto SP podepsané. [Tato informace bude dostupná v metadatech SP]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Indikuje, jestli budou zprávy <samlp:logoutRequest> odeslané tímto SP podepsané.",
     "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "Indikuje, jestli budou zprávy <samlp:logoutResponse> odeslané tímto  SP podepsané.",
