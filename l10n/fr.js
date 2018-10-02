@@ -58,7 +58,7 @@ OC.L10N.register(
     "If you want to optionally map attributes to the user you can configure these here." : "Si vous préférez relier les attributs à l'utilisateur, vous pouvez les configurer ici.",
     "Show attribute mapping settings…" : "Montrer les paramètres du mappage des attributs...",
     "Security settings" : "Paramètres de sécurité",
-    "For increased security we recommend enabling the following settings if supported by your environment." : "Pour augmenté la sécurité nous recommandons d'activer les paramètres suivant si ils sont supportés par votre environnement.",
+    "For increased security we recommend enabling the following settings if supported by your environment." : "Pour augmenter la sécurité nous recommandons d'activer les paramètres suivants s'ils sont supportés par votre environnement.",
     "Show security settings…" : "Afficher les paramètres de sécurité...",
     "Signatures and encryption offered" : "Signatures et chiffrement proposés",
     "Signatures and encryption required" : "Signatures et chiffrement obligatoire",
