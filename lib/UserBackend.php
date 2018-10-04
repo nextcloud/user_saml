@@ -23,8 +23,10 @@ namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 use OCP\ILogger;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use OCP\UserInterface;
