@@ -37,6 +37,10 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OneLogin\Saml2\Auth;
+use OneLogin\Saml2\Error;
+use OneLogin\Saml2\Settings;
+use OneLogin\Saml2\ValidationError;
 
 class SAMLController extends Controller {
 	/** @var ISession */
@@ -161,7 +165,7 @@ class SAMLController extends Controller {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch($type) {
 			case 'saml':
-				$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+				$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
 				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
@@ -201,18 +205,18 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @param int $idp
 	 * @return Http\DataDownloadResponse
-	 * @throws \OneLogin_Saml2_Error
+	 * @throws Error
 	 */
 	public function getMetadata($idp) {
-		$settings = new \OneLogin_Saml2_Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
+		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
 		$errors = $settings->validateMetadata($metadata);
 		if (empty($errors)) {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
-			throw new \OneLogin_Saml2_Error(
+			throw new Error(
 				'Invalid SP metadata: '.implode(', ', $errors),
-				\OneLogin_Saml2_Error::METADATA_SP_INVALID
+				Error::METADATA_SP_INVALID
 			);
 		}
 	}
@@ -225,6 +229,8 @@ class SAMLController extends Controller {
 	 * @NoSameSiteCookieRequired
 	 *
 	 * @return Http\RedirectResponse|void
+	 * @throws Error
+	 * @throws ValidationError
 	 */
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
@@ -233,7 +239,7 @@ class SAMLController extends Controller {
 			return;
 		}
 
-		$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
 		$errors = $auth->getErrors();
@@ -294,6 +300,7 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 *
 	 * @return Http\RedirectResponse
+	 * @throws Error
 	 */
 	public function singleLogoutService() {
 
@@ -307,7 +314,7 @@ class SAMLController extends Controller {
 
 		if($pass) {
 			$idp = $this->session->get('user_saml.Idp');
-			$auth = new \OneLogin_Saml2_Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$returnTo = null;
 			$parameters = array();
 			$nameId = $this->session->get('user_saml.samlNameId');
