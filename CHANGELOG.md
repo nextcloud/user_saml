@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.0
+
+### Changed
+
+- many small changes/fixes to make SAML work in a Global Scale setup
+
 ## 1.6.2
 
 ### Changed
