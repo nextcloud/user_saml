@@ -100,11 +100,6 @@ class SAMLController extends Controller {
 	 */
 	private function autoprovisionIfPossible(array $auth) {
 
-		// nothing to do here, in case of a global scale setup
-		if ($this->config->getSystemValue('gs.enabled', false)) {
-			return;
-		}
-
 		$prefix = $this->SAMLSettings->getPrefix();
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		if(isset($auth[$uidMapping])) {
@@ -120,6 +115,11 @@ class SAMLController extends Controller {
 				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
 			}
 
+			// in case of a global scale setup we make sure that the server knows the user and leave
+			if ($this->config->getSystemValue('gs.enabled', false)) {
+				$this->userBackend->createUserIfNotExists($uid);
+				return;
+			}
 			$userExists = $this->userManager->userExists($uid);
 			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if($userExists === true) {
@@ -265,7 +265,7 @@ class SAMLController extends Controller {
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 		try {
 			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
-			if(!($user instanceof IUser)) {
+			if (!($user instanceof IUser)) {
 				throw new \InvalidArgumentException('User is not valid');
 			}
 			$user->updateLastLoginTimestamp();
