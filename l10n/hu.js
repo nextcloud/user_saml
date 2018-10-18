@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Elmentve",
     "X.509 certificate of the Service Provider" : "Szolgáltató X.509 tanúsítványa",
-    "Private key of the Service Provider" : "Szolgáltató privát kulcsa",
+    "Private key of the Service Provider" : "Szolgáltató titkos kulcsa",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Jelzi, hogy a  <samlp:logoutRequest> nameID-ja titkosítva lesz küldve ezen SP által.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Jelzi, hogy a <samlp:AuthnRequest> üzenetek ezen az SP-n keresztül küldve alá lesznek írva. [Az SP metaadatai megadják ezt az infót]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Jelzi, hogy a <samlp:logoutRequest> üzenetek ezen az SP-n keresztül küldve alá lesznek írva.",
