@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Elmentve",
+    "Provider" : "Szolgáltató",
     "X.509 certificate of the Service Provider" : "Szolgáltató X.509 tanúsítványa",
     "Private key of the Service Provider" : "Szolgáltató titkos kulcsa",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Jelzi, hogy a  <samlp:logoutRequest> nameID-ja titkosítva lesz küldve ezen SP által.",
