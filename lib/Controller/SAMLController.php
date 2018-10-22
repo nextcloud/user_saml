@@ -119,8 +119,13 @@ class SAMLController extends Controller {
 				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
 			}
 
-			// in case of a global scale setup we make sure that the server knows the user and leave
-			if ($this->config->getSystemValue('gs.enabled', false)) {
+			// if this server acts as a global scale master and the user is not
+			// a local admin of the server we just create the user and continue
+			// no need to update additional attributes
+			$isGsEnabled = $this->config->getSystemValue('gs.enabled', false);
+			$isGsMaster = $this->config->getSystemValue('gss.mode', 'slave') === 'master';
+			$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []));
+			if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
 				$this->userBackend->createUserIfNotExists($uid);
 				return;
 			}
