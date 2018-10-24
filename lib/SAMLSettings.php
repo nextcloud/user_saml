@@ -101,7 +101,7 @@ class SAMLSettings {
 		$settings = [
 			'strict' => true,
 			'debug' => $this->config->getSystemValue('debug', false),
-			'baseurl' => $this->request->getServerProtocol() . '://' . $this->request->getServerHost(),
+			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
 			'security' => [
 				'nameIdEncrypted' => ($this->config->getAppValue('user_saml', $prefix . 'security-nameIdEncrypted', '0') === '1') ? true : false,
 				'authnRequestsSigned' => ($this->config->getAppValue('user_saml', $prefix . 'security-authnRequestsSigned', '0') === '1') ? true : false,

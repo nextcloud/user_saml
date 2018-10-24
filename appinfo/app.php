@@ -61,8 +61,8 @@ $type = '';
 switch($config->getAppValue('user_saml', 'type')) {
 	case 'saml':
 		try {
-			$oneLoginSettings = new \OneLogin_Saml2_Settings($samlSettings->getOneLoginSettingsArray(1));
-		} catch (OneLogin_Saml2_Error $e) {
+			$oneLoginSettings = new \OneLogin\Saml2\Settings($samlSettings->getOneLoginSettingsArray(1));
+		} catch (\OneLogin\SAML2\Error $e) {
 			$returnScript = true;
 		}
 		$type = 'saml';
