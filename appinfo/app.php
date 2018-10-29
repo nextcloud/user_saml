@@ -53,7 +53,6 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
-OC_User::handleApacheAuth();
 
 // Setting up the one login config may fail, if so, do not catch the requests later.
 $returnScript = false;
@@ -72,6 +71,10 @@ switch($config->getAppValue('user_saml', 'type')) {
 		break;
 	default:
 		return;
+}
+
+if ($type === 'environment-variable') {
+	OC_User::handleApacheAuth();
 }
 
 if($returnScript === true) {
