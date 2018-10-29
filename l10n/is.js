@@ -1,8 +1,13 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Þessi notandaaðgangur er óvirkur; hafðu samband við kerfisstjóra.",
     "Saved" : "Vistað",
+    "Provider" : "Þjónustuveita",
+    "Unknown error, please check the log file for more details." : "Óþekkt villa, skoðaðu atvikaskráninguna til að sjá nánari upplýsingar.",
     "Direct log in" : "Bein innskráning",
+    "SSO & SAML log in" : "SSO & SAML innskráning",
+    "Provider " : "Þjónustuveita ",
     "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
     "Private key of the Service Provider" : "Einkalykill internetþjónustu",
     "Whether the metadata should be signed." : "Hvort undirrita eigi lýsigögnin.",
@@ -11,6 +16,8 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Nota innbyggða SAML-auðkenningu",
     "Use environment variable" : "Nota umhverfisbreytu",
     "Global settings" : "Víðværar stillingar",
+    "Remove identity provider" : "Fjarlægja auðkenningarþjónustu",
+    "Add identity provider" : "Bæta við auðkenningarþjónustu",
     "General" : "Almennt",
     "Service Provider Data" : "Gögn um internetþjónustu",
     "Show Service Provider settings…" : "Birta stillingar internetþjónustu…",
@@ -25,6 +32,7 @@ OC.L10N.register(
     "Reset settings" : "Frumstilla stillingar",
     "Metadata invalid" : "Lýsigögn eru ógild",
     "Metadata valid" : "Lýsigögn eru gild",
+    "Error" : "Villa",
     "Account not provisioned." : "Aðgangur ekki tilbúinn.",
     "Show Service Provider settings ..." : "Birta stillingar internetþjónustu ...",
     "Show security settings ..." : "Birta öryggisstillingar ..."
