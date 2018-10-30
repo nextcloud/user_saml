@@ -81,6 +81,11 @@ class SAMLControllerTest extends TestCase  {
 			}
 		);
 
+		$this->config->expects($this->any())->method('getSystemValue')
+			->willReturnCallback(function($key, $default) {
+			return $default;
+		});
+
 		$this->samlController = new SAMLController(
 			'user_saml',
 			$this->request,
