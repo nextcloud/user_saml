@@ -3,9 +3,11 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Denne bruger konto er deaktiveret. Kontakt venligst din administrator.",
     "Saved" : "Gemt",
+    "Provider" : "Udbyder",
     "Unknown error, please check the log file for more details." : "Ukendt fejl, tjek venligst logfilen for flere detaljer.",
-    "Direct log in" : "Direkte log in",
+    "Direct log in" : "Direkte login",
     "SSO & SAML log in" : "SSO & SAML log in",
+    "Provider " : "Udbyder",
     "X.509 certificate of the Service Provider" : "X.509 certifikat hos udbyderen",
     "Private key of the Service Provider" : "Privat nøgle for udbyderen",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikerer at nameID af <samlp:logoutRequest> sendt af denne SP vil blive krypteret.",
@@ -27,7 +29,10 @@ OC.L10N.register(
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Valgfrit visningsnavn for identitetsudbyderen (standard: \"SSO & SAML log ind\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Tillad brug af flere brugerbackender (f.eks. LDAP)",
     "Open documentation" : "Åben dokumentation",
-    "Use environment variable" : "Brug miljøvariabel.",
-    "General" : "General"
+    "Use environment variable" : "Brug miljøvariabel",
+    "Global settings" : "Globale indstillinger",
+    "General" : "General",
+    "Security settings" : "Sikkerhedsindstillinger",
+    "Show security settings ..." : "Vis sikkerhedsindstillinger..."
 },
 "nplurals=2; plural=(n != 1);");
