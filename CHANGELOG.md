@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.0.0
+
+### Changed
+
+- update to upstream php-saml 3.0 (upstream library) which removes the mcrypt dependency
+- Improve SAML behaviour in a Global Scale setup
+
+
 ## 1.7.0
 
 ### Changed
