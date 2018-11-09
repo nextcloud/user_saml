@@ -8,10 +8,9 @@
 }
 
 .login-option {
-	background-color: #0082c9;
+	background-color: var(--color-primary-element);
 	border: 1px solid #fff;
 	font-weight: 600;
-	/*padding: 13px 20px;*/
 	height: 40px;
 
 	margin: 15px 0;
