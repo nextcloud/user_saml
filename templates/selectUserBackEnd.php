@@ -8,11 +8,12 @@ script('user_saml', 'selectUserBackEnd');
 
 <div id="saml-select-user-back-end">
 
-<h1>Choose login option:</h1>
+<h1>Login options:</h1>
 
 	<?php if($_['useCombobox']) { ?>
 
 		<select id="av_mode" name="avMode">
+			<option value=""><?php p($l->t('Choose a authentication provider')); ?></option>
 			<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
 				<option value="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></option>
 			<?php } ?>
