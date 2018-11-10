@@ -33,6 +33,7 @@ While theoretically any other authentication provider implementing either one of
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/1.png</screenshot>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/2.png</screenshot>
 	<dependencies>
+		<lib>mcrypt</lib>
 		<nextcloud min-version="14" max-version="15" />
 	</dependencies>
 	<settings>

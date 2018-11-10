@@ -120,6 +120,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'protected_group_mapping' => [
+				'text' => $this->l10n->t('Protected Groups'),
+				'type' => 'line',
+				'required' => true,
+			]
 		];
 
 		$type = $this->config->getAppValue('user_saml', 'type');

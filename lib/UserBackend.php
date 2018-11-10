@@ -619,6 +619,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			if ($newQuota !== null) {
 				$user->setQuota($newQuota);
 			}
+			
+			$protectedGroups = $this->config->getAppValue('user_saml', 'saml-attribute-mapping-protected_group_mapping', '');
 
 			if ($newGroups !== null) {
 				$groupManager = $this->groupManager;
@@ -633,8 +635,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 					}
 					$groupManager->get($group)->addUser($user);
 				}
+				
+				$protectedGroupArray = explode(',', $protectedGroups);
+				$groupsToRemoveReally = array_diff($groupsToRemove, $protectedGroupArray);
 
-				foreach ($groupsToRemove as $group) {
+				foreach ($groupsToRemoveReally as $group) {
 					$groupManager->get($group)->removeUser($user);
 				}
 			}
