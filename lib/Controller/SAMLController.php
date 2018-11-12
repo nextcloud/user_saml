@@ -366,18 +366,21 @@ class SAMLController extends Controller {
 	 */
 	public function selectUserBackEnd($redirectUrl) {
 
-		$loginUrls = [];
+		$attributes = ['loginUrls' => []];
 
 		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
-			$loginUrls['directLogin'] = [
+			$attributes['loginUrls']['directLogin'] = [
 				'url' => $this->getDirectLoginUrl($redirectUrl),
 				'display-name' => $this->l->t('Direct log in')
 			];
 		}
 
-		$loginUrls['ssoLogin'] = $this->getIdps($redirectUrl);
+		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
 
-		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $loginUrls, 'guest');
+		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4 ? true : false;
+
+
+		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
 	}
 
 	/**

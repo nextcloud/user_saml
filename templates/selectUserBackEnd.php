@@ -1,5 +1,6 @@
 <?php
 style('user_saml', 'selectUserBackEnd');
+script('user_saml', 'selectUserBackEnd');
 
 /** @var array $_ */
 /** @var $l \OCP\IL10N */
@@ -7,18 +8,34 @@ style('user_saml', 'selectUserBackEnd');
 
 <div id="saml-select-user-back-end">
 
-<h1>Choose login option:</h1>
+<h1>Login options:</h1>
 
-	<?php if(isset($_['directLogin'])) : ?>
-<div class="login-option">
-	<a href="<?php p($_['directLogin']['url']); ?>"><?php p($_['directLogin']['display-name']); ?></a>
-</div>
-	<?php endif; ?>
+	<?php if($_['useCombobox']) { ?>
 
-	<?php foreach ($_['ssoLogin'] as $idp) { ?>
-<div class="login-option">
-	<a href="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></a>
-</div>
+		<select id="av_mode" name="avMode">
+			<option value=""><?php p($l->t('Choose a authentication provider')); ?></option>
+			<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
+				<option value="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></option>
+			<?php } ?>
+			<?php if(isset($_['loginUrls']['directLogin'])) : ?>
+				<option value="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></option>
+			<?php endif; ?>
+		</select>
+
+	<?php } else { ?>
+
+		<?php if(isset($_['loginUrls']['directLogin'])) : ?>
+			<div class="login-option">
+				<a href="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></a>
+			</div>
+		<?php endif; ?>
+
+		<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
+			<div class="login-option">
+				<a href="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></a>
+			</div>
+		<?php } ?>
+
 	<?php } ?>
 
 </div>
