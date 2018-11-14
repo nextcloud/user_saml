@@ -68,6 +68,7 @@
     "Error" : "Hata",
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
+    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
     "Indicates if the SP will validate all received XMLs." : "Hizmet sağlayıcının tüm alınan XML dosyalarını doğrulayacağını gösterir.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Bir hesap yalnız başka bir arka sistemde varsa (LDAP gibi) kimliği doğrulansın",
     "Show Service Provider settings ..." : "Hizmet Sağlayıcısının Ayarlarını Görüntüle ...",

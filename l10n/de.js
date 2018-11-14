@@ -70,6 +70,7 @@ OC.L10N.register(
     "Error" : "Fehler",
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
+    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen",
     "Indicates if the SP will validate all received XMLs." : "Zeigt an, ob der Diensteanbieter alles empfangene XML überprüft.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Anmeldung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
     "Show Service Provider settings ..." : "Zeige die Diensteanbieter-Einstellungen…",

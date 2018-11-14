@@ -70,6 +70,7 @@ OC.L10N.register(
     "Error" : "Chyba",
     "Account not provisioned." : "Účet není zprovozněn.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet ještě nebyl zprovozněn, přístup ke službě tedy ještě není možný.",
+    "Choose a authentication provider" : "Zvolte poskytovatele ověřování",
     "Indicates if the SP will validate all received XMLs." : "Indikuje, zda poskytovatel služby ověří všechna přijatá XML.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Přihlášení umožnit pouze pokud účet už existuje i někde jinde. (např. LDAP)",
     "Show Service Provider settings ..." : "Zobrazit nastavení poskytovatele služeb…",

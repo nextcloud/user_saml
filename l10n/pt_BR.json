@@ -68,6 +68,7 @@
     "Error" : "Erro",
     "Account not provisioned." : "Conta não provisionada",
     "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. O acesso a esse serviço não é possível",
+    "Choose a authentication provider" : "Escolha um provedor de autenticação",
     "Indicates if the SP will validate all received XMLs." : "Indica se o SP validará todos os XMLs recebidos.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Somente permite a autenticação se uma conta existir em outra plataforma de serviço. (ex. LDAP)",
     "Show Service Provider settings ..." : "Mostrar configurações do Provedor de Serviços...",
