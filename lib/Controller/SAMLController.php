@@ -146,7 +146,7 @@ class SAMLController extends Controller {
 				if($this->userManager->userExists($uid)) {
 					return;
 				}
-				throw new NoUserFoundException();
+				throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
 			} elseif(!$userExists && $autoProvisioningAllowed) {
 				$this->userBackend->createUserIfNotExists($uid);
 				$this->userBackend->updateAttributes($uid, $auth);
@@ -154,7 +154,7 @@ class SAMLController extends Controller {
 			}
 		}
 
-		throw new NoUserFoundException();
+		throw new NoUserFoundException('Remote user environment variable (' . $uidMapping . ') not found in environment');
 	}
 
 	/**
@@ -186,10 +186,13 @@ class SAMLController extends Controller {
 					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
 					$user = $this->userManager->get($this->userBackend->getCurrentUserId());
 					if(!($user instanceof IUser)) {
-						throw new NoUserFoundException();
+						throw new NoUserFoundException('User' . $this->userBackend->getCurrentUserId() . ' not valid or not found');
 					}
 					$user->updateLastLoginTimestamp();
 				} catch (NoUserFoundException $e) {
+					if ($e->getMessage()) {
+						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
+					}
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
 				}
 				break;
