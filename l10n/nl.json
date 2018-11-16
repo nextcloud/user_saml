@@ -68,6 +68,7 @@
     "Error" : "Fout",
     "Account not provisioned." : "Account niet verstrekt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Je account is niet verstrekt, toegang tot deze dienst is dus niet mogelijk.",
+    "Choose a authentication provider" : "Kies een authenticatieprovider",
     "Indicates if the SP will validate all received XMLs." : "Geeft aan of de SP alle ontvangen XMLs zal valideren.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Sta alleen authenticatie toe als een account bestaat op een ander backend (bijv. LDAP).",
     "Show Service Provider settings ..." : "Tonen Service Provider instellingen ...",

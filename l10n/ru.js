@@ -70,6 +70,7 @@ OC.L10N.register(
     "Error" : "Ошибка",
     "Account not provisioned." : "Учётная запись не обслуживается.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваша учётная запись не обслуживается. Доступ к этой услуге, таким образом, не представляется возможным.",
+    "Choose a authentication provider" : "Выберите службу аутентификации",
     "Indicates if the SP will validate all received XMLs." : "Указывает, будет ли SP проверять все полученные XML.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Позволять аутентификацию только если учётная запись существует на другом внутреннем интерфейсе (например, LDAP).",
     "Show Service Provider settings ..." : "Показать параметры настройки поставщика услуги…",
