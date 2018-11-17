@@ -70,6 +70,7 @@ OC.L10N.register(
     "Error" : "Грешка",
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
+    "Choose a authentication provider" : "Одаберите провајдера провере идентитета",
     "Indicates if the SP will validate all received XMLs." : "Назначава да ли ће добављач услуга валидирати све примљене XML-ове.",
     "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Дозволи проверу идентитета само ако налог постоји на неком другом позадинском механизму (нпр. LDAP)",
     "Show Service Provider settings ..." : "Прикажи поставке провајдера услуга...",
