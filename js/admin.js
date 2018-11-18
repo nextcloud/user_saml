@@ -111,7 +111,7 @@
 				configIdentifier = '';
 			}
 			OC.msg.startSaving('#user-saml-save-indicator');
-			OCP.AppConfig.setValue('user_saml', configIdentifier + category + '-' + setting, value);
+			OCP.AppConfig.setValue('user_saml', configIdentifier + category + '-' + setting, value.trim());
 			OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
 		}
 	}
