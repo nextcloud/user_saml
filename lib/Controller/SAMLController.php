@@ -250,6 +250,8 @@ class SAMLController extends Controller {
 		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
+		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
+
 		$errors = $auth->getErrors();
 
 		if (!empty($errors)) {
