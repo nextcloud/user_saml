@@ -100,7 +100,7 @@ class SettingsController extends Controller {
 				continue;
 			}
 			foreach ($content as $setting => $details) {
-				if ($details['global']) {
+				if (isset($details['global']) && $details['global'] === true) {
 					continue;
 				}
 				$prefix = $providerId === '1' ? '' : $providerId . '-';
