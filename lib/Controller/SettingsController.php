@@ -96,11 +96,11 @@ class SettingsController extends Controller {
 		];
 		/* Fetch all config values for the given providerId */
 		foreach ($params as $category => $content) {
-			if (empty($content) || $category === 'providers') {
+			if (!is_array($content) || $category === 'providers') {
 				continue;
 			}
 			foreach ($content as $setting => $details) {
-				if ($details['global']) {
+				if (isset($details['global']) && $details['global'] === true) {
 					continue;
 				}
 				$prefix = $providerId === '1' ? '' : $providerId . '-';
