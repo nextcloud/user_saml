@@ -154,7 +154,7 @@ class SAMLController extends Controller {
 			}
 		}
 
-		throw new NoUserFoundException('Remote user environment variable (' . $uidMapping . ') not found in environment');
+		throw new NoUserFoundException('IDP parameter for the UID (' . $uidMapping . ') not found. Possible parameters are: ' . json_encode(array_keys($auth)));
 	}
 
 	/**
@@ -271,7 +271,7 @@ class SAMLController extends Controller {
 		try {
 			$this->autoprovisionIfPossible($auth->getAttributes());
 		} catch (NoUserFoundException $e) {
-			$this->logger->info('User not found', ['app' => $this->appName]);
+			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
