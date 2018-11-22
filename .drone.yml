@@ -5,7 +5,7 @@ clone:
 
 pipeline:
   check-app-compatbility:
-    image: nextcloudci/php7.0:php7.0-2
+    image: nextcloudci/php7.0:php7.0-19
     environment:
       - APP_NAME=user_saml
       - CORE_BRANCH=master
@@ -24,7 +24,7 @@ pipeline:
       matrix:
         TESTS: check-app-compatbility
   signed-off-check:
-    image: nextcloudci/php7.0:php7.0-2
+    image: nextcloudci/php7.0:php7.0-19
     environment:
       - APP_NAME=user_saml
       - CORE_BRANCH=master
@@ -40,7 +40,7 @@ pipeline:
       matrix:
         TESTS: signed-off-check
   php7.0:
-    image: nextcloudci/php7.0:php7.0-2
+    image: nextcloudci/php7.0:php7.0-19
     environment:
       - APP_NAME=user_saml
       - CORE_BRANCH=master
@@ -58,7 +58,7 @@ pipeline:
       matrix:
         TESTS: php7.0
   php7.1:
-    image: nextcloudci/php7.1:php7.1-12
+    image: nextcloudci/php7.1:php7.1-16
     environment:
       - APP_NAME=user_saml
       - CORE_BRANCH=master
@@ -75,6 +75,42 @@ pipeline:
     when:
       matrix:
         TESTS: php7.1
+  php7.2:
+    image: nextcloudci/php7.2:php7.2-12
+    environment:
+      - APP_NAME=user_saml
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/apps/$APP_NAME
+
+      # Run phpunit tests
+      - cd tests/unit/
+      - phpunit --configuration phpunit.xml
+    when:
+      matrix:
+        TESTS: php7.2
+  php7.3:
+    image: nextcloudci/php7.3:php7.3-1
+    environment:
+      - APP_NAME=user_saml
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/apps/$APP_NAME
+
+      # Run phpunit tests
+      - cd tests/unit/
+      - phpunit --configuration phpunit.xml
+    when:
+      matrix:
+        TESTS: php7.3
   integration-tests:
     image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
     environment:
@@ -100,6 +136,8 @@ matrix:
   include:
     - TESTS: php7.0
     - TESTS: php7.1
+    - TESTS: php7.2
+    - TESTS: php7.3
     - TESTS: check-app-compatbility
     - TESTS: signed-off-check
     - TESTS: integration-tests
