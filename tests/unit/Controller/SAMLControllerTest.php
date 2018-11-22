@@ -340,7 +340,7 @@ class SAMLControllerTest extends TestCase  {
 			->method('createUserIfNotExists')
 			->with('MyUid');
 		$this->userBackend
-			->expects($this->once())
+			->expects($this->exactly(2))
 			->method('getCurrentUserId')
 			->willReturn('MyUid');
 		$this->userManager

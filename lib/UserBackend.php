@@ -105,15 +105,28 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	/**
-	 * Creates an user if it does not exists
+	 * Creates a user if it does not exist. In case home directory mapping
+	 * is enabled we also set up the user's home from $attributes.
 	 *
 	 * @param string $uid
+	 * @param array $attributes
 	 */
-	public function createUserIfNotExists($uid) {
+	public function createUserIfNotExists($uid, array $attributes = array()) {
 		if(!$this->userExistsInDatabase($uid)) {
 			$values = [
 				'uid' => $uid,
 			];
+
+			// Try to get the mapped home directory of the user
+			try {
+				$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
+			} catch (\InvalidArgumentException $e) {
+				$home = null;
+			}
+
+			if ($home !== null) {
+				$values['home'] = $home;
+			}
 
 			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
@@ -150,6 +163,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function implementsActions($actions) {
 		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
 		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
+		$availableActions |= \OC\User\Backend::GET_HOME;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -198,6 +212,27 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Returns the user's home directory, if home directory mapping is set up.
+	 *
+	 * @param string $uid the username	
+	 * @return string
+	 */
+	public function getHome($uid) {
+		if($this->userExistsInDatabase($uid)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('home')
+				->from('user_saml_users')
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->setMaxResults(1);
+			$result = $qb->execute();
+			$users = $result->fetchAll();
+			if (isset($users[0]['home'])) {
+				return $users[0]['home'];
+			}
+		}
 	}
 
 	/**
@@ -595,7 +630,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		} catch (\InvalidArgumentException $e) {
 			$newGroups = null;
 		}
-
 
 		if ($user !== null) {
 			$currentEmail = (string)$user->getEMailAddress();

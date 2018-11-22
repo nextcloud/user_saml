@@ -25,6 +25,15 @@
 				<notnull>true</notnull>
 				<length>255</length>
 			</field>
+
+			<field>
+				<name>home</name>
+				<type>text</type>
+				<default></default>
+				<notnull>true</notnull>
+				<length>255</length>
+			</field>
+
 		</declaration>
 	</table>
 
