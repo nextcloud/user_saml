@@ -139,5 +139,4 @@ matrix:
     - TESTS: php7.2
     - TESTS: php7.3
     - TESTS: check-app-compatbility
-    - TESTS: signed-off-check
     - TESTS: integration-tests
