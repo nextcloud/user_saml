@@ -70,13 +70,6 @@ OC.L10N.register(
     "Error" : "Грешка",
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
-    "Choose a authentication provider" : "Одаберите провајдера провере идентитета",
-    "Indicates if the SP will validate all received XMLs." : "Назначава да ли ће добављач услуга валидирати све примљене XML-ове.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Дозволи проверу идентитета само ако налог постоји на неком другом позадинском механизму (нпр. LDAP)",
-    "Show Service Provider settings ..." : "Прикажи поставке провајдера услуга...",
-    "Show optional Identity Provider settings ..." : "Прикажи опционе поставке провајдера идентитета...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Ако желите да опционо мапирате SAML атрибуте на корисника, то можете учинити овде.",
-    "Show attribute mapping settings ..." : "Прикажи поставке мапирања атрибута...",
-    "Show security settings ..." : "Прикажи безбедоносне поставке..."
+    "Choose a authentication provider" : "Одаберите провајдера провере идентитета"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

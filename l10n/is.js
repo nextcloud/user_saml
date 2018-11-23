@@ -33,8 +33,6 @@ OC.L10N.register(
     "Metadata invalid" : "Lýsigögn eru ógild",
     "Metadata valid" : "Lýsigögn eru gild",
     "Error" : "Villa",
-    "Account not provisioned." : "Aðgangur ekki tilbúinn.",
-    "Show Service Provider settings ..." : "Birta stillingar internetþjónustu ...",
-    "Show security settings ..." : "Birta öryggisstillingar ..."
+    "Account not provisioned." : "Aðgangur ekki tilbúinn."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

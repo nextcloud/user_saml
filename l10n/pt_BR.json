@@ -68,13 +68,6 @@
     "Error" : "Erro",
     "Account not provisioned." : "Conta não provisionada",
     "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. O acesso a esse serviço não é possível",
-    "Choose a authentication provider" : "Escolha um provedor de autenticação",
-    "Indicates if the SP will validate all received XMLs." : "Indica se o SP validará todos os XMLs recebidos.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Somente permite a autenticação se uma conta existir em outra plataforma de serviço. (ex. LDAP)",
-    "Show Service Provider settings ..." : "Mostrar configurações do Provedor de Serviços...",
-    "Show optional Identity Provider settings ..." : "Mostrar configurações opcionais do Provedor de Identidade...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Se você opcionalmente deseja mapear atributos SAML para o usuário, pode configurar eles aqui.",
-    "Show attribute mapping settings ..." : "Mostrar configurações de mapeamento de atributos...",
-    "Show security settings ..." : "Mostrar configurações de segurança..."
+    "Choose a authentication provider" : "Escolha um provedor de autenticação"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

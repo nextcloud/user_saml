@@ -63,12 +63,6 @@ OC.L10N.register(
     "Error" : "エラー",
     "Account not provisioned." : "アカウントがプロビジョニングされていない",
     "Your account is not provisioned, access to this service is thus not possible." : "アカウントにプロビジョニングされていないため、このサービスへのアクセスはできません。",
-    "Choose a authentication provider" : "認証プロバイダを選択する",
-    "Indicates if the SP will validate all received XMLs." : "SPが受信したすべてのXMLを検証するかどうかを示します。",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "ほかのバックエンドにアカウントが存在する場合のみ、認証を許可します。 （例えば、LDAP）",
-    "Show Service Provider settings ..." : "Service Provider設定を表示...",
-    "Show optional Identity Provider settings ..." : "オプションのIdentity Provider設定を表示する...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "オプションでSAML属性をユーザーにマップする場合は、ここでこれらを構成できます。",
-    "Show security settings ..." : "セキュリティ設定を表示..."
+    "Choose a authentication provider" : "認証プロバイダを選択する"
 },
 "nplurals=1; plural=0;");

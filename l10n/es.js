@@ -69,13 +69,6 @@ OC.L10N.register(
     "Metadata valid" : "Metadatos válidos",
     "Error" : "Error",
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible.",
-    "Indicates if the SP will validate all received XMLs." : "Indica si el SP validará todos los XMLs recibidos.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Solo permita la autenticación si la cuenta existe en algún otro punto. (p.e. LDAP)",
-    "Show Service Provider settings ..." : "Mostrar configuración del Proveedor de Servicio ...",
-    "Show optional Identity Provider settings ..." : "Mostrar configuración de la identificación del Proveedor ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si desea opcionalmente definir atributos SAML al usuario, puede configurar estos aquí.",
-    "Show attribute mapping settings ..." : "Mostrar ajustes de los atributos definidos ...",
-    "Show security settings ..." : "Mostrar la configuración de seguridad ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible."
 },
 "nplurals=2; plural=(n != 1);");

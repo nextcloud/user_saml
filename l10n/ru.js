@@ -70,13 +70,6 @@ OC.L10N.register(
     "Error" : "Ошибка",
     "Account not provisioned." : "Учётная запись не обслуживается.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваша учётная запись не обслуживается. Доступ к этой услуге, таким образом, не представляется возможным.",
-    "Choose a authentication provider" : "Выберите службу аутентификации",
-    "Indicates if the SP will validate all received XMLs." : "Указывает, будет ли SP проверять все полученные XML.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Позволять аутентификацию только если учётная запись существует на другом внутреннем интерфейсе (например, LDAP).",
-    "Show Service Provider settings ..." : "Показать параметры настройки поставщика услуги…",
-    "Show optional Identity Provider settings ..." : "Показать дополнительные параметры поставщика услуги идентификации",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Здесь можно настроить дополнительную привязку пользователю атрибутов SAML. ",
-    "Show attribute mapping settings ..." : "Показать настройки привязки атрибутов…",
-    "Show security settings ..." : "Показать настройки безопасности…"
+    "Choose a authentication provider" : "Выберите службу аутентификации"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

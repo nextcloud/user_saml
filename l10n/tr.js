@@ -70,13 +70,6 @@ OC.L10N.register(
     "Error" : "Hata",
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
-    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
-    "Indicates if the SP will validate all received XMLs." : "Hizmet sağlayıcının tüm alınan XML dosyalarını doğrulayacağını gösterir.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Bir hesap yalnız başka bir arka sistemde varsa (LDAP gibi) kimliği doğrulansın",
-    "Show Service Provider settings ..." : "Hizmet Sağlayıcısının Ayarlarını Görüntüle ...",
-    "Show optional Identity Provider settings ..." : "İsteğe bağlı ek Kimlik Sağlayıcısı ayarları ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "SAML öznitelikleri isteğe bağlı olarak kullanıcı ile buradan eşleştirilebilir.",
-    "Show attribute mapping settings ..." : "Öznitelik eşleştirme ayarlarını görüntüle ...",
-    "Show security settings ..." : "Güvenlik ayarlarını görüntüle ..."
+    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin"
 },
 "nplurals=2; plural=(n > 1);");

@@ -51,13 +51,6 @@ OC.L10N.register(
     "Metadata invalid" : "Érvénytelen metaadat",
     "Metadata valid" : "Érvényes metaadat",
     "Account not provisioned." : "Nem felügyelt fiók.",
-    "Your account is not provisioned, access to this service is thus not possible." : "A fiókod nincs engedélyezve, így ehhez a szolgáltatáshoz nem férhetsz hozzá.",
-    "Indicates if the SP will validate all received XMLs." : "Mutatja ha az SP validálja az összes fogadott XML-t.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Csak akkor engedd a hitelesítést, ha egy másik háttérszolgáltatásban is létezik a fiók. (pl: LDAP)",
-    "Show Service Provider settings ..." : "Szolgáltatói beállítások mutatása ...",
-    "Show optional Identity Provider settings ..." : "Opcionális Azonosító szolgáltatási paraméterek mutatása ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Ha opcionális összerendelést szeretnél a SAML attribútumokkal és a felhasználóval, állítsd be itt.",
-    "Show attribute mapping settings ..." : "Attribútum összerendelési beállítások mutatása ...",
-    "Show security settings ..." : "Biztonsági beállítások megjelenítése ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "A fiókod nincs engedélyezve, így ehhez a szolgáltatáshoz nem férhetsz hozzá."
 },
 "nplurals=2; plural=(n != 1);");

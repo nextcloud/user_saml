@@ -69,13 +69,6 @@ OC.L10N.register(
     "Metadata valid" : "Les metadades vàlides",
     "Error" : "Error",
     "Account not provisioned." : "Compte no subministrat.",
-    "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no és possible accedir ",
-    "Indicates if the SP will validate all received XMLs." : "Indica si el SP validarà tots els XML rebuts.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Només permetre l'autenticació si hi ha un compte en un altre suport. (p. ex., LDAP)",
-    "Show Service Provider settings ..." : "Dades del proveïdor de serveis",
-    "Show optional Identity Provider settings ..." : "Dades del proveïdor de serveis",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Si voleu assignar automàticament atributs SAML a l'usuari, podeu configurar-los aquí.",
-    "Show attribute mapping settings ..." : "Mostra la configuració del mapa d'atributs ...",
-    "Show security settings ..." : "Mostra la configuració de seguretat ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no és possible accedir "
 },
 "nplurals=2; plural=(n != 1);");

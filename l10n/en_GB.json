@@ -59,13 +59,6 @@
     "Metadata invalid" : "Metadata invalid",
     "Metadata valid" : "Metadata valid",
     "Account not provisioned." : "Account not provisioned.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible.",
-    "Indicates if the SP will validate all received XMLs." : "Indicates if the SP will validate all received XMLs.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)",
-    "Show Service Provider settings ..." : "Show Service Provider settings ...",
-    "Show optional Identity Provider settings ..." : "Show optional Identity Provider settings ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "If you want to optionally map SAML attributes to the user you can configure these here.",
-    "Show attribute mapping settings ..." : "Show attribute mapping settings ...",
-    "Show security settings ..." : "Show security settings ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

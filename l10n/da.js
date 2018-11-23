@@ -32,7 +32,6 @@ OC.L10N.register(
     "Use environment variable" : "Brug miljøvariabel",
     "Global settings" : "Globale indstillinger",
     "General" : "General",
-    "Security settings" : "Sikkerhedsindstillinger",
-    "Show security settings ..." : "Vis sikkerhedsindstillinger..."
+    "Security settings" : "Sikkerhedsindstillinger"
 },
 "nplurals=2; plural=(n != 1);");

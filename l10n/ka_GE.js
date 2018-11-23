@@ -50,13 +50,6 @@ OC.L10N.register(
     "Metadata invalid" : "მეტა-მონაცემი არასწორია",
     "Metadata valid" : "მეტა-მონაცემი სწორია",
     "Account not provisioned." : "ანგარიში არაა გათვალისწინებული.",
-    "Your account is not provisioned, access to this service is thus not possible." : "თქვენი ანგარიში არაა გათვალისწინებული, ამ სერვისისადმი წვდომა შესაბამისად შეუძლებელია.",
-    "Indicates if the SP will validate all received XMLs." : "ანიშნებს გაუწევს თუ არა SP ვალიდაციას ყველა შემოსულ XML-ს.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "აუტენტიფიკაციის უფლება დართეთ მხოლოდ მაშინ, თუ ანგარიში არსებობს რაიმე სხვა ბექენდზეც. (მაგ. LDAP-ზე)",
-    "Show Service Provider settings ..." : "სერვისის მომწოდებლის პარამეტრების ჩვენება ...",
-    "Show optional Identity Provider settings ..." : "არა-აუცილებელი იდენტობის პროვაიდერის პარამეტრების ჩვენება ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "არაა აუცილებელი, მაგრამ თუ გსურთ SAML ატრიბუტების მიბმა მომხმარებელთან, შეგიძლიათ კონფიგურაცია შეასრულოთ აქ.",
-    "Show attribute mapping settings ..." : "ატრიბუტების მიბმის პარამეტრების ჩვენება ...",
-    "Show security settings ..." : "უსაფრთხოების პარამეტრების ჩვენება ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "თქვენი ანგარიში არაა გათვალისწინებული, ამ სერვისისადმი წვდომა შესაბამისად შეუძლებელია."
 },
 "nplurals=2; plural=(n!=1);");

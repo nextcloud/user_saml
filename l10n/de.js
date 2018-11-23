@@ -70,13 +70,6 @@ OC.L10N.register(
     "Error" : "Fehler",
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
-    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen",
-    "Indicates if the SP will validate all received XMLs." : "Zeigt an, ob der Diensteanbieter alles empfangene XML überprüft.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Anmeldung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
-    "Show Service Provider settings ..." : "Zeige die Diensteanbieter-Einstellungen…",
-    "Show optional Identity Provider settings ..." : "Zeige optionale Autorisierungsdienst-Einstellungen",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Wenn du optional SAML-Attribute dem Nutzer zuordnen möchtest, kannst du dies hier einstellen.",
-    "Show attribute mapping settings ..." : "Einstellungen der Attribute-Zuordnung anzeigen …",
-    "Show security settings ..." : "Zeige Sicherheitseinstellungen…"
+    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen"
 },
 "nplurals=2; plural=(n != 1);");

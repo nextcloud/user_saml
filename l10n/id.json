@@ -29,11 +29,6 @@
     "Metadata invalid" : "Metadata tidak sah",
     "Metadata valid" : "Metadata sah",
     "Account not provisioned." : "Akun tidak ditetapkan.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin.",
-    "Indicates if the SP will validate all received XMLs." : "Mengindikasikan apabila SP akan menvalidasi semua XML yang diterima.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Hanya izinkan otentikasi apabila akun ada dalam backend yang lain. (cth. LDAP)",
-    "Show Service Provider settings ..." : "Lihat pengaturan Penyedia Layanan ...",
-    "Show optional Identity Provider settings ..." : "Lihat pengaturan Penyedia Identitas opsional ...",
-    "Show security settings ..." : "Lihat pengaturan keamanan ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "Akun Anda tidak ditetapkan, akses ke layanan tidak mungkin."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

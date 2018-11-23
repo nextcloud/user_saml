@@ -24,9 +24,6 @@ OC.L10N.register(
     "Security settings" : "Ρυθμίσεις ασφαλείας",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
     "Metadata invalid" : "Μη έγκυρα μεταδεδομένα",
-    "Metadata valid" : "Έγκυρα μεταδεδομένα",
-    "Indicates if the SP will validate all received XMLs." : "Υποδεικνύει εάν το SP θα επικυρώσει όλες τις ληφθείσες XML.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Να επιτρέπεται η πιστοποίηση μόνον εάν ένας λογαριασμός υπάρχει σε κάποιο άλλο backend. (πχ. LDAP)",
-    "Show security settings ..." : "Προβολή ρυθμίσεων ασφαλείας ..."
+    "Metadata valid" : "Έγκυρα μεταδεδομένα"
 },
 "nplurals=2; plural=(n != 1);");

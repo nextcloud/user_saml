@@ -54,13 +54,6 @@
     "Metadata invalid" : "Metadata ogiltig",
     "Metadata valid" : "Metadata giltig",
     "Account not provisioned." : "Konto inte förberett",
-    "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto är inte förberett, tillgång till tjänsten är därför inte möjligt.",
-    "Indicates if the SP will validate all received XMLs." : "Indikerar om SP'n kommer validera alla mottagna XMLs.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Tillåt bara autentisering om kontot finns på någon annan backend. (t.ex. LDAP)",
-    "Show Service Provider settings ..." : "Visa leverantörsinställningar",
-    "Show optional Identity Provider settings ..." : "Visa valbara Identity Provider inställningar ...",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Om du frivilligt vill mappa SAML-attribut till användaren kan du konfigurera dessa här.",
-    "Show attribute mapping settings ..." : "Visa inställningar för attributmappning ...",
-    "Show security settings ..." : "Visa säkerhetsinställningar ..."
+    "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto är inte förberett, tillgång till tjänsten är därför inte möjligt."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

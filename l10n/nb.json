@@ -54,13 +54,6 @@
     "Metadata invalid" : "Ugyldige metadata",
     "Metadata valid" : "Gyldige metadata",
     "Account not provisioned." : "Kontoen er ikke klargjort",
-    "Your account is not provisioned, access to this service is thus not possible." : "Din konto er ikke klargjort, tilgang til denne tjenesten er ikke mulig akkurat nå.",
-    "Indicates if the SP will validate all received XMLs." : "Forteller om SP-en skal validere all mottatt XML.",
-    "Only allow authentication if an account is existent on some other backend. (e.g. LDAP)" : "Kun tillat autentisering hvis en konto finnes på en annen bakende. (f.eks. LDAP)",
-    "Show Service Provider settings ..." : "Vis tjenesteleverandørens innstillinger",
-    "Show optional Identity Provider settings ..." : "Vis valgfrie identitetstilbyderinnstillinger…",
-    "If you want to optionally map SAML attributes to the user you can configure these here." : "Hvis du valgfritt ønsker å knytte SAML-attributter til brukeren kan du sette opp disse her.",
-    "Show attribute mapping settings ..." : "Vis attributttilnytningsinnstillinger…",
-    "Show security settings ..." : "Vis sikkerhetsinnstillinger …"
+    "Your account is not provisioned, access to this service is thus not possible." : "Din konto er ikke klargjort, tilgang til denne tjenesten er ikke mulig akkurat nå."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
