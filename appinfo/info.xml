@@ -23,9 +23,6 @@ While theoretically any other authentication provider implementing either one of
 	<types>
 		<authentication/>
 	</types>
-	<documentation>
-		<admin>https://docs.nextcloud.com/server/16/admin_manual/configuration_server/sso_configuration.html</admin>
-	</documentation>
 	<category>integration</category>
 	<website>https://github.com/nextcloud/user_saml</website>
 	<bugs>https://github.com/nextcloud/user_saml/issues</bugs>
