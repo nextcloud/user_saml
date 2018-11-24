@@ -27,6 +27,7 @@
     "Attribute to map the email address to." : "Attributo a cui associare l'indirizzo di posta elettronica.",
     "Attribute to map the quota to." : "Attributo a cui associare la quota.",
     "Attribute to map the users groups to." : "Attributo per associare i gruppi di utenti",
+    "Attribute to map the users home to." : ".Attributo per associare le home degli utenti.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Utilizza autenticazione SAML per i client desktop di %s (richiede una nuova autenticazione degli utenti)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nome visualizzato facoltativo del fornitore d'identità  (predefinito: \"Accesso SSO e SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Consenti l'utilizzo di più motori utente (ad es. LDAP)",

@@ -29,6 +29,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Атрибут на који се мапира адреса е-поште.",
     "Attribute to map the quota to." : "Атрибут на који се мапира квота.",
     "Attribute to map the users groups to." : "Атрибут на који да се мапира корисничка група.",
+    "Attribute to map the users home to." : "Атрибут на који да се мапира кориснички директоријум.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Користи SAML проверу идентитета за %s десктоп клијенте (захтева поновну проверу идентитета)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Опциони натпис за опслужиоца идентитета (подразумевано: „SSO & SAML log in“)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Дозволи коришћење више позадинских механизама (нпр. LDAP)",

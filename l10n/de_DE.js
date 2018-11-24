@@ -29,6 +29,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Attribut dem die E-Mail-Adresse zugeordnet werden soll.",
     "Attribute to map the quota to." : "Attribut dem das Speicherkontingent zugeordnet werden soll.",
     "Attribute to map the users groups to." : "Attribut dem die Gruppen des Benutzers zugeordnet werden sollen.",
+    "Attribute to map the users home to." : "Attribut dem das zu Hause des Benutzers zugeordnet werden soll.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML-Autorisierung für die %s Desktop-Clients nutzen (erfordert eine Neu-Autorisierung der Nutzer)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Optional den Namen des Identitätsanbieters anzeigen (Standard: \"SSO & SAML-Anmeldung\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Die Verwendung von mehreren Benutzerverwaltungen erlauben (z.B. LDAP)",
