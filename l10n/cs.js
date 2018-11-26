@@ -29,6 +29,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Atribut, na který se má mapovat e-mailová adresa.",
     "Attribute to map the quota to." : "Atribut, na který namapovat kvótu",
     "Attribute to map the users groups to." : "Atribut, na který namapovat uživatelovy skupiny",
+    "Attribute to map the users home to." : "Atribut, na který namapovat uživatelovu domovskou složku.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Použít SAML pro %s desktopové klienty (vyžaduje novou autentizaci uživatele)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Volitelný zobrazovaný název poskytovatele identity (výchozí: „SSO a SAML přihlášení“)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Umožnit použití vícero podpůrných vrstev pro uživatelské účty (např. LDAP)",

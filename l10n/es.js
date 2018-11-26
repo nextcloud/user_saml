@@ -29,6 +29,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Atributo para definir la dirección de correo electrónico",
     "Attribute to map the quota to." : "Atributo para asignar la cuota a.",
     "Attribute to map the users groups to." : "Atributo para mapear los grupos de usuarios",
+    "Attribute to map the users home to." : "Atributo para mapear los grupos de usuarios",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar la autenticación SAML para los clientes de escritorio %s (necesita una re-autenticación del usuario)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Visualización opcional del nombre del proveedor de identidad (predeterminado: \"inicio de sesión de SSO y SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir el uso de back-ends de múltiples usuarios (por ejemplo, LDAP)",
@@ -69,6 +70,7 @@ OC.L10N.register(
     "Metadata valid" : "Metadatos válidos",
     "Error" : "Error",
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible."
+    "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible.",
+    "Choose a authentication provider" : "Escoge un proveedor de autenticación"
 },
 "nplurals=2; plural=(n != 1);");
