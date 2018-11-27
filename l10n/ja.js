@@ -26,6 +26,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "電子メールアドレスをマップする属性。",
     "Attribute to map the quota to." : "クォータをマップする属性。",
     "Attribute to map the users groups to." : "ユーザーグループをマップする属性。",
+    "Attribute to map the users home to." : "ユーザーをホームにマップするための属性。",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s デスクトップクライアントにSAML認証を使用する（ユーザーの再認証が必要）",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "IDプロバイダのオプションの表示名（デフォルト： \"SSO＆SAMLログイン\"）",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "複数のユーザーのバックエンド（LDAPなど）の使用を許可する",
