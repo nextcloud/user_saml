@@ -177,7 +177,7 @@ class SAMLControllerTest extends TestCase  {
 			->with('/')
 			->willReturn('https://nextcloud.com/absolute/');
 		$this->userBackend
-			->expects($this->once())
+			->expects($this->any())
 			->method('getCurrentUserId')
 			->willReturn('MyUid');
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */

@@ -81,6 +81,9 @@ if($returnScript === true) {
 	return;
 }
 
+$app = new \OCA\User_SAML\AppInfo\Application();
+$app->registerDavAuth();
+
 $redirectSituation = false;
 
 $user = $userSession->getUser();
