@@ -2,12 +2,21 @@
 All notable changes to this project will be documented in this file.
 
 
-## 2.0.1
+
+
+## 2.1.0
 
 ### Changed
 
 - add attribute mapping for the users home directory when creating a new user
+- use a combobox to select the IDP on login when more then 4 IDPs are configured
+- improved debug logging and in case of errors
+- Add sabredav plugin to register environment auth for dav requests
 
+### Fixed
+
+- remove trailing and leading spaces on settings
+- adjust login page to the theme
 
 ## 2.0.0
 
