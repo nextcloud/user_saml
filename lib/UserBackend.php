@@ -121,10 +121,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			try {
 				$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
 			} catch (\InvalidArgumentException $e) {
-				$home = null;
+				$home = '';
 			}
 
-			if ($home !== null) {
+			if ($home !== '') {
+				//if attribute's value is an absolute path take this, otherwise append it to data dir
+				//check for / at the beginning or pattern c:\ resp. c:/
+				if(   '/' !== $home[0]
+				   && !(3 < strlen($home) && ctype_alpha($home[0])
+					   && $home[1] === ':' && ('\\' === $home[2] || '/' === $home[2]))
+				) {
+					$home = $this->config->getSystemValue('datadirectory',
+							\OC::$SERVERROOT.'/data' ) . '/' . $home;
+				}
+
 				$values['home'] = $home;
 			}
 
