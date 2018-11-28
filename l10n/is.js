@@ -7,6 +7,7 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Óþekkt villa, skoðaðu atvikaskráninguna til að sjá nánari upplýsingar.",
     "Direct log in" : "Bein innskráning",
     "SSO & SAML log in" : "SSO & SAML innskráning",
+    "This page should not be visted directly." : "Þessa síðu ætti ekki að heimsækja beint.",
     "Provider " : "Þjónustuveita ",
     "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
     "Private key of the Service Provider" : "Einkalykill internetþjónustu",
@@ -33,6 +34,7 @@ OC.L10N.register(
     "Metadata invalid" : "Lýsigögn eru ógild",
     "Metadata valid" : "Lýsigögn eru gild",
     "Error" : "Villa",
-    "Account not provisioned." : "Aðgangur ekki tilbúinn."
+    "Account not provisioned." : "Aðgangur ekki tilbúinn.",
+    "Choose a authentication provider" : "Veldu auðkenningarþjónustu"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
