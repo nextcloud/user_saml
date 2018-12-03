@@ -367,9 +367,10 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 * @param string $redirectUrl
+	 * @param string $type
 	 * @return Http\TemplateResponse
 	 */
-	public function selectUserBackEnd($redirectUrl) {
+	public function selectUserBackEnd($redirectUrl, $type) {
 
 		$attributes = ['loginUrls' => []];
 
@@ -380,7 +381,11 @@ class SAMLController extends Controller {
 			];
 		}
 
-		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
+		if ($type === 'saml') {
+			$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
+		} else {
+			$attributes['loginUrls']['ssoLogin'] = $this->getEnvVarLogin($redirectUrl);
+		}
 
 		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4 ? true : false;
 
@@ -405,6 +410,42 @@ class SAMLController extends Controller {
 		}
 
 		return $result;
+	}
+
+
+	/**
+	 * get the IdPs showed at the login page
+	 *
+	 * @param $redirectUrl
+	 * @return array
+	 */
+	private function getEnvVarLogin($redirectUrl) {
+
+		if(!empty($redirectUrl)) {
+			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
+			$url = $this->urlGenerator->linkToRouteAbsolute(
+				'user_saml.SAML.selectUserBackEnd',
+				[
+					'environmentVariableLogin' => '1',
+					'redirect' => $originalUrl
+				]
+			);
+		} else {
+			$url = $this->urlGenerator->linkToRouteAbsolute(
+				'user_saml.SAML.selectUserBackEnd',
+				[
+					'environmentVariableLogin' => '1'
+				]
+			);
+		}
+
+		return [
+			[
+				'url' => $url,
+				'display-name' => 'Kerberos Login',
+			]
+		];
+
 	}
 
 	/**

@@ -73,10 +73,6 @@ switch($config->getAppValue('user_saml', 'type')) {
 		return;
 }
 
-if ($type === 'environment-variable') {
-	OC_User::handleApacheAuth();
-}
-
 if($returnScript === true) {
 	return;
 }
@@ -131,12 +127,13 @@ if($useSamlForDesktopClients === '1') {
 	}
 }
 
+$params = $request->getParams();
 $multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
 $configuredIdps = $samlSettings->getListOfIdps();
 $showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
+$showLoginOptions = $showLoginOptions && !isset($params['environmentVariableLogin']);
 
 if ($redirectSituation === true && $showLoginOptions) {
-	$params = $request->getParams();
 	$redirectUrl = '';
 	if(isset($params['redirect_url'])) {
 		$redirectUrl = $params['redirect_url'];
@@ -145,12 +142,17 @@ if ($redirectSituation === true && $showLoginOptions) {
 	$targetUrl = $urlGenerator->linkToRouteAbsolute(
 		'user_saml.SAML.selectUserBackEnd',
 		[
-			'redirectUrl' => $redirectUrl
+			'redirectUrl' => $redirectUrl,
+			'type' => $type
 		]
 	);
 	header('Location: '.$targetUrl);
 	exit();
 
+}
+
+if ($type === 'environment-variable' && !$showLoginOptions) {
+	OC_User::handleApacheAuth();
 }
 
 if($redirectSituation === true) {
