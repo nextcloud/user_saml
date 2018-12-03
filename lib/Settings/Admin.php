@@ -97,6 +97,12 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
 				'global' => true,
+			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
+				'type' => 'checkbox',
+				'hideForEnv' => false,
+				'global' => true,
 			]
 		];
 		$attributeMappingSettings = [
@@ -140,12 +146,7 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			];
-			$generalSettings['allow_multiple_user_back_ends'] = [
-				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
-				'type' => 'checkbox',
-				'hideForEnv' => true,
-				'global' => true,
-			];
+
 		}
 
 		$params = [
