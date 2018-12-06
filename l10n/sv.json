@@ -25,7 +25,7 @@
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Använd SAML-autentisering för de %s skrivbordsklienterna (kräver att användarna loggar in på nytt)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Frivilligt visningsnamn av den identifierande aktören (standard: \"SSO & SAML inloggning\")",
     "SSO & SAML authentication" : "SSO & SAML-autentisering",
-    "Open documentation" : "Öppna dokumentation",
+    "Open documentation" : "Öppna dokumentationen",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Var säker på att konfigurera en administratörs användare som får tillträde till instansen via SSO. Inloggning med det vanliga %s konto är inte möjligt längre, om du inte slog på \"%s\"",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Försäkra dig om att konfigurera en administrativ användare som kan komma åt instansen via SSO. Att logga in med ditt vanliga %s konto kommer inte längre vara möjligt.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Vänligen välj om du vill autentisera med SAML-leverantören inbyggd i Nextcloud eller om du vill autentisera mot en miljövariabel.",
