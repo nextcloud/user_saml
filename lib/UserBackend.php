@@ -146,19 +146,28 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			}
 			$qb->execute();
 
-			### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
-			//trigger creation of user home and /files folder
-			$userFolder = \OC::$server->getUserFolder($uid);
-			try {
-				// copy skeleton
-				\OC_Util::copySkeleton($uid, $userFolder);
-			} catch (NotPermittedException $ex) {
-				// read only uses
-			}
-			// trigger any other initialization
-			$user = $this->userManager->get($uid);
-			\OC::$server->getEventDispatcher()->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
+			$this->initializeHomeDir($uid);
+
 		}
+	}
+
+	/**
+	 * @param string $uid
+	 * @throws \OCP\Files\NotFoundException
+	 */
+	public function initializeHomeDir($uid) {
+		### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
+		//trigger creation of user home and /files folder
+		$userFolder = \OC::$server->getUserFolder($uid);
+		try {
+			// copy skeleton
+			\OC_Util::copySkeleton($uid, $userFolder);
+		} catch (NotPermittedException $ex) {
+			// read only uses
+		}
+		// trigger any other initialization
+		$user = $this->userManager->get($uid);
+		\OC::$server->getEventDispatcher()->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
 	}
 
 	/**
@@ -227,7 +236,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/**
 	 * Returns the user's home directory, if home directory mapping is set up.
 	 *
-	 * @param string $uid the username	
+	 * @param string $uid the username
 	 * @return string
 	 */
 	public function getHome($uid) {

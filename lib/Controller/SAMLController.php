@@ -144,6 +144,7 @@ class SAMLController extends Controller {
 				// help with it and make the user known
 				$this->userManager->search($uid);
 				if($this->userManager->userExists($uid)) {
+					$this->userBackend->initializeHomeDir($uid);
 					return;
 				}
 				throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
