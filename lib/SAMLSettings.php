@@ -71,6 +71,8 @@ class SAMLSettings {
 			$result[$id] = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
 		}
 
+		asort($result);
+
 		return $result;
 	}
 
