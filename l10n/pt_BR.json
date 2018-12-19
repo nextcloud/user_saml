@@ -58,7 +58,7 @@
     "If you want to optionally map attributes to the user you can configure these here." : "Aqui você pode opcionalmente mapear atributos aos usuários.",
     "Show attribute mapping settings…" : "Mostrar configurações de mapeamento de atributos...",
     "Security settings" : "Configurações de segurança",
-    "For increased security we recommend enabling the following settings if supported by your environment." : "Para aumentar a segurança recomendamos habilitar as seguinte configurações se seu ambiente suportar",
+    "For increased security we recommend enabling the following settings if supported by your environment." : "Para aumentar a segurança recomendamos ativar as seguinte configurações se seu ambiente suportar",
     "Show security settings…" : "Mostrar configurações de segurança...",
     "Signatures and encryption offered" : "Assinaturas e criptografias oferecidas",
     "Signatures and encryption required" : "Assinaturas e criptografia requeridas",
