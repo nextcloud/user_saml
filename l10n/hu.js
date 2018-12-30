@@ -6,6 +6,7 @@ OC.L10N.register(
     "Provider" : "Szolgáltató",
     "Unknown error, please check the log file for more details." : "Ismeretlen hiba, kérlek ellenőrizd a log fájlokat további részletekért.",
     "Direct log in" : "Közvetlen belépés",
+    "SSO & SAML log in" : "SSO & SAML belépés",
     "Provider " : "Szolgáltató",
     "X.509 certificate of the Service Provider" : "Szolgáltató X.509 tanúsítványa",
     "Private key of the Service Provider" : "Szolgáltató titkos kulcsa",
