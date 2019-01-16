@@ -243,11 +243,17 @@ class SAMLController extends Controller {
 	public function assertionConsumerService() {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
 		$idp = $this->session->get('user_saml.Idp');
+		$idp = $idp === null ? 1 : $idp;
+		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
-			return;
+			$auth->login(null, [], false, false, true);
+			$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
+			$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
+			$this->session->set('user_saml.Idp', $idp);
+			$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
 		}
 
-		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
 		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
