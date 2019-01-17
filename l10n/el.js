@@ -24,6 +24,7 @@ OC.L10N.register(
     "Security settings" : "Ρυθμίσεις ασφαλείας",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
     "Metadata invalid" : "Μη έγκυρα μεταδεδομένα",
-    "Metadata valid" : "Έγκυρα μεταδεδομένα"
+    "Metadata valid" : "Έγκυρα μεταδεδομένα",
+    "Error" : "Σφάλμα"
 },
 "nplurals=2; plural=(n != 1);");
