@@ -16,23 +16,29 @@ style('user_saml', 'admin');
 
 	<div class="warning hidden" id="user-saml-warning-admin-user">
 		<?php
+		$url = \OC::$server->getURLGenerator()->linkToRouteAbsolute('core.login.showLoginForm') . '?direct=1';
+		$url = '<a href="' . $url . '">' . \OCP\Util::sanitizeHTML($url) . '</a>';
 		if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
-			p(
+			print_unescaped(
 				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s"',
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s" or you go directly to the URL %s.',
 					[
-						$theme->getEntity(),
-						$_['general']['allow_multiple_user_back_ends']['text']
+						\OCP\Util::sanitizeHTML($theme->getEntity()),
+						\OCP\Util::sanitizeHTML($_['general']['allow_multiple_user_back_ends']['text']),
+						$url,
 					]
 				)
 			);
 		} else {
+			print_unescaped(
 				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore.',
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you go directly to the URL %s.',
 					[
-						$theme->getEntity(),
-										]
-				);
+						\OCP\Util::sanitizeHTML($theme->getEntity()),
+						$url,
+					]
+				)
+			);
 		}
 		?>
 	</div>
