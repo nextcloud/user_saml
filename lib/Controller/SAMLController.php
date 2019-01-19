@@ -481,7 +481,7 @@ class SAMLController extends Controller {
 	 * @return Http\TemplateResponse
 	 */
 	public function base() {
-		$message = $this->l->t('This page should not be visted directly.');
+		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 
