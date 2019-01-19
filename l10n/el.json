@@ -16,7 +16,6 @@
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Προαπαιτείται για το <saml:Assertion> των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.[Τα μεταδεδομένα του SP θα προσφέρουν αυτές τις πληροφορίες]",
     "SSO & SAML authentication" : "Πιστοποίηση SSO & SAML",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Βεβαιωθείτε ότι έχετε διαμορφώσει έναν χρήστη διαχείρισης ο οποίος μπορεί να έχει άμεση  πρόσβαση μέσω SSO.Σύνδεση στον τακτικό λογαριασμό σας %sδε θα είναι δυνατή πλέον.",
     "Use environment variable" : "Χρησιμοποιήστε μεταβλητή περιβάλλοντος",
     "General" : "Γενικά",
     "Security settings" : "Ρυθμίσεις ασφαλείας",

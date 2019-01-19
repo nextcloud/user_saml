@@ -1,7 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Esta conta de usuario está desactivada, póñase en contacto co administrador",
+    "This user account is disabled, please contact your administrator." : "Esta conta de usuario está desactivada, póñase en contacto co administrador.",
     "Saved" : "Gardado",
     "Provider" : "Provedor",
     "Unknown error, please check the log file for more details." : "Produciuse un erro descoñecido, revise o rexistro para obter máis información.",
@@ -37,8 +37,6 @@ OC.L10N.register(
     "Authenticate using single sign-on" : "Autenticación usando SSO (single sign-on)",
     "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix." : "Usando o aplicativo SSO e SAML no seu NextCloud pode facer posíbel integrar a súa solución de «Single-Sign-On» co Nextcloud. Ademaiss, pode empregar o provedor de usuarios LDAP do NextCloud para manter a conveniencia para usuarios (p. ej., ao compartir).\nPolo momento foron omprobados e son compatíbeis os seguintes proveedores:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Autenticación mediante variábel de contorno**\n\t* Kerberos (mod_auth_kerb)\n\t* Calquera outro provedor que autentique usando a variábel de contorno\n\nAínda que teoricamente calquera outro provedor de autenticación que implemente calquera destes estándares é compatible, queremos facer notar que non forman parte de ningunha matriz de probas interna.",
     "Open documentation" : "Abrir a documentación",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Asegúrese de configurar un usuario administrativo que poida acceder á instancia a través de SSO. Acceder coa sua conta normal %s xa non será posíbel, a non ser que teña activado «%s».",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Asegúrese de configurar un usuario administrativo que poida acceder á instancia a través de SSO. Acceder coa sua conta normal %s xa non será posíbel.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Escolla se quere autenticarse usando o provedor SAML integrado en Nextcloud ou se quere autenticarse nunha variábel de entorno.",
     "Use built-in SAML authentication" : "Usar a autenticación integrada de SAML",
     "Use environment variable" : "Usar variábel de entorno",
@@ -71,6 +69,7 @@ OC.L10N.register(
     "Error" : "Erro",
     "Account not provisioned." : "Conta non aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "A súa conta non esta aprovisionada, polo que non é posíbel o acceso a este servizo.",
-    "Choose a authentication provider" : "Escolla un provedor de autenticación"
+    "Choose a authentication provider" : "Escolla un provedor de autenticación",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Asegúrese de configurar un usuario administrativo que poida acceder á instancia a través de SSO. Acceder coa sua conta normal %s xa non será posíbel, a non ser que teña activado «%s»."
 },
 "nplurals=2; plural=(n != 1);");

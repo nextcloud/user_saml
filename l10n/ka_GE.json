@@ -21,7 +21,6 @@
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "გამოიყენეთ SAML აუტენტიფიკაცია %s დესკტოპ კლიენტებისთვის (საჭიროებს ხელახალ აუტენტიფიკაციას)",
     "SSO & SAML authentication" : "SSO და SAML აუტენტიფიკაცია",
     "Open documentation" : "ღია დოკუმენტაცია",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "აუცილებლად გაუწიეთ კონფიგურაცია ადმინისტრაციულ მომხმარებელს, რომელსაც გააჩნია ნიმუშზე SSO წვდომა. თქვენი ჩვეულებრივი %s ანგარიშით ავტორიზაცია მეტი შესაძლებელი აღარ იქნება.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "გთხოვთ აირჩიოთ აუტენტიფიკაცია გსურთ Nextcloud-ში ჩაშენებული SAML მომწოდებელით თუ გსურთ აუტენტიფიკაცია სხვა გარემოს ცვლადის წინააღმდეგ.",
     "Use built-in SAML authentication" : "ჩაშენებული SAML აუტენტიფიკაციის გამოყენება",
     "Use environment variable" : "გარემოში არსებული ცვლადის გამოყენება",

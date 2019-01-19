@@ -24,7 +24,6 @@ OC.L10N.register(
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s 데스크톱 클라이언트에 SAML 인증을 사용합니다(사용자 재인증이 필요함)",
     "SSO & SAML authentication" : "SSO 및 SAML 인증",
     "Open documentation" : "문서 열기",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "관리 사용자가 인스턴스에 SSO로 로그인할 수 있는지 확인하십시오. 일반 %s 계정으로 더 이상 로그인할 수 없습니다.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Nextcloud에 내장된 SAML 공급자로 인증할지, 환경 변수를 사용하여 인증할지를 선택하십시오.",
     "Use built-in SAML authentication" : "내장 SAML 인증 사용",
     "Use environment variable" : "환경 변수 사용",

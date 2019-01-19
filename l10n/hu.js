@@ -29,7 +29,6 @@ OC.L10N.register(
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML használata %s asztali kliens hitelesítés (felhasználók ismételt bejelentkezését igényli)",
     "SSO & SAML authentication" : "SSO & SAML hitelesítés",
     "Open documentation" : "Dokumentáció megnyitása",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Győződj meg róla, hogy legyen rendszergazdai fiók, ami hozzáfér a telepítéshez SSO-n keresztül. A szokásos %s fiókoddal többé nem lehet bejelentkezni.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Kélek válassz, hogy a Nextcloud-ba épített SAML szolgáltató vagy egy környezeti változó ellenében szeretnél bejelentkeztetni.",
     "Use built-in SAML authentication" : "Használd a beépített SAML hitelesítés",
     "Use environment variable" : "Használd a környezeti változót",

@@ -31,7 +31,6 @@ OC.L10N.register(
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "为 %s 桌面客户端使用 SAML 认证（需要重新验证用户）",
     "SSO & SAML authentication" : "SSO & SAML 认证",
     "Open documentation" : "打开文档",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "确保配置一个可通过 SSO 访问实例的管理员用户。将不再允许使用常规账户 %s 登录。",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "请选择是否要使用 Nextcloud 内置的 SAML 提供商进行身份验证，还是要根据环境变量进行身份验证。",
     "Use built-in SAML authentication" : "使用内置 SAML 认证",
     "Use environment variable" : "使用环境变量",

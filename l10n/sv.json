@@ -34,8 +34,6 @@
     "SSO & SAML authentication" : "SSO & SAML-autentisering",
     "Authenticate using single sign-on" : "Autentisera med single sign-on",
     "Open documentation" : "Öppna dokumentationen",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Var säker på att konfigurera en administratörs användare som får tillträde till instansen via SSO. Inloggning med det vanliga %s konto är inte möjligt längre, om du inte slog på \"%s\"",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Försäkra dig om att konfigurera en administrativ användare som kan komma åt instansen via SSO. Att logga in med ditt vanliga %s konto kommer inte längre vara möjligt.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Vänligen välj om du vill autentisera med SAML-leverantören inbyggd i Nextcloud eller om du vill autentisera mot en miljövariabel.",
     "Use built-in SAML authentication" : "Använd den inbyggda SAML-autentiseringen",
     "Use environment variable" : "Använd miljövariabel",
@@ -68,6 +66,7 @@
     "Error" : "Fel",
     "Account not provisioned." : "Konto inte förberett",
     "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto är inte förberett, tillgång till tjänsten är därför inte möjligt.",
-    "Choose a authentication provider" : "Välj en autentiseringsleverantör"
+    "Choose a authentication provider" : "Välj en autentiseringsleverantör",
+    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Var säker på att konfigurera en administratörs användare som får tillträde till instansen via SSO. Inloggning med det vanliga %s konto är inte möjligt längre, om du inte slog på \"%s\""
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

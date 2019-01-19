@@ -23,7 +23,6 @@ OC.L10N.register(
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Por favor usa autenticación SAML para los %s clientes de escritorio (se requiere volver a autenticar)",
     "SSO & SAML authentication" : "Autenticación SSO & SAML",
     "Open documentation" : "Abrir documentación",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore." : "Asegurate de configurar un usuario administrativo que tenga acceso a la instancia mediante SSO. Iniciar sesión con tu cuenta regular %s no será más posible. ",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Por favor selecciona si deseas autenticarte usando el proveedor integrado SAML de Nextcloud o si deseas autenticarte contra una variable de ambiente.  ",
     "Use built-in SAML authentication" : "Usar autenticación SAML integrada",
     "Use environment variable" : "Usar la variable de ambiente",
