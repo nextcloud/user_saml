@@ -5,7 +5,6 @@
     "Unknown error, please check the log file for more details." : "Error desconegut, comprovar el fitxer de registre per a més detalls.",
     "Direct log in" : "Entrada directa",
     "SSO & SAML log in" : "Entrada SSO i SAML",
-    "This page should not be visted directly." : "Aquesta pàgina no s’ha de visitar directament.",
     "Provider " : "Proveïdor ",
     "X.509 certificate of the Service Provider" : "X.509 El certificat d'aquest servidor és invàlid",
     "Private key of the Service Provider" : "Clau privada del proveïdor de serveis",

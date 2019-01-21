@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "未知错误，请在日志文件检查更多详情。",
     "Direct log in" : "直接登录",
     "SSO & SAML log in" : "SSO & SAML 登录",
-    "This page should not be visted directly." : "这个页面不应当被直接访问。",
     "Provider " : "服务商",
     "X.509 certificate of the Service Provider" : "服务商 X.509 认证",
     "Private key of the Service Provider" : "服务商私钥",

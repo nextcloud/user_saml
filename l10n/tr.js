@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Bilinmeyen bir sorun çıktı. Ayrıntılı bilgi almak için günlük dosyalarına bakabilirsiniz.",
     "Direct log in" : "Doğrudan oturum açma",
     "SSO & SAML log in" : "SSO ve SAML oturum açma",
-    "This page should not be visted directly." : "Bu sayfaya doğrudan erişilememelidir.",
     "Provider " : "Hizmet Sağlayıcı",
     "X.509 certificate of the Service Provider" : "Hizmet sağlayıcısının X.509 sertifikası",
     "Private key of the Service Provider" : "Hizmet sağlayıcısının özel anahtarı",

@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Непозната грешка. Проверите дневнике за више детаља.",
     "Direct log in" : "Директна пријава",
     "SSO & SAML log in" : "SSO & SAML пријава",
-    "This page should not be visted directly." : "Не бисте требали да директно посећујете ову страну .",
     "Provider " : "Провајдер",
     "X.509 certificate of the Service Provider" : "X.509 сертификат провајдера услуга",
     "Private key of the Service Provider" : "Приватни кључ провајдера услуга",

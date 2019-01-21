@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Produciuse un erro descoñecido, revise o rexistro para obter máis información.",
     "Direct log in" : "Acceso directo",
     "SSO & SAML log in" : "Acceso SSO e SAML",
-    "This page should not be visted directly." : "Esta páxina non debe ser visitada directamente.",
     "Provider " : "Provedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do provedor do servizo",
     "Private key of the Service Provider" : "Chave privada do provedor do servizo",

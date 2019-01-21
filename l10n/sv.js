@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Okänt fel, kolla loggfilen för mer detaljer.",
     "Direct log in" : "Direkt inloggning",
     "SSO & SAML log in" : "SSO & SAML inloggning",
-    "This page should not be visted directly." : "Den här sidan ska inte besökas direkt.",
     "Provider " : "Leverantör",
     "X.509 certificate of the Service Provider" : "X.509-certifikat av leverantören",
     "Private key of the Service Provider" : "Privat nyckel från leverantören",

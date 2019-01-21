@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Neznámá chyba, podrobnosti naleznete v záznamu událostí.",
     "Direct log in" : "Přímé přihlášení",
     "SSO & SAML log in" : "SSO a SAML přihlášení",
-    "This page should not be visted directly." : "Tato stránka by neměla být zobrazována přímo.",
     "Provider " : "Poskytovatel",
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovatele služby",
     "Private key of the Service Provider" : "Privátní klíč poskytovatele služby",

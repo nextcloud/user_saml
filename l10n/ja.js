@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "不明なエラー、詳細はログファイルを確認してください。",
     "Direct log in" : "ダイレクトログイン",
     "SSO & SAML log in" : "SSO & SAML log in",
-    "This page should not be visted directly." : "このページは直接閲覧することはできません。",
     "Provider " : "プロバイダー",
     "X.509 certificate of the Service Provider" : "サービスプロバイダのX.509 証明書",
     "Private key of the Service Provider" : "サービスプロバイダーの秘密鍵",

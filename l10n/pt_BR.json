@@ -5,7 +5,6 @@
     "Unknown error, please check the log file for more details." : "Erro desconhecido, verifique o log para mais detalhes.",
     "Direct log in" : "Login direto",
     "SSO & SAML log in" : "Login SSO & SAML",
-    "This page should not be visted directly." : "Esta página não deve ser visitada diretamente.",
     "Provider " : "Provedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do Provedor de Serviços",
     "Private key of the Service Provider" : "Chave privada do Provedor de Serviços",

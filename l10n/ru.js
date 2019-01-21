@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Неизвестная ошибка, обратитесь к файлу журнала для более подробных сведений.",
     "Direct log in" : "Прямой вход в систему",
     "SSO & SAML log in" : "Вход через SSO и SAML",
-    "This page should not be visted directly." : "Невозможен прямой переход на эту страницу.",
     "Provider " : "Поставщик",
     "X.509 certificate of the Service Provider" : "X.509-сертификат поставщика услуг",
     "Private key of the Service Provider" : "Закрытый ключ поставщика услуг",

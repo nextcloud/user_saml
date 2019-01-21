@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Onbekende fout, controleer de log voor meer details.",
     "Direct log in" : "Directe log-in",
     "SSO & SAML log in" : "SSO & SAML log-in",
-    "This page should not be visted directly." : "Deze pagina moet niet rechtstreeks worden bezocht.",
     "Provider " : "Provider ",
     "X.509 certificate of the Service Provider" : "X.509 certificaat ban de Service Provider",
     "Private key of the Service Provider" : "Privésleutel van de Service Provider",
