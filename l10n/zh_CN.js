@@ -34,7 +34,7 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "使用内置 SAML 认证",
     "Use environment variable" : "使用环境变量",
     "Remove identity provider" : "移除身份提供者",
-    "Add identity provider" : "增加身份提供者",
+    "Add identity provider" : "添加身份提供者",
     "General" : "常规",
     "Service Provider Data" : "数据服务提供商",
     "If your Service Provider should use certificates you can optionally specify them here." : "如果您的服务提供商使用证书，您可以在这里选择指定。",
