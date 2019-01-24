@@ -284,7 +284,10 @@ class SAMLController extends Controller {
 			if (!($user instanceof IUser)) {
 				throw new \InvalidArgumentException('User is not valid');
 			}
-			$user->updateLastLoginTimestamp();
+			$firstLogin = $user->updateLastLoginTimestamp();
+			if($firstLogin) {
+				$this->userBackend->initializeHomeDir($user->getUID());
+			}
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
