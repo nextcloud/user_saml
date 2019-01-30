@@ -44,7 +44,7 @@ OC.L10N.register(
     "Add identity provider" : "Lägg till identity provider",
     "General" : "Allmänt",
     "Service Provider Data" : "Leverantörsdata",
-    "If your Service Provider should use certificates you can optionally specify them here." : "Om din tjänstleverantör använder certifikat kan du välja att ange dom här.",
+    "If your Service Provider should use certificates you can optionally specify them here." : "Om din tjänstleverantör använder certifikat kan du välja att ange dem här.",
     "Show Service Provider settings…" : "Visa leverantörsinställningar",
     "Identity Provider Data" : "Identity Provider Data",
     "Configure your IdP settings here." : "Konfigurera dina IdP-inställningar här.",
