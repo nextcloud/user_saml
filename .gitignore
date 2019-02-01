@@ -1,3 +1,6 @@
 3rdparty/vendor/jumbojett/openid-connect-php/client_example.php
 3rdparty/vendor/jumbojett/openid-connect-php/.github
 3rdparty/vendor/jumbojett/openid-connect-php/CHANGELOG.md
+3rdparty/vendor/jumbojett/openid-connect-php/README.md
+3rdparty/vendor/phpseclib/phpseclib/appveyor.yml
+3rdparty/vendor/phpseclib/phpseclib/README.md
