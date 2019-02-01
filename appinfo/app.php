@@ -131,8 +131,16 @@ $useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_
 if($useSamlForDesktopClients === '1') {
 	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 	if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
+		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
 			$redirectSituation = true;
+
+			if (preg_match('/^.*\/(\d+\.\d+\.\d+).*$/', $request->getHeader('USER_AGENT'), $matches) === 1) {
+				$versionstring = $matches[1];
+
+				if (version_compare($versionstring, '2.5.0', '>=') === true) {
+					$redirectSituation = false;
+				}
+			}
 		}
 	}
 }
