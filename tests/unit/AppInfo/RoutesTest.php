@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\User_SAML\Tests\AppInfo;
+namespace OCA\User_OIDC\Tests\AppInfo;
 
 use Test\TestCase;
 
@@ -30,60 +30,29 @@ class Test extends TestCase  {
 		$expected = [
 			'routes' => [
 				[
-					'name' => 'SAML#login',
-					'url' => '/saml/login',
+					'name' => 'OIDC#login',
+					'url' => '/oidc/login',
 					'verb' => 'GET',
 				],
 				[
-					'name' => 'SAML#base',
-					'url' => '/saml',
+					'name' => 'OIDC#base',
+					'url' => '/oidc',
 					'verb' => 'GET',
 				],
 				[
-					'name' => 'SAML#getMetadata',
-					'url' => '/saml/metadata',
+					'name' => 'OIDC#signOut',
+					'url' => '/oidc/signout',
 					'verb' => 'GET',
 				],
 				[
-					'name' => 'SAML#assertionConsumerService',
-					'url' => '/saml/acs',
-					'verb' => 'POST',
-				],
-				[
-					'name' => 'SAML#singleLogoutService',
-					'url' => '/saml/sls',
+					'name' => 'OIDC#notProvisioned',
+					'url' => '/oidc/notProvisioned',
 					'verb' => 'GET',
 				],
 				[
-					'name' => 'SAML#notProvisioned',
-					'url' => '/saml/notProvisioned',
+					'name' => 'OIDC#genericError',
+					'url' => '/oidc/error',
 					'verb' => 'GET',
-				],
-				[
-					'name' => 'SAML#genericError',
-					'url' => '/saml/error',
-					'verb' => 'GET',
-				],
-				[
-					'name' => 'SAML#selectUserBackEnd',
-					'url' => '/saml/selectUserBackEnd',
-					'verb' => 'GET',
-				],
-				[
-					'name' => 'Settings#getSamlProviderSettings',
-					'url' => '/settings/providerSettings/{providerId}',
-					'verb' => 'GET',
-					'defaults' => [
-						'providerId' => '1'
-					]
-				],
-				[
-					'name' => 'Settings#deleteSamlProviderSettings',
-					'url' => '/settings/providerSettings/{providerId}',
-					'verb' => 'DELETE',
-					'defaults' => [
-						'providerId' => '1'
-					]
 				],
 			],
 		];

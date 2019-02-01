@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\User_SAML;
+namespace OCA\User_OIDC;
 
 use OCA\DAV\Connector\Sabre\Auth;
 use OCP\IConfig;
@@ -35,32 +35,29 @@ use Sabre\HTTP\ResponseInterface;
 class DavPlugin extends ServerPlugin {
 	private $session;
 	private $config;
-	private $auth;
+	private $userData;
 	/** @var Server */
 	private $server;
 
-	public function __construct(ISession $session, IConfig $config, array $auth) {
+	public function __construct(ISession $session, IConfig $config, array $userData) {
 		$this->session = $session;
 		$this->config = $config;
-		$this->auth = $auth;
+		$this->userData = $userData;
 	}
 
 
 	public function initialize(Server $server) {
-		// before auth
+		// before userData
 		$server->on('beforeMethod', [$this, 'beforeMethod'], 9);
 		$this->server = $server;
 	}
 
 	public function beforeMethod(RequestInterface $request, ResponseInterface $response) {
-		if (
-			$this->config->getAppValue('user_saml', 'type') === 'environment-variable' &&
-			!$this->session->exists('user_saml.samlUserData')
-		) {
-			$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
-			if (isset($this->auth[$uidMapping])) {
-				$this->session->set(Auth::DAV_AUTHENTICATED, $this->auth[$uidMapping]);
-				$this->session->set('user_saml.samlUserData', $this->auth);
+		if (!$this->session->exists('user_oidc.userInfo')) {
+			$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
+			if (isset($this->userData[$uidMapping])) {
+				$this->session->set(Auth::DAV_AUTHENTICATED, $this->userData[$uidMapping]);
+				$this->session->set('user_oidc.userInfo', $this->userData);
 			}
 		}
 	}

@@ -19,9 +19,9 @@
  *
  */
 
-namespace OCA\User_SAML\Tests\Middleware;
+namespace OCA\User_OIDC\Tests\Middleware;
 
-use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use OCA\User_OIDC\Middleware\OnlyLoggedInMiddleware;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Utility\IControllerMethodReflector;

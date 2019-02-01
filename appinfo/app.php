@@ -29,59 +29,21 @@ if(OC::$CLI) {
 }
 
 $urlGenerator = \OC::$server->getURLGenerator();
-$l = \OC::$server->getL10N('user_saml');
-$config = \OC::$server->getConfig();
 $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
-$session = \OC::$server->getSession();
-$samlSettings = new \OCA\User_SAML\SAMLSettings(
-	$urlGenerator,
-	$config,
-	$request,
-	$session
-);
 
-$userBackend = new \OCA\User_SAML\UserBackend(
-	$config,
+$userBackend = new \OCA\User_OIDC\UserBackend(
+	\OC::$server->getConfig(),
 	$urlGenerator,
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),
 	\OC::$server->getUserManager(),
 	\OC::$server->getGroupManager(),
-	$samlSettings,
 	\OC::$server->getLogger()
 );
-$userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 
-// Setting up the one login config may fail, if so, do not catch the requests later.
-$returnScript = false;
-$type = '';
-switch($config->getAppValue('user_saml', 'type')) {
-	case 'saml':
-		try {
-			$oneLoginSettings = new \OneLogin\Saml2\Settings($samlSettings->getOneLoginSettingsArray(1));
-		} catch (\OneLogin\SAML2\Error $e) {
-			$returnScript = true;
-		}
-		$type = 'saml';
-		break;
-	case 'environment-variable':
-		$type = 'environment-variable';
-		break;
-	default:
-		return;
-}
-
-if ($type === 'environment-variable') {
-	OC_User::handleApacheAuth();
-}
-
-if($returnScript === true) {
-	return;
-}
-
-$app = new \OCA\User_SAML\AppInfo\Application();
+$app = new \OCA\User_OIDC\AppInfo\Application();
 $app->registerDavAuth();
 
 $redirectSituation = false;
@@ -91,9 +53,9 @@ if ($user !== null) {
 	$enabled = $user->isEnabled();
 	if ($enabled === false) {
 		$targetUrl = $urlGenerator->linkToRouteAbsolute(
-			'user_saml.SAML.genericError',
+			'user_oidc.OIDC.genericError',
 			[
-				'message' => $l->t('This user account is disabled, please contact your administrator.')
+				'message' => 'This user account is disabled, please contact your administrator.'
 			]
 		);
 		header('Location: '.$targetUrl);
@@ -102,55 +64,15 @@ if ($user !== null) {
 }
 
 // All requests that are not authenticated and match against the "/login" route are
-// redirected to the SAML login endpoint
+// redirected to the OIDC login endpoint
 if(!$cli &&
 	!$userSession->isLoggedIn() &&
-	\OC::$server->getRequest()->getPathInfo() === '/login' &&
-	$type !== '') {
+	\OC::$server->getRequest()->getPathInfo() === '/login') {
 	$params = $request->getParams();
 	if (isset($params['direct'])) {
 		return;
 	}
 	$redirectSituation = true;
-}
-
-// If a request to OCS or remote.php is sent by the official desktop clients it can
-// be intercepted as it supports SAML. All other clients don't yet and thus we
-// require the usage of application specific passwords there.
-//
-// However, it is an opt-in setting to use SAML for the desktop clients. For better
-// UX (users don't have to reauthenticate) we default to disallow the access via
-// SAML at the moment.
-$useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
-if($useSamlForDesktopClients === '1') {
-	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
-	if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OC\AppFramework\Http\Request::USER_AGENT_OWNCLOUD_DESKTOP])) {
-			$redirectSituation = true;
-		}
-	}
-}
-
-$multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
-$configuredIdps = $samlSettings->getListOfIdps();
-$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
-
-if ($redirectSituation === true && $showLoginOptions) {
-	$params = $request->getParams();
-	$redirectUrl = '';
-	if(isset($params['redirect_url'])) {
-		$redirectUrl = $params['redirect_url'];
-	}
-
-	$targetUrl = $urlGenerator->linkToRouteAbsolute(
-		'user_saml.SAML.selectUserBackEnd',
-		[
-			'redirectUrl' => $redirectUrl
-		]
-	);
-	header('Location: '.$targetUrl);
-	exit();
-
 }
 
 if($redirectSituation === true) {
@@ -162,11 +84,10 @@ if($redirectSituation === true) {
 
 	$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
 	$targetUrl = $urlGenerator->linkToRouteAbsolute(
-		'user_saml.SAML.login',
+		'user_oidc.OIDC.login',
 		[
 			'requesttoken' => $csrfToken->getEncryptedValue(),
 			'originalUrl' => $originalUrl,
-			'idp' => 1,
 		]
 	);
 	header('Location: '.$targetUrl);

@@ -19,15 +19,13 @@
  *
  */
 
-namespace OCA\User_SAML\Tests\Controller;
+namespace OCA\User_OIDC\Tests\Controller;
 
-use OCA\User_SAML\Controller\SAMLController;
-use OCA\User_SAML\SAMLSettings;
-use OCA\User_SAML\UserBackend;
+use OCA\User_OIDC\Controller\OIDCController;
+use OCA\User_OIDC\UserBackend;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
-use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
@@ -37,15 +35,13 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
 
-class SAMLControllerTest extends TestCase  {
+class OIDCControllerTest extends TestCase  {
 	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	private $request;
 	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
 	private $session;
 	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
 	private $userSession;
-	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject*/
-	private $samlSettings;
 	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;
 	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
@@ -56,10 +52,8 @@ class SAMLControllerTest extends TestCase  {
 	private $userManager;
 	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
 	private $logger;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l;
-	/** @var SAMLController */
-	private $samlController;
+	/** @var OIDCController */
+	private $oidcController;
 
 	public function setUp() {
 		parent::setUp();
@@ -67,7 +61,6 @@ class SAMLControllerTest extends TestCase  {
 		$this->request = $this->createMock(IRequest::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->userSession = $this->createMock(IUserSession::class);
-		$this->samlSettings = $this->createMock(SAMLSettings::class);
 		$this->userBackend = $this->createMock(UserBackend::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
@@ -86,45 +79,25 @@ class SAMLControllerTest extends TestCase  {
 			return $default;
 		});
 
-		$this->samlController = new SAMLController(
-			'user_saml',
+		$this->oidcController = new OIDCController(
+			'user_oidc',
 			$this->request,
 			$this->session,
 			$this->userSession,
-			$this->samlSettings,
 			$this->userBackend,
 			$this->config,
 			$this->urlGenerator,
 			$this->userManager,
-			$this->logger,
-			$this->l
+			$this->logger
 		);
 
 	}
 
-	/**
-	 * @expectedExceptionMessage Type of "UnknownValue" is not supported for user_saml
-	 * @expectedException \Exception
-	 */
-	public function testLoginWithInvalidAppValue() {
-		$this->config
-			->expects($this->once())
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('UnknownValue');
-		$this->samlController->login(1);
-	}
-
-	public function testLoginWithEnvVariableAndNotExistingUidInSettingsArray() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLoginWithNotExistingUidInSettingsArray() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'bar' => 'foo',
@@ -132,79 +105,24 @@ class SAMLControllerTest extends TestCase  {
 		$this->config
 			->expects($this->at(1))
 			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->urlGenerator
 			->expects($this->once())
 			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.notProvisioned')
+			->with('user_oidc.OIDC.notProvisioned')
 			->willReturn('https://nextcloud.com/notProvisioned/');
 
 		$expected = new RedirectResponse('https://nextcloud.com/notProvisioned/');
-		$result = $this->samlController->login(1);
+		$result = $this->oidcController->login(1);
 		$this->assertEquals($expected, $result);
 	}
 
-
-	public function testLoginWithEnvVariableAndExistingUser() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLoginWithExistingUser() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
-			->willReturn([
-				'foo' => 'bar',
-				'uid' => 'MyUid',
-				'bar' => 'foo',
-			]);
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
-			->willReturn('uid');
-		$this->userManager
-			->expects($this->once())
-			->method('userExists')
-			->with('MyUid')
-			->willReturn(true);
-		$this->urlGenerator
-			->expects($this->once())
-			->method('getAbsoluteURL')
-			->with('/')
-			->willReturn('https://nextcloud.com/absolute/');
-		$this->userBackend
-			->expects($this->any())
-			->method('getCurrentUserId')
-			->willReturn('MyUid');
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
-		$user = $this->createMock(IUser::class);
-		$this->userManager
-			->expects($this->once())
-			->method('get')
-			->with('MyUid')
-			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('updateLastLoginTimestamp');
-
-		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login(1));
-	}
-
-	public function testLoginWithEnvVariableAndExistingUserAndArray() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
-		$this->session
-			->expects($this->once())
-			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'uid' => ['MyUid'],
@@ -212,8 +130,8 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->method('getSystemValue')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->userManager
 			->expects($this->once())
@@ -241,19 +159,14 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('https://nextcloud.com/absolute/');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login(1));
+		$this->assertEquals($expected, $this->oidcController->login(1));
 	}
 
-	public function testLoginWithEnvVariableAndNotExistingUserWithProvisioning() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLoginWithNotExistingUserWithProvisioning() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'uid' => 'MyUid',
@@ -261,8 +174,8 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->method('getSystemValue')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->userManager
 			->expects($this->once())
@@ -298,19 +211,14 @@ class SAMLControllerTest extends TestCase  {
 			->method('updateLastLoginTimestamp');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login(1));
+		$this->assertEquals($expected, $this->oidcController->login(1));
 	}
 
-	public function testLoginWithEnvVariableAndNotExistingUserWithMalfunctioningBackend() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLoginWithNotExistingUserWithMalfunctioningBackend() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'uid' => 'MyUid',
@@ -318,8 +226,8 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->method('getSystemValue')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->userManager
 			->expects($this->once())
@@ -329,7 +237,7 @@ class SAMLControllerTest extends TestCase  {
 		$this->urlGenerator
 			->expects($this->once())
 			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.notProvisioned')
+			->with('user_oidc.OIDC.notProvisioned')
 			->willReturn('https://nextcloud.com/notprovisioned/');
 		$this->userBackend
 			->expects($this->at(0))
@@ -350,19 +258,14 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn(null);
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
-		$this->assertEquals($expected, $this->samlController->login(1));
+		$this->assertEquals($expected, $this->oidcController->login(1));
 	}
 
-	public function testLoginWithEnvVariableAndNotExistingUserWithoutProvisioning() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLogiWithNotExistingUserWithoutProvisioning() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'uid' => 'MyUid',
@@ -370,8 +273,8 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->method('getSystemValue')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->userManager
 			->expects($this->any())
@@ -381,7 +284,7 @@ class SAMLControllerTest extends TestCase  {
 		$this->urlGenerator
 			->expects($this->once())
 			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.notProvisioned')
+			->with('user_oidc.OIDC.notProvisioned')
 			->willReturn('https://nextcloud.com/notprovisioned/');
 		$this->userBackend
 			->expects($this->once())
@@ -389,19 +292,14 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn(false);
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
-		$this->assertEquals($expected, $this->samlController->login(1));
+		$this->assertEquals($expected, $this->oidcController->login(1));
 	}
 
-	public function testLoginWithEnvVariableAndNotYetMappedUserWithoutProvisioning() {
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('environment-variable');
+	public function testLoginWithNotYetMappedUserWithoutProvisioning() {
 		$this->session
 			->expects($this->once())
 			->method('get')
-			->with('user_saml.samlUserData')
+			->with('user_oidc.userInfo')
 			->willReturn([
 				'foo' => 'bar',
 				'uid' => 'MyUid',
@@ -409,8 +307,8 @@ class SAMLControllerTest extends TestCase  {
 			]);
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-uid_mapping')
+			->method('getSystemValue')
+			->with('user_oidc', 'uid_mapping')
 			->willReturn('uid');
 		$this->userManager
 			->expects($this->exactly(2))
@@ -440,12 +338,12 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 
 		$expected = new RedirectResponse('https://nextcloud.com/absolute/');
-		$this->assertEquals($expected, $this->samlController->login(1));
+		$this->assertEquals($expected, $this->oidcController->login(1));
 	}
 
 	public function testNotProvisioned() {
-		$expected = new TemplateResponse('user_saml', 'notProvisioned', [], 'guest');
-		$this->assertEquals($expected, $this->samlController->notProvisioned());
+		$expected = new TemplateResponse('user_oidc', 'notProvisioned', [], 'guest');
+		$this->assertEquals($expected, $this->oidcController->notProvisioned());
 	}
 
 	/**
@@ -455,8 +353,8 @@ class SAMLControllerTest extends TestCase  {
 	 * @param string $messageExpected
 	 */
 	public function testGenericError($messageSend, $messageExpected) {
-		$expected = new TemplateResponse('user_saml', 'error', ['message' => $messageExpected], 'guest');
-		$this->assertEquals($expected, $this->samlController->genericError($messageSend));
+		$expected = new TemplateResponse('user_oidc', 'error', ['message' => $messageExpected], 'guest');
+		$this->assertEquals($expected, $this->oidcController->genericError($messageSend));
 	}
 
 	public function dataTestGenericError() {
@@ -466,22 +364,4 @@ class SAMLControllerTest extends TestCase  {
 		];
 	}
 
-	/**
-	 * @dataProvider dataTestGetSSODisplayName
-	 *
-	 * @param string $configuredDisplayName
-	 * @param string $expected
-	 */
-	public function testGetSSODisplayName($configuredDisplayName, $expected) {
-		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName', [$configuredDisplayName]);
-
-		$this->assertSame($expected, $result);
-	}
-
-	public function dataTestGetSSODisplayName() {
-		return [
-			['My identity provider', 'My identity provider'],
-			['', 'SSO & SAML log in']
-		];
-	}
 }

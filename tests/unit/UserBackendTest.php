@@ -19,10 +19,10 @@
  *
  */
 
-namespace OCA\User_SAML\Tests\Settings;
+namespace OCA\User_OIDC\Tests\Settings;
 
-use OCA\User_SAML\SAMLSettings;
-use OCA\User_SAML\UserBackend;
+use OCA\User_OIDC\OIDCSettings;
+use OCA\User_OIDC\UserBackend;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -49,8 +49,6 @@ class UserBackendTest extends TestCase   {
 	private $groupManager;
 	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;
-	/** @var \PHPUnit_Framework_MockObject_MockObject|SAMLSettings */
-	private $SAMLSettings;
 	/** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
 	private $logger;
 
@@ -63,7 +61,6 @@ class UserBackendTest extends TestCase   {
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
 	}
 
@@ -77,7 +74,6 @@ class UserBackendTest extends TestCase   {
 					$this->db,
 					$this->userManager,
 					$this->groupManager,
-					$this->SAMLSettings,
 					$this->logger
 				])
 				->setMethods($mockedFunctions)
@@ -90,7 +86,6 @@ class UserBackendTest extends TestCase   {
 				$this->db,
 				$this->userManager,
 				$this->groupManager,
-				$this->SAMLSettings,
 				$this->logger
 			);
 		}
@@ -98,7 +93,7 @@ class UserBackendTest extends TestCase   {
 
 	public function testGetBackendName() {
 		$this->getMockedBuilder();
-		$this->assertSame('user_saml', $this->userBackend->getBackendName());
+		$this->assertSame('user_oidc', $this->userBackend->getBackendName());
 	}
 
 	public function testUpdateAttributesWithoutAttributes() {
@@ -145,23 +140,23 @@ class UserBackendTest extends TestCase   {
 
 		$this->config
 			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'email_mapping', '')
 			->willReturn('email');
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'displayName_mapping', '')
 			->willReturn('displayname');
 		$this->config
 			->expects($this->at(2))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'quota_mapping', '')
 			->willReturn('quota');
 		$this->config
 			->expects($this->at(3))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-group_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'group_mapping', '')
 			->willReturn('groups');
 
 		$this->userManager
@@ -238,18 +233,18 @@ class UserBackendTest extends TestCase   {
 
 		$this->config
 			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'oidc-attribute-mapping-email_mapping', '')
 			->willReturn('email');
 		$this->config
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'oidc-attribute-mapping-displayName_mapping', '')
 			->willReturn('displayname');
 		$this->config
 			->expects($this->at(2))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
+			->method('getSystemValue')
+			->with('user_oidc', 'oidc-attribute-mapping-quota_mapping', '')
 			->willReturn('quota');
 
 		$this->userManager

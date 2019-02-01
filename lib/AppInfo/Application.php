@@ -19,19 +19,16 @@
  *
  */
 
-namespace OCA\User_SAML\AppInfo;
+namespace OCA\User_OIDC\AppInfo;
 
-use OCA\User_SAML\DavPlugin;
-use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use OCA\User_OIDC\Middleware\OnlyLoggedInMiddleware;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
-use OCP\SabrePluginEvent;
 
 class Application extends App {
 	public function __construct(array $urlParams = array()) {
-		parent::__construct('user_saml', $urlParams);
+		parent::__construct('user_oidc', $urlParams);
 		$container = $this->getContainer();
-
 		/**
 		 * Middleware
 		 */
@@ -41,26 +38,6 @@ class Application extends App {
 				$c->query('ServerContainer')->getUserSession()
 			);
 		});
-
-		$container->registerService(DavPlugin::class, function (IAppContainer $c) {
-			$server = $c->getServer();
-			return new DavPlugin(
-				$server->getSession(),
-				$server->getConfig(),
-				$_SERVER
-			);
-		});
-
 		$container->registerMiddleWare('OnlyLoggedInMiddleware');
-	}
-
-	public function registerDavAuth() {
-
-		$container = $this->getContainer();
-
-		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) use ($container) {
-			$event->getServer()->addPlugin($container->query(DavPlugin::class));
-		});
 	}
 }

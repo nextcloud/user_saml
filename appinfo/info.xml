@@ -1,39 +1,21 @@
 <?xml version="1.0"?>
 <info>
-	<id>user_saml</id>
-	<name>SSO &amp; SAML authentication</name>
-	<summary>Authenticate using single sign-on</summary>
-	<description><![CDATA[Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)
-The following providers are supported and tested at the moment:
-
-* **SAML 2.0**
-	* OneLogin
-	* Shibboleth
-	* Active Directory Federation Services (ADFS)
-
-* **Authentication via Environment Variable**
-	* Kerberos (mod_auth_kerb)
-	* Any other provider that authenticates using the environment variable
-
-While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.]]></description>
-	<version>2.1.1</version>
+	<id>user_oidc</id>
+	<name>OIDC Authentication</name>
+	<summary>Authenticate using Single Sign-On</summary>
+	<description><![CDATA[Using the SOIDC app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud.]]></description>
+	<version>0.1.0</version>
 	<licence>agpl</licence>
-	<author>Lukas Reschke</author>
-	<namespace>User_SAML</namespace>
+	<author>Christian Glombek</author>
+	<namespace>User_OIDC</namespace>
 	<types>
 		<authentication/>
 	</types>
 	<category>integration</category>
-	<website>https://github.com/nextcloud/user_saml</website>
-	<bugs>https://github.com/nextcloud/user_saml/issues</bugs>
-	<repository type="git">https://github.com/nextcloud/user_saml.git</repository>
-	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/1.png</screenshot>
-	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/2.png</screenshot>
+	<website>https://github.com/LorbusChris/user_oidc</website>
+	<bugs>https://github.com/LorbusChris/user_oidc/issues</bugs>
+	<repository type="git">https://github.com/LorbusChris/user_oidc.git</repository>
 	<dependencies>
-		<nextcloud min-version="14" max-version="16" />
+		<nextcloud min-version="15" max-version="16" />
 	</dependencies>
-	<settings>
-		<admin>OCA\User_SAML\Settings\Admin</admin>
-		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
-	</settings>
 </info>

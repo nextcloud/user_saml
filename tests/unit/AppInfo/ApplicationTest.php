@@ -25,7 +25,7 @@
 namespace OCA\User_SAML\Tests\AppInfo;
 
 use OCA\User_SAML\AppInfo\Application;
-use OCA\User_SAML\Controller\SAMLController;
+use OCA\User_SAML\Controller\OIDCController;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 
 class ApplicationTest extends \Test\TestCase  {
@@ -42,7 +42,7 @@ class ApplicationTest extends \Test\TestCase  {
 
 	public function testContainerAppName() {
 		$this->app = new Application();
-		$this->assertEquals('user_saml', $this->container->getAppName());
+		$this->assertEquals('user_oidc', $this->container->getAppName());
 	}
 
 	public function queryData() {

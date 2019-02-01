@@ -6,14 +6,14 @@
 		 timeoutForMediumTests="900"
 		 timeoutForLargeTests="900"
 >
-	<testsuite name='User_SAML App Tests'>
+	<testsuite name='User_OIDC App Tests'>
 		<directory suffix='Test.php'>.</directory>
 	</testsuite>
 	<!-- filters for code coverage -->
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../../../user_saml/appinfo</directory>
-			<directory suffix=".php">../../../user_saml/lib</directory>
+			<directory suffix=".php">../../../user_oidc/appinfo</directory>
+			<directory suffix=".php">../../../user_oidc/lib</directory>
 		</whitelist>
 	</filter>
 	<logging>

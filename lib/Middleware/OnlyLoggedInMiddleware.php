@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\User_SAML\Middleware;
+namespace OCA\User_OIDC\Middleware;
 
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Middleware;
@@ -30,7 +30,7 @@ use OCP\IUserSession;
  * Class OnlyLoggedInMiddleware prevents access to a controller method if the user
  * is already logged-in.
  *
- * @package OCA\User_SAML\MiddleWare
+ * @package OCA\User_OIDC\MiddleWare
  */
 class OnlyLoggedInMiddleware extends Middleware {
 	/** @var IControllerMethodReflector */

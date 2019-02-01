@@ -20,16 +20,15 @@
  *
  */
 
-namespace OCA\User_SAML\Controller;
+namespace OCA\User_OIDC\Controller;
 
 use Firebase\JWT\JWT;
-use OCA\User_SAML\Exceptions\NoUserFoundException;
-use OCA\User_SAML\SAMLSettings;
-use OCA\User_SAML\UserBackend;
+use OCA\User_OIDC\Exceptions\NoUserFoundException;
+use OCA\User_OIDC\UserBackend;
+use OCA\User_OIDC\OIDCClient;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
-use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
@@ -37,18 +36,13 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use OneLogin\Saml2\Auth;
-use OneLogin\Saml2\Error;
-use OneLogin\Saml2\Settings;
-use OneLogin\Saml2\ValidationError;
+use Jumbojett\OpenIDConnectClient;
 
-class SAMLController extends Controller {
+class OIDCController extends Controller {
 	/** @var ISession */
 	private $session;
 	/** @var IUserSession */
 	private $userSession;
-	/** @var SAMLSettings */
-	private $SAMLSettings;
 	/** @var UserBackend */
 	private $userBackend;
 	/** @var IConfig */
@@ -59,58 +53,55 @@ class SAMLController extends Controller {
 	private $userManager;
 	/** @var ILogger */
 	private $logger;
-	/** @var IL10N */
-	private $l;
 
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param ISession $session
 	 * @param IUserSession $userSession
-	 * @param SAMLSettings $SAMLSettings
 	 * @param UserBackend $userBackend
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
 	 * @param ILogger $logger
-	 * @param IL10N $l
 	 */
 	public function __construct($appName,
 								IRequest $request,
 								ISession $session,
 								IUserSession $userSession,
-								SAMLSettings $SAMLSettings,
 								UserBackend $userBackend,
 								IConfig $config,
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
-								ILogger $logger,
-								IL10N $l) {
+								ILogger $logger) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
-		$this->SAMLSettings = $SAMLSettings;
 		$this->userBackend = $userBackend;
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
-		$this->l = $l;
+
+		$init = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'));
+		$init->register();
+		$this->client_id = $init->getClientID();
+		$this->client_secret = $init->getClientSecret();
+		$init = null;
 	}
 
 	/**
-	 * @param array $auth
+	 * @param array $userData
 	 * @throws NoUserFoundException
 	 */
-	private function autoprovisionIfPossible(array $auth) {
+	private function autoprovisionIfPossible(array $userData) {
 
-		$prefix = $this->SAMLSettings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		if(isset($auth[$uidMapping])) {
-			if(is_array($auth[$uidMapping])) {
-				$uid = $auth[$uidMapping][0];
+		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
+		if(isset($userData[$uidMapping])) {
+			if(is_array($userData[$uidMapping])) {
+				$uid = $userData[$uidMapping][0];
 			} else {
-				$uid = $auth[$uidMapping];
+				$uid = $userData[$uidMapping];
 			}
 
 			// make sure that a valid UID is given
@@ -133,7 +124,7 @@ class SAMLController extends Controller {
 			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 			if($userExists === true) {
 				if($autoProvisioningAllowed) {
-					$this->userBackend->updateAttributes($uid, $auth);
+					$this->userBackend->updateAttributes($uid, $userData);
 				}
 				return;
 			}
@@ -148,174 +139,63 @@ class SAMLController extends Controller {
 				}
 				throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
 			} elseif(!$userExists && $autoProvisioningAllowed) {
-				$this->userBackend->createUserIfNotExists($uid, $auth);
-				$this->userBackend->updateAttributes($uid, $auth);
+				$this->userBackend->createUserIfNotExists($uid, $userData);
+				$this->userBackend->updateAttributes($uid, $userData);
 				return;
 			}
 		}
 
-		throw new NoUserFoundException('IDP parameter for the UID (' . $uidMapping . ') not found. Possible parameters are: ' . json_encode(array_keys($auth)));
+		throw new NoUserFoundException('IDP parameter for the UID (' . $uidMapping . ') not found. Possible parameters are: ' . json_encode(array_keys($userData)));
 	}
-
+    
 	/**
 	 * @PublicPage
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
 	 *
-	 * @param int $idp id of the idp
 	 * @return Http\RedirectResponse
 	 * @throws \Exception
 	 */
-	public function login($idp) {
-		$type = $this->config->getAppValue($this->appName, 'type');
-		switch($type) {
-			case 'saml':
-				$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
-				$ssoUrl = $auth->login(null, [], false, false, true);
-				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
-				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
-				$this->session->set('user_saml.Idp', $idp);
-				break;
-			case 'environment-variable':
-				$ssoUrl = $this->request->getParam('originalUrl', '');
-				if (empty($ssoUrl)) {
-					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
-				}
-				$this->session->set('user_saml.samlUserData', $_SERVER);
-				try {
-					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
-					$user = $this->userManager->get($this->userBackend->getCurrentUserId());
-					if(!($user instanceof IUser)) {
-						throw new NoUserFoundException('User' . $this->userBackend->getCurrentUserId() . ' not valid or not found');
-					}
-					$user->updateLastLoginTimestamp();
-				} catch (NoUserFoundException $e) {
-					if ($e->getMessage()) {
-						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
-					}
-					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
-				}
-				break;
-			default:
-				throw new \Exception(
-					sprintf(
-						'Type of "%s" is not supported for user_saml',
-						$type
-					)
-				);
+	public function login() {
+		$oidc = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'), $this->client_id, $this->client_secret);
+		$oidc_config = $this->config->getSystemValue('user_oidc');
+		$oidc->addScope($oidc_config['scopes']);
+		$redirectUrl = $this->request->getParam('originalUrl', '');
+        if (empty($redirectUrl)) {
+            $redirectUrl = $this->urlGenerator->getAbsoluteURL('/');
 		}
+		$this->log->debug('Using redirectUrl ' . $redirectUrl, ['app' => $this->appName]);
+		$oidc->setRedirectUrl($redirectUrl);
+		$this->session->set('user_oidc.originalUrl', $redirectUrl);
+		$oidc->authenticate();
+		$this->session->set('user_oidc.accessToken', $oidc->getAccessToken();
+		$this->session->set('user_oidc.subClaim', $oidc->getVerifiedClaims('sub');
+		$this->session->set('user_oidc.userInfo', $oidc->requestUserInfo());
+        try {
+            $this->autoprovisionIfPossible($this->session->get('user_oidc.userInfo'));
+            $user = $this->userManager->get($this->userBackend->getCurrentUserId());
+            if(!($user instanceof IUser)) {
+                throw new NoUserFoundException('User' . $this->userBackend->getCurrentUserId() . ' not valid or not found');
+            }
+            $user->updateLastLoginTimestamp();
+        } catch (NoUserFoundException $e) {
+            if ($e->getMessage()) {
+                $this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_oidc']);
+            }
+            $redirectUrl = $this->urlGenerator->linkToRouteAbsolute('user_oidc.OIDC.notProvisioned');
+        }
 
-		return new Http\RedirectResponse($ssoUrl);
+		return new Http\RedirectResponse($redirectUrl);
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @param int $idp
-	 * @return Http\DataDownloadResponse
-	 * @throws Error
-	 */
-	public function getMetadata($idp) {
-		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
-		$metadata = $settings->getSPMetadata();
-		$errors = $settings->validateMetadata($metadata);
-		if (empty($errors)) {
-			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
-		} else {
-			throw new Error(
-				'Invalid SP metadata: '.implode(', ', $errors),
-				Error::METADATA_SP_INVALID
-			);
-		}
-	}
-
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @UseSession
-	 * @OnlyUnauthenticatedUsers
-	 * @NoSameSiteCookieRequired
-	 *
-	 * @return Http\RedirectResponse|void
-	 * @throws Error
-	 * @throws ValidationError
-	 */
-	public function assertionConsumerService() {
-		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
-		$idp = $this->session->get('user_saml.Idp');
-		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
-			return;
-		}
-
-		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
-		$auth->processResponse($AuthNRequestID);
-
-		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
-
-		$errors = $auth->getErrors();
-
-		if (!empty($errors)) {
-			foreach($errors as $error) {
-				$this->logger->error($error, ['app' => $this->appName]);
-			}
-			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
-		}
-
-		if (!$auth->isAuthenticated()) {
-			$this->logger->info('Auth failed', ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
-		}
-
-		// Check whether the user actually exists, if not redirect to an error page
-		// explaining the issue.
-		try {
-			$this->autoprovisionIfPossible($auth->getAttributes());
-		} catch (NoUserFoundException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
-		}
-
-		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
-		$this->session->set('user_saml.samlNameId', $auth->getNameId());
-		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
-		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
-		try {
-			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
-			if (!($user instanceof IUser)) {
-				throw new \InvalidArgumentException('User is not valid');
-			}
-			$firstLogin = $user->updateLastLoginTimestamp();
-			if($firstLogin) {
-				$this->userBackend->initializeHomeDir($user->getUID());
-			}
-		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
-		}
-
-		$originalUrl = $this->session->get('user_saml.OriginalUrl');
-		if($originalUrl !== null && $originalUrl !== '') {
-			$response = new Http\RedirectResponse($originalUrl);
-		} else {
-			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
-		}
-		$this->session->remove('user_saml.OriginalUrl');
-		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
-		// to be there.
-		if($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
-			$response->addCookie('_shibsession_', 'authenticated');
-		}
-		return $response;
-	}
-
-	/**
+    /**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
 	 * @return Http\RedirectResponse
 	 * @throws Error
 	 */
-	public function singleLogoutService() {
+	public function signOut() {
 
 		$pass = $this->request->passesCSRFCheck();
 		$isGlobalScaleEnabled = $this->config->getSystemValue('gs.enabled', false);
@@ -326,14 +206,11 @@ class SAMLController extends Controller {
 		}
 
 		if($pass) {
-			$idp = $this->session->get('user_saml.Idp');
-			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+            $oidc = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'), $this->client_id, $this->client_secret);
 			$returnTo = null;
-			$parameters = array();
-			$nameId = $this->session->get('user_saml.samlNameId');
-			$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
+			$accessToken = $this->session->get('user_oidc.accessToken');
 			$this->userSession->logout();
-			$targetUrl = $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, true);
+			$targetUrl = $oidc->signOut($accessToken, $returnTo);
 		} else {
 			$targetUrl = $this->urlGenerator->getAbsoluteURL('/');
 		}
@@ -360,123 +237,22 @@ class SAMLController extends Controller {
 	 */
 	public function genericError($message) {
 		if (empty($message)) {
-			$message = $this->l->t('Unknown error, please check the log file for more details.');
+			$message = 'Unknown error, please check the log file for more details.';
 		}
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @OnlyUnauthenticatedUsers
-	 * @param string $redirectUrl
-	 * @return Http\TemplateResponse
-	 */
-	public function selectUserBackEnd($redirectUrl) {
-
-		$attributes = ['loginUrls' => []];
-
-		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
-			$attributes['loginUrls']['directLogin'] = [
-				'url' => $this->getDirectLoginUrl($redirectUrl),
-				'display-name' => $this->l->t('Direct log in')
-			];
-		}
-
-		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
-
-		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4 ? true : false;
-
-
-		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
-	}
-
-	/**
-	 * get the IdPs showed at the login page
-	 *
-	 * @param $redirectUrl
-	 * @return array
-	 */
-	private function getIdps($redirectUrl) {
-		$result = [];
-		$idps = $this->SAMLSettings->getListOfIdps();
-		foreach ($idps as $idpId => $displayName) {
-			$result[] = [
-				'url' => $this->getSSOUrl($redirectUrl, $idpId),
-				'display-name' => $this->getSSODisplayName($displayName),
-			];
-		}
-
-		return $result;
-	}
-
-	/**
-	 * get SSO URL
-	 *
-	 * @param $redirectUrl
-	 * @param idp identifier
-	 * @return string
-	 */
-	private function getSSOUrl($redirectUrl, $idp) {
-
-		$originalUrl = '';
-		if(!empty($redirectUrl)) {
-			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
-		}
-
-
-		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
-		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
-			'user_saml.SAML.login',
-			[
-				'requesttoken' => $csrfToken->getEncryptedValue(),
-				'originalUrl' => $originalUrl,
-				'idp' => $idp
-			]
-		);
-
-		return $ssoUrl;
-
-	}
-
-	/**
-	 * return the display name of the SSO identity provider
-	 *
-	 * @param $displayName
-	 * @return string
-	 */
-	protected function getSSODisplayName($displayName) {
-		if (empty($displayName)) {
-			$displayName = $this->l->t('SSO & SAML log in');
-		}
-
-		return $displayName;
-	}
-
-	/**
-	 * get Nextcloud login URL
-	 *
-	 * @return string
-	 */
-	private function getDirectLoginUrl($redirectUrl) {
-		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
-			'direct' => '1',
-			'redirect_url' => $redirectUrl,
-		]);
-		return $directUrl;
-	}
-
-	private function isValidJwt($jwt) {
+    private function isValidJwt($jwt) {
 		try {
 			$key = $this->config->getSystemValue('gss.jwt.key', '');
-			JWT::decode($jwt, $key, ['HS256']);
+			JWT::decode($jwt, $key, ['RS256']);
 		} catch (\Exception $e) {
 			return false;
 		}
 
 		return true;
-	}
-
+    }
+    
 	/**
 	 * @PublicPage
 	 * @NoCSRFRequired
@@ -484,7 +260,7 @@ class SAMLController extends Controller {
 	 * @return Http\TemplateResponse
 	 */
 	public function base() {
-		$message = $this->l->t('This page should not be visited directly.');
+		$message = 'This page should not be visited directly.';
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 

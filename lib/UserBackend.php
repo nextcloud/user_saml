@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\User_SAML;
+namespace OCA\User_OIDC;
 
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -49,10 +49,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $userManager;
 	/** @var IGroupManager */
 	private $groupManager;
-	/** @var \OCP\UserInterface[] */
-	private static $backends = [];
-	/** @var SAMLSettings */
-	private $settings;
 	/** @var ILogger */
 	private $logger;
 
@@ -63,7 +59,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param IDBConnection $db
 	 * @param IUserManager $userManager
 	 * @param IGroupManager $groupManager
-	 * @param SAMLSettings $settings
 	 * @param ILogger $logger
 	 */
 	public function __construct(IConfig $config,
@@ -72,7 +67,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 								IDBConnection $db,
 								IUserManager $userManager,
 								IGroupManager $groupManager,
-								SAMLSettings $settings,
 								ILogger $logger) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -80,7 +74,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->db = $db;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
-		$this->settings = $settings;
 		$this->logger = $logger;
 	}
 
@@ -90,11 +83,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @return bool
 	 */
-	protected function userExistsInDatabase($uid) {
+	protected function userExists($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
-			->from('user_saml_users')
+			->from('user_oidc')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
 		$result = $qb->execute();
@@ -112,14 +105,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param array $attributes
 	 */
 	public function createUserIfNotExists($uid, array $attributes = array()) {
-		if(!$this->userExistsInDatabase($uid)) {
+		if(!$this->userExists($uid)) {
 			$values = [
 				'uid' => $uid,
 			];
 
 			// Try to get the mapped home directory of the user
 			try {
-				$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
+				$home = $this->getAttributeValue('home_mapping', $attributes);
 			} catch (\InvalidArgumentException $e) {
 				$home = '';
 			}
@@ -140,7 +133,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
-			$qb->insert('user_saml_users');
+			$qb->insert('user_oidc');
 			foreach($values as $column => $value) {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
@@ -196,20 +189,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * returns the user id or false
 	 */
 	public function checkPassword($uid, $password) {
-		/* @var $qb IQueryBuilder */
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('token')
-			->from('user_saml_auth_token')
-			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-			->setMaxResults(1000);
-		$result = $qb->execute();
-		$data = $result->fetchAll();
-		$result->closeCursor();
-
-		foreach($data as $passwords) {
-			if(password_verify($password, $passwords['token'])) {
+		// TODO: Review
+		if(password_verify($password, $this->session->get('user_oidc.accessToken'))) {
 				return $uid;
-			}
 		}
 
 		return false;
@@ -222,10 +204,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function deleteUser($uid) {
-		if($this->userExistsInDatabase($uid)) {
+		if($this->userExists($uid)) {
 			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
-			$qb->delete('user_saml_users')
+			$qb->delete('user_oidc')
 				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 				->execute();
 			return true;
@@ -240,10 +222,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return string
 	 */
 	public function getHome($uid) {
-		if($this->userExistsInDatabase($uid)) {
+		if($this->userExists($uid)) {
 			$qb = $this->db->getQueryBuilder();
 			$qb->select('home')
-				->from('user_saml_users')
+				->from('user_oidc')
 				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 				->setMaxResults(1);
 			$result = $qb->execute();
@@ -267,7 +249,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid', 'displayname')
-			->from('user_saml_users')
+			->from('user_oidc')
 			->where(
 				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
 			)
@@ -287,28 +269,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		return $uids;
 	}
 
-	/**
-	 * check if a user exists
-	 * @param string $uid the username
-	 * @return boolean
-	 * @since 4.5.0
-	 */
-	public function userExists($uid) {
-		if($backend = $this->getActualUserBackend($uid)) {
-			return $backend->userExists($uid);
-		} else {
-			return $this->userExistsInDatabase($uid);
-		}
-	}
-
 	public function setDisplayName($uid, $displayName) {
-		if($backend = $this->getActualUserBackend($uid)) {
-			return $backend->setDisplayName($uid, $displayName);
-		}
-
-		if ($this->userExistsInDatabase($uid)) {
+		if ($this->userExists($uid)) {
 			$qb = $this->db->getQueryBuilder();
-			$qb->update('user_saml_users')
+			$qb->update('user_oidc')
 				->set('displayname', $qb->createNamedParameter($displayName))
 				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 				->execute();
@@ -326,23 +290,19 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getDisplayName($uid) {
-		if($backend = $this->getActualUserBackend($uid)) {
-			return $backend->getDisplayName($uid);
-		} else {
-			if($this->userExistsInDatabase($uid)) {
-				$qb = $this->db->getQueryBuilder();
-				$qb->select('displayname')
-					->from('user_saml_users')
-					->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-					->setMaxResults(1);
-				$result = $qb->execute();
-				$users = $result->fetchAll();
-				if (isset($users[0]['displayname'])) {
-					return $users[0]['displayname'];
-				}
+		if($this->userExists($uid)) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('displayname')
+				->from('user_oidc')
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->setMaxResults(1);
+			$result = $qb->execute();
+			$users = $result->fetchAll();
+			if (isset($users[0]['displayname'])) {
+				return $users[0]['displayname'];
 			}
 		}
-
+		
 		return false;
 	}
 
@@ -358,7 +318,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid', 'displayname')
-			->from('user_saml_users')
+			->from('user_oidc')
 			->where(
 				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
 			)
@@ -407,31 +367,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		return false;
 	}
 
-	/**
+		/**
 	 * {@inheritdoc}
 	 */
 	public function getLogoutUrl() {
-		$prefix = $this->settings->getPrefix();
-		$slo = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', '');
-		if($slo === '') {
-			return '';
-		}
-
+	
 		return $this->urlGenerator->linkToRouteAbsolute(
-			'user_saml.SAML.singleLogoutService',
+			'user_saml.OIDC.signOut',
 			[
 				'requesttoken' => \OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue(),
 			]
 		);
-	}
-
-	/**
-	 * Logout attribute for Nextcloud < 12.0.3
-	 *
-	 * @return string
-	 */
-	public function getLogoutAttribute() {
-		return 'style="display:none;"';
 	}
 
 	/**
@@ -440,7 +386,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return mixed
 	 */
 	public function getUserData() {
-		$userData = $this->session->get('user_saml.samlUserData');
+		$userData = $this->session->get('user_oidc.userInfo');
 		$userData = $this->formatUserData($userData);
 
 		// make sure that a valid UID is given
@@ -465,17 +411,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$result = ['formatted' => [], 'raw' => $attributes];
 
 		try {
-			$result['formatted']['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+			$result['formatted']['email'] = $this->getAttributeValue('email_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['email'] = null;
 		}
 		try {
-			$result['formatted']['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+			$result['formatted']['displayName'] = $this->getAttributeValue('displayName_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['displayName'] = null;
 		}
 		try {
-			$result['formatted']['quota'] = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			$result['formatted']['quota'] = $this->getAttributeValue('quota_mapping', $attributes);
 			if ($result['formatted']['quota'] === '') {
 				$result['formatted']['quota'] = 'default';
 			}
@@ -484,16 +430,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$result['formatted']['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$result['formatted']['groups'] = $this->getAttributeArrayValue('group_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['groups'] = null;
 		}
 
-		$prefix = $this->settings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
+		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
 		$result['formatted']['uid'] = '';
 		if (isset($attributes[$uidMapping])) {
-			$result['formatted']['uid'] = $attributes[$uidMapping][0];
+			$result['formatted']['uid'] = $attributes[$uidMapping];
 		}
 
 		return $result;
@@ -505,16 +450,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getCurrentUserId() {
-		$samlData = $this->session->get('user_saml.samlUserData');
-		$prefix = $this->settings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping', '');
+		$userData = $this->session->get('user_oidc.userInfo');
+		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping', '');
 
-		if($uidMapping !== '' && isset($samlData[$uidMapping])) {
-			if(is_array($samlData[$uidMapping])) {
-				$uid = $samlData[$uidMapping][0];
-			} else {
-				$uid = $samlData[$uidMapping];
-			}
+		if($uidMapping !== '' && isset($userData[$uidMapping])) {
+			$uid = $userData[$uidMapping];
 			if($this->userExists($uid)) {
 				$this->session->set('last-password-confirm', time());
 				return $uid;
@@ -531,7 +471,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 8.0.0
 	 */
 	public function getBackendName() {
-		return 'user_saml';
+		return 'user_oidc';
 	}
 
 	/**
@@ -540,39 +480,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return bool
 	 */
 	public function autoprovisionAllowed() {
-		return $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0') === '0';
-	}
-
-	/**
-	 * Gets the actual user backend of the user
-	 *
-	 * @param string $uid
-	 * @return null|UserInterface
-	 */
-	public function getActualUserBackend($uid) {
-		foreach(self::$backends as $backend) {
-			if($backend->userExists($uid)) {
-				return $backend;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Registers the used backends, used later to get the actual user backend
-	 * of the user.
-	 *
-	 * @param \OCP\UserInterface[] $backends
-	 */
-	public function registerBackends(array $backends) {
-		self::$backends = $backends;
+		return $this->config->getSystemValue('user_oidc', 'require_provisioned_account', '0') === '0';
 	}
 
 	private function getAttributeKeys($name)
 	{
-		$prefix = $this->settings->getPrefix($name);
-		$keys = explode(' ', $this->config->getAppValue('user_saml', $prefix . $name, ''));
+		$keys = explode(' ', $this->config->getSystemValue('user_oidc', $name, ''));
 
 		if (count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
@@ -626,17 +539,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 									 array $attributes) {
 		$user = $this->userManager->get($uid);
 		try {
-			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+			$newEmail = $this->getAttributeValue('email_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newEmail = null;
 		}
 		try {
-			$newDisplayname = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+			$newDisplayname = $this->getAttributeValue('displayName_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newDisplayname = null;
 		}
 		try {
-			$newQuota = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			$newQuota = $this->getAttributeValue('quota_mapping', $attributes);
 			if ($newQuota === '') {
 				$newQuota = 'default';
 			}
@@ -645,7 +558,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$newGroups = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$newGroups = $this->getAttributeArrayValue('group_mapping', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newGroups = null;
 		}

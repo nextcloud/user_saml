@@ -1,7 +1,3 @@
-3rdparty/vendor/onelogin/php-saml/certs/
-3rdparty/vendor/onelogin/php-saml/demo1/
-3rdparty/vendor/onelogin/php-saml/demo2/
-3rdparty/vendor/onelogin/php-saml/demo-old/
-3rdparty/vendor/onelogin/php-saml/docs/
-3rdparty/vendor/onelogin/php-saml/tests/
-3rdparty/vendor/onelogin/php-saml/endpoints/
+3rdparty/vendor/jumbojett/openid-connect-php/client_example.php
+3rdparty/vendor/jumbojett/openid-connect-php/.github
+3rdparty/vendor/jumbojett/openid-connect-php/CHANGELOG.md
