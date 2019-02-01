@@ -1,8 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.1.1
 
+### Changed
 
+- sort IDP's alphabetical
+- improved documentation in UI, add hint for direct login URL
+
+### Fixed
+
+- create skeleton files if SAML is used in combination with LDAP
 
 ## 2.1.0
 
