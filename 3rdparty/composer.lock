@@ -101,16 +101,16 @@
         },
         {
             "name": "robrichards/xmlseclibs",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/robrichards/xmlseclibs.git",
-                "reference": "1f4de0c0d121922aafd8c62c2a9f5e528830cf38"
+                "reference": "406c68ac9124db033d079284b719958b829cb830"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/1f4de0c0d121922aafd8c62c2a9f5e528830cf38",
-                "reference": "1f4de0c0d121922aafd8c62c2a9f5e528830cf38",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/406c68ac9124db033d079284b719958b829cb830",
+                "reference": "406c68ac9124db033d079284b719958b829cb830",
                 "shasum": ""
             },
             "require": {
@@ -135,7 +135,7 @@
                 "xml",
                 "xmldsig"
             ],
-            "time": "2018-09-27T13:24:13+00:00"
+            "time": "2018-11-15T11:59:02+00:00"
         }
     ],
     "packages-dev": [],
