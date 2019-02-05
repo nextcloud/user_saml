@@ -32,6 +32,9 @@ OC.L10N.register(
     "Use environment variable" : "Brug miljøvariabel",
     "Global settings" : "Globale indstillinger",
     "General" : "General",
-    "Security settings" : "Sikkerhedsindstillinger"
+    "Security settings" : "Sikkerhedsindstillinger",
+    "Download metadata XML" : "Download metadata XML",
+    "Metadata invalid" : "Ugyldig metadata",
+    "Metadata valid" : "Gyldig metadata"
 },
 "nplurals=2; plural=(n != 1);");
