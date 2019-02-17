@@ -1,22 +1,19 @@
 ## Config
 
-```config.php
+in `config.php`:
 
-oidc_backend => array(
+```php
+
+user_oidc => array(
     auth_url => 'some.example.tld',
     signout_url => 'some.example.tld/signout',
     scopes => 'openid,webid',
-    uid_mapping => 'uid',
-    displayName_mapping => 'given_name',
-    email_mapping => 'email',
-    quota_mapping => '',
-    group_mapping => '',
-    home_mapping => '',
+    map_uid => 'uid',
+    map_display_name => 'given_name',
+    map_email => 'email',
+    map_quota => '',
+    map_group => '',
+    map_home => '',
 )
 
 ```
-
-## TODO
-
-Vendor jumbojett/openid-connect-php
-Change Tests

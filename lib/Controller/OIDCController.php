@@ -82,12 +82,6 @@ class OIDCController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
-
-		$init = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'));
-		$init->register();
-		$this->client_id = $init->getClientID();
-		$this->client_secret = $init->getClientSecret();
-		$init = null;
 	}
 
 	/**
@@ -96,7 +90,7 @@ class OIDCController extends Controller {
 	 */
 	private function autoprovisionIfPossible(array $userData) {
 
-		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
+		$uidMapping = $this->config->getSystemValue('user_oidc' ,'map_uid', 'uid');
 		if(isset($userData[$uidMapping])) {
 			if(is_array($userData[$uidMapping])) {
 				$uid = $userData[$uidMapping][0];
@@ -157,19 +151,22 @@ class OIDCController extends Controller {
 	 * @throws \Exception
 	 */
 	public function login() {
-		$oidc = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'), $this->client_id, $this->client_secret);
-		$oidc_config = $this->config->getSystemValue('user_oidc');
-		$oidc->addScope($oidc_config['scopes']);
+		$authUrl = $this->config->getSystemValue('user_oidc', 'auth_url', 'localhost');
+		$clientId = $this->config->getSystemValue('user_oidc', 'client_id', '');
+		$clientSecret = $this->config->getSystemValue('user_oidc', 'client_secret', '');
+		$oidc = new OpenIDConnectClient($authUrl, $clientId, $clientSecret);
+		$scopes = $this->config->getSystemValue('user_oidc', 'scopes', array('openid'));
+		$oidc->addScope($scopes);
 		$redirectUrl = $this->request->getParam('originalUrl', '');
         if (empty($redirectUrl)) {
             $redirectUrl = $this->urlGenerator->getAbsoluteURL('/');
 		}
-		$this->log->debug('Using redirectUrl ' . $redirectUrl, ['app' => $this->appName]);
+		$this->logger->debug('Using redirectUrl ' . $redirectUrl, ['app' => $this->appName]);
 		$oidc->setRedirectUrl($redirectUrl);
 		$this->session->set('user_oidc.originalUrl', $redirectUrl);
 		$oidc->authenticate();
-		$this->session->set('user_oidc.accessToken', $oidc->getAccessToken();
-		$this->session->set('user_oidc.subClaim', $oidc->getVerifiedClaims('sub');
+		$this->session->set('user_oidc.accessToken', $oidc->getAccessToken());
+		$this->session->set('user_oidc.subClaim', $oidc->getVerifiedClaims('sub'));
 		$this->session->set('user_oidc.userInfo', $oidc->requestUserInfo());
         try {
             $this->autoprovisionIfPossible($this->session->get('user_oidc.userInfo'));
@@ -206,7 +203,10 @@ class OIDCController extends Controller {
 		}
 
 		if($pass) {
-            $oidc = new OpenIDConnectClient($this->config->getSystemValue('user_oidc', 'auth_url'), $this->client_id, $this->client_secret);
+			$authUrl = $this->config->getSystemValue('user_oidc', 'auth_url', 'localhost');
+			$clientId = $this->config->getSystemValue('user_oidc', 'client_id', '');
+			$clientSecret = $this->config->getSystemValue('user_oidc', 'client_secret', '');
+            $oidc = new OpenIDConnectClient($authUrl, $clientId, $clientSecret);
 			$returnTo = null;
 			$accessToken = $this->session->get('user_oidc.accessToken');
 			$this->userSession->logout();

@@ -31,9 +31,15 @@ if(OC::$CLI) {
 $urlGenerator = \OC::$server->getURLGenerator();
 $request = \OC::$server->getRequest();
 $userSession = \OC::$server->getUserSession();
+$config = \OC::$server->getConfig();
+
+$relay = new \Jumbojett\OpenIDConnectClient($config->getSystemValue('user_oidc', 'auth_url', 'localhost'));
+$relay->register();
+$config->setSystemValue('user_oidc', 'client_id', $relay->getClientID());
+$config->setSystemValue('user_oidc', 'client_secet', $relay->getClientSecret());
 
 $userBackend = new \OCA\User_OIDC\UserBackend(
-	\OC::$server->getConfig(),
+	$config,
 	$urlGenerator,
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),

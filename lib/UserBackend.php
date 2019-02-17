@@ -83,7 +83,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @return bool
 	 */
-	protected function userExists($uid) {
+	public function userExists($uid) {
 		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
@@ -112,7 +112,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 			// Try to get the mapped home directory of the user
 			try {
-				$home = $this->getAttributeValue('home_mapping', $attributes);
+				$home = $this->getAttributeValue('map_home', $attributes);
 			} catch (\InvalidArgumentException $e) {
 				$home = '';
 			}
@@ -373,7 +373,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function getLogoutUrl() {
 	
 		return $this->urlGenerator->linkToRouteAbsolute(
-			'user_saml.OIDC.signOut',
+			'user_oidc.OIDC.signOut',
 			[
 				'requesttoken' => \OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue(),
 			]
@@ -411,17 +411,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$result = ['formatted' => [], 'raw' => $attributes];
 
 		try {
-			$result['formatted']['email'] = $this->getAttributeValue('email_mapping', $attributes);
+			$result['formatted']['email'] = $this->getAttributeValue('map_email', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['email'] = null;
 		}
 		try {
-			$result['formatted']['displayName'] = $this->getAttributeValue('displayName_mapping', $attributes);
+			$result['formatted']['displayName'] = $this->getAttributeValue('map_display_name', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['displayName'] = null;
 		}
 		try {
-			$result['formatted']['quota'] = $this->getAttributeValue('quota_mapping', $attributes);
+			$result['formatted']['quota'] = $this->getAttributeValue('map_quota', $attributes);
 			if ($result['formatted']['quota'] === '') {
 				$result['formatted']['quota'] = 'default';
 			}
@@ -430,12 +430,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$result['formatted']['groups'] = $this->getAttributeArrayValue('group_mapping', $attributes);
+			$result['formatted']['groups'] = $this->getAttributeArrayValue('map_group', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$result['formatted']['groups'] = null;
 		}
 
-		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
+		$uidMapping = $this->config->getSystemValue('user_oidc', 'map_uid', 'uid');
 		$result['formatted']['uid'] = '';
 		if (isset($attributes[$uidMapping])) {
 			$result['formatted']['uid'] = $attributes[$uidMapping];
@@ -451,7 +451,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function getCurrentUserId() {
 		$userData = $this->session->get('user_oidc.userInfo');
-		$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping', '');
+		$uidMapping = $this->config->getSystemValue('user_oidc', 'map_uid', 'uid');
 
 		if($uidMapping !== '' && isset($userData[$uidMapping])) {
 			$uid = $userData[$uidMapping];
@@ -539,17 +539,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 									 array $attributes) {
 		$user = $this->userManager->get($uid);
 		try {
-			$newEmail = $this->getAttributeValue('email_mapping', $attributes);
+			$newEmail = $this->getAttributeValue('map_email', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newEmail = null;
 		}
 		try {
-			$newDisplayname = $this->getAttributeValue('displayName_mapping', $attributes);
+			$newDisplayname = $this->getAttributeValue('map_display_name', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newDisplayname = null;
 		}
 		try {
-			$newQuota = $this->getAttributeValue('quota_mapping', $attributes);
+			$newQuota = $this->getAttributeValue('map_quota', $attributes);
 			if ($newQuota === '') {
 				$newQuota = 'default';
 			}
@@ -558,7 +558,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$newGroups = $this->getAttributeArrayValue('group_mapping', $attributes);
+			$newGroups = $this->getAttributeArrayValue('map_group', $attributes);
 		} catch (\InvalidArgumentException $e) {
 			$newGroups = null;
 		}

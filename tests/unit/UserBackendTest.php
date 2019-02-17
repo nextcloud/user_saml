@@ -141,22 +141,22 @@ class UserBackendTest extends TestCase   {
 		$this->config
 			->expects($this->at(0))
 			->method('getSystemValue')
-			->with('user_oidc', 'email_mapping', '')
+			->with('user_oidc', 'map_email', '')
 			->willReturn('email');
 		$this->config
 			->expects($this->at(1))
 			->method('getSystemValue')
-			->with('user_oidc', 'displayName_mapping', '')
+			->with('user_oidc', 'map_display_name', '')
 			->willReturn('displayname');
 		$this->config
 			->expects($this->at(2))
 			->method('getSystemValue')
-			->with('user_oidc', 'quota_mapping', '')
+			->with('user_oidc', 'map_quota', '')
 			->willReturn('quota');
 		$this->config
 			->expects($this->at(3))
 			->method('getSystemValue')
-			->with('user_oidc', 'group_mapping', '')
+			->with('user_oidc', 'map_group', '')
 			->willReturn('groups');
 
 		$this->userManager
@@ -234,17 +234,17 @@ class UserBackendTest extends TestCase   {
 		$this->config
 			->expects($this->at(0))
 			->method('getSystemValue')
-			->with('user_oidc', 'oidc-attribute-mapping-email_mapping', '')
+			->with('user_oidc', 'map_email', '')
 			->willReturn('email');
 		$this->config
 			->expects($this->at(1))
 			->method('getSystemValue')
-			->with('user_oidc', 'oidc-attribute-mapping-displayName_mapping', '')
+			->with('user_oidc', 'map_display_name', '')
 			->willReturn('displayname');
 		$this->config
 			->expects($this->at(2))
 			->method('getSystemValue')
-			->with('user_oidc', 'oidc-attribute-mapping-quota_mapping', '')
+			->with('user_oidc', 'map_quota', '')
 			->willReturn('quota');
 
 		$this->userManager

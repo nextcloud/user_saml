@@ -22,11 +22,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\User_SAML\Tests\AppInfo;
+namespace OCA\User_OIDC\Tests\AppInfo;
 
-use OCA\User_SAML\AppInfo\Application;
-use OCA\User_SAML\Controller\OIDCController;
-use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use OCA\User_OIDC\AppInfo\Application;
+use OCA\User_OIDC\Controller\OIDCController;
+use OCA\User_OIDC\Middleware\OnlyLoggedInMiddleware;
 
 class ApplicationTest extends \Test\TestCase  {
 	/** @var Application */

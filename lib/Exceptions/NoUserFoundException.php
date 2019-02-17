@@ -19,12 +19,12 @@
  *
  */
 
-namespace OCA\User_SAML\Exceptions;
+namespace OCA\User_OIDC\Exceptions;
 
 /**
  * Class NoUserFoundException is thrown when no user has been found
  *
- * @package OCA\User_SAML\Exceptions
+ * @package OCA\User_OIDC\Exceptions
  */
 class NoUserFoundException extends \Exception {
 }

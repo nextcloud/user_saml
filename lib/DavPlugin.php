@@ -54,7 +54,7 @@ class DavPlugin extends ServerPlugin {
 
 	public function beforeMethod(RequestInterface $request, ResponseInterface $response) {
 		if (!$this->session->exists('user_oidc.userInfo')) {
-			$uidMapping = $this->config->getSystemValue('user_oidc', 'uid_mapping');
+			$uidMapping = $this->config->getSystemValue('user_oidc', 'map_uid', 'uid');
 			if (isset($this->userData[$uidMapping])) {
 				$this->session->set(Auth::DAV_AUTHENTICATED, $this->userData[$uidMapping]);
 				$this->session->set('user_oidc.userInfo', $this->userData);
