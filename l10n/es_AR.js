@@ -24,6 +24,8 @@ OC.L10N.register(
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Favor de seleccionar si usted desdea autenticarse usando el proveedor integrado SAML de Nextcloud o si desdea autenticarse contra una variable de ambiente.  ",
     "Use built-in SAML authentication" : "Usar autenticación SAML integrada",
     "Use environment variable" : "Usar la variable de ambiente",
+    "Remove identity provider" : "Eliminar proveedor de identidad",
+    "Add identity provider" : "Añadir proveedor de identidad",
     "General" : "General",
     "Service Provider Data" : "Datos del Proveedor de Servicio",
     "If your Service Provider should use certificates you can optionally specify them here." : "Si su Proveedor de Servicio debe usar certificados, usted puede especificarlos opcionalmente desde aquí.",
