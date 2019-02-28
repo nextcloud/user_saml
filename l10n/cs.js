@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error" : "Chyba",
     "Account not provisioned." : "Účet není zprovozněn.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet ještě nebyl zprovozněn, přístup ke službě tedy ještě není možný.",
-    "Choose a authentication provider" : "Zvolte poskytovatele ověřování",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Nezapomeňte nastavit správního uživatele který může přistupovat k instanci přes SSO. Přihlašování vaším běžným %s účtem už nebude možné, pokud jste nezapnuli „%s“"
+    "Choose a authentication provider" : "Zvolte poskytovatele ověřování"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -59,7 +59,6 @@ OC.L10N.register(
     "Metadata invalid" : "Metadata invalid",
     "Metadata valid" : "Metadata valid",
     "Account not provisioned." : "Account not provisioned.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible.",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\""
+    "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible."
 },
 "nplurals=2; plural=(n != 1);");

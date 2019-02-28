@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error" : "Erreur",
     "Account not provisioned." : "Compte non approvisionné.",
     "Your account is not provisioned, access to this service is thus not possible." : "Votre compte n'est pas approvisionné, l'accès à ce service n'est donc pas possible.",
-    "Choose a authentication provider" : "Choisir un fournisseur d'authentification",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Assurez-vous de configurer un utilisateur administratif qui peut accéder à l'instance par SSO. La connexion avec votre compte %s habituel ne sera plus possible, à moins que vous activiez \"%s\""
+    "Choose a authentication provider" : "Choisir un fournisseur d'authentification"
 },
 "nplurals=2; plural=(n > 1);");

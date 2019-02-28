@@ -69,7 +69,6 @@
     "Error" : "Грешка",
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
-    "Choose a authentication provider" : "Одаберите провајдера провере идентитета",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Постарајте се да подесите административног корисника који може да приступи инстанци преко SSO-а. Пријава преко обичног %s налога неће виши бити могућа, осим ако не укључите \"%s\"."
+    "Choose a authentication provider" : "Одаберите провајдера провере идентитета"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

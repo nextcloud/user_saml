@@ -69,7 +69,6 @@
     "Error" : "Ошибка",
     "Account not provisioned." : "Учётная запись не обслуживается.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваша учётная запись не обслуживается. Доступ к этой услуге, таким образом, не представляется возможным.",
-    "Choose a authentication provider" : "Выберите службу аутентификации",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Убедитесь, что настроен пользователь с правами администратора, который может получить доступ к экземпляру через SSO. Вход в систему с вашей обычной учетной записью %s больше не будет возможен, если вы не включили \"%s\""
+    "Choose a authentication provider" : "Выберите службу аутентификации"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

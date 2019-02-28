@@ -69,7 +69,6 @@
     "Error" : "Errore",
     "Account not provisioned." : "Account non generato.",
     "Your account is not provisioned, access to this service is thus not possible." : "Il tuo account non è stato generato, l'accesso a questo servizio è perciò impossibile",
-    "Choose a authentication provider" : "Scegli un fornitore di autenticazione",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Assicurati di configurare un utente amministrativo che possa accedere all'istanza tramite SSO. L'accesso con il tuo account normale %s non sarà più possibile a meno che tu abbia abilitato \"%s\""
+    "Choose a authentication provider" : "Scegli un fornitore di autenticazione"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

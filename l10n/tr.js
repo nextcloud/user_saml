@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error" : "Hata",
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
-    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Kopyaya SSO üzerinden erişebilecek bir yönetici kullanıcı yapılandırdığınızdan emin olun. Bundan sonra \"%s\" seçeneğini etkinleştirmediğiniz sürece normal %s hesabınızı kullanarak oturum açamayacaksınız"
+    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin"
 },
 "nplurals=2; plural=(n > 1);");

@@ -66,7 +66,6 @@ OC.L10N.register(
     "Metadata valid" : "Les metadades vàlides",
     "Error" : "Error",
     "Account not provisioned." : "Compte no subministrat.",
-    "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no és possible accedir ",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Assegureu-vos de configurar un usuari d'administració que pugui accedir a la instància mitjançant l'SSO. Entrar amb el teu compte regular %s ja o serà possible, llevat que hagis permès \"%s\""
+    "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no és possible accedir "
 },
 "nplurals=2; plural=(n != 1);");

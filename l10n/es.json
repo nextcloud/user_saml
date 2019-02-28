@@ -69,7 +69,6 @@
     "Error" : "Error",
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible.",
-    "Choose a authentication provider" : "Escoge un proveedor de autenticación",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Asegúrese de configurar un usuario administrativo que pueda acceder a la instancia a través de SSO. El inicio de sesión normal con su cuenta %s ya no será posible , a menos que haya habilitado \"%s\""
+    "Choose a authentication provider" : "Escoge un proveedor de autenticación"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

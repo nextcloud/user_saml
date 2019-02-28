@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error" : "Erro",
     "Account not provisioned." : "Conta não provisionada",
     "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. O acesso a esse serviço não é possível",
-    "Choose a authentication provider" : "Escolha um provedor de autenticação",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Certifique-se de configurar um usuário administrativo que possa acessar a instância via SSO. Fazer o login com sua %s conta normal não será mais possível, a menos que você tenha ativado \"%s\""
+    "Choose a authentication provider" : "Escolha um provedor de autenticação"
 },
 "nplurals=2; plural=(n > 1);");

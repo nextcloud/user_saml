@@ -57,7 +57,6 @@ OC.L10N.register(
     "Metadata invalid" : "Metadatos inválidos",
     "Metadata valid" : "Metadatos válidos",
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
-    "Your account is not provisioned, access to this service is thus not possible." : "Tu cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. ",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Asegurate de configurar un usuario administrador que pueda acceder la instancia via SSO. Iniciar sesión con tu cuenta regular %s ya no será posible, a menos que la habilites \"%s\""
+    "Your account is not provisioned, access to this service is thus not possible." : "Tu cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "
 },
 "nplurals=2; plural=(n != 1);");

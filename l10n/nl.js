@@ -71,7 +71,6 @@ OC.L10N.register(
     "Error" : "Fout",
     "Account not provisioned." : "Account niet verstrekt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Je account is niet verstrekt, toegang tot deze dienst is dus niet mogelijk.",
-    "Choose a authentication provider" : "Kies een authenticatieprovider",
-    "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\"" : "Zorg ervoor dat er een gebruiker is met administratieve toegang om de instantie te benaderen met SSO. Inloggen met een reguliere %s account is niet langer mogelijk, tenzij %s is ingeschakeld."
+    "Choose a authentication provider" : "Kies een authenticatieprovider"
 },
 "nplurals=2; plural=(n != 1);");
