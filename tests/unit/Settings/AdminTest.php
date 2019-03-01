@@ -92,6 +92,14 @@ class AdminTest extends \Test\TestCase  {
 				'type' => 'line',
 				'required' => true,
 			],
+			'uid_rewrite_pattern' => [
+				'text' => 'UID rewrite pattern RegEx (PHP preg_replace pattern)',
+				'type' => 'line',
+			],
+			'uid_rewrite_replacement' => [
+				'text' => 'UID rewrite replacement (PHP preg_replace pattern)',
+				'type' => 'line',
+			],
 			'require_provisioned_account' => [
 				'text' => 'Only allow authentication if an account exists on some other backend. (e.g. LDAP)',
 				'type' => 'checkbox',
