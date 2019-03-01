@@ -484,7 +484,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
 		$result['formatted']['uid'] = '';
 		if (isset($attributes[$uidMapping])) {
-			$result['formatted']['uid'] = $attributes[$uidMapping][0];
+			$uid = $attributes[$uidMapping][0];
+			$uidRewritePattern = $this->config->getAppValue('user_saml', $prefix . 'general-uid_rewrite_pattern');
+			$uidRewriteReplacement = $this->config->getAppValue('user_saml', $prefix . 'general-uid_rewrite_replacement');
+			if (!empty($uidRewritePattern) && !empty($uidRewriteReplacement)) {
+				$uid = preg_replace($uidRewritePattern, $uidRewriteReplacement, $uid);
+			}
+
+			$result['formatted']['uid'] = $uid;
 		}
 
 		return $result;
@@ -505,6 +512,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$uid = $samlData[$uidMapping][0];
 			} else {
 				$uid = $samlData[$uidMapping];
+			}
+			$uidRewritePattern = $this->config->getAppValue('user_saml', $prefix . 'general-uid_rewrite_pattern');
+			$uidRewriteReplacement = $this->config->getAppValue('user_saml', $prefix . 'general-uid_rewrite_replacement');
+			if (!empty($uidRewritePattern) && !empty($uidRewriteReplacement)) {
+				$uid = preg_replace($uidRewritePattern, $uidRewriteReplacement, $uid);
 			}
 			if($this->userExists($uid)) {
 				$this->session->set('last-password-confirm', strtotime('+4 year', time()));

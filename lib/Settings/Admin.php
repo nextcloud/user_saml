@@ -94,6 +94,14 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'uid_rewrite_pattern' => [
+				'text' => $this->l10n->t('UID rewrite pattern RegEx (PHP preg_replace pattern)'),
+				'type' => 'line',
+			],
+			'uid_rewrite_replacement' => [
+				'text' => $this->l10n->t('UID rewrite replacement (PHP preg_replace pattern)'),
+				'type' => 'line',
+			],
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
 				'type' => 'checkbox',
