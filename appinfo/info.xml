@@ -23,6 +23,9 @@ While theoretically any other authentication provider implementing either one of
 	<types>
 		<authentication/>
 	</types>
+	<documentation>
+		<admin>https://portal.nextcloud.com/article/configuring-single-sign-on-10.html</admin>
+	</documentation>
 	<category>integration</category>
 	<website>https://github.com/nextcloud/user_saml</website>
 	<bugs>https://github.com/nextcloud/user_saml/issues</bugs>
