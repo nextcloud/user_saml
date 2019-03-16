@@ -26,6 +26,7 @@
     "Attribute to map the email address to." : "Attribútum melyre az e-mail leképeződik.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML használata %s asztali kliens hitelesítés (felhasználók ismételt bejelentkezését igényli)",
     "SSO & SAML authentication" : "SSO & SAML hitelesítés",
+    "Authenticate using single sign-on" : "Hitelesítés egyszeri belépéssel",
     "Open documentation" : "Dokumentáció megnyitása",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Kélek válassz, hogy a Nextcloud-ba épített SAML szolgáltató vagy egy környezeti változó ellenében szeretnél bejelentkeztetni.",
     "Use built-in SAML authentication" : "Használd a beépített SAML hitelesítés",
