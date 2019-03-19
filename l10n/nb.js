@@ -52,6 +52,7 @@ OC.L10N.register(
     "Signatures and encryption offered" : "Signaturer og kryptering er tilbudt",
     "Signatures and encryption required" : "Signaturer og kryptering er påkrevd",
     "Download metadata XML" : "Last ned XML med metadata",
+    "Reset settings" : "Tilbakestill innstillinger",
     "Metadata invalid" : "Ugyldige metadata",
     "Metadata valid" : "Gyldige metadata",
     "Account not provisioned." : "Kontoen er ikke klargjort",
