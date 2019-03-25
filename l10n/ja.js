@@ -23,7 +23,7 @@ OC.L10N.register(
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "ほかのバックエンドにアカウントが存在する場合のみ、認証を許可します。 （例えば、LDAP）",
     "Attribute to map the displayname to." : "表示名をにマップする属性。",
     "Attribute to map the email address to." : "電子メールアドレスをマップする属性。",
-    "Attribute to map the quota to." : "クォータをマップする属性。",
+    "Attribute to map the quota to." : "クオータをマップする属性。",
     "Attribute to map the users groups to." : "ユーザーグループをマップする属性。",
     "Attribute to map the users home to." : "ユーザーをホームにマップするための属性。",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s デスクトップクライアントにSAML認証を使用する（ユーザーの再認証が必要）",
