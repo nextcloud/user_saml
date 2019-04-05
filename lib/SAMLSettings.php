@@ -11,9 +11,11 @@ use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCP\DB\Exception;
 use OCP\IConfig;
+use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OneLogin\Saml2\Constants;
+use OneLogin\Saml2\Utils;
 
 class SAMLSettings {
 	private const LOADED_NONE = 0;
@@ -77,7 +79,11 @@ class SAMLSettings {
 		private IConfig $config,
 		private ISession $session,
 		private ConfigurationsMapper $mapper,
+		private IRequest $request,
 	) {
+		Utils::setSelfProtocol($this->request->getServerProtocol());
+		Utils::setSelfHost($this->request->getServerHost());
+		Utils::setProxyVars(true);
 	}
 
 	/**
