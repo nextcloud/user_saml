@@ -70,22 +70,20 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
   - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
+    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-1
     environment:
       CORE_BRANCH: master
     commands:
       - /start.sh &
       - sleep 3
-      - scl enable rh-php70 bash
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
-      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
-      - php /var/www/html/occ app:enable user_saml
+      - scl enable rh-php72 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+      - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
 
 trigger:
   branch:
@@ -121,16 +119,14 @@ steps:
     commands:
       - /start.sh &
       - sleep 3
-      - scl enable rh-php70 bash
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
-      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
-      - php /var/www/html/occ app:enable user_saml
+      - scl enable rh-php70 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+      - scl enable rh-php70 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
 
 trigger:
   branch:
@@ -166,16 +162,14 @@ steps:
     commands:
       - /start.sh &
       - sleep 3
-      - scl enable rh-php70 bash
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
-      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
-      - php /var/www/html/occ app:enable user_saml
+      - scl enable rh-php70 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+      - scl enable rh-php70 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
 
 trigger:
   branch:
