@@ -1,138 +1,78 @@
+kind: pipeline
+name: compatibility
+
 clone:
-  git:
-    image: plugins/git
-    depth: 1
+  depth: 1
 
-pipeline:
-  check-app-compatbility:
+steps:
+  - name: app-code-check
     image: nextcloudci/php7.1:php7.1-16
     environment:
-      - APP_NAME=user_saml
-      - CORE_BRANCH=master
-      - DB=sqlite
+      APP_NAME: user_saml
+      CORE_BRANCH: master
+      DB: sqlite
     commands:
-      # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server
-
-      # Code checker
-      - ./occ app:check-code $APP_NAME -c strong-comparison
-      - ./occ app:check-code $APP_NAME -c deprecation
+      - ./occ app:check-code $APP_NAME -c strong-comparison -c deprecation
       - cd apps/$APP_NAME/
-    when:
-      matrix:
-        TESTS: check-app-compatbility
-  signed-off-check:
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+
+---
+kind: pipeline
+name: tests-master
+
+clone:
+  depth: 1
+
+steps:
+  - name: php7.1
     image: nextcloudci/php7.1:php7.1-16
     environment:
-      - APP_NAME=user_saml
-      - CORE_BRANCH=master
-      - DB=sqlite
+      APP_NAME: user_saml
+      CORE_BRANCH: master
+      DB: sqlite
     commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server
-      - php ./build/signed-off-checker.php
-    secrets: [ github_token ]
-    when:
-      matrix:
-        TESTS: signed-off-check
-  php7.0-stable14:
-      image: nextcloudci/php7.0:php7.0-19
-      environment:
-        - APP_NAME=user_saml
-        - CORE_BRANCH=stable14
-        - DB=sqlite
-      commands:
-        # Pre-setup steps
-        - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-        - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-        - cd ../server/apps/$APP_NAME
-
-        # Run phpunit tests
-        - cd tests/unit/
-        - phpunit --configuration phpunit.xml
-      when:
-        matrix:
-          TESTS: php7.0-stable14
-  php7.0-stable15:
-      image: nextcloudci/php7.0:php7.0-19
-      environment:
-        - APP_NAME=user_saml
-        - CORE_BRANCH=stable15
-        - DB=sqlite
-      commands:
-        # Pre-setup steps
-        - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-        - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-        - cd ../server/apps/$APP_NAME
-
-        # Run phpunit tests
-        - cd tests/unit/
-        - phpunit --configuration phpunit.xml
-      when:
-        matrix:
-          TESTS: php7.0-stable15
-  php7.1:
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      - APP_NAME=user_saml
-      - CORE_BRANCH=master
-      - DB=sqlite
-    commands:
-      # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server/apps/$APP_NAME
-
-      # Run phpunit tests
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
-    when:
-      matrix:
-        TESTS: php7.1
-  php7.2:
+  - name: php7.2
     image: nextcloudci/php7.2:php7.2-12
     environment:
-      - APP_NAME=user_saml
-      - CORE_BRANCH=master
-      - DB=sqlite
+      APP_NAME: user_saml
+      CORE_BRANCH: master
+      DB: sqlite
     commands:
-      # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server/apps/$APP_NAME
-
-      # Run phpunit tests
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
-    when:
-      matrix:
-        TESTS: php7.2
-  php7.3:
+  - name: php7.3
     image: nextcloudci/php7.3:php7.3-1
     environment:
-      - APP_NAME=user_saml
-      - CORE_BRANCH=master
-      - DB=sqlite
+      APP_NAME: user_saml
+      CORE_BRANCH: master
+      DB: sqlite
     commands:
-      # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server/apps/$APP_NAME
-
-      # Run phpunit tests
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
-    when:
-      matrix:
-        TESTS: php7.3
-  integration-tests-master:
+  - name: integration-tests-master
     image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
     environment:
-      - CORE_BRANCH=master
+      CORE_BRANCH: master
     commands:
       - /start.sh &
       - sleep 3
@@ -146,58 +86,100 @@ pipeline:
       - php /var/www/html/occ app:enable user_saml
       - chown -R apache:apache /var/www/html/
       - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
-    when:
-      matrix:
-        TESTS: integration-tests
-  integration-tests-stable14:
-      image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
-      environment:
-        - CORE_BRANCH=stable14
-      commands:
-        - /start.sh &
-        - sleep 3
-        - scl enable rh-php70 bash
-        - rm -rf /var/www/html
-        - cd /var/www/
-        - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
-        - cd /var/www/html && git submodule update --init
-        - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
-        - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
-        - php /var/www/html/occ app:enable user_saml
-        - chown -R apache:apache /var/www/html/
-        - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
-      when:
-        matrix:
-          TESTS: integration-tests-stable14
-  integration-tests-stable15:
-      image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
-      environment:
-        - CORE_BRANCH=stable15
-      commands:
-        - /start.sh &
-        - sleep 3
-        - scl enable rh-php70 bash
-        - rm -rf /var/www/html
-        - cd /var/www/
-        - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
-        - cd /var/www/html && git submodule update --init
-        - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
-        - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
-        - php /var/www/html/occ app:enable user_saml
-        - chown -R apache:apache /var/www/html/
-        - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
-      when:
-        matrix:
-          TESTS: integration-tests-stable15
 
-matrix:
-  include:
-    - TESTS: php7.1
-    - TESTS: php7.2
-    - TESTS: php7.3
-    - TESTS: php7.0-stable14
-    - TESTS: php7.0-stable15
-    - TESTS: check-app-compatbility
-    - TESTS: integration-tests
-    - TESTS: integration-tests-stable14
-    - TESTS: integration-tests-stable15
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+
+---
+kind: pipeline
+name: tests-15
+
+clone:
+  depth: 1
+
+steps:
+  - name: php7.0-stable15
+    image: nextcloudci/php7.0:php7.0-19
+    environment:
+      APP_NAME: user_saml
+      CORE_BRANCH: stable15
+      DB: sqlite
+    commands:
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/apps/$APP_NAME
+      - cd tests/unit/
+      - phpunit --configuration phpunit.xml
+  - name: integration-tests-stable15
+    image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
+    environment:
+      CORE_BRANCH: stable15
+    commands:
+      - /start.sh &
+      - sleep 3
+      - scl enable rh-php70 bash
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
+      - chown -R apache:apache /var/www/html/
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+
+---
+kind: pipeline
+name: tests-14
+
+clone:
+  depth: 1
+
+steps:
+  - name: php7.0-stable14
+    image: nextcloudci/php7.0:php7.0-19
+    environment:
+      APP_NAME: user_saml
+      CORE_BRANCH: stable14
+      DB: sqlite
+    commands:
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/apps/$APP_NAME
+      - cd tests/unit/
+      - phpunit --configuration phpunit.xml
+  - name: integration-tests-stable14
+    image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
+    environment:
+      CORE_BRANCH: stable14
+    commands:
+      - /start.sh &
+      - sleep 3
+      - scl enable rh-php70 bash
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
+      - chown -R apache:apache /var/www/html/
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
