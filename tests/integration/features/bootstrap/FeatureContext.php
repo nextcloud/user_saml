@@ -110,7 +110,9 @@ class FeatureContext implements Context {
 				'headers' => [
 					'Accept' => 'text/html',
 				],
-				'query' => ['idp' => 1],
+				'query' => [
+					'idp' => 1
+				],
 			]
 		);
 	}
