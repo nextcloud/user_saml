@@ -45,6 +45,8 @@ class FeatureContext implements Context {
 				'track_redirects' => true,
 			],
 		]);
+
+
 	}
 
 	/** @AfterScenario */
@@ -56,7 +58,8 @@ class FeatureContext implements Context {
 		foreach($users as $user) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s user:delete %s',
+					'sudo -u apache %s %s user:delete %s',
+					PHP_BINARY,
 					__DIR__ . '/../../../../../../occ',
 					$user
 				)
@@ -66,7 +69,8 @@ class FeatureContext implements Context {
 		foreach($this->changedSettings as $setting) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s config:app:delete user_saml %s',
+					'sudo -u apache %s %s config:app:delete user_saml %s',
+					PHP_BINARY,
 					__DIR__ . '/../../../../../../occ',
 					$setting
 				)
@@ -86,7 +90,8 @@ class FeatureContext implements Context {
 		$this->changedSettings[] = $settingName;
 		shell_exec(
 			sprintf(
-				'sudo -u apache /opt/rh/rh-php70/root/usr/bin/php %s config:app:set --value="%s" user_saml %s',
+				'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$value,
 				$settingName
@@ -105,7 +110,9 @@ class FeatureContext implements Context {
 				'headers' => [
 					'Accept' => 'text/html',
 				],
-				'query' => ['idp' => 1],
+				'query' => [
+					'idp' => 1
+				],
 			]
 		);
 	}
@@ -235,7 +242,8 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password /opt/rh/rh-php70/root/usr/bin/php %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'sudo -u apache OC_PASS=password%s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
 			)
@@ -251,7 +259,8 @@ class FeatureContext implements Context {
 	public function theLastLoginTimestampOfShouldNotBeEmpty($uid) {
 		$response = shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password /opt/rh/rh-php70/root/usr/bin/php %s user:lastseen %s',
+				'sudo -u apache OC_PASS=password %s %s user:lastseen %s',
+				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
 			)
