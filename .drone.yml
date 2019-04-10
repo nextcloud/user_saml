@@ -80,7 +80,7 @@ steps:
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
-      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - cd /var/www/html/apps/ && git clone -b $DRONE_SOURCE_BRANCH https://github.com/nextcloud/user_saml.git
       - scl enable rh-php72 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
       - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
@@ -123,7 +123,7 @@ steps:
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
-      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - cd /var/www/html/apps/ && git clone -b $DRONE_SOURCE_BRANCH https://github.com/nextcloud/user_saml.git
       - scl enable rh-php70 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
       - scl enable rh-php70 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
@@ -166,7 +166,7 @@ steps:
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
-      - cd /var/www/html/apps/ && git clone -b $DRONE_BRANCH https://github.com/nextcloud/user_saml.git
+      - cd /var/www/html/apps/ && git clone -b $DRONE_SOURCE_BRANCH https://github.com/nextcloud/user_saml.git
       - scl enable rh-php70 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
       - scl enable rh-php70 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
