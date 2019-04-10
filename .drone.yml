@@ -74,6 +74,7 @@ steps:
     environment:
       CORE_BRANCH: master
     commands:
+      - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
       - /start.sh &
       - sleep 3
       - rm -rf /var/www/html
