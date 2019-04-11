@@ -2,6 +2,7 @@
 namespace GuzzleHttp\Psr7;
 
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * PSR-7 response implementation.
@@ -92,6 +93,10 @@ class Response implements ResponseInterface
         $version = '1.1',
         $reason = null
     ) {
+        if (filter_var($status, FILTER_VALIDATE_INT) === false) {
+            throw new \InvalidArgumentException('Status code must be an integer value.');
+        }
+
         $this->statusCode = (int) $status;
 
         if ($body !== '' && $body !== null) {
@@ -100,7 +105,7 @@ class Response implements ResponseInterface
 
         $this->setHeaders($headers);
         if ($reason == '' && isset(self::$phrases[$this->statusCode])) {
-            $this->reasonPhrase = self::$phrases[$status];
+            $this->reasonPhrase = self::$phrases[$this->statusCode];
         } else {
             $this->reasonPhrase = (string) $reason;
         }
