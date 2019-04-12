@@ -217,13 +217,12 @@ class FeatureContext implements Context {
 		$xml = simplexml_load_string($this->response->getBody());
 		/** @var array $responseArray */
 		$responseArray = json_decode(json_encode((array)$xml), true);
-		foreach($responseArray['data'] as $arrayKey => $arrayValue) {
-			if(count($responseArray['data'][$arrayKey]) === 0) {
-				$responseArray['data'][$arrayKey] = '';
-			}
-		}
 
+		if (count((array)$responseArray['data'][$key]) === 0) {
+			$responseArray['data'][$key] = '';
+		}
 		$actualValue = $responseArray['data'][$key];
+
 		if($actualValue !== $value) {
 			throw new UnexpectedValueException(
 				sprintf(
@@ -242,7 +241,7 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password%s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'sudo -u apache OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
