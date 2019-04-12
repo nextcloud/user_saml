@@ -7,6 +7,7 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Óþekkt villa, skoðaðu atvikaskráninguna til að sjá nánari upplýsingar.",
     "Direct log in" : "Bein innskráning",
     "SSO & SAML log in" : "SSO & SAML innskráning",
+    "This page should not be visited directly." : "Þessa síðu ætti ekki að heimsækja beint.",
     "Provider " : "Þjónustuveita ",
     "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
     "Private key of the Service Provider" : "Einkalykill internetþjónustu",
