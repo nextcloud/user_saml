@@ -627,26 +627,34 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$user = $this->userManager->get($uid);
 		try {
 			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
+			$this->logger->debug('Email attribute content: {email}', ['app' => 'user_saml', 'email' => $newEmail]);
 		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch email attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
 			$newEmail = null;
 		}
 		try {
 			$newDisplayname = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
+			$this->logger->debug('Display name attribute content: {displayName}', ['app' => 'user_saml', 'displayName' => $newDisplayname]);
 		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch display name attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
 			$newDisplayname = null;
 		}
 		try {
 			$newQuota = $this->getAttributeValue('saml-attribute-mapping-quota_mapping', $attributes);
+			$this->logger->debug('Quota attribute content: {quota}', ['app' => 'user_saml', 'quota' => $newQuota]);
 			if ($newQuota === '') {
 				$newQuota = 'default';
 			}
 		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch quota attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
 			$newQuota = null;
 		}
 
 		try {
 			$newGroups = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$this->logger->debug('Group attribute content: {groups}', ['app' => 'user_saml', 'groups' => json_encode($newGroups)]);
 		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch group attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
 			$newGroups = null;
 		}
 
