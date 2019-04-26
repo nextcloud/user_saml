@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.2.0
+
+### Changed
+
+- Update dependencies for PHP 7.3 compatibility
+- Ready for Nextcloud 16
+- improve logging
+
+
 ## 2.1.1
 
 ### Changed
