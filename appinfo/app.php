@@ -54,6 +54,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 
+$params = [];
+
 // Setting up the one login config may fail, if so, do not catch the requests later.
 $returnScript = false;
 $type = '';
@@ -107,7 +109,11 @@ if(!$cli &&
 	!$userSession->isLoggedIn() &&
 	\OC::$server->getRequest()->getPathInfo() === '/login' &&
 	$type !== '') {
-	$params = $request->getParams();
+	try {
+		$params = $request->getParams();
+	} catch (\LogicException $e) {
+		// ignore exception when PUT is called since getParams cannot parse parameters in that case
+	}
 	if (isset($params['direct'])) {
 		return;
 	}
@@ -136,7 +142,11 @@ $configuredIdps = $samlSettings->getListOfIdps();
 $showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
 
 if ($redirectSituation === true && $showLoginOptions) {
-	$params = $request->getParams();
+	try {
+		$params = $request->getParams();
+	} catch (\LogicException $e) {
+		// ignore exception when PUT is called since getParams cannot parse parameters in that case
+	}
 	$redirectUrl = '';
 	if(isset($params['redirect_url'])) {
 		$redirectUrl = $params['redirect_url'];
@@ -154,7 +164,11 @@ if ($redirectSituation === true && $showLoginOptions) {
 }
 
 if($redirectSituation === true) {
-	$params = $request->getParams();
+	try {
+		$params = $request->getParams();
+	} catch (\LogicException $e) {
+		// ignore exception when PUT is called since getParams cannot parse parameters in that case
+	}
 	$originalUrl = '';
 	if(isset($params['redirect_url'])) {
 		$originalUrl = $urlGenerator->getAbsoluteURL($params['redirect_url']);
