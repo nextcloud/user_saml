@@ -6,6 +6,7 @@
     "Private key of the Service Provider" : "Paslaugų teikėjo privatusis raktas",
     "Whether the metadata should be signed." : "Ar metaduomenys turėtų būti pasirašyti.",
     "Open documentation" : "Atverti dokumentaciją",
+    "Use environment variable" : "Naudoti aplinkos kintamąjį",
     "Global settings" : "Visuotiniai nustatymai",
     "General" : "Bendra",
     "Service Provider Data" : "Paslaugų teikėjo duomenys",
