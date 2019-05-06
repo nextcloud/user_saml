@@ -264,27 +264,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getUsers($search = '', $limit = null, $offset = null) {
-		/* @var $qb IQueryBuilder */
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('uid', 'displayname')
-			->from('user_saml_users')
-			->where(
-				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
-			)
-			->setMaxResults($limit);
-		if($offset !== null) {
-			$qb->setFirstResult($offset);
-		}
-		$result = $qb->execute();
-		$users = $result->fetchAll();
-		$result->closeCursor();
-
-		$uids = [];
-		foreach($users as $user) {
-			$uids[] = $user['uid'];
-		}
-
-		return $uids;
+		// shamelessly duplicated from \OC\User\Database
+		$users = $this->getDisplayNames($search, $limit, $offset);
+		$userIds = array_map(function ($uid) {
+			return (string)$uid;
+		}, array_keys($users));
+		sort($userIds, SORT_STRING | SORT_FLAG_CASE);
+		return $userIds;
 	}
 
 	/**
@@ -356,29 +342,33 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('uid', 'displayname')
-			->from('user_saml_users')
-			->where(
-				$qb->expr()->iLike('uid', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
+		// shamelessly duplicate from \OC\User\Database
+		$query = $this->db->getQueryBuilder();
+
+		$query->select('uid', 'displayname')
+			->from('user_saml_users', 'u')
+			->leftJoin('u', 'preferences', 'p', $query->expr()->andX(
+				$query->expr()->eq('userid', 'uid'),
+				$query->expr()->eq('appid', $query->expr()->literal('settings')),
+				$query->expr()->eq('configkey', $query->expr()->literal('email')))
 			)
-			->orWhere(
-				$qb->expr()->iLike('displayname', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($search) . '%'))
-			)
-			->setMaxResults($limit);
-		if($offset !== null) {
-			$qb->setFirstResult($offset);
+			// sqlite doesn't like re-using a single named parameter here
+			->where($query->expr()->iLike('uid', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
+			->orWhere($query->expr()->iLike('displayname', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
+			->orWhere($query->expr()->iLike('configvalue', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
+			->orderBy($query->func()->lower('displayname'), 'ASC')
+			->orderBy('uid', 'ASC')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		$result = $query->execute();
+		$displayNames = [];
+		while ($row = $result->fetch()) {
+			$displayNames[(string)$row['uid']] = (string)$row['displayname'];
 		}
-		$result = $qb->execute();
-		$users = $result->fetchAll();
 		$result->closeCursor();
 
-		$uids = [];
-		foreach($users as $user) {
-			$uids[$user['uid']] = $user['displayname'];
-		}
-
-		return $uids;
+		return $displayNames;
 	}
 
 	/**
