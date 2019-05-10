@@ -106,6 +106,14 @@ style('user_saml', 'admin');
 			</p>
 
 			<div class="hidden">
+				<label for="user-saml-nameidformat"><?php p($l->t('Name ID format')) ?></label><br/>
+				<select id="user-saml-nameidformat"
+						name="name-id-format">
+					<?php foreach($_['name-id-formats'] as $key => $value): ?>
+					<option value="<?php p($key) ?>"
+						<?php if ($value['selected'] ?? false) { p("selected"); } ?> ><?php p($value['label']) ?></option>
+					<?php endforeach; ?>
+				</select>
 				<?php foreach($_['sp'] as $key => $text): ?>
 					<p>
 						<textarea name="<?php p($key) ?>" placeholder="<?php p($text) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'sp-'.$key, '')) ?></textarea>
