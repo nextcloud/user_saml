@@ -79,5 +79,10 @@ return [
 				'providerId' => '1'
 			]
 		],
+		[
+			'name' => 'Timezone#setTimezone',
+			'url' => '/config/timezone',
+			'verb' => 'POST',
+		],
 	],
 ];

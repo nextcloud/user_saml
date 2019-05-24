@@ -52,6 +52,7 @@ class Application extends App {
 		});
 
 		$container->registerMiddleWare('OnlyLoggedInMiddleware');
+		$this->timezoneHandling();
 	}
 
 	public function registerDavAuth() {
@@ -61,6 +62,28 @@ class Application extends App {
 		$dispatcher = $container->getServer()->getEventDispatcher();
 		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) use ($container) {
 			$event->getServer()->addPlugin($container->query(DavPlugin::class));
+		});
+	}
+
+	private function timezoneHandling() {
+		$container = $this->getContainer();
+
+		$userSession = $container->getServer()->getUserSession();
+		$session = $container->getServer()->getSession();
+		$config = $container->getServer()->getConfig();
+
+		$dispatcher = $container->getServer()->getEventDispatcher();
+		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function() use ($session, $config, $userSession) {
+			if (!$userSession->isLoggedIn()) {
+				return;
+			}
+
+			$user = $userSession->getUser();
+			$timezoneDB = $config->getUserValue($user->getUID(), 'core', 'timezone', '');
+
+			if ($timezoneDB === '' || !$session->exists('timezone')) {
+				\OCP\Util::addScript('user_saml', 'timezone');
+			}
 		});
 	}
 }
