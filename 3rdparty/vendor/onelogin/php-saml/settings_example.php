@@ -5,7 +5,7 @@ $settings = array(
     // or unencrypted messages if it expects them signed or encrypted
     // Also will reject the messages if not strictly follow the SAML
     // standard: Destination, NameId, Conditions ... are validated too.
-    'strict' => false,
+    'strict' => true,
 
     // Enable debug mode (to print errors)
     'debug' => false,
@@ -34,7 +34,7 @@ $settings = array(
         // attributeConsumingService. nameFormat, attributeValue and
         // friendlyName can be omitted. Otherwise remove this section.
         "attributeConsumingService"=> array(
-                "ServiceName" => "SP test",
+                "serviceName" => "SP test",
                 "serviceDescription" => "Test Service",
                 "requestedAttributes" => array(
                     array(
