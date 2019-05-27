@@ -46,22 +46,22 @@
     },
     {
         "name": "onelogin/php-saml",
-        "version": "v3.0.0",
-        "version_normalized": "3.0.0.0",
+        "version": "3.1.1",
+        "version_normalized": "3.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/onelogin/php-saml.git",
-            "reference": "920c2240e48c9a74aad4129720f48fbf3d5fee47"
+            "reference": "c9026b26395a65184550055d9a01bdf9dbd30861"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/920c2240e48c9a74aad4129720f48fbf3d5fee47",
-            "reference": "920c2240e48c9a74aad4129720f48fbf3d5fee47",
+            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/c9026b26395a65184550055d9a01bdf9dbd30861",
+            "reference": "c9026b26395a65184550055d9a01bdf9dbd30861",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4",
-            "robrichards/xmlseclibs": "^3.0"
+            "robrichards/xmlseclibs": ">=3.0.3"
         },
         "require-dev": {
             "pdepend/pdepend": "^2.5.0",
@@ -76,7 +76,7 @@
             "ext-gettext": "Install gettext and php5-gettext libs to handle translations",
             "ext-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)"
         },
-        "time": "2018-10-02T16:02:37+00:00",
+        "time": "2019-03-11T09:41:32+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
