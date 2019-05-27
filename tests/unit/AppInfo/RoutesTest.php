@@ -85,6 +85,11 @@ class Test extends TestCase  {
 						'providerId' => '1'
 					]
 				],
+				[
+					'name' => 'Timezone#setTimezone',
+					'url' => '/config/timezone',
+					'verb' => 'POST',
+				],
 			],
 		];
 		$this->assertSame($expected, $routes);
