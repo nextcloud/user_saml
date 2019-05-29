@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.3.0
+
+### Added
+- Ability to specify nameformat when configuring IdPs
+- Properly set the timezone
+
+### Changed
+- Also search for diplayname and email in backend
+- Bumped onelogin/php-saml to 3.1.1
+- Updated translations
+
+### Fixed
+- Catch exception so app does not get disabled on random PUT requests
+
 ## 2.2.0
 
 ### Changed
