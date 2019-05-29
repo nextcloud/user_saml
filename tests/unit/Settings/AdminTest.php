@@ -25,6 +25,7 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IL10N;
+use OneLogin\Saml2\Constants;
 
 class AdminTest extends \Test\TestCase  {
 	/** @var \OCA\User_SAML\Settings\Admin */
@@ -136,6 +137,45 @@ class AdminTest extends \Test\TestCase  {
 			],
 		];
 
+		$nameIdFormats = [
+			Constants::NAMEID_EMAIL_ADDRESS => [
+				'label' => 'Email address',
+				'selected' => false,
+			],
+			Constants::NAMEID_ENCRYPTED => [
+				'label' => 'Encrypted',
+				'selected' => false,
+			],
+			Constants::NAMEID_ENTITY => [
+				'label' => 'Entity',
+				'selected' => false,
+			],
+			Constants::NAMEID_KERBEROS => [
+				'label' => 'Kerberos',
+				'selected' => false,
+			],
+			Constants::NAMEID_PERSISTENT => [
+				'label' => 'Persistent',
+				'selected' => false,
+			],
+			Constants::NAMEID_TRANSIENT => [
+				'label' => 'Transient',
+				'selected' => false,
+			],
+			Constants::NAMEID_UNSPECIFIED => [
+				'label' => 'Unspecified',
+				'selected' => true,
+			],
+			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
+				'label' => 'Windows domain qualified name',
+				'selected' => false,
+			],
+			Constants::NAMEID_X509_SUBJECT_NAME => [
+				'label' => 'X509 subject name',
+				'selected' => false,
+			],
+		];
+
 		$params = [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
@@ -147,6 +187,7 @@ class AdminTest extends \Test\TestCase  {
 				['id' => 1, 'name' => 'Provider 1'],
 				['id' => 2, 'name' => 'Provider 2']
 			],
+			'name-id-formats' => $nameIdFormats,
 		];
 
 		return $params;
@@ -168,6 +209,11 @@ class AdminTest extends \Test\TestCase  {
 			->willReturn('Provider 2');
 		$this->config
 			->expects($this->at(3))
+			->method('getAppValue')
+			->with('user_saml', 'sp-name-id-format')
+			->will($this->returnArgument(2));
+		$this->config
+			->expects($this->at(4))
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('');
@@ -198,6 +244,11 @@ class AdminTest extends \Test\TestCase  {
 			->willReturn('Provider 2');
 		$this->config
 			->expects($this->at(3))
+			->method('getAppValue')
+			->with('user_saml', 'sp-name-id-format')
+			->will($this->returnArgument(2));
+		$this->config
+			->expects($this->at(4))
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('saml');

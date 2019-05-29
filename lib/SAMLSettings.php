@@ -26,6 +26,7 @@ use OCP\IConfig;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OneLogin\Saml2\Constants;
 
 class SAMLSettings {
 	/** @var IURLGenerator */
@@ -124,6 +125,7 @@ class SAMLSettings {
 				'assertionConsumerService' => [
 					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.assertionConsumerService'),
 				],
+				'NameIDFormat' => $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED)
 			],
 			'idp' => [
 				'entityId' => $this->config->getAppValue('user_saml', $prefix . 'idp-entityId', ''),

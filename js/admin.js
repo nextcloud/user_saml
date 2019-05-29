@@ -244,6 +244,10 @@ $(function() {
 			OCA.User_SAML.Admin.setSamlConfigValue('sp', key, $(this).val());
 		}
 	});
+	$('#user-saml-sp select').change(function(e) {
+		var key = $(this).attr('name');
+		OCA.User_SAML.Admin.setSamlConfigValue('sp', key, $(this).val());
+	});
 
 	$('#user-saml-idp input[type="text"], #user-saml-idp textarea').change(function(e) {
 		var el = $(this);

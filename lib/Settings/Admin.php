@@ -28,6 +28,7 @@ use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\ISettings;
+use OneLogin\Saml2\Constants;
 
 class Admin implements ISettings {
 	/** @var IL10N */
@@ -128,6 +129,46 @@ class Admin implements ISettings {
 
 		];
 
+		$selectedNameIdFormat = $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED);
+		$nameIdFormats = [
+			Constants::NAMEID_EMAIL_ADDRESS => [
+				'label' => $this->l10n->t('Email address'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_EMAIL_ADDRESS,
+			],
+			Constants::NAMEID_ENCRYPTED => [
+				'label' => $this->l10n->t('Encrypted'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENCRYPTED,
+			],
+			Constants::NAMEID_ENTITY => [
+				'label' => $this->l10n->t('Entity'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENTITY,
+			],
+			Constants::NAMEID_KERBEROS => [
+				'label' => $this->l10n->t('Kerberos'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_KERBEROS,
+			],
+			Constants::NAMEID_PERSISTENT => [
+				'label' => $this->l10n->t('Persistent'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_PERSISTENT,
+			],
+			Constants::NAMEID_TRANSIENT => [
+				'label' => $this->l10n->t('Transient'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_TRANSIENT,
+			],
+			Constants::NAMEID_UNSPECIFIED => [
+				'label' => $this->l10n->t('Unspecified'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_UNSPECIFIED,
+			],
+			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
+				'label' => $this->l10n->t('Windows domain qualified name'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME,
+			],
+			Constants::NAMEID_X509_SUBJECT_NAME => [
+				'label' => $this->l10n->t('X509 subject name'),
+				'selected' => $selectedNameIdFormat === Constants::NAMEID_X509_SUBJECT_NAME,
+			],
+		];
+
 		$type = $this->config->getAppValue('user_saml', 'type');
 		if($type === 'saml') {
 			$generalSettings['use_saml_auth_for_desktop'] = [
@@ -155,6 +196,7 @@ class Admin implements ISettings {
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
 			'attribute-mapping' => $attributeMappingSettings,
+			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
 			'providers' => $providers
 		];
