@@ -125,7 +125,7 @@ class SAMLSettings {
 				'assertionConsumerService' => [
 					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.assertionConsumerService'),
 				],
-				'NameIDFormat' => $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED)
+				'NameIDFormat' => $this->config->getAppValue('user_saml', $prefix . 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED)
 			],
 			'idp' => [
 				'entityId' => $this->config->getAppValue('user_saml', $prefix . 'idp-entityId', ''),
