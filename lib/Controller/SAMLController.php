@@ -309,6 +309,7 @@ class SAMLController extends Controller {
 	}
 
 	/**
+	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
@@ -316,25 +317,43 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function singleLogoutService() {
+		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
+					 $this->config->getSystemValue('gss.mode', '') === 'master');
+		$isFromIDP = !$isFromGS && !empty($_GET['SAMLRequest']);
 
-		$pass = $this->request->passesCSRFCheck();
-		$isGlobalScaleEnabled = $this->config->getSystemValue('gs.enabled', false);
-		$gssMode = $this->config->getSystemValue('gss.mode', '');
-		if (!$pass && $isGlobalScaleEnabled && $gssMode === 'master') {
+		if($isFromIDP) {
+			// requests comes from the IDP so let it manage the logout
+			// (or raise Error if request is invalid)
+			$pass = True ;
+		} elseif($isFromGS) {
+			// Request is from master GlobalScale
+			// Request validity is check via a JSON Web Token
 			$jwt = $this->request->getParam('jwt', '');
 			$pass = $this->isValidJwt($jwt);
+		} else {
+			// standard request : need read CRSF check
+			$pass = $this->request->passesCSRFCheck();
 		}
 
 		if($pass) {
 			$idp = $this->session->get('user_saml.Idp');
 			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
-			$returnTo = null;
-			$parameters = array();
-			$nameId = $this->session->get('user_saml.samlNameId');
-			$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-			$this->userSession->logout();
-			$targetUrl = $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, true);
-		} else {
+			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
+			if($isFromIDP){
+				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
+				$targetUrl = $auth->processSLO($keepLocalSession, null, false, null, $stay);
+			} else {
+				// If request is not from IDP, we must send him the logout request
+				$parameters = array();
+				$nameId = $this->session->get('user_saml.samlNameId');
+				$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
+				$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay);
+			}
+			if(!empty($targetUrl) && !$auth->getLastErrorReason()){
+				$this->userSession->logout();
+			}
+		}
+		if(empty($targetUrl)){
 			$targetUrl = $this->urlGenerator->getAbsoluteURL('/');
 		}
 
