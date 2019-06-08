@@ -49,6 +49,12 @@ return [
 			'verb' => 'GET',
 		],
 		[
+			'name' => 'SAML#singleLogoutService',
+			'url' => '/saml/sls',
+			'verb' => 'POST',
+			'postfix' => 'slspost',
+		],
+		[
 			'name' => 'SAML#notProvisioned',
 			'url' => '/saml/notProvisioned',
 			'verb' => 'GET',
