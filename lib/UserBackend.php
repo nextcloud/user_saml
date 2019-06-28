@@ -506,7 +506,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$uid = $samlData[$uidMapping];
 			}
 			if($this->userExists($uid)) {
-				$this->session->set('last-password-confirm', time());
+				$this->session->set('last-password-confirm', strtotime('+4 year', time()));
 				return $uid;
 			}
 		}
