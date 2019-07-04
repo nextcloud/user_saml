@@ -27,13 +27,17 @@ $cli = false;
 if(OC::$CLI) {
 	$cli = true;
 }
-
-$urlGenerator = \OC::$server->getURLGenerator();
-$l = \OC::$server->getL10N('user_saml');
-$config = \OC::$server->getConfig();
-$request = \OC::$server->getRequest();
-$userSession = \OC::$server->getUserSession();
-$session = \OC::$server->getSession();
+try {
+	$urlGenerator = \OC::$server->getURLGenerator();
+	$l = \OC::$server->getL10N('user_saml');
+	$config = \OC::$server->getConfig();
+	$request = \OC::$server->getRequest();
+	$userSession = \OC::$server->getUserSession();
+	$session = \OC::$server->getSession();
+} catch (Throwable $e) {
+	\OC::$server->getLogger()->logException($e);
+	return;
+}
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config,
