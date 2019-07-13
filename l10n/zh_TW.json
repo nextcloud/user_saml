@@ -1,0 +1,20 @@
+{ "translations": {
+    "This user account is disabled, please contact your administrator." : "您的使用者帳號已被停用，請聯繫系統管理員。",
+    "Saved" : "已儲存",
+    "Provider" : "提供者",
+    "Unknown error, please check the log file for more details." : "未知的錯誤，請檢查伺服器記錄檔案以獲取更多資訊。",
+    "Direct log in" : "直接登入",
+    "SSO & SAML log in" : "SSO 單一登入",
+    "Provider " : "提供者",
+    "X.509 certificate of the Service Provider" : "服務提供者 (SP) 的 X.509 憑證",
+    "Private key of the Service Provider" : "服務提供者 (SP) 的私鑰",
+    "General" : "一般",
+    "Service Provider Data" : "服務提供者 (Service Provider) 資料",
+    "If your Service Provider should use certificates you can optionally specify them here." : "如果您的服務提供者需要憑證，請在這邊指定",
+    "Identity Provider Data" : "身份提供者 (IdP) 資料",
+    "Show security settings…" : "顯示安全性設定",
+    "Download metadata XML" : "下載元數據XML",
+    "Metadata valid" : "元數據有效",
+    "Account not provisioned." : "帳號尚未配置"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
