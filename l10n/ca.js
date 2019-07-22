@@ -81,6 +81,6 @@ OC.L10N.register(
     "Error" : "Error",
     "Account not provisioned." : "Compte no subministrat.",
     "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no és possible accedir ",
-    "Choose a authentication provider" : "Escollir un proveïdor d'autenticació"
+    "Choose a authentication provider" : "Tria un proveïdor d'autenticació"
 },
 "nplurals=2; plural=(n != 1);");
