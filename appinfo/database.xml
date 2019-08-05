@@ -78,4 +78,34 @@
 			</field>
 		</declaration>
 	</table>
+
+	<table>
+		<name>*dbprefix*user_saml_group_members</name>
+		<declaration>
+			<field>
+				<name>uid</name>
+				<type>text</type>
+				<default></default>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+
+			<field>
+				<name>group</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>128</length>
+				<default></default>
+			</field>
+
+			<index>
+				<name>idx_group_members</name>
+				<unique>true</unique>
+				<field>
+					<name>group</name>
+					<name>uid</name>
+				</field>
+			</index>
+		</declaration>
+	</table>
 </database>
