@@ -38,6 +38,22 @@ try {
 	\OC::$server->getLogger()->logException($e);
 	return;
 }
+
+\OC::$server->registerService('SAMLGroupDuplicateChecker', function() use($config) {
+    return new OCA\User_SAML\GroupDuplicateChecker(
+        $config,
+        \OC::$server->getGroupManager(),
+        \OC::$server->getLogger()
+    );
+});
+
+\OC::$server->registerService('SAMLGroupManager', function() {
+    return new OCA\User_SAML\GroupManager(
+        \OC::$server->getDatabaseConnection(),
+        \OC::$server->query('SAMLGroupDuplicateChecker')
+    );
+});
+
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
 	$config,
@@ -57,13 +73,16 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getSession(),
 	\OC::$server->getDatabaseConnection(),
 	\OC::$server->getUserManager(),
-	\OC::$server->getGroupManager(),
+	\OC::$server->query('SAMLGroupManager'),
 	$samlSettings,
 	\OC::$server->getLogger(),
 	$userData
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
+
+$groupBackend = new \OCA\User_SAML\GroupBackend($config, \OC::$server->query('SAMLGroupManager'));
+\OC::$server->getGroupManager()->addBackend($groupBackend);
 
 $params = [];
 

@@ -24,16 +24,16 @@ namespace OCA\User_SAML;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\NotPermittedException;
-use OCP\IDBConnection;
-use OCP\ILogger;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IGroupManager;
-use OCP\UserInterface;
-use OCP\IUserBackend;
 use OCP\IConfig;
-use OCP\IURLGenerator;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\ILogger;
 use OCP\ISession;
+use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserBackend;
+use OCP\IUserManager;
+use OCP\UserInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use function base64_decode;
 
@@ -48,7 +48,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var IGroupManager */
+	/** @var GroupManager */
 	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
@@ -59,6 +59,16 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var UserData */
 	private $userData;
 
+	 /**
+	 * @param IConfig $config
+	 * @param IURLGenerator $urlGenerator
+	 * @param ISession $session
+	 * @param IDBConnection $db
+	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
+	 * @param SAMLSettings $settings
+	 * @param ILogger $logger
+	 */
 	public function __construct(
 		IConfig $config,
 		IURLGenerator $urlGenerator,
@@ -659,24 +669,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setQuota($newQuota);
 			}
 
-			if ($newGroups !== null) {
-				$groupManager = $this->groupManager;
-				$oldGroups = $groupManager->getUserGroupIds($user);
-
-				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
-				$groupsToRemove = array_diff($oldGroups, $newGroups);
-
-				foreach ($groupsToAdd as $group) {
-					if (!($groupManager->groupExists($group))) {
-						$groupManager->createGroup($group);
-					}
-					$groupManager->get($group)->addUser($user);
-				}
-
-				foreach ($groupsToRemove as $group) {
-					$groupManager->get($group)->removeUser($user);
-				}
+			if ($newGroups === null) {
+				$newGroups = [];
 			}
+			$this->groupManager->replaceGroups($user->getUID(), $newGroups);
 		}
 	}
 
