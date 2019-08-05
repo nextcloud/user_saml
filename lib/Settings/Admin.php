@@ -120,13 +120,13 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			],
-			'group_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the users groups to.'),
+			'home_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users home to.'),
 				'type' => 'line',
 				'required' => true,
 			],
-			'home_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the users home to.'),
+			'group_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users groups to.'),
 				'type' => 'line',
 				'required' => true,
 			],
@@ -135,7 +135,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			],
-
+			'group_mapping_prefix' => [
+				'text' => $this->l10n->t('Group Mapping Prefix, default: %s', [SAMLSettings::DEFAULT_GROUP_PREFIX]),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$userFilterSettings = [

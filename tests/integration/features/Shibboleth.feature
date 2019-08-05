@@ -63,7 +63,7 @@ Feature: Shibboleth
     And The response should be a SAML redirect page that gets submitted
     And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
     Then The user value "id" should be "student1"
-    Then The user value "email" should be ""
+    And The user value "email" should be ""
     And The user value "display-name" should be "Default displayname of student1"
     And The last login timestamp of "student1" should not be empty
 
@@ -80,6 +80,8 @@ Feature: Shibboleth
     And The setting "security-wantAssertionsSigned" is set to "1"
     And The setting "saml-attribute-mapping-email_mapping" is set to "urn:oid:0.9.2342.19200300.100.1.3"
     And The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"
+    And The setting "saml-attribute-mapping-quota_mapping" is set to "urn:oid:1.3.6.1.4.1.49213.1.1.2"
+    And The setting "saml-attribute-mapping-group_mapping" is set to "groups"
     When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
@@ -89,7 +91,11 @@ Feature: Shibboleth
     And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
+    And The user value "quota.total" should be "209715200"
     And The user value "display-name" should be "Stud Ent"
+    And The user value "groups" should be "Students, Astrophysics"
+    And the group "SAML_Astrophysics" should exists
+    And the group "SAML_Students" should exists
     And The last login timestamp of "student1" should not be empty
 
   Scenario: Authenticating using Shibboleth with SAML with custom redirect URL

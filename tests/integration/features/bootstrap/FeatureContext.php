@@ -235,7 +235,7 @@ class FeatureContext implements Context {
 	 * @param string $value
 	 * @throws UnexpectedValueException
 	 */
-	public function thUserValueShouldBe($key, $value) {
+	public function theUserValueShouldBe(string $key, string $value): void {
 		$this->response = $this->client->request(
 			'GET',
 			'http://localhost:8080/ocs/v1.php/cloud/user',
@@ -243,17 +243,47 @@ class FeatureContext implements Context {
 				'headers' => [
 					'OCS-APIRequest' => 'true',
 				],
+				'query' => [
+					'format' => 'json',
+				]
 			]
 		);
 
-		$xml = simplexml_load_string($this->response->getBody());
-		/** @var array $responseArray */
-		$responseArray = json_decode(json_encode((array)$xml), true);
+		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
 
-		if (count((array)$responseArray['data'][$key]) === 0) {
+		if (!isset($responseArray['data'][$key]) || count((array)$responseArray['data'][$key]) === 0) {
+			if (strpos($key, '.') !== false) {
+				// support nested arrays, specify the key seperated by "."s, e.g. quota.total
+				$keys = explode('.', $key);
+				if (isset($responseArray['data'][$keys[0]])) {
+					$source = $responseArray['data'];
+					foreach ($keys as $subKey) {
+						if (isset($source[$subKey])) {
+							$source = $source[$subKey];
+							if (!is_array($source)) {
+								$actualValue = (string)$source;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
 			$responseArray['data'][$key] = '';
 		}
-		$actualValue = $responseArray['data'][$key];
+
+		$actualValue = $actualValue ?? $responseArray['data'][$key];
+		if (is_array($actualValue)) {
+			// transform array to string, ensuring values are in the same order
+			$value = explode(',', $value);
+			$value = array_map('trim', $value);
+			sort($value);
+			$value = implode(',', $value);
+
+			sort($actualValue);
+			$actualValue = implode(',', $actualValue);
+		}
 
 		if ($actualValue !== $value) {
 			throw new UnexpectedValueException(
@@ -317,5 +347,24 @@ class FeatureContext implements Context {
 \$_SERVER["$key"] = "$value";
 EOF;
 		file_put_contents(self::ENV_CONFIG_FILE, $envConfigPhp);
+	}
+
+	/**
+	 * @Given /^the group "([^"]*)" should exists$/
+	 */
+	public function theGroupShouldExists(string $gid): void {
+		$response = shell_exec(
+			sprintf(
+				'%s %s group:info --output=json %s',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$gid
+			)
+		);
+
+		$responseArray = json_decode($response, true);
+		if (!isset($responseArray['groupID']) || $responseArray['groupID'] !== $gid) {
+			throw new UnexpectedValueException('Group does not exist');
+		}
 	}
 }

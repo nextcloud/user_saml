@@ -35,6 +35,11 @@ While theoretically any other authentication provider implementing either one of
 	<dependencies>
 		<nextcloud min-version="28" max-version="29" />
 	</dependencies>
+	<repair-steps>
+		<post-migration>
+			<step>OCA\User_SAML\Migration\RememberLocalGroupsForPotentialMigrations</step>
+		</post-migration>
+	</repair-steps>
 	<commands>
 		<command>OCA\User_SAML\Command\ConfigCreate</command>
 		<command>OCA\User_SAML\Command\ConfigDelete</command>

@@ -27,7 +27,6 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -52,7 +51,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var IGroupManager */
+	/** @var GroupManager */
 	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
@@ -71,7 +70,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		ISession $session,
 		IDBConnection $db,
 		IUserManager $userManager,
-		IGroupManager $groupManager,
+		GroupManager $groupManager,
 		SAMLSettings $settings,
 		LoggerInterface $logger,
 		UserData $userData,
@@ -647,28 +646,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 				$user->setQuota($newQuota);
 			}
 
-			if ($newGroups !== null) {
-				$groupManager = $this->groupManager;
-				$oldGroups = $groupManager->getUserGroupIds($user);
-
-				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
-				$groupsToRemove = array_diff($oldGroups, $newGroups);
-
-				foreach ($groupsToAdd as $group) {
-					if (!($groupManager->groupExists($group))) {
-						$groupManager->createGroup($group);
-					}
-					$groupManager->get($group)->addUser($user);
-				}
-
-				foreach ($groupsToRemove as $group) {
-					$groupManager->get($group)->removeUser($user);
-				}
-			}
+			$this->groupManager->handleIncomingGroups($user, $newGroups ?? []);
 		}
 	}
-
-
 
 	public function countUsers() {
 		$query = $this->db->getQueryBuilder();
