@@ -126,7 +126,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
-
+			'group_mapping_prefix' => [
+				'text' => $this->l10n->t('Group Mapping Prefix'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$selectedNameIdFormat = $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED);
