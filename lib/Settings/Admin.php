@@ -135,7 +135,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
-
+			'group_mapping_prefix' => [
+				'text' => $this->l10n->t('Group Mapping Prefix'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$firstIdPConfig = isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null;
