@@ -161,6 +161,7 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
+	 * @NoCSRFRequired
 	 *
 	 * @param int $idp id of the idp
 	 * @return Http\RedirectResponse
