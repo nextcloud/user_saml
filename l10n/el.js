@@ -21,10 +21,17 @@ OC.L10N.register(
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
     "Use environment variable" : "Χρησιμοποιήστε μεταβλητή περιβάλλοντος",
     "General" : "Γενικά",
+    "Service Provider Data" : "Δεδομένα φορέα παροχής υπηρεσιών",
+    "If your Service Provider should use certificates you can optionally specify them here." : "Εάν ο πάροχος υπηρεσιών σας πρέπει να χρησιμοποιήσει πιστοποιητικά, μπορείτε να τα ορίσετε προαιρετικά εδώ.",
+    "Identity Provider Data" : "Στοιχεία παροχέα ταυτότητας",
     "Security settings" : "Ρυθμίσεις ασφαλείας",
+    "For increased security we recommend enabling the following settings if supported by your environment." : "Για αυξημένη ασφάλεια σας συνιστούμε να ενεργοποιήσετε τις παρακάτω ρυθμίσεις εάν υποστηρίζονται από το περιβάλλον σας.",
+    "Signatures and encryption offered" : "Υπογραφές και κρυπτογράφηση που προσφέρονται",
+    "Signatures and encryption required" : "Απαιτούνται υπογραφές και κρυπτογράφηση",
     "Download metadata XML" : "Λήψη μεταδεδομένων XML",
     "Metadata invalid" : "Μη έγκυρα μεταδεδομένα",
     "Metadata valid" : "Έγκυρα μεταδεδομένα",
-    "Error" : "Σφάλμα"
+    "Error" : "Σφάλμα",
+    "Account not provisioned." : "Ο λογαριασμός δεν προβλέφθηκε."
 },
 "nplurals=2; plural=(n != 1);");

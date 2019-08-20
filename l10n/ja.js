@@ -16,7 +16,7 @@ OC.L10N.register(
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "このSPによって送信された  <samlp:logoutRequest> メッセージが署名されるかどうかを示します。",
     "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "このSPによって送信された <samlp:logoutResponse> メッセージが署名されるかどうかを示します。",
     "Whether the metadata should be signed." : "メタデータに署名する必要があるかどうか。",
-    "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "このSPによって受信された<samlp:Response>、<samlp:LogoutRequest>、および<samlp:LogoutResponse>要素が署名されるための要件を示します。",
+    "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "このSPが受信した<samlp:Response>、<samlp:LogoutRequest>、および<samlp:LogoutResponse>要素が署名されるための要件を示します。",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "このSPによって受信された<saml:Assertion>要素が署名されるための要件を示します。 [SPのメタデータはこの情報を提供する]",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "このSPが受信した<saml:Assertion>要素を暗号化するための要件を示します。",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "このSPによって受信されたSAMLResponse上のNameID要素が存在する必要があることを示します。",
