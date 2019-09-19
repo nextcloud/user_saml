@@ -119,6 +119,8 @@ class SAMLController extends Controller {
 				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
 			}
 
+			$uid = $this->userBackend->testEncodedObjectGUID($uid);
+
 			// if this server acts as a global scale master and the user is not
 			// a local admin of the server we just create the user and continue
 			// no need to update additional attributes
