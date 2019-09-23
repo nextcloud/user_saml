@@ -714,7 +714,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/**
 	 * @see \OCA\User_LDAP\Access::convertObjectGUID2Str
 	 */
-	public function convertObjectGUID2Str($oguid) {
+	protected function convertObjectGUID2Str($oguid) {
 		$hex_guid = bin2hex($oguid);
 		$hex_guid_to_guid_str = '';
 		for($k = 1; $k <= 4; ++$k) {
