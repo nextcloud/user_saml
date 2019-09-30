@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.4.0
+### Added
+- IdP initiated logout
+
+### Fixed
+- No password confirmation for passwordless users
+- Handle exceptions more graceful (prevent app from disabling)
+- Desktop client login failing in some cases
+
 ## 2.3.1
 ### Fixed
 - name id format is set per provider

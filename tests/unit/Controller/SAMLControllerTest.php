@@ -69,6 +69,9 @@ class SAMLControllerTest extends TestCase  {
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->samlSettings = $this->createMock(SAMLSettings::class);
 		$this->userBackend = $this->createMock(UserBackend::class);
+		$this->userBackend->expects($this->any())
+			->method('testEncodedObjectGUID')
+			->willReturnArgument(0);
 		$this->config = $this->createMock(IConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->userManager = $this->createMock(IUserManager::class);
@@ -275,11 +278,11 @@ class SAMLControllerTest extends TestCase  {
 			->with('/')
 			->willReturn('https://nextcloud.com/absolute/');
 		$this->userBackend
-			->expects($this->at(0))
+			->expects($this->once())
 			->method('autoprovisionAllowed')
 			->willReturn(true);
 		$this->userBackend
-			->expects($this->at(1))
+			->expects($this->once())
 			->method('createUserIfNotExists')
 			->with('MyUid');
 		$this->userBackend
@@ -332,11 +335,11 @@ class SAMLControllerTest extends TestCase  {
 			->with('user_saml.SAML.notProvisioned')
 			->willReturn('https://nextcloud.com/notprovisioned/');
 		$this->userBackend
-			->expects($this->at(0))
+			->expects($this->once())
 			->method('autoprovisionAllowed')
 			->willReturn(true);
 		$this->userBackend
-			->expects($this->at(1))
+			->expects($this->once())
 			->method('createUserIfNotExists')
 			->with('MyUid');
 		$this->userBackend
