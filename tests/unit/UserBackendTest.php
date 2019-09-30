@@ -281,5 +281,25 @@ class UserBackendTest extends TestCase   {
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
 
+	public function objectGuidProvider() {
+		return [
+			['Joey No Conversion', 'Joey No Conversion'],
+			['no@convers.ion', 'no@convers.ion'],
+			['a0aa9ed8-6b48-1034-8ad7-8fb78330d80a', 'a0aa9ed8-6b48-1034-8ad7-8fb78330d80a'],
+			['EDE70D16-B9D5-4E9A-ABD7-614D17246E3F', 'EDE70D16-B9D5-4E9A-ABD7-614D17246E3F'],
+			['Tm8gY29udmVyc2lvbgo=', 'Tm8gY29udmVyc2lvbgo='],
+			['ASfjU2OYEd69ZgAVF4pePA==', '53E32701-9863-DE11-BD66-0015178A5E3C'],
+		];
+	}
+
+	/**
+	 * @dataProvider objectGuidProvider
+	 */
+	public function testTestEncodedObjectGUID(string $input, string $expectation) {
+		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
+		$uid = $this->userBackend->testEncodedObjectGUID($input);
+		$this->assertSame($expectation, $uid);
+	}
+
 
 }
