@@ -2,128 +2,162 @@
 
 namespace OCA\User_SAML;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCP\Group\Backend\ABackend;
-use OCP\IConfig;
+use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\IDBConnection;
 
-class GroupBackend extends ABackend {
-	/**
-	 * @var IConfig
-	 */
-	protected $config;
+class GroupBackend extends ABackend implements ICreateGroupBackend {
+	/** @var IDBConnection */
+	private $dbc;
 
-	/**
-	 * @var GroupManager
-	 */
-	protected $groupManager;
+	/** @var array  */
+	private $groupCache = [];
 
-	public function __construct(
-		IConfig $config,
-		GroupManager $groupManager
-	) {
-		$this->config = $config;
-		$this->groupManager = $groupManager;
+	const TABLE_GROUPS = 'user_saml_groups';
+	const TABLE_MEMBERS = 'user_saml_group_members';
+
+	public function __construct(IDBConnection $dbc) {
+		$this->dbc = $dbc;
 	}
 
-	/**
-	 * @return string
-	 */
-	protected function getPrefix() {
-		return $this->config->getAppValue('user_saml', 'saml-attribute-mapping-group_mapping_prefix', '');
-	}
-
-	protected function hasPrefix($string) {
-		return mb_substr($string, 0, mb_strlen($this->getPrefix())) === $this->getPrefix();
-	}
-
-	protected function removePrefix($query = null) {
-		if ($query === null || $query === '') {
-			return null;
-		}
-
-		$pattern = '';
-		foreach (preg_split('//u', $this->getPrefix(), -1, PREG_SPLIT_NO_EMPTY) as $char) {
-			$pattern .= preg_quote($char, '/') . '?';
-		}
-
-		$result = preg_replace('/^' . $pattern . '/', '', $query);
-
-		if ($result === '') {
-			return null;
-		}
-
-		return $result;
-	}
-
-	protected function prefixedList($items) {
-		$newList = array();
-
-		foreach ($items as $item) {
-			$newList[] = $this->getPrefix() . $item;
-		}
-
-		return $newList;
-	}
-
-	/**
-	 * @return bool
-	 */
 	public function inGroup($uid, $gid) {
-		if (!$this->hasPrefix($gid)) {
-			return false;
-		}
+		$qb = $this->dbc->getQueryBuilder();
+		$stmt = $qb->select('gid')
+			->from(self::TABLE_MEMBERS)
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+			->setMaxResults(1)
+			->execute();
 
-		return $this->groupManager->userInGroup($uid, $this->removePrefix($gid));
+		$result = count($stmt->fetchAll()) > 0;
+		$stmt->closeCursor();
+		return $result;
 	}
 
 	/**
 	 * @return string[] Group names
 	 */
 	public function getUserGroups($uid) {
-		return $this->prefixedList($this->groupManager->userGroups($uid));
+		$qb = $this->dbc->getQueryBuilder();
+		$cursor = $qb->select('gid')
+			->from(self::TABLE_MEMBERS)
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->execute();
+
+		$groups = [];
+		while( $row = $cursor->fetch()) {
+			$groups[] = $row['gid'];
+			$this->groupCache[$row['gid']] = $row['gid'];
+		}
+		$cursor->closeCursor();
+
+		return $groups;
 	}
 
 	/**
 	 * @return string[] Group names
 	 */
-	public function getGroups($search = '', $limit = -1, $offset = 0) {
-		if ($search === '') {
-			$search = null;
-		} else {
-			if (!$this->hasPrefix($search)) {
-				return [];
-			}
+	public function getGroups($search = '', $limit = null, $offset = null) {
+		$query = $this->dbc->getQueryBuilder();
+		$query->select('gid')
+			->from(self::TABLE_GROUPS)
+			->orderBy('gid', 'ASC');
+
+		if ($search !== '') {
+			$query->where($query->expr()->iLike('gid', $query->createNamedParameter(
+				'%' . $this->dbc->escapeLikeParameter($search) . '%'
+			)));
 		}
 
-		return $this->prefixedList($this->groupManager->findGroups($this->removePrefix($search), $limit, $offset));
+		$query->setMaxResults($limit)
+			->setFirstResult($offset);
+		$result = $query->execute();
+
+		$groups = [];
+		while ($row = $result->fetch()) {
+			$groups[] = $row['gid'];
+		}
+		$result->closeCursor();
+
+		return $groups;
 	}
 
 	/**
 	 * @return bool
 	 */
 	public function groupExists($gid) {
-		if (!$this->hasPrefix($gid)) {
-			return false;
+		if (isset($this->groupCache[$gid])) {
+			return true;
 		}
 
-		return $this->groupManager->hasGroup(
-			$this->removePrefix($gid)
-		);
+		$qb = $this->dbc->getQueryBuilder();
+		$cursor = $qb->select('gid')
+			->from(self::TABLE_GROUPS)
+			->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+			->execute();
+		$result = $cursor->fetch();
+		$cursor->closeCursor();
+
+		if ($result !== false) {
+			$this->groupCache[$gid] = $gid;
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * @return string[] User ids
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0) {
-		if ($search === '') {
-			$search = null;
-		} else {
-			if (!$this->hasPrefix($search)) {
-				return [];
-			}
+		$query = $this->dbc->getQueryBuilder();
+		$query->select('uid')
+			->from(self::TABLE_MEMBERS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->orderBy('uid', 'ASC');
+
+		if ($search !== '') {
+			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
+				'%' . $this->dbc->escapeLikeParameter($search) . '%'
+			)));
 		}
 
-		return $this->prefixedList(
-			$this->groupManager->findGroups($gid, $this->removePrefix($search), $limit, $offset)
-		);
+		if ($limit !== -1) {
+			$query->setMaxResults($limit);
+		}
+		if ($offset !== 0) {
+			$query->setFirstResult($offset);
+		}
+
+		$result = $query->execute();
+
+		$users = [];
+		while ($row = $result->fetch()) {
+			$users[] = $row['uid'];
+		}
+		$result->closeCursor();
+
+		return $users;
+	}
+
+	/**
+	 * @since 14.0.0
+	 */
+	public function createGroup(string $gid): bool {
+		try {
+			// Add group
+			$builder = $this->dbc->getQueryBuilder();
+			$result = $builder->insert(self::TABLE_GROUPS)
+				->setValue('gid', $builder->createNamedParameter($gid))
+				->setValue('displayname', $builder->createNamedParameter($gid))
+				->execute();
+		} catch(UniqueConstraintViolationException $e) {
+			$result = 0;
+		}
+
+		// Add to cache
+		$this->groupCache[$gid] = $gid;
+
+		return $result === 1;
 	}
 }

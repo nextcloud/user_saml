@@ -33,16 +33,8 @@ class GroupDuplicateChecker
 		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
-	protected function getPrefix() {
-		return $this->config->getAppValue('user_saml', 'saml-attribute-mapping-group_mapping_prefix', '');
-	}
-
 	public function checkForDuplicates($group) {
-		$realGroupName = $this->getPrefix() . $group;
-		$existingGroup = $this->groupManager->get($realGroupName);
+		$existingGroup = $this->groupManager->get($group);
 		if ($existingGroup !== null) {
 			$reflection = new \ReflectionClass($existingGroup);
 			$property = $reflection->getProperty('backends');
@@ -59,7 +51,7 @@ class GroupDuplicateChecker
 			$this->logger->warning(
 				'Group {name} already existing in other backend',
 				[
-					'name' => $realGroupName
+					'name' => $group
 				]
 			);
 		}
