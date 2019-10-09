@@ -9,6 +9,7 @@ OC.L10N.register(
     "Private key of the Service Provider" : "Zasebni ključ ponudnika storitev",
     "Global settings" : "Splošne nastavitve",
     "General" : "Splošno",
+    "Service Provider Data" : "Podatki ponudnika storitev",
     "Show Service Provider settings…" : "Pokaži nastavitve ponudnika storitve ...",
     "Security settings" : "Varnostne nastavitve",
     "Show security settings…" : "Pokaži varnostne nastavitve ...",
