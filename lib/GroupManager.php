@@ -2,7 +2,10 @@
 
 namespace OCA\User_SAML;
 
+use OC\BackgroundJob\JobList;
 use OC\Hooks\PublicEmitter;
+use OCA\User_SAML\Jobs\MigrateGroups;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -10,6 +13,8 @@ use OCP\IUserManager;
 
 class GroupManager
 {
+	const LOCAL_GROUPS_CHECK_FOR_MIGRATION = 'localGroupsCheckForMigration';
+
 	/**
 	 * @var IDBConnection $db
 	 */
@@ -25,6 +30,10 @@ class GroupManager
 	private $userManager;
 	/** @var GroupBackend */
 	private $ownGroupBackend;
+	/** @var IConfig */
+	private $config;
+	/** @var JobList */
+	private $jobList;
 
 
 	public function __construct(
@@ -32,13 +41,17 @@ class GroupManager
 		GroupDuplicateChecker $duplicateChecker,
 		IGroupManager $groupManager,
 		IUserManager $userManager,
-		GroupBackend $ownGroupBackend
+		GroupBackend $ownGroupBackend,
+		IConfig $config,
+		JobList $jobList
 	) {
 		$this->db = $db;
 		$this->duplicateChecker = $duplicateChecker;
 		$this->groupManager = $groupManager;
 		$this->userManager = $userManager;
 		$this->ownGroupBackend = $ownGroupBackend;
+		$this->config = $config;
+		$this->jobList = $jobList;
 	}
 
 	public function replaceGroups($uid, $saml) {
@@ -87,5 +100,19 @@ class GroupManager
 			}
 		}
 		$group->addUser($user);
+	}
+
+	public function evaluateGroupMigrations(array $groups) {
+		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, null);
+		if($candidateInfo === null) {
+			return;
+		}
+		$candidateInfo = \json_decode($candidateInfo, true);
+		if(!isset($candidateInfo['dropAfter']) || $candidateInfo['dropAfter'] < time()) {
+			$this->config->deleteAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
+			return;
+		}
+
+		$this->jobList->add(MigrateGroups::class, ['gids' => $groups]);
 	}
 }

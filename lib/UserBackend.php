@@ -673,6 +673,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$newGroups = [];
 			}
 			$this->groupManager->replaceGroups($user->getUID(), $newGroups);
+			// TODO: drop following line with dropping NC 18 support
+			$this->groupManager->evaluateGroupMigrations($newGroups);
 		}
 	}
 
