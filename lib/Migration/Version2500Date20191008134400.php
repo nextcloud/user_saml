@@ -54,7 +54,13 @@ class Version2500Date20191008134400 extends SimpleMigrationStep {
 				'length' => 255,
 				'default' => '',
 			]);
+			$table->addColumn('saml_gid', Type::STRING, [
+				'notnull' => true,
+				'length' => 64,
+				'default' => '',
+			]);
 			$table->setPrimaryKey(['gid']);
+			$table->addUniqueIndex(['saml_gid']);
 		}
 
 		if (!$schema->hasTable('user_saml_auth_token')) {
