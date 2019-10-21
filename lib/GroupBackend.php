@@ -7,7 +7,7 @@ use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\ICreateGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements ICreateGroupBackend {
+class GroupBackend extends ABackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -106,6 +106,21 @@ class GroupBackend extends ABackend implements ICreateGroupBackend {
 		return false;
 	}
 
+	public function groupExistsWithDifferentGid($samlGid): ?string {
+		$qb = $this->dbc->getQueryBuilder();
+		$cursor = $qb->select('gid')
+			->from(self::TABLE_GROUPS)
+			->where($qb->expr()->eq('saml_gid', $qb->createNamedParameter($samlGid)))
+			->execute();
+		$result = $cursor->fetch();
+		$cursor->closeCursor();
+
+		if ($result !== false) {
+			return $result[0];
+		}
+		return null;
+	}
+
 	/**
 	 * @return string[] User ids
 	 */
@@ -140,16 +155,16 @@ class GroupBackend extends ABackend implements ICreateGroupBackend {
 		return $users;
 	}
 
-	/**
-	 * @since 14.0.0
-	 */
-	public function createGroup(string $gid): bool {
+	public function createGroup(string $gid, string $samlGid = null): bool {
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
+			$displayName = $samlGid ? $gid . ' (SAML)' : $gid;
+			$samlGid = $samlGid ?? $gid;
 			$result = $builder->insert(self::TABLE_GROUPS)
 				->setValue('gid', $builder->createNamedParameter($gid))
-				->setValue('displayname', $builder->createNamedParameter($gid))
+				->setValue('displayname', $builder->createNamedParameter($displayName))
+				->setValue('saml_gid', $builder->createNamedParameter($samlGid))
 				->execute();
 		} catch(UniqueConstraintViolationException $e) {
 			$result = 0;
