@@ -7,6 +7,7 @@ use OC\Hooks\PublicEmitter;
 use OCA\User_SAML\Jobs\MigrateGroups;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -54,14 +55,24 @@ class GroupManager
 		$this->jobList = $jobList;
 	}
 
-	public function replaceGroups($uid, $saml) {
+	public function replaceGroups($uid, $samlGroups) {
 		$user = $this->userManager->get($uid);
 		if($user === null) {
 			return;
 		}
+		$this->translateGroupToIds($samlGroups);
 		$assigned = $this->groupManager->getUserGroups($uid);
-		$this->removeGroups($user, array_diff($assigned, $saml));
-		$this->addGroups($uid, array_diff($saml, $assigned));
+		$this->removeGroups($user, array_diff($assigned, $samlGroups));
+		$this->addGroups($uid, array_diff($samlGroups, $assigned));
+	}
+
+	protected function translateGroupToIds(array &$samlGroups) {
+		array_walk($samlGroups, function (&$gid){
+			$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
+			if($altGid !== null) {
+				$gid = $altGid;
+			}
+		});
 	}
 
 	public function removeGroups(IUser $user, array $groupIds) {
@@ -85,21 +96,82 @@ class GroupManager
 	}
 
 	public function addGroup(IUser $user, $gid) {
-		$group = $this->groupManager->get($gid);
-		if($group === null) {
-			if($this->groupManager instanceof PublicEmitter) {
-				$this->groupManager->emit('\OC\Group', 'preCreate', array($gid));
-			}
-			if(!$this->ownGroupBackend->createGroup($gid)) {
-				return;
-			}
-
-			$group = $this->groupManager->get($gid);
-			if($this->groupManager instanceof PublicEmitter) {
-				$this->groupManager->emit('\OC\Group', 'postCreate', array($group));
+		try {
+			$group = $this->findGroup($gid);
+		} catch (\RuntimeException $e) {
+			if($e->getCode() === 1) {
+				$group = $this->createGroupInBackend($gid);
+			} else if($e->getCode() === 2) {
+				//FIXME: probably need config flag. Previous to 17, gid was used as displayname
+				$group = $this->createGroupInBackend('__saml__' . $gid, $gid);
+			} else {
+				throw $e;
 			}
 		}
+
 		$group->addUser($user);
+	}
+
+	protected function createGroupInBackend($gid, $originalGid = null) {
+		if($this->groupManager instanceof PublicEmitter) {
+			$this->groupManager->emit('\OC\Group', 'preCreate', array($gid));
+		}
+		if(!$this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid)) {
+			return;
+		}
+
+		$group = $this->groupManager->get($gid);
+		if($this->groupManager instanceof PublicEmitter) {
+			$this->groupManager->emit('\OC\Group', 'postCreate', array($group));
+		}
+
+		return $group;
+	}
+
+	protected function findGroup($gid): IGroup {
+		$migrationWhiteList = $this->config->getAppValue(
+			'user_saml',
+			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
+			null
+		);
+		$strictBackendCheck = null === $migrationWhiteList;
+		if(!$strictBackendCheck && in_array($gid, $migrationWhiteList['groups'], true)) {
+			$group = $this->groupManager->get($gid);
+			if($group === null) {
+				//FIXME: specific Exception and/or constant error code
+				throw new \RuntimeException('Group not found', 1);
+			}
+			return $group;
+		}
+		$group = $this->groupManager->get($gid);
+		if($group === null) {
+			//FIXME: specific Exception and/or constant error code
+			throw new \RuntimeException('Group not found', 1);
+		}
+		if($this->hasSamlBackend($group)) {
+			return $group;
+		}
+
+		$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
+		if($altGid) {
+			return $this->groupManager->get($altGid);
+		}
+
+		//FIXME: specific Exception and/or constant error code
+		throw new \RuntimeException('Non-migratable duplicate found', 2);
+	}
+
+	protected function hasSamlBackend(IGroup $group): bool {
+		$reflected = new \ReflectionClass($group);
+		$backendsProperty = $reflected->getProperty('backends');
+		$backendsProperty->setAccessible(true);
+		$backends = $backendsProperty->getValue();
+		foreach ($backends as $backend) {
+			if($backend instanceof GroupBackend) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function evaluateGroupMigrations(array $groups) {
