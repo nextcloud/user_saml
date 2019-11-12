@@ -8,7 +8,7 @@ style('user_saml', 'admin');
 	<h2 class="inlineblock"><?php p($l->t('SSO & SAML authentication')); ?></h2>
 	<a target="_blank" rel="noreferrer" class="icon-info"
 	   title="<?php p($l->t('Open documentation'));?>"
-	   href="<?php p(link_to_docs('admin-sso')); ?>"></a>
+	   href="https://portal.nextcloud.com/article/configuring-single-sign-on-10.html"></a>
 
 	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
 
