@@ -58,7 +58,7 @@
     "Show Service Provider settings…" : "Hizmet Sağlayıcısının Ayarlarını Görüntüle…",
     "Name ID format" : "Ad kodu biçimi",
     "Identity Provider Data" : "Kimlik Sağlayıcısı Verileri",
-    "Configure your IdP settings here." : "Buradan Kimlik Sağlayıcı ayarlarınızı yapabilirsiniz.",
+    "Configure your IdP settings here." : "Buradan Kimlik Sağlayıcı ayarlarınızı yapılandırabilirsiniz.",
     "Identifier of the IdP entity (must be a URI)" : "Kimlik Sağlayıcı varlığının belirteci (bir adres olmalı)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Hizmet sağlayıcının Kimlik Doğrulama İsteği İletisini gödereceği Kimlik Sağlayıcı hedef adresini yazın",
     "Show optional Identity Provider settings…" : "İsteğe bağlı ek Kimlik Sağlayıcısı ayarları…",
