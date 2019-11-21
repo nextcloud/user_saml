@@ -22,6 +22,7 @@ OC.L10N.register(
     "Show security settings…" : "Rodyti saugumo nustatymus…",
     "Signatures and encryption offered" : "Siūlomi parašai ir šifravimas",
     "Signatures and encryption required" : "Reikalingi parašai ir šifravimas",
+    "Download metadata XML" : "Atsisiųsti metaduomenų XML",
     "Reset settings" : "Atstatyti nustatymus",
     "Error" : "Klaida"
 },
