@@ -183,6 +183,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
 		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
 		$availableActions |= \OC\User\Backend::GET_HOME;
+		$availableActions |= \OC\User\Backend::COUNT_USERS;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -690,5 +691,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				}
 			}
 		}
+	}
+
+	public function countUsers() {
+		$query = $this->db->getQueryBuilder();
+		$query->select($query->func()->count('uid'))
+			->from('user_saml_users');
+		$result = $query->execute();
+
+		return $result->fetchColumn();
 	}
 }
