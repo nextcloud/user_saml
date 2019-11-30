@@ -68,7 +68,7 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Veřejný X.509 certifikát poskytovatele přihlašovacích údajů",
     "Attribute mapping" : "Mapování atributů",
     "If you want to optionally map attributes to the user you can configure these here." : "Pokud chcete volitelně provést mapování atributů na uživatele, můžete to provést zde.",
-    "Show attribute mapping settings…" : "Zobrazit nastavení mapování atributů…",
+    "Show attribute mapping settings…" : "Zobrazit nastavení pro mapování atributů…",
     "Security settings" : "Nastavení zabezpečení",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pro zvýšení bezpečnosti doporučujeme povolení následujících možností, pokud jsou tyto podporovány ve vašem prostředí.",
     "Show security settings…" : "Zobrazit nastavení zabezpečení…",
