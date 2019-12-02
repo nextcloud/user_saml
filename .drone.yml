@@ -6,7 +6,7 @@ clone:
 
 steps:
   - name: app-code-check
-    image: nextcloudci/php7.1:php7.1-16
+    image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
@@ -33,20 +33,8 @@ clone:
   depth: 1
 
 steps:
-  - name: php7.1
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      APP_NAME: user_saml
-      CORE_BRANCH: master
-      DB: sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
-      - cd tests/unit/
-      - phpunit --configuration phpunit.xml
   - name: php7.2
-    image: nextcloudci/php7.2:php7.2-12
+    image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
@@ -103,7 +91,7 @@ clone:
 
 steps:
   - name: php7.2-stable17
-    image: nextcloudci/php7.2:php7.2-12
+    image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: stable17
