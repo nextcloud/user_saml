@@ -46,7 +46,7 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
   - name: php7.3
-    image: nextcloudci/php7.3:php7.3-1
+    image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
@@ -81,137 +81,48 @@ trigger:
   event:
     - pull_request
     - push
-
 ---
 kind: pipeline
-name: tests-17
+name: tests-18
 
 clone:
-  depth: 1
+    depth: 1
 
 steps:
-  - name: php7.2-stable17
-    image: nextcloudci/php7.2:php7.2-13
-    environment:
-      APP_NAME: user_saml
-      CORE_BRANCH: stable17
-      DB: sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
-      - cd tests/unit/
-      - phpunit --configuration phpunit.xml
-  - name: integration-tests-stable16
-    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
-    environment:
-      CORE_BRANCH: stable17
-    commands:
-      - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
-      - /start.sh &
-      - sleep 7
-      - rm -rf /var/www/html
-      - cd /var/www/
-      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
-      - cd /var/www/html && git submodule update --init
-      # use local clone
-      - cp -r /drone/src /var/www/html/apps/user_saml
-      - scl enable rh-php72 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
-      - chown -R apache:apache /var/www/html/
-      - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+    - name: php7.3-stable18
+      image: nextcloudci/php7.3:php7.3-5
+      environment:
+          APP_NAME: user_saml
+          CORE_BRANCH: stable18
+          DB: sqlite
+      commands:
+          - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+          - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+          - cd ../server/apps/$APP_NAME
+          - cd tests/unit/
+          - phpunit --configuration phpunit.xml
+    - name: integration-tests-stable18
+      image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
+      environment:
+          CORE_BRANCH: stable18
+      commands:
+          - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
+          - /start.sh &
+          - sleep 7
+          - rm -rf /var/www/html
+          - cd /var/www/
+          - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+          - cd /var/www/html && git submodule update --init
+          # use local clone
+          - cp -r /drone/src /var/www/html/apps/user_saml
+          - scl enable rh-php72 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
+          - chown -R apache:apache /var/www/html/
+          - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
 
 trigger:
-  branch:
-    - master
-  event:
-    - pull_request
-    - push
+    branch:
+        - master
+    event:
+        - pull_request
+        - push
 
----
-kind: pipeline
-name: tests-16
-
-clone:
-  depth: 1
-
-steps:
-  - name: php7.1-stable16
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      APP_NAME: user_saml
-      CORE_BRANCH: stable16
-      DB: sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
-      - cd tests/unit/
-      - phpunit --configuration phpunit.xml
-  - name: integration-tests-stable16
-    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
-    environment:
-      CORE_BRANCH: stable16
-    commands:
-      - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
-      - /start.sh &
-      - sleep 7
-      - rm -rf /var/www/html
-      - cd /var/www/
-      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
-      - cd /var/www/html && git submodule update --init
-      # use local clone
-      - cp -r /drone/src /var/www/html/apps/user_saml
-      - scl enable rh-php72 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
-      - chown -R apache:apache /var/www/html/
-      - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
-
-trigger:
-  branch:
-    - master
-  event:
-    - pull_request
-    - push
-
----
-kind: pipeline
-name: tests-15
-
-clone:
-  depth: 1
-
-steps:
-  - name: php7.0-stable15
-    image: nextcloudci/php7.0:php7.0-19
-    environment:
-      APP_NAME: user_saml
-      CORE_BRANCH: stable15
-      DB: sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
-      - cd tests/unit/
-      - phpunit --configuration phpunit.xml
-  - name: integration-tests-stable15
-    image: nextcloudci/user_saml_shibboleth-php7:user_saml_shibboleth_php7-5
-    environment:
-      CORE_BRANCH: stable15
-    commands:
-      - /start.sh &
-      - sleep 3
-      - rm -rf /var/www/html
-      - cd /var/www/
-      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
-      - cd /var/www/html && git submodule update --init
-      # use local clone
-      - cp -r /drone/src /var/www/html/apps/user_saml
-      - scl enable rh-php70 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
-      - chown -R apache:apache /var/www/html/
-      - scl enable rh-php70 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
-
-trigger:
-  branch:
-    - master
-  event:
-    - pull_request
-    - push

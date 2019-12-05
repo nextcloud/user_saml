@@ -34,7 +34,7 @@ class ApplicationTest extends \Test\TestCase  {
 	/** @var \OCP\AppFramework\IAppContainer */
 	protected $container;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->app = new Application();
 		$this->container = $this->app->getContainer();

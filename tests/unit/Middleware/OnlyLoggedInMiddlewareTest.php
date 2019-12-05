@@ -35,7 +35,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 	/** @var OnlyLoggedInMiddleware */
 	private $onlyLoggedInMiddleware;
 
-	public function setUp() {
+	protected function setUp(): void {
 		$this->reflector = $this->createMock(IControllerMethodReflector::class);
 		$this->userSession = $this->createMock(IUserSession::class);
 		$this->onlyLoggedInMiddleware = new OnlyLoggedInMiddleware(
@@ -43,7 +43,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 			$this->userSession
 		);
 
-		return parent::setUp();
+		parent::setUp();
 	}
 
 	public function testBeforeControllerWithoutAnnotation() {

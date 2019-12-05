@@ -61,7 +61,7 @@ class SAMLControllerTest extends TestCase  {
 	/** @var SAMLController */
 	private $samlController;
 
-	public function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);
