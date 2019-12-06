@@ -13,6 +13,7 @@ OC.L10N.register(
     "General" : "Orokorra",
     "Security settings" : "Segurtasun ezarpenak",
     "Show security settings…" : "Erakutsi segurtasun ezarpenak",
+    "Download metadata XML" : "Deskargatu metadatuen XMLa",
     "Reset settings" : "Leheneratu ezarpenak",
     "Metadata invalid" : "Baliogabeko metadatuak",
     "Error" : "Errorea"
