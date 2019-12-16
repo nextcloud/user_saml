@@ -569,7 +569,7 @@ After that line we will be able to use the classes (and their methods) of the
 toolkit (because the external and the Saml2 libraries files are loaded).
 
 That toolkit depends on [xmlseclibs](https://github.com/robrichards/xmlseclibs) 3.X.X branch,
-you will need to get its code and place on your project and reuse the _toolkit_loader.php 
+you will need to get its code and place on your project and reuse the _toolkit_loader.php
 file to include xmlseclibs as well.
 
 
@@ -1169,7 +1169,7 @@ Main class of OneLogin PHP Toolkit
  * `getNameId` - Returns the nameID
  * `getNameIdFormat` - Gets the NameID Format provided by the SAML response from the IdP.
  * `getNameIdNameQualifier` - Gets the NameID NameQualifier provided from the SAML Response String.
- * `getNameIdNameSPQualifier` - Gets the NameID SP NameQualifier provided from the SAML Response String.
+ * `getNameIdSPNameQualifier` - Gets the NameID SP NameQualifier provided from the SAML Response String.
  * `getSessionIndex` - Gets the SessionIndex from the AuthnStatement.
  * `getErrors` - Returns if there were any error
  * `getSSOurl` - Gets the SSO url.
@@ -1207,7 +1207,7 @@ SAML 2 Authentication Response class
  * `getNameId` - Gets the NameID provided by the SAML response from the IdP.
  * `getNameIdFormat` - Gets the NameID Format provided by the SAML response from the IdP.
  * `getNameIdNameQualifier` - Gets the NameID NameQualifier provided from the SAML Response String.
- * `getNameIdNameSPQualifier` - Gets the NameID SP NameQualifier provided from the SAML Response String.
+ * `getNameIdSPNameQualifier` - Gets the NameID SP NameQualifier provided from the SAML Response String.
  * `getSessionNotOnOrAfter` - Gets the SessionNotOnOrAfter from the
    AuthnStatement
  * `getSessionIndex` - Gets the SessionIndex from the AuthnStatement.
@@ -1503,4 +1503,3 @@ demo1, only changes the targets.
     to the IdP (to the SLS endpoint of the IdP).The IdP receives the Logout
     Response, process it and close the session at of the IdP. Notice that the
     SLO Workflow starts and ends at the IdP.
-
