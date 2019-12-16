@@ -77,8 +77,8 @@
     "Metadata invalid" : "元数据无效",
     "Metadata valid" : "元数据有效",
     "Error" : "错误",
-    "Account not provisioned." : "帐户未配置。",
-    "Your account is not provisioned, access to this service is thus not possible." : "您的帐户未配置，因此无法访问此服务。",
+    "Account not provisioned." : "账号未配置。",
+    "Your account is not provisioned, access to this service is thus not possible." : "您的账号未配置，因此无法访问此服务。",
     "Choose a authentication provider" : "选择一个认证提供者"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
