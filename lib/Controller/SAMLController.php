@@ -279,6 +279,9 @@ class SAMLController extends Controller {
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
 		$this->session->set('user_saml.samlNameId', $auth->getNameId());
+		$this->session->set('user_saml.samlNameIdFormat', $auth->getNameIdFormat());
+		$this->session->set('user_saml.samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
+		$this->session->set('user_saml.samlNameIdNameSPQualifier', $auth->getNameIdNameSPQualifier());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
 		try {
@@ -355,8 +358,11 @@ class SAMLController extends Controller {
 				// If request is not from IDP, we must send him the logout request
 				$parameters = array();
 				$nameId = $this->session->get('user_saml.samlNameId');
+				$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
+				$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');
+				$nameIdNameSPQualifier = $this->session->get('user_saml.samlNameIdNameSPQualifier');
 				$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-				$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay);
+				$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdNameSPQualifier);
 			}
 			if(!empty($targetUrl) && !$auth->getLastErrorReason()){
 				$this->userSession->logout();
