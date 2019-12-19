@@ -356,14 +356,21 @@ class SAMLController extends Controller {
 				$parameters = array();
 				$nameId = $this->session->get('user_saml.samlNameId');
 				$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-				$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay);
+                if (!empty($_GET['returnTo'])) {
+                        $returnTo = $_GET['returnTo'];
+                }
+				$targetUrl = $auth->logout($returnTo, [], $nameId, $sessionIndex, $stay);
 			}
 			if(!empty($targetUrl) && !$auth->getLastErrorReason()){
 				$this->userSession->logout();
 			}
 		}
 		if(empty($targetUrl)){
-			$targetUrl = $this->urlGenerator->getAbsoluteURL('/');
+            if (!empty($_GET['RelayState'])) {
+                    $targetUrl = $_GET['RelayState'];
+            } else {
+                    $targetUrl = $this->urlGenerator->getAbsoluteURL('/');
+            }
 		}
 
 		return new Http\RedirectResponse($targetUrl);
