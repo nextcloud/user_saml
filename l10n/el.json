@@ -15,6 +15,7 @@
     "Whether the metadata should be signed." : "Εάν τα μεταδεδομένα πρέπει να είναι υπογεγραμένα.",
     "Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed." : "Υποδεικνύει μία απαίτηση για το<samlp:Response>,<samlp:LogoutRequest>και<samlp:LogoutResponse>των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Προαπαιτείται για το <saml:Assertion> των ληφθέντων στοιχείων απο αυτό το SP ως προς υπογραφή.[Τα μεταδεδομένα του SP θα προσφέρουν αυτές τις πληροφορίες]",
+    "Email address" : "Διεύθυνση αλληλογραφίας",
     "SSO & SAML authentication" : "Πιστοποίηση SSO & SAML",
     "Open documentation" : "Άνοιγμα τεκμηρίωσης",
     "Use environment variable" : "Χρησιμοποιήστε μεταβλητή περιβάλλοντος",

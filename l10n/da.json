@@ -34,6 +34,7 @@
     "Security settings" : "Sikkerhedsindstillinger",
     "Download metadata XML" : "Download metadata XML",
     "Metadata invalid" : "Ugyldig metadata",
-    "Metadata valid" : "Gyldig metadata"
+    "Metadata valid" : "Gyldig metadata",
+    "Error" : "Fejl"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

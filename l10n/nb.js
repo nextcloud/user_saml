@@ -55,6 +55,7 @@ OC.L10N.register(
     "Reset settings" : "Tilbakestill innstillinger",
     "Metadata invalid" : "Ugyldige metadata",
     "Metadata valid" : "Gyldige metadata",
+    "Error" : "Feil",
     "Account not provisioned." : "Kontoen er ikke klargjort",
     "Your account is not provisioned, access to this service is thus not possible." : "Din konto er ikke klargjort, tilgang til denne tjenesten er ikke mulig akkurat nå."
 },

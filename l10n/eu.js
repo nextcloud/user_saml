@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Gordeta",
     "Provider" : "Hornitzailea",
     "Provider " : "Hornitzailea",
+    "Email address" : "Posta helbidea",
     "Encrypted" : "Zifratua",
     "SSO & SAML authentication" : "SSO eta SAML autentifikazioa",
     "Open documentation" : "Ireki dokumentazioa",

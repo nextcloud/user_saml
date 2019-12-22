@@ -36,6 +36,7 @@ OC.L10N.register(
     "Security settings" : "Sikkerhedsindstillinger",
     "Download metadata XML" : "Download metadata XML",
     "Metadata invalid" : "Ugyldig metadata",
-    "Metadata valid" : "Gyldig metadata"
+    "Metadata valid" : "Gyldig metadata",
+    "Error" : "Fejl"
 },
 "nplurals=2; plural=(n != 1);");

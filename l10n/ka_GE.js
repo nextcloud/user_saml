@@ -48,6 +48,7 @@ OC.L10N.register(
     "Download metadata XML" : "XML მეტა-მონაცემების გადმოწერა",
     "Metadata invalid" : "მეტა-მონაცემი არასწორია",
     "Metadata valid" : "მეტა-მონაცემი სწორია",
+    "Error" : "შეცდომა",
     "Account not provisioned." : "ანგარიში არაა გათვალისწინებული.",
     "Your account is not provisioned, access to this service is thus not possible." : "თქვენი ანგარიში არაა გათვალისწინებული, ამ სერვისისადმი წვდომა შესაბამისად შეუძლებელია."
 },

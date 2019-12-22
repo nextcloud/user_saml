@@ -43,6 +43,7 @@ OC.L10N.register(
     "Download metadata XML" : "Descargar metadatos XML",
     "Metadata invalid" : "Metadatos inválidos",
     "Metadata valid" : "Metadatos válidos",
+    "Error" : "Error",
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
     "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "
 },

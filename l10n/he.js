@@ -33,6 +33,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "נדרשו חתימות והצפנה",
     "Download metadata XML" : "הורדת XML של נתוני העל",
     "Metadata invalid" : "נתוני העל שגויים",
-    "Metadata valid" : "נתוני העל תקינים"
+    "Metadata valid" : "נתוני העל תקינים",
+    "Error" : "שגיאה"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

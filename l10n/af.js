@@ -1,6 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
+    "Saved" : "Bewaar",
     "Provider" : "Verskaffer",
     "Provider " : "Verskaffer",
     "Private key of the Service Provider" : "Privaatsleutel van die Diensverskaffer",

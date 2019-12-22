@@ -17,6 +17,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Ríquense robles y cifráu",
     "Download metadata XML" : "Baxar XML de datos meta",
     "Metadata invalid" : "Datos meta non válidos",
-    "Metadata valid" : "Datos meta válidos"
+    "Metadata valid" : "Datos meta válidos",
+    "Error" : "Fallu"
 },
 "nplurals=2; plural=(n != 1);");

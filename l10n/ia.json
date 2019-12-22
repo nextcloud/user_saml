@@ -4,6 +4,7 @@
     "General" : "General",
     "Security settings" : "Configurationes de securitate",
     "Metadata invalid" : "Metadatos non valide",
-    "Metadata valid" : "Metadatos valide"
+    "Metadata valid" : "Metadatos valide",
+    "Error" : "Error"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

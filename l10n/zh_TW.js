@@ -10,6 +10,7 @@ OC.L10N.register(
     "Provider " : "提供者",
     "X.509 certificate of the Service Provider" : "服務提供者 (SP) 的 X.509 憑證",
     "Private key of the Service Provider" : "服務提供者 (SP) 的私鑰",
+    "Open documentation" : "開啟說明文件",
     "General" : "一般",
     "Service Provider Data" : "服務提供者 (Service Provider) 資料",
     "If your Service Provider should use certificates you can optionally specify them here." : "如果您的服務提供者需要憑證，請在這邊指定",
@@ -17,6 +18,7 @@ OC.L10N.register(
     "Show security settings…" : "顯示安全性設定",
     "Download metadata XML" : "下載元數據XML",
     "Metadata valid" : "元數據有效",
+    "Error" : "錯誤",
     "Account not provisioned." : "帳號尚未配置"
 },
 "nplurals=1; plural=0;");

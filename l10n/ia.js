@@ -6,6 +6,7 @@ OC.L10N.register(
     "General" : "General",
     "Security settings" : "Configurationes de securitate",
     "Metadata invalid" : "Metadatos non valide",
-    "Metadata valid" : "Metadatos valide"
+    "Metadata valid" : "Metadatos valide",
+    "Error" : "Error"
 },
 "nplurals=2; plural=(n != 1);");

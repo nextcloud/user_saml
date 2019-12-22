@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Запазено",
     "SSO & SAML authentication" : "SSO и SAML удостоверяване",
+    "Open documentation" : "Отвори документацията",
     "Use built-in SAML authentication" : "Ползвай вграденото SAML удостоверяване",
     "General" : "Общи",
     "Security settings" : "Настройки за сигурност",
