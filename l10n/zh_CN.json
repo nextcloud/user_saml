@@ -1,5 +1,5 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "此用户帐户被禁用，请联系管理员。",
+    "This user account is disabled, please contact your administrator." : "此用户账号已禁用，请联系管理员。",
     "Saved" : "已保存",
     "Provider" : "服务商",
     "Unknown error, please check the log file for more details." : "未知错误，请在日志文件检查更多详情。",
@@ -22,7 +22,7 @@
     "Indicates if the SP will validate all received XML." : "指定 SP 是否验证所有接收到的 XML。",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL - 将 SAML 数据编码为小写，默认情况下，该工具包使用大写。 在签名验证时启用 ADFS 兼容性。",
     "Attribute to map the UID to." : "映射到 UID 的属性。",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "仅允许身份验证，如果账户存在于其他后端。（例如 LDAP）",
+    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "仅在其他后端存在账号时才允许身份验证。 （例如 LDAP）",
     "Attribute to map the displayname to." : "映射到显示名称的属性。",
     "Attribute to map the email address to." : "将电子邮件地址映射到的属性。",
     "Attribute to map the quota to." : "要将配额映射到的属性。",
