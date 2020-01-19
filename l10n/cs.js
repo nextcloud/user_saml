@@ -50,7 +50,7 @@ OC.L10N.register(
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you go directly to the URL %s." : "Nezapomeňte nastavit správního uživatele který může přistupovat k instanci přes SSO. Přihlašování vaším běžným %s účtem nadále nebude možné, jedině že půjdete přímo na URL %s.",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Vyberte zda chcete ověřovat za použití dodané zabudované SAML funkce v Nextcloud nebo zda chcete ověřovat za pomoci proměnné prostředí.",
     "Use built-in SAML authentication" : "Použít zabudované SAML ověření",
-    "Use environment variable" : "Použít proměnné prostředí",
+    "Use environment variable" : "Použít hodnotu z proměnné prostředí",
     "Global settings" : "Globální nastavení",
     "Remove identity provider" : "Vzdálený poskytovatel identity",
     "Add identity provider" : "Přidat poskytovatele identity",

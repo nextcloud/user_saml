@@ -30,6 +30,7 @@ OC.L10N.register(
     "Attribute to map the quota to." : "Атрибут для сопоставления квоты.",
     "Attribute to map the users groups to." : "Атрибут для отображения групп пользователей.",
     "Attribute to map the users home to." : "Атрибут для привязки домашней директории пользователей.",
+    "Email address" : "Адрес электронной почты",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Использовать SAML для настольных клиентов синхронизации %s (потребуется повторная аутентификация пользователей)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Дополнительное отображаемое имя поставщика удостоверений (по умолчанию: «SSO & SAML log in»)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Разрешить использование нескольких пользовательских back-end (например, LDAP)",
