@@ -7,6 +7,7 @@
     "Private key of the Service Provider" : "Zasebni ključ ponudnika storitev",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Določa, da bo ID imena <samlp:logoutRequest> poslan prek tega ponudnika storitev, šifriran.",
     "Whether the metadata should be signed." : "Ali naj bodo metapodatki podpisani.",
+    "Email address" : "Elektronski naslov",
     "SSO & SAML authentication" : "Overitev SSO in SAML",
     "Open documentation" : "Odpri dokumentacijo",
     "Use built-in SAML authentication" : "Uporabi vgrajeno overitev SAML",
