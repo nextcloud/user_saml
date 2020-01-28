@@ -54,7 +54,7 @@ class UserBackendTest extends TestCase   {
 	/** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
 	private $logger;
 
-	protected function setUp(): void {
+	public function setUp() {
 		parent::setUp();
 
 		$this->config = $this->createMock(IConfig::class);
