@@ -32,7 +32,7 @@ class SectionTest extends \Test\TestCase  {
 	/** @var  IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
 	private $urlGenerator;
 
-	protected function setUp(): void {
+	public function setUp() {
 		$this->l10n = $this->createMock(\OCP\IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->section = new \OCA\User_SAML\Settings\Section(
@@ -40,7 +40,7 @@ class SectionTest extends \Test\TestCase  {
 			$this->urlGenerator
 		);
 
-		parent::setUp();
+		return parent::setUp();
 	}
 
 	public function testGetId() {

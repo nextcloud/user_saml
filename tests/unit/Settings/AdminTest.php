@@ -37,7 +37,7 @@ class AdminTest extends \Test\TestCase  {
 	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
 	private $config;
 
-	protected function setUp(): void {
+	public function setUp() {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
 		$this->config = $this->createMock(IConfig::class);
@@ -48,7 +48,7 @@ class AdminTest extends \Test\TestCase  {
 			$this->config
 		);
 
-		parent::setUp();
+		return parent::setUp();
 	}
 
 	public function formDataProvider() {
