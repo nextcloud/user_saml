@@ -134,22 +134,10 @@ clone:
     depth: 1
 
 steps:
-    - name: php7.3-stable18
-      image: nextcloudci/php7.3:php7.3-5
-      environment:
-          APP_NAME: user_saml
-          CORE_BRANCH: stable17
-          DB: sqlite
-      commands:
-          - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-          - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-          - cd ../server/apps/$APP_NAME
-          - cd tests/unit/
-          - phpunit --configuration phpunit.xml
-    - name: integration-tests-stable18
+    - name: integration-tests-stable17
       image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
       environment:
-          CORE_BRANCH: stable18
+          CORE_BRANCH: stable17
       commands:
           - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
           - /start.sh &
