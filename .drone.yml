@@ -25,6 +25,8 @@ trigger:
     - pull_request
     - push
 
+type: docker
+
 ---
 kind: pipeline
 name: tests-master
@@ -57,12 +59,12 @@ steps:
       - cd ../server/apps/$APP_NAME
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
+
   - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
+    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-3
     environment:
       CORE_BRANCH: master
     commands:
-      - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
       - /start.sh &
       - sleep 7
       - rm -rf /var/www/html
@@ -75,12 +77,15 @@ steps:
       - chown -R apache:apache /var/www/html/
       - scl enable rh-php72 "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
 
+
 trigger:
   branch:
     - master
   event:
     - pull_request
     - push
+
+type: docker
 ---
 kind: pipeline
 name: tests-18
@@ -101,12 +106,12 @@ steps:
           - cd ../server/apps/$APP_NAME
           - cd tests/unit/
           - phpunit --configuration phpunit.xml
+
     - name: integration-tests-stable18
-      image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-2
+      image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-3
       environment:
           CORE_BRANCH: stable18
       commands:
-          - sed -i 's_/etc/init.d/jetty run \&_sleep 4 \&\& /etc/init.d/jetty run \&_' /start.sh
           - /start.sh &
           - sleep 7
           - rm -rf /var/www/html
@@ -125,4 +130,6 @@ trigger:
     event:
         - pull_request
         - push
+
+type: docker
 
