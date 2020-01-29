@@ -701,4 +701,46 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 		return $result->fetchColumn();
 	}
+
+	/**
+	 * returns the plain text UUID if the provided $uid string is a
+	 * base64-encoded binary string representing e.g. the objectGUID. Otherwise
+	 *
+	 */
+	public function testEncodedObjectGUID(string $uid): string {
+		$candidate = base64_decode($uid, true);
+		if($candidate === false) {
+			return $uid;
+		}
+		$candidate = $this->convertObjectGUID2Str($candidate);
+		// the regex only matches the structure of the UUID, not its semantic
+		// (i.e. version or variant) simply to be future compatible
+		if(preg_match('/^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}$/i', $candidate) === 1) {
+			$uid = $candidate;
+		}
+		return $uid;
+	}
+
+	/**
+	 * @see \OCA\User_LDAP\Access::convertObjectGUID2Str
+	 */
+	protected function convertObjectGUID2Str($oguid) {
+		$hex_guid = bin2hex($oguid);
+		$hex_guid_to_guid_str = '';
+		for($k = 1; $k <= 4; ++$k) {
+			$hex_guid_to_guid_str .= substr($hex_guid, 8 - 2 * $k, 2);
+		}
+		$hex_guid_to_guid_str .= '-';
+		for($k = 1; $k <= 2; ++$k) {
+			$hex_guid_to_guid_str .= substr($hex_guid, 12 - 2 * $k, 2);
+		}
+		$hex_guid_to_guid_str .= '-';
+		for($k = 1; $k <= 2; ++$k) {
+			$hex_guid_to_guid_str .= substr($hex_guid, 16 - 2 * $k, 2);
+		}
+		$hex_guid_to_guid_str .= '-' . substr($hex_guid, 16, 4);
+		$hex_guid_to_guid_str .= '-' . substr($hex_guid, 20);
+
+		return strtoupper($hex_guid_to_guid_str);
+	}
 }
