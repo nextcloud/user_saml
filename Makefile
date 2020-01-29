@@ -24,23 +24,24 @@ clean:
 appstore: clean
 	mkdir -p $(sign_dir)
 	rsync -a \
-	--exclude=/build \
-	--exclude=/docs \
-	--exclude=/translationfiles \
-	--exclude=.tx \
-	--exclude=/tests \
+	--exclude=.drone.yml \
 	--exclude=.git \
-	--exclude=.github \
-	--exclude=/l10n/l10n.pl \
-	--exclude=/CONTRIBUTING.md \
-	--exclude=/issue_template.md \
-	--exclude=/README.md \
 	--exclude=.gitattributes \
+	--exclude=.github \
 	--exclude=.gitignore \
 	--exclude=.scrutinizer.yml \
 	--exclude=.travis.yml \
+	--exclude=.tx \
+	--exclude=/build \
+	--exclude=/CONTRIBUTING.md \
+	--exclude=/docs \
+	--exclude=/issue_template.md \
+	--exclude=/l10n/l10n.pl \
 	--exclude=/Makefile \
-	--exclude=.drone.yml \
+	--exclude=/README.md \
+	--exclude=/screenshots \
+	--exclude=/tests \
+	--exclude=/translationfiles \
 	$(project_dir)/ $(sign_dir)/$(app_name)
 	tar -czf $(build_dir)/$(app_name)-$(version).tar.gz \
 		-C $(sign_dir) $(app_name)
