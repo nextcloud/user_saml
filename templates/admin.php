@@ -177,11 +177,20 @@ style('user_saml', 'admin');
 					</p>
 				<?php endforeach; ?>
 				<h4><?php p($l->t('General')) ?></h4>
-				<?php foreach($_['security-general'] as $key => $text): ?>
-					<p>
-						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
-						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
-					</p>
+				<?php foreach($_['security-general'] as $key => $attribute): ?>
+					<?php if (is_array($attribute) && $attribute['type'] === 'line') { ?>
+						<?php $text = $attribute['text'] ?>
+						<p>
+							<label><?php p($attribute['text']) ?></label><br />
+							<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '')) ?>" type="text" <?php if(isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+						</p>
+					<?php } else { ?>
+						<?php $text = $attribute ?>
+						<p>
+							<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+							<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label><br/>
+						</p>
+					<?php } ?>
 				<?php endforeach; ?>
 			</div>
 		</div>

@@ -119,6 +119,7 @@ class SAMLSettings {
 				'wantXMLValidation' => ($this->config->getAppValue('user_saml', $prefix . 'security-wantXMLValidation', '0') === '1') ? true : false,
 				'requestedAuthnContext' => false,
 				'lowercaseUrlencoding' => ($this->config->getAppValue('user_saml', $prefix . 'security-lowercaseUrlencoding', '0') === '1') ? true : false,
+				'signatureAlgorithm' => $this->config->getAppValue('user_saml', $prefix . 'security-signatureAlgorithm', null)
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
