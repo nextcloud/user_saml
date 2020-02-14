@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 2.4.2
+### Added
+- Add setting to specify a different signature algorithm #401
+
+## 2.4.1
+### Added
+- Handle ObjectGUID claims #391
+- added link to portal documentation #390
+- Add counting to the user backend #392
+
+###Changed
+- fixed login with chrome browser #388
+
 ## 2.4.0
 ### Added
 - IdP initiated logout
