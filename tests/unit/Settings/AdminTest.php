@@ -80,6 +80,10 @@ class AdminTest extends \Test\TestCase  {
 		];
 		$securityGeneral = [
 			'lowercaseUrlencoding' => 'ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.',
+			'signatureAlgorithm' => [
+				'type' => 'line',
+				'text' => 'Algorithm that the toolkit will use on signing process.'
+			]
 		];
 		$generalSettings = [
 			'idp0_display_name' => [

@@ -75,7 +75,7 @@ class Admin implements ISettings {
 			'authnRequestsSigned' => $this->l10n->t('Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]'),
 			'logoutRequestSigned' => $this->l10n->t('Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed.'),
 			'logoutResponseSigned' => $this->l10n->t('Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed.'),
-			'signMetadata' => $this->l10n->t('Whether the metadata should be signed.'),
+			'signMetadata' => $this->l10n->t('Whether the metadata should be signed.')
 		];
 		$securityRequiredFields = [
 			'wantMessagesSigned' => $this->l10n->t('Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and <samlp:LogoutResponse> elements received by this SP to be signed.'),
@@ -87,6 +87,10 @@ class Admin implements ISettings {
 		];
 		$securityGeneral = [
 			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
+			'signatureAlgorithm' => [
+				'type' => 'line',
+				'text' => $this->l10n->t('Algorithm that the toolkit will use on signing process.')
+			]
 		];
 		$generalSettings = [
 			'uid_mapping' => [
