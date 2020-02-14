@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.0.1
+### Added
+- Add setting to specify a different signature algorithm #401
+
+### Changed
+- translation updates
+
+## 3.0.0
+### Changed
+- fixed login with chrome browser #379
+- translation updates
+- Make 19 compatible #380
+
 ## 2.4.0
 ### Added
 - IdP initiated logout
