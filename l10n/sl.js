@@ -17,6 +17,8 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Uporabi vgrajeno overitev SAML",
     "Use environment variable" : "Uporabi okoljsko spremenljivko",
     "Global settings" : "Splošne nastavitve",
+    "Remove identity provider" : "Odstrani ponudnika istovetnosti",
+    "Add identity provider" : "Dodaj ponudnika istovetnosti",
     "General" : "Splošno",
     "Service Provider Data" : "Podatki ponudnika storitev",
     "Show Service Provider settings…" : "Pokaži nastavitve ponudnika storitve ...",
