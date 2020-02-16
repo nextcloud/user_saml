@@ -21,6 +21,7 @@
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indikuje požadavek poskytovatele služby na přijetí NameID v zašifrované podobě.",
     "Indicates if the SP will validate all received XML." : "Indikuje, zda poskytovatel služeb ověří všechna přijatá XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL kóduje SAML data malými písmeny, a toolkit používá ve výchozím nastavení velká písmena. Povolit pro ADFS kompatibilitu pro ověření podpisu.",
+    "Algorithm that the toolkit will use on signing process." : "Algoritmus který sada nástrojů použije při procesu podepisování.",
     "Attribute to map the UID to." : "Atribut k přiřazení UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet už existuje i někde jinde. (např. LDAP)",
     "Attribute to map the displayname to." : "Atribut, na který se má mapovat zobrazované jméno.",
