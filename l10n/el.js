@@ -23,6 +23,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Υποδεικνύει την απαίτηση για κρυπτογράφηση του αναγνωριστικού ονόματος που λαμβάνεται από αυτό το SP.",
     "Indicates if the SP will validate all received XML." : "Υποδεικνύει εάν το SP θα επικυρώσει όλες τις ληφθείσες XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Διεύθυνση URL ADFS - Κωδικοποιεί τα δεδομένα SAML ως πεζά και το κιτ εργαλείων χρησιμοποιεί από προεπιλογή κεφαλαία γράμματα. Ενεργοποιήστε τη συμβατότητα ADFS κατά την επαλήθευση υπογραφής.",
+    "Algorithm that the toolkit will use on signing process." : "Αλγόριθμος που θα χρησιμοποιήσει η εργαλειοθήκη κατά τη διαδικασία υπογραφής.",
     "Attribute to map the UID to." : "Χαρακτηριστικό χαρτογράφησης του UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Να επιτρέπεται η πιστοποίηση μόνον εάν ένας λογαριασμός υπάρχει σε κάποιο άλλο backend. (πχ. LDAP)",
     "Attribute to map the displayname to." : "Χαρακτηριστικό για τη χαρτογράφηση του ονόματος εμφάνισης.",
