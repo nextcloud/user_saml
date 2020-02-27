@@ -77,7 +77,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Podpisy i szyfrowanie są wymagane",
     "Download metadata XML" : "Ściągnij metadane XML",
     "Reset settings" : "Wyzeruj ustawienia",
-    "Metadata invalid" : "Nie prawidłowe metadane",
+    "Metadata invalid" : "Nieprawidłowe metadane",
     "Metadata valid" : "Prawidłowe metadane",
     "Error" : "Błąd",
     "Account not provisioned." : "Konto nie jest wspierane",
