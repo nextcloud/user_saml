@@ -87,7 +87,7 @@ if($returnScript === true) {
 	return;
 }
 
-$app = new \OCA\User_SAML\AppInfo\Application();
+$app = \OC::$server->query(\OCA\User_SAML\AppInfo\Application::class);
 $app->registerDavAuth();
 
 $redirectSituation = false;
