@@ -1,0 +1,21 @@
+OC.L10N.register(
+    "user_saml",
+    {
+    "This user account is disabled, please contact your administrator." : "این حساب کاربری غیرفعال شده ، لطفاً با مدیر خود تماس بگیرید.",
+    "Saved" : "ذخیره شد",
+    "Provider" : "تامین کننده",
+    "Unknown error, please check the log file for more details." : "خطای ناشناخته ، لطفاً پرونده ورود را برای جزئیات بیشتر بررسی کنید.",
+    "Direct log in" : "جزئیات ورود",
+    "SSO & SAML log in" : " SSO و SAMLورود ",
+    "This page should not be visited directly." : "این صفحه نباید مستقیماً بازدید شود.",
+    "Provider " : "تامیین کننده",
+    "X.509 certificate of the Service Provider" : "گواهینامه X.509 ارائه دهنده خدمات",
+    "Private key of the Service Provider" : "کلید خصوصی ارائه دهنده خدمات",
+    "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "نشان می دهد که نامID از<samlp:logoutRequest> ارسال شده توسط این SP رمزگذاری می شود.",
+    "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "نشان می دهد که آیا <samlp:AuthnRequest> پیام های ارسال شده توسط این SP امضا خواهد شد. [ابرداده SP این اطلاعات را ارائه می دهد]",
+    "Email address" : "آدرس ایمیل",
+    "Open documentation" : "مستندات باز",
+    "General" : "عمومی",
+    "Error" : "خطا"
+},
+"nplurals=2; plural=(n > 1);");

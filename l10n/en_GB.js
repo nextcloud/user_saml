@@ -58,6 +58,7 @@ OC.L10N.register(
     "Download metadata XML" : "Download metadata XML",
     "Metadata invalid" : "Metadata invalid",
     "Metadata valid" : "Metadata valid",
+    "Error" : "Error",
     "Account not provisioned." : "Account not provisioned.",
     "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible."
 },

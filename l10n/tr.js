@@ -23,6 +23,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Bu hizmet sağlayıcı tarafından alınan zorunlu NameID şifrelenmiş olup olmayacağını gösterir.",
     "Indicates if the SP will validate all received XML." : "Hizmet sağlayıcının alınan tüm XML kodlarını doğrulayacağını gösterir.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS SAML verilerindeki adres kodlamalarını küçük harfler ile yaparken araç büyük harf kullanır. İmza doğrulaması bölümündeki ADFS uyumluluğunu etkinleştirin.",
+    "Algorithm that the toolkit will use on signing process." : "İmzalama işleminde araç takımı tarafından kullanılacak algoritma.",
     "Attribute to map the UID to." : "UID değerinin eşleştirileceği öznitelik.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Kimlik yalnız, hesap başka bir arka sistemde varsa (LDAP gibi) doğrulansın",
     "Attribute to map the displayname to." : "Görüntülenecek ad değerinin eşleştirileceği öznitelik.",

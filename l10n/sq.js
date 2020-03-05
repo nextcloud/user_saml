@@ -48,6 +48,7 @@ OC.L10N.register(
     "Download metadata XML" : "Shkarko metadata XML",
     "Metadata invalid" : "Metadata jo e vlefshme",
     "Metadata valid" : "Metadata e vlefshme",
+    "Error" : "Error",
     "Account not provisioned." : "Llogaria nuk është e provizionuar",
     "Your account is not provisioned, access to this service is thus not possible." : "Llogaria juaj nuk është e provizionuar, prandaj aksesi në këtë pajisje nuk është i munduar."
 },

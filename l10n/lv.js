@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download metadata XML" : "Lejupielādēt metadatu XML",
     "Metadata invalid" : "Nederīgi metadati",
     "Metadata valid" : "Derīgi metadati",
+    "Error" : "Kļūda",
     "Account not provisioned." : "Konts nav nodrošināts.",
     "Your account is not provisioned, access to this service is thus not possible." : "Jūsu konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."
 },

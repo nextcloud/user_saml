@@ -17,6 +17,7 @@
     "Download metadata XML" : "Lejupielādēt metadatu XML",
     "Metadata invalid" : "Nederīgi metadati",
     "Metadata valid" : "Derīgi metadati",
+    "Error" : "Kļūda",
     "Account not provisioned." : "Konts nav nodrošināts.",
     "Your account is not provisioned, access to this service is thus not possible." : "Jūsu konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

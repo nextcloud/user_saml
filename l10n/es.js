@@ -23,6 +23,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indica un requisito para que el NameID recibido por este SP esté cifrado.",
     "Indicates if the SP will validate all received XML." : "Indica si el SP validará todo el XML recibido.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Cifra datos SAML en minúsculas, y el kit de herramientas usa mayúsculas por omisión. Active ADFS para compatibilidad en la firma de verificación.",
+    "Algorithm that the toolkit will use on signing process." : "El algoritmo que la herramienta usará en el proceso de firma.",
     "Attribute to map the UID to." : "Atributo para definir la UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Permitir la autenticación solo si una cuenta existe en algún otro motor (LDAP, p. ej.).",
     "Attribute to map the displayname to." : "Atributo para definir el nombre mostrado",
