@@ -48,7 +48,7 @@ class DavPlugin extends ServerPlugin {
 
 	public function initialize(Server $server) {
 		// before auth
-		$server->on('beforeMethod', [$this, 'beforeMethod'], 9);
+		$server->on('beforeMethod:*', [$this, 'beforeMethod'], 9);
 		$this->server = $server;
 	}
 
