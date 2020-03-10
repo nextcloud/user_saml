@@ -21,6 +21,7 @@
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Назначава захтев да NameID елемент који прима овај добављач услуга буде шифрован.",
     "Indicates if the SP will validate all received XML." : "Назначава да ли ће добављач услуга валидирати сав примљени XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Енкодује SAML податке малим словима, а тулкит подразумевано користи велика слова. Укључити за ADFS компатибилност при верификацији потписа.",
+    "Algorithm that the toolkit will use on signing process." : "Алгоритам који ће комплет алатки користити код процеса регистрације.",
     "Attribute to map the UID to." : "Атрибут на који се UID мапира.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Дозволи проверу идентитета само ако налог постоји на неком другом позадинском механизму (нпр. LDAP)",
     "Attribute to map the displayname to." : "Атрибут на који се displayname мапира.",
