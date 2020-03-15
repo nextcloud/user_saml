@@ -5,6 +5,7 @@
     "SSO & SAML log in" : "SSO- ja SAML-kirjautuminen",
     "X.509 certificate of the Service Provider" : "Palveluntarjoajan X.509-varmenne",
     "Private key of the Service Provider" : "Palveluntarjoajan yksityinen avain",
+    "Email address" : "Sähköpostiosoite",
     "SSO & SAML authentication" : "SSO- ja SAML-tunnistautuminen",
     "Open documentation" : "Avaa dokumentaatio",
     "Use built-in SAML authentication" : "Käytä sisäänrakennettua SAML-tunnistautumista",
