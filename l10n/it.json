@@ -61,7 +61,7 @@
     "Identity Provider Data" : "Dati del fornitore di identità",
     "Configure your IdP settings here." : "Configura qui le tue impostazioni IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Identificatore dell'entità IdP (deve essere un URI)",
-    "URL Target of the IdP where the SP will send the Authentication Request Message" : "Destinazione dell'URL dell'Idp dove lo SP invierà il messaggio di richiesta di autenticazione",
+    "URL Target of the IdP where the SP will send the Authentication Request Message" : "Destinazione dell'URL dell'IdP dove lo SP invierà il messaggio di richiesta di autenticazione",
     "Show optional Identity Provider settings…" : "Mostra impostazioni opzionali del fornitore di identità...",
     "URL Location of the IdP where the SP will send the SLO Request" : "Posizione dell'URL dell'IdP dove lo SP invierà la richiesta SLO",
     "Public X.509 certificate of the IdP" : "Certificato X.509 dell'IdP",
