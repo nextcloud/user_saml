@@ -22,6 +22,8 @@ OC.L10N.register(
     "General" : "Splošno",
     "Service Provider Data" : "Podatki ponudnika storitev",
     "Show Service Provider settings…" : "Pokaži nastavitve ponudnika storitve ...",
+    "Identity Provider Data" : "Podatki ponudnika istovetnosti",
+    "Configure your IdP settings here." : "Prilagoditev nastavitev IdP.",
     "Public X.509 certificate of the IdP" : "Javno potrdilo X.509 IdP",
     "Security settings" : "Varnostne nastavitve",
     "Show security settings…" : "Pokaži varnostne nastavitve ...",
