@@ -9,6 +9,7 @@ OC.L10N.register(
     "X.509 certificate of the Service Provider" : "Potrdilo X.509 ponudnika storitev",
     "Private key of the Service Provider" : "Zasebni ključ ponudnika storitev",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Določa, da bo ID imena <samlp:logoutRequest> poslan prek tega ponudnika storitev, šifriran.",
+    "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Določa, ali naj bodo sporočila, <samlp:logoutRequest> poslana prek tega spletnega ponudnika, podpisana.",
     "Whether the metadata should be signed." : "Ali naj bodo metapodatki podpisani.",
     "Attribute to map the UID to." : "Atribut za preslikavo UID.",
     "Email address" : "Elektronski naslov",
