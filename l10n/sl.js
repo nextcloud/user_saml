@@ -5,6 +5,7 @@ OC.L10N.register(
     "Saved" : "Shranjeno",
     "Provider" : "Ponudnik",
     "Unknown error, please check the log file for more details." : "Neznana napaka; več podrobnosti je zapisanih v dnevniški datoteki.",
+    "This page should not be visited directly." : "Ta strani naj ne bi bilo mogoče obiskati neposredno.",
     "Provider " : "Ponudnik",
     "X.509 certificate of the Service Provider" : "Potrdilo X.509 ponudnika storitev",
     "Private key of the Service Provider" : "Zasebni ključ ponudnika storitev",
