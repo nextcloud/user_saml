@@ -246,7 +246,7 @@ class SAMLController extends Controller {
 		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
 		$idp = $this->session->get('user_saml.Idp');
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
-			return;
+			new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		}
 
 		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
