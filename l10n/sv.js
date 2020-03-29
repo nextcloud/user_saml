@@ -4,7 +4,7 @@ OC.L10N.register(
     "This user account is disabled, please contact your administrator." : "Detta användarkontot är avstängt, kontakta din administratör.",
     "Saved" : "Sparad",
     "Provider" : "Leverantör",
-    "Unknown error, please check the log file for more details." : "Okänt fel, kontrollera loggfilen för mer detaljer.",
+    "Unknown error, please check the log file for more details." : "Okänt fel, vänligen kontrollera loggfilen för mer detaljer.",
     "Direct log in" : "Direkt inloggning",
     "SSO & SAML log in" : "SSO & SAML-inloggning",
     "This page should not be visited directly." : "Den här sidan ska inte besökas direkt.",
