@@ -57,7 +57,7 @@
     "If your Service Provider should use certificates you can optionally specify them here." : "Om din tjänstleverantör använder certifikat kan du välja att ange dem här.",
     "Show Service Provider settings…" : "Visa leverantörsinställningar",
     "Name ID format" : "Name ID format",
-    "Identity Provider Data" : "Identity Provider Data",
+    "Identity Provider Data" : "Identitetsleverantörsdata",
     "Configure your IdP settings here." : "Konfigurera dina IdP-inställningar här.",
     "Identifier of the IdP entity (must be a URI)" : "Identifierare av IdP'n (måste vara en URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Webbadressmål av IdP där SP skickar autentiseringsförfrågningsmeddelandet",
