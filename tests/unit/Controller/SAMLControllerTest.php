@@ -22,8 +22,10 @@
 namespace OCA\User_SAML\Tests\Controller;
 
 use OCA\User_SAML\Controller\SAMLController;
+use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
@@ -33,11 +35,12 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
-use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
 
 class SAMLControllerTest extends TestCase  {
+	/** @var UserResolver|\PHPUnit\Framework\MockObject\MockObject */
+	protected $userResolver;
 	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	private $request;
 	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
@@ -52,8 +55,6 @@ class SAMLControllerTest extends TestCase  {
 	private $config;
 	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
 	private $urlGenerator;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
-	private $userManager;
 	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
 	private $logger;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
@@ -74,9 +75,9 @@ class SAMLControllerTest extends TestCase  {
 			->willReturnArgument(0);
 		$this->config = $this->createMock(IConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->userManager = $this->createMock(IUserManager::class);
 		$this->logger = $this->createMock(ILogger::class);
 		$this->l = $this->createMock(IL10N::class);
+		$this->userResolver = $this->createMock(UserResolver::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			function($param) {
@@ -98,9 +99,9 @@ class SAMLControllerTest extends TestCase  {
 			$this->userBackend,
 			$this->config,
 			$this->urlGenerator,
-			$this->userManager,
 			$this->logger,
-			$this->l
+			$this->l,
+			$this->userResolver
 		);
 
 	}
@@ -169,8 +170,8 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
-			->expects($this->once())
+		$this->userResolver
+			->expects($this->any())
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(true);
@@ -185,9 +186,9 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
 		$user = $this->createMock(IUser::class);
-		$this->userManager
+		$this->userResolver
 			->expects($this->once())
-			->method('get')
+			->method('findExistingUser')
 			->with('MyUid')
 			->willReturn($user);
 		$user
@@ -218,8 +219,8 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
-			->expects($this->once())
+		$this->userResolver
+			->expects($this->any())
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(true);
@@ -229,9 +230,9 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
 		$user = $this->createMock(IUser::class);
-		$this->userManager
+		$this->userResolver
 			->expects($this->once())
-			->method('get')
+			->method('findExistingUser')
 			->with('MyUid')
 			->willReturn($user);
 		$user
@@ -267,11 +268,16 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
-			->expects($this->once())
+		$this->userResolver
+			->expects($this->any())
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(false);
+		$this->userResolver
+			->expects($this->any())
+			->method('findExistingUserId')
+			->with('MyUid', true)
+			->willThrowException(new NoUserFoundException());
 		$this->urlGenerator
 			->expects($this->once())
 			->method('getAbsoluteURL')
@@ -291,9 +297,9 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
 		$user = $this->createMock(IUser::class);
-		$this->userManager
+		$this->userResolver
 			->expects($this->once())
-			->method('get')
+			->method('findExistingUser')
 			->with('MyUid')
 			->willReturn($user);
 		$user
@@ -324,11 +330,16 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
-			->expects($this->once())
+		$this->userResolver
+			->expects($this->any())
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(false);
+		$this->userResolver
+			->expects($this->any())
+			->method('findExistingUserId')
+			->with('MyUid', true)
+			->willThrowException(new NoUserFoundException());
 		$this->urlGenerator
 			->expects($this->once())
 			->method('linkToRouteAbsolute')
@@ -343,14 +354,14 @@ class SAMLControllerTest extends TestCase  {
 			->method('createUserIfNotExists')
 			->with('MyUid');
 		$this->userBackend
-			->expects($this->exactly(2))
+			->expects($this->atLeastOnce())
 			->method('getCurrentUserId')
 			->willReturn('MyUid');
-		$this->userManager
+		$this->userResolver
 			->expects($this->once())
-			->method('get')
+			->method('findExistingUser')
 			->with('MyUid')
-			->willReturn(null);
+			->willThrowException(new NoUserFoundException());
 
 		$expected = new RedirectResponse('https://nextcloud.com/notprovisioned/');
 		$this->assertEquals($expected, $this->samlController->login(1));
@@ -376,11 +387,16 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
+		$this->userResolver
 			->expects($this->any())
 			->method('userExists')
 			->with('MyUid')
 			->willReturn(false);
+		$this->userResolver
+			->expects($this->any())
+			->method('findExistingUserId')
+			->with('MyUid', $this->anything())
+			->willThrowException(new NoUserFoundException());
 		$this->urlGenerator
 			->expects($this->once())
 			->method('linkToRouteAbsolute')
@@ -415,14 +431,14 @@ class SAMLControllerTest extends TestCase  {
 			->method('getAppValue')
 			->with('user_saml', 'general-uid_mapping')
 			->willReturn('uid');
-		$this->userManager
-			->expects($this->exactly(2))
-			->method('userExists')
-			->with('MyUid')
-			->willReturnOnConsecutiveCalls(false, true);
-		$this->userManager
+		$this->userResolver
 			->expects($this->once())
-			->method('get')
+			->method('findExistingUserId')
+			->with('MyUid', true)
+			->willReturn('MyUid');
+		$this->userResolver
+			->expects($this->once())
+			->method('findExistingUser')
 			->with('MyUid')
 			->willReturn($this->createMock(IUser::class));
 		$this->urlGenerator
