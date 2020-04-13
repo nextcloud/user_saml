@@ -80,7 +80,7 @@ OC.L10N.register(
     "Metadata valid" : "Metadata giltig",
     "Error" : "Fel",
     "Account not provisioned." : "Konto inte förberett",
-    "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto är inte förberett, tillgång till tjänsten är därför inte möjligt.",
+    "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto tillhandahålls inte, åtkomst till den här tjänsten är därför inte möjligt.",
     "Choose a authentication provider" : "Välj en autentiseringsleverantör"
 },
 "nplurals=2; plural=(n != 1);");
