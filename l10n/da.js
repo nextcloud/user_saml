@@ -26,6 +26,7 @@ OC.L10N.register(
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Tillad kun godkendelse, hvis der findes en konto på en anden backend. (f.eks. LDAP)",
     "Attribute to map the displayname to." : "Egenskab til at kortlægge visningsnavn til.",
     "Attribute to map the email address to." : "Egenskab til at kortlægge e-mail-adressen til.",
+    "Email address" : "E-mailadresse",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Valgfrit visningsnavn for identitetsudbyderen (standard: \"SSO & SAML log ind\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Tillad brug af flere brugerbackender (f.eks. LDAP)",
     "Open documentation" : "Åbn dokumentation",
