@@ -12,6 +12,7 @@ OC.L10N.register(
     "X.509 certificate of the Service Provider" : "X.509 certifikát poskytovateľa služby",
     "Private key of the Service Provider" : "Privátny kľúč poskytovateľa služby",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Znamená, že nameID <samlp:logoutRequest>odoslané týmto poskytovateľom služieb bude šifrované.",
+    "Email address" : "E-mailová adresa",
     "Open documentation" : "Otvoriť dokumentáciu",
     "Use environment variable" : "Použiť premennú prostredia",
     "Global settings" : "Globálne nastavenia",
