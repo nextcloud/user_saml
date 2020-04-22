@@ -46,7 +46,11 @@ class UserResolver {
 		if($this->userManager->userExists($rawUidCandidate)) {
 			return $rawUidCandidate;
 		}
-		$sanitized = $this->sanitizeUserIdCandidate($rawUidCandidate);
+		try {
+			$sanitized = $this->sanitizeUserIdCandidate($rawUidCandidate);
+		} catch(\InvalidArgumentException $e) {
+			$sanitized = '';
+		}
 		if($this->userManager->userExists($sanitized)) {
 			return $sanitized;
 		}
@@ -78,6 +82,9 @@ class UserResolver {
 		$this->userManager->search($search);
 	}
 
+	/**
+	 * @throws \InvalidArgumentException
+	 */
 	protected function sanitizeUserIdCandidate(string $rawUidCandidate): string {
 		//FIXME: adjusted copy of LDAP's Access::sanitizeUsername(), should go to API
 		$sanitized = trim($rawUidCandidate);
