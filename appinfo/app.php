@@ -45,6 +45,12 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$session
 );
 
+$userData = new \OCA\User_SAML\UserData(
+	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
+	$samlSettings,
+	$config
+);
+
 $userBackend = new \OCA\User_SAML\UserBackend(
 	$config,
 	$urlGenerator,
@@ -53,7 +59,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getUserManager(),
 	\OC::$server->getGroupManager(),
 	$samlSettings,
-	\OC::$server->getLogger()
+	\OC::$server->getLogger(),
+	$userData
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);

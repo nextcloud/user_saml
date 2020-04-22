@@ -26,6 +26,7 @@ use Firebase\JWT\JWT;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
@@ -62,6 +63,8 @@ class SAMLController extends Controller {
 	private $l;
 	/** @var UserResolver */
 	private $userResolver;
+	/** @var UserData */
+	private $userData;
 
 	/**
 	 * @param string $appName
@@ -86,7 +89,8 @@ class SAMLController extends Controller {
 		IURLGenerator $urlGenerator,
 		ILogger $logger,
 		IL10N $l,
-		UserResolver $userResolver
+		UserResolver $userResolver,
+		UserData $userData
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -98,65 +102,52 @@ class SAMLController extends Controller {
 		$this->logger = $logger;
 		$this->l = $l;
 		$this->userResolver = $userResolver;
+		$this->userData = $userData;
 	}
 
 	/**
-	 * @param array $auth
 	 * @throws NoUserFoundException
 	 */
-	private function autoprovisionIfPossible(array $auth) {
+	private function autoprovisionIfPossible() {
+		$auth = $this->userData->getAttributes();
 
-		$prefix = $this->SAMLSettings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		if(isset($auth[$uidMapping])) {
-			if(is_array($auth[$uidMapping])) {
-				$uid = $auth[$uidMapping][0];
-			} else {
-				$uid = $auth[$uidMapping];
-			}
-
-			// make sure that a valid UID is given
-			if (empty($uid)) {
-				$this->logger->error('Uid "' . $uid . '" is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
-				throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Given uid: ' . $uid);
-			}
-
-			$uid = $this->userBackend->testEncodedObjectGUID($uid);
-			try {
-				$userExists = true;
-				$uid = $this->userResolver->findExistingUserId($uid, true);
-			} catch (NoUserFoundException $e) {
-				$userExists = false;
-			}
-
-			// if this server acts as a global scale master and the user is not
-			// a local admin of the server we just create the user and continue
-			// no need to update additional attributes
-			$isGsEnabled = $this->config->getSystemValue('gs.enabled', false);
-			$isGsMaster = $this->config->getSystemValue('gss.mode', 'slave') === 'master';
-			$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []));
-			if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
-				$this->userBackend->createUserIfNotExists($uid);
-				return;
-			}
-			$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
-			if($userExists === true) {
-				if($autoProvisioningAllowed) {
-					$this->userBackend->updateAttributes($uid, $auth);
-				}
-				return;
-			}
-
-			if(!$userExists && !$autoProvisioningAllowed) {
-				throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
-			} elseif(!$userExists && $autoProvisioningAllowed) {
-				$this->userBackend->createUserIfNotExists($uid, $auth);
-				$this->userBackend->updateAttributes($uid, $auth);
-				return;
-			}
+		if(!$this->userData->hasUidMappingAttribute()) {
+			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth)));
 		}
 
-		throw new NoUserFoundException('IDP parameter for the UID (' . $uidMapping . ') not found. Possible parameters are: ' . json_encode(array_keys($auth)));
+		if ($this->userData->getOriginalUid() === '') {
+			$this->logger->error('Uid is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
+			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping.');
+		}
+		$uid = $this->userData->getEffectiveUid();
+		$userExists = $uid !== '';
+
+		// if this server acts as a global scale master and the user is not
+		// a local admin of the server we just create the user and continue
+		// no need to update additional attributes
+		$isGsEnabled = $this->config->getSystemValue('gs.enabled', false);
+		$isGsMaster = $this->config->getSystemValue('gss.mode', 'slave') === 'master';
+		$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []));
+		if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
+			$this->userBackend->createUserIfNotExists($this->userData->getOriginalUid());
+			return;
+		}
+		$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
+		if($userExists) {
+			if($autoProvisioningAllowed) {
+				$this->userBackend->updateAttributes($uid, $auth);
+			}
+			return;
+		}
+
+		$uid = $this->userData->getOriginalUid();
+		if(!$userExists && !$autoProvisioningAllowed) {
+			throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
+		} elseif(!$userExists && $autoProvisioningAllowed) {
+			$this->userBackend->createUserIfNotExists($uid, $auth);
+			$this->userBackend->updateAttributes($uid, $auth);
+			return;
+		}
 	}
 
 	/**
@@ -186,7 +177,8 @@ class SAMLController extends Controller {
 				}
 				$this->session->set('user_saml.samlUserData', $_SERVER);
 				try {
-					$this->autoprovisionIfPossible($this->session->get('user_saml.samlUserData'));
+					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
+					$this->autoprovisionIfPossible();
 					$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
 					$user->updateLastLoginTimestamp();
 				} catch (NoUserFoundException $e) {
@@ -269,7 +261,8 @@ class SAMLController extends Controller {
 		// Check whether the user actually exists, if not redirect to an error page
 		// explaining the issue.
 		try {
-			$this->autoprovisionIfPossible($auth->getAttributes());
+			$this->userData->setAttributes($auth->getAttributes());
+			$this->autoprovisionIfPossible();
 		} catch (NoUserFoundException $e) {
 			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
