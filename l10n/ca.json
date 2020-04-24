@@ -21,6 +21,7 @@
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Indica un requisit perquè l'encriptació de nom d'aquest SP sigui xifrada.",
     "Indicates if the SP will validate all received XML." : "Indica si el SP validarà tots els XML rebuts.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL: codifica les dades SAML com a minúscules, i el kit d'eines per defecte usa majúscules. Activa la compatibilitat ADFS sobre la verificació de la signatura.",
+    "Algorithm that the toolkit will use on signing process." : "Algorisme que s'emprarà en el procés de signatura.",
     "Attribute to map the UID to." : "Atribut per assignar un UID a.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Només permetre l'autenticació si hi ha un compte en un altre suport. (p. ex., LDAP)",
     "Attribute to map the displayname to." : "Atribut per assignar el nom de la pantalla a.",
