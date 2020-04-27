@@ -12,6 +12,7 @@
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "מציין שה־nameID של ה־<samlp:logoutRequest> שנשלח על ידי ספק השירות הזה יהיה מוצפן.",
     "Whether the metadata should be signed." : "האם לחתום על נתוני העל.",
     "Indicates if the SP will validate all received XML." : "מציין אם ספק השירות יאמת את כל ה־XML שמתקבל",
+    "Email address" : "כתובת דוא״ל",
     "Open documentation" : "פתיחת תיעוד",
     "Use built-in SAML authentication" : "שימוש באימות SAML מובנה",
     "Use environment variable" : "שימוש במשתני סביבה",
