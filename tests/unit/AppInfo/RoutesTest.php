@@ -25,6 +25,7 @@ use Test\TestCase;
 
 class Test extends TestCase  {
 	public function testFile() {
+		$dir =__DIR__;
 		$routes = require_once __DIR__ . '/../../../appinfo/routes.php';
 
 		$expected = [

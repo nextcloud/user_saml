@@ -23,6 +23,7 @@ namespace OCA\User_SAML\Tests\Settings;
 
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\UserData;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -35,6 +36,8 @@ use OCP\IUserManager;
 use Test\TestCase;
 
 class UserBackendTest extends TestCase   {
+	/** @var UserData|\PHPUnit\Framework\MockObject\MockObject */
+	private $userData;
 	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
 	private $config;
 	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
@@ -65,6 +68,7 @@ class UserBackendTest extends TestCase   {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
+		$this->userData = $this->createMock(UserData::class);
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
@@ -78,7 +82,8 @@ class UserBackendTest extends TestCase   {
 					$this->userManager,
 					$this->groupManager,
 					$this->SAMLSettings,
-					$this->logger
+					$this->logger,
+					$this->userData,
 				])
 				->setMethods($mockedFunctions)
 				->getMock();
@@ -91,7 +96,8 @@ class UserBackendTest extends TestCase   {
 				$this->userManager,
 				$this->groupManager,
 				$this->SAMLSettings,
-				$this->logger
+				$this->logger,
+				$this->userData
 			);
 		}
 	}
@@ -281,27 +287,9 @@ class UserBackendTest extends TestCase   {
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
 
-	public function objectGuidProvider() {
-		return [
-			['Joey No Conversion', 'Joey No Conversion'],
-			['no@convers.ion', 'no@convers.ion'],
-			['a0aa9ed8-6b48-1034-8ad7-8fb78330d80a', 'a0aa9ed8-6b48-1034-8ad7-8fb78330d80a'],
-			['EDE70D16-B9D5-4E9A-ABD7-614D17246E3F', 'EDE70D16-B9D5-4E9A-ABD7-614D17246E3F'],
-			['Tm8gY29udmVyc2lvbgo=', 'Tm8gY29udmVyc2lvbgo='],
-			['ASfjU2OYEd69ZgAVF4pePA==', '53E32701-9863-DE11-BD66-0015178A5E3C'],
 			['aaabbbcc@aa.bbbccdd.eee.ff', 'aaabbbcc@aa.bbbccdd.eee.ff'],
 			['aaabbbcccaa.bbbccdddeee', 'aaabbbcccaa.bbbccdddeee']
-		];
-	}
 
-	/**
-	 * @dataProvider objectGuidProvider
-	 */
-	public function testTestEncodedObjectGUID(string $input, string $expectation) {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		$uid = $this->userBackend->testEncodedObjectGUID($input);
-		$this->assertSame($expectation, $uid);
-	}
 
 
 }
