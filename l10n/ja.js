@@ -23,6 +23,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "このSPによって受信されたNameIDが暗号化されるための要件を示します。",
     "Indicates if the SP will validate all received XML." : "SPが受信したすべてのXMLを検証するかどうかを示します。",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL- SAMLデータを小文字で符号化し、ツールキットはデフォルトで大文字を使用します。 署名検証でADFSとの互換性を有効にする。",
+    "Algorithm that the toolkit will use on signing process." : "ツールキットが署名処理で使用するアルゴリズム。",
     "Attribute to map the UID to." : "UIDをマップする属性。",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "ほかのバックエンドにアカウントが存在する場合のみ、認証を許可します。 （例えば、LDAP）",
     "Attribute to map the displayname to." : "表示名をにマップする属性。",
