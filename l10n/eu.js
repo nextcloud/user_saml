@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add identity provider" : "Gehitu identitate hornitzailea",
     "General" : "Orokorra",
     "Service Provider Data" : "Zerbitzu-hornitzailearen datuak",
+    "Identity Provider Data" : "Identitate-hornitzailearen datuak",
     "Configure your IdP settings here." : "Konfiguratu zure IdP ezarpenak hemen.",
     "Public X.509 certificate of the IdP" : "IdP-aren X.509 ziurtagiri publikoa",
     "Security settings" : "Segurtasun ezarpenak",
@@ -32,6 +33,7 @@ OC.L10N.register(
     "Reset settings" : "Leheneratu ezarpenak",
     "Metadata invalid" : "Baliogabeko metadatuak",
     "Metadata valid" : "Baliozko metadatuak",
-    "Error" : "Errorea"
+    "Error" : "Errorea",
+    "Account not provisioned." : "Kontua ez dago hornituta."
 },
 "nplurals=2; plural=(n != 1);");
