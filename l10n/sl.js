@@ -43,6 +43,7 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Javno potrdilo X.509 IdP",
     "Security settings" : "Varnostne nastavitve",
     "Show security settings…" : "Pokaži varnostne nastavitve ...",
+    "Signatures and encryption required" : "Zahtevani so podpisi in šifriranje",
     "Download metadata XML" : "Prejmi datoteko metapodatkov XML",
     "Reset settings" : "Ponastavi nastavitve",
     "Metadata invalid" : "Neveljavni metapodatki",
