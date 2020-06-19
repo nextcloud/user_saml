@@ -35,6 +35,8 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Security\ICrypto;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class SAMLControllerTest extends TestCase  {
@@ -58,6 +60,8 @@ class SAMLControllerTest extends TestCase  {
 	private $logger;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
 	private $l;
+	/** @var ICrypto|MockObject */
+	private $crypto;
 	/** @var SAMLController */
 	private $samlController;
 
@@ -77,6 +81,7 @@ class SAMLControllerTest extends TestCase  {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->logger = $this->createMock(ILogger::class);
 		$this->l = $this->createMock(IL10N::class);
+		$this->crypto = $this->createMock(ICrypto::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			function($param) {
@@ -100,7 +105,8 @@ class SAMLControllerTest extends TestCase  {
 			$this->urlGenerator,
 			$this->userManager,
 			$this->logger,
-			$this->l
+			$this->l,
+			$this->crypto
 		);
 
 	}
