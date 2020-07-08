@@ -39,6 +39,7 @@ OC.L10N.register(
     "Show Service Provider settings…" : "Pokaži nastavitve ponudnika storitve ...",
     "Identity Provider Data" : "Podatki ponudnika istovetnosti",
     "Configure your IdP settings here." : "Prilagoditev nastavitev IdP.",
+    "Identifier of the IdP entity (must be a URI)" : "Dololilo IdP (zapisano kot naslov URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Ciljni naslov URL za IdP, kamor bo ponudnik storitev poslal sporočilo o zahtevi overitve.",
     "Public X.509 certificate of the IdP" : "Javno potrdilo X.509 IdP",
     "Security settings" : "Varnostne nastavitve",
