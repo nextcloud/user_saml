@@ -37,6 +37,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Security\ICrypto;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -61,6 +62,10 @@ class SAMLController extends Controller {
 	private $logger;
 	/** @var IL10N */
 	private $l;
+	/**
+	 * @var ICrypto
+	 */
+	private $crypto;
 
 	/**
 	 * @param string $appName
@@ -85,7 +90,8 @@ class SAMLController extends Controller {
 								IURLGenerator $urlGenerator,
 								IUserManager $userManager,
 								ILogger $logger,
-								IL10N $l) {
+								IL10N $l,
+								ICrypto $crypto) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
@@ -96,6 +102,7 @@ class SAMLController extends Controller {
 		$this->userManager = $userManager;
 		$this->logger = $logger;
 		$this->l = $l;
+		$this->crypto = $crypto;
 	}
 
 	/**
@@ -175,9 +182,22 @@ class SAMLController extends Controller {
 			case 'saml':
 				$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
-				$this->session->set('user_saml.AuthNRequestID', $auth->getLastRequestID());
-				$this->session->set('user_saml.OriginalUrl', $this->request->getParam('originalUrl', ''));
-				$this->session->set('user_saml.Idp', $idp);
+				$response = new Http\RedirectResponse($ssoUrl);
+
+				// Pack data as JSON so we can properly extract it later
+				$data = json_encode([
+					'AuthNRequestID' => $auth->getLastRequestID(),
+					'OriginalUrl' => $this->request->getParam('originalUrl', ''),
+					'Idp' => $idp
+				]);
+
+				// Encrypt it
+				$data = $this->crypto->encrypt($data);
+
+				// And base64 encode it
+				$data = base64_encode($data);
+
+				$response->addCookie('saml_data', $data, null, 'None');
 				break;
 			case 'environment-variable':
 				$ssoUrl = $this->request->getParam('originalUrl', '');
@@ -198,6 +218,7 @@ class SAMLController extends Controller {
 					}
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
 				}
+				$response = new Http\RedirectResponse($ssoUrl);
 				break;
 			default:
 				throw new \Exception(
@@ -208,7 +229,7 @@ class SAMLController extends Controller {
 				);
 		}
 
-		return new Http\RedirectResponse($ssoUrl);
+		return $response;
 	}
 
 	/**
@@ -244,8 +265,26 @@ class SAMLController extends Controller {
 	 * @throws ValidationError
 	 */
 	public function assertionConsumerService() {
-		$AuthNRequestID = $this->session->get('user_saml.AuthNRequestID');
-		$idp = $this->session->get('user_saml.Idp');
+		// Fetch and decrypt the cookie
+		$cookie = $this->request->getCookie('saml_data');
+		if ($cookie === null) {
+			return;
+		}
+
+		// Base64 decode
+		$cookie = base64_decode($cookie);
+
+		// Decrypt and deserialize
+		try {
+			$cookie = $this->crypto->decrypt($cookie);
+		} catch (\Exception $e) {
+			return;
+		}
+		$data = json_decode($cookie, true);
+
+
+		$AuthNRequestID = $data['AuthNRequestID'];
+		$idp = $data['Idp'];
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
 			return;
 		}
@@ -299,18 +338,19 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 		}
 
-		$originalUrl = $this->session->get('user_saml.OriginalUrl');
+		$originalUrl = $data['OriginalUrl'];
 		if($originalUrl !== null && $originalUrl !== '') {
 			$response = new Http\RedirectResponse($originalUrl);
 		} else {
 			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		}
-		$this->session->remove('user_saml.OriginalUrl');
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
 		// to be there.
 		if($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
 			$response->addCookie('_shibsession_', 'authenticated');
 		}
+
+		$response->invalidateCookie('saml_data');
 		return $response;
 	}
 
