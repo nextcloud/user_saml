@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.1.2
+### Fixed
+- 19 support. This was broken due to stricter cookies
+
 ## 3.0.1
 ### Added
 - Add setting to specify a different signature algorithm #401
