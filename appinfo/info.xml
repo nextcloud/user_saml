@@ -35,6 +35,9 @@ While theoretically any other authentication provider implementing either one of
 	<dependencies>
 		<nextcloud min-version="18" max-version="20" />
 	</dependencies>
+	<commands>
+		<command>OCA\User_SAML\Command\GetMetadata</command>
+	</commands>
 	<settings>
 		<admin>OCA\User_SAML\Settings\Admin</admin>
 		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
