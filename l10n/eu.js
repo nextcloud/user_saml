@@ -17,7 +17,10 @@ OC.L10N.register(
     "Encrypted" : "Zifratua",
     "Entity" : "Entitatea",
     "Kerberos" : "Kerberos",
+    "Persistent" : "Iraunkorra",
+    "Transient" : "Behin-behinekoa",
     "Unspecified" : "Zehaztu gabea",
+    "X509 subject name" : "X509 gaia",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Baimendu erabiltzaile atzealde anitzen erabilpena (adib. LDAP)",
     "SSO & SAML authentication" : "SSO eta SAML autentifikazioa",
     "Open documentation" : "Ireki dokumentazioa",
@@ -45,6 +48,7 @@ OC.L10N.register(
     "Metadata valid" : "Baliozko metadatuak",
     "Error" : "Errorea",
     "Account not provisioned." : "Kontua ez dago hornituta.",
+    "Your account is not provisioned, access to this service is thus not possible." : "Zure kontua ez dago hornituta. Zerbitzu honetara sarbidea, ondorioz, ez da posiblea.",
     "Choose a authentication provider" : "Aukeratu autentifikazio-hornitzailea"
 },
 "nplurals=2; plural=(n != 1);");
