@@ -1,6 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
+    "This user account is disabled, please contact your administrator." : "Erabiltzaile-kontu hau desgaitua dago, mesedez, jarri harremanetan administratzailearekin",
     "Saved" : "Gordeta",
     "Provider" : "Hornitzailea",
     "Unknown error, please check the log file for more details." : "Errore ezezaguna, mesedez egiaztatu egunkari fitxategia xehetasun gehiagorako.",
