@@ -8,7 +8,7 @@ script('user_saml', 'selectUserBackEnd');
 
 <div id="saml-select-user-back-end">
 
-<h1>Login options:</h1>
+<h1><?php p($l->t('Login options:')); ?></h1>
 
 	<?php if($_['useCombobox']) { ?>
 
