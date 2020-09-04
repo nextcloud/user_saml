@@ -80,6 +80,12 @@ switch($config->getAppValue('user_saml', 'type')) {
 }
 
 if ($type === 'environment-variable') {
+	// We should ignore oauth2 token endpoint (oauth can send the credentials as basic auth which will fail with apache auth)
+	$uri = $request->getRequestUri();
+	if (substr($uri, -24) === '/apps/oauth/api/v1/token') {
+		return;
+	}
+
 	OC_User::handleApacheAuth();
 }
 
