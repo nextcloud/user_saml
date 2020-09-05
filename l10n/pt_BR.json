@@ -80,6 +80,7 @@
     "Error" : "Erro",
     "Account not provisioned." : "Conta não provisionada",
     "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. O acesso a esse serviço não é possível",
+    "Login options:" : "Opções de login:",
     "Choose a authentication provider" : "Escolha um provedor de autenticação"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
