@@ -5,7 +5,7 @@ Feature: EnvironmentVariable
     And The setting "general-uid_mapping" is set to "REMOTE_USER"
     And The environment variable "REMOTE_USER" is set to "not-provisioned-user"
     When I send a GET request to "http://localhost/index.php/login"
-    Then I should be redirected to "http://localhost/index.php/apps/files/"
+    Then I should be redirected to "http://localhost/index.php/apps/dashboard/"
     Then The user value "id" should be "not-provisioned-user"
     And The last login timestamp of "not-provisioned-user" should not be empty
 
@@ -16,7 +16,7 @@ Feature: EnvironmentVariable
     And The setting "general-uid_mapping" is set to "REMOTE_USER"
     And The environment variable "REMOTE_USER" is set to "provisioned-user"
     When I send a GET request to "http://localhost/index.php/login"
-    Then I should be redirected to "http://localhost/index.php/apps/files/"
+    Then I should be redirected to "http://localhost/index.php/apps/dashboard/"
     Then The user value "id" should be "provisioned-user"
     And The last login timestamp of "provisioned-user" should not be empty
 
