@@ -55,7 +55,7 @@
     "Add identity provider" : "Dodaj dostawcę tożsamości",
     "General" : "Ogólne",
     "Service Provider Data" : "Dane dostawcy usług",
-    "If your Service Provider should use certificates you can optionally specify them here." : "Jeśli twój dostawca usług powinien używać certyfikatów możesz je opcjonalnie tutaj ustawić.",
+    "If your Service Provider should use certificates you can optionally specify them here." : "Jeśli Twój dostawca usług powinien używać certyfikatów, możesz opcjonalnie określić je tutaj.",
     "Show Service Provider settings…" : "Pokaż ustawienia dostawcy usług…",
     "Name ID format" : "Format nazwy ID",
     "Identity Provider Data" : "Dane od dostawcy tożsamości",

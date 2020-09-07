@@ -82,6 +82,7 @@ OC.L10N.register(
     "Error" : "Fel",
     "Account not provisioned." : "Konto inte förberett",
     "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto tillhandahålls inte, åtkomst till den här tjänsten är därför inte möjligt.",
+    "Login options:" : "Inloggningsalternativ:",
     "Choose a authentication provider" : "Välj en autentiseringsleverantör"
 },
 "nplurals=2; plural=(n != 1);");
