@@ -17,7 +17,7 @@ Feature: Shibboleth
      |j_username|j_password|_eventId_proceed|
      |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/files/"
+    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
     And The user value "id" should be "student1"
     And The last login timestamp of "student1" should not be empty
 
@@ -61,7 +61,7 @@ Feature: Shibboleth
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/files/"
+    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
     Then The user value "id" should be "student1"
     Then The user value "email" should be ""
     And The user value "display-name" should be "Default displayname of student1"
@@ -86,7 +86,7 @@ Feature: Shibboleth
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/files/"
+    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "display-name" should be "Stud Ent"
