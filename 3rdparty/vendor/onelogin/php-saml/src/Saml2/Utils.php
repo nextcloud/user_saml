@@ -111,12 +111,13 @@ class Utils
      * @param string|DOMDocument $xml    The XML string or document which should be validated.
      * @param string             $schema The schema filename which should be used.
      * @param bool               $debug  To disable/enable the debug mode
+     * @param string             $schemaPath Change schema path
      *
      * @return string|DOMDocument $dom  string that explains the problem or the DOMDocument
      *
      * @throws Exception
      */
-    public static function validateXML($xml, $schema, $debug = false)
+    public static function validateXML($xml, $schema, $debug = false, $schemaPath = null)
     {
         assert(is_string($xml) || $xml instanceof DOMDocument);
         assert(is_string($schema));
@@ -134,7 +135,12 @@ class Utils
             }
         }
 
-        $schemaFile = __DIR__ . '/schemas/' . $schema;
+        if (isset($schemaPath)) {
+            $schemaFile = $schemaPath . $schema;
+        } else {
+            $schemaFile = __DIR__ . '/schemas/' . $schema;
+        }
+
         $oldEntityLoader = libxml_disable_entity_loader(false);
         $res = $dom->schemaValidate($schemaFile);
         libxml_disable_entity_loader($oldEntityLoader);
@@ -622,7 +628,7 @@ class Utils
         if (!empty($_SERVER['REQUEST_URI'])) {
             $route = $_SERVER['REQUEST_URI'];
             if (!empty($_SERVER['QUERY_STRING'])) {
-                $route = str_replace($_SERVER['QUERY_STRING'], '', $route);
+                $route = self::strLreplace($_SERVER['QUERY_STRING'], '', $route);
                 if (substr($route, -1) == '?') {
                     $route = substr($route, 0, -1);
                 }
@@ -635,7 +641,24 @@ class Utils
         }
 
         $selfRoutedURLNoQuery = $selfURLhost . $route;
+
+        $pos = strpos($selfRoutedURLNoQuery, "?");
+        if ($pos !== false) {
+            $selfRoutedURLNoQuery = substr($selfRoutedURLNoQuery, 0, $pos-1);
+        }
+
         return $selfRoutedURLNoQuery;
+    }
+
+    public static function strLreplace($search, $replace, $subject)
+    {
+        $pos = strrpos($subject, $search);
+
+        if ($pos !== false) {
+            $subject = substr_replace($subject, $replace, $pos, strlen($search));
+        }
+
+        return $subject;
     }
 
     /**
@@ -1531,7 +1554,7 @@ class Utils
                 }
             }
 
-            if ($objKey->verifySignature($signedQuery, base64_decode($_GET['Signature'])) === 1) {
+            if ($objKey->verifySignature($signedQuery, base64_decode($getData['Signature'])) === 1) {
                 $signatureValid = true;
                 break;
             }

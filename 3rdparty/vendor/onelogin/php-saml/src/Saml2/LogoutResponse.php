@@ -65,10 +65,9 @@ class LogoutResponse
      *
      * @param Settings $settings Settings.
      * @param string|null             $response An UUEncoded SAML Logout response from the IdP.
-     * 
+     *
      * @throws Error
      * @throws Exception
-     * 
      */
     public function __construct(\OneLogin\Saml2\Settings $settings, $response = null)
     {
@@ -140,7 +139,7 @@ class LogoutResponse
      * @param bool        $retrieveParametersFromServer True if we want to use parameters from $_SERVER to validate the signature
      *
      * @return bool Returns if the SAML LogoutResponse is or not valid
-     * 
+     *
      * @throws ValidationError
      */
     public function isValid($requestId = null, $retrieveParametersFromServer = false)
@@ -154,7 +153,7 @@ class LogoutResponse
                 $security = $this->_settings->getSecurityData();
 
                 if ($security['wantXMLValidation']) {
-                    $res = Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive());
+                    $res = Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive(), $this->_settings->getSchemasPath());
                     if (!$res instanceof DOMDocument) {
                         throw new ValidationError(
                             "Invalid SAML Logout Response. Not match the saml-schema-protocol-2.0.xsd",
@@ -185,14 +184,27 @@ class LogoutResponse
 
                 $currentURL = Utils::getSelfRoutedURLNoQuery();
 
-                // Check destination
                 if ($this->document->documentElement->hasAttribute('Destination')) {
                     $destination = $this->document->documentElement->getAttribute('Destination');
-                    if (!empty($destination) && strpos($destination, $currentURL) === false) {
-                        throw new ValidationError(
-                            "The LogoutResponse was received at $currentURL instead of $destination",
-                            ValidationError::WRONG_DESTINATION
-                        );
+                    if (empty($destination)) {
+                        if (!$security['relaxDestinationValidation']) {
+                            throw new ValidationError(
+                                "The LogoutResponse has an empty Destination value",
+                                ValidationError::EMPTY_DESTINATION
+                            );
+                        }
+                    } else {
+                        $urlComparisonLength = $security['destinationStrictlyMatches'] ? strlen($destination) : strlen($currentURL);
+                        if (strncmp($destination, $currentURL, $urlComparisonLength) !== 0) {
+                            $currentURLNoRouted = Utils::getSelfURLNoQuery();
+                            $urlComparisonLength = $security['destinationStrictlyMatches'] ? strlen($destination) : strlen($currentURLNoRouted);
+                            if (strncmp($destination, $currentURLNoRouted, $urlComparisonLength) !== 0) {
+                                throw new ValidationError(
+                                    "The LogoutResponse was received at $currentURL instead of $destination",
+                                    ValidationError::WRONG_DESTINATION
+                                );
+                            }
+                        }
                     }
                 }
 
