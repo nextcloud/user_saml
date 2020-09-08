@@ -260,15 +260,16 @@ class SAMLController extends Controller {
 	 * @OnlyUnauthenticatedUsers
 	 * @NoSameSiteCookieRequired
 	 *
-	 * @return Http\RedirectResponse|void
+	 * @return Http\RedirectResponse
 	 * @throws Error
 	 * @throws ValidationError
 	 */
-	public function assertionConsumerService() {
+	public function assertionConsumerService(): Http\RedirectResponse {
 		// Fetch and decrypt the cookie
 		$cookie = $this->request->getCookie('saml_data');
 		if ($cookie === null) {
-			return;
+			$this->logger->debug('Cookie was not present', ['app' => 'user_saml']);
+			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
 		// Base64 decode
@@ -278,7 +279,8 @@ class SAMLController extends Controller {
 		try {
 			$cookie = $this->crypto->decrypt($cookie);
 		} catch (\Exception $e) {
-			return;
+			$this->logger->debug('Could not decrypt SAML cookie', ['app' => 'user_saml']);
+			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 		$data = json_decode($cookie, true);
 
@@ -286,7 +288,8 @@ class SAMLController extends Controller {
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
-			return;
+			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
+			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
 		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
