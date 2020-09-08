@@ -45,7 +45,7 @@ class Settings
      *
      * @var bool
      */
-    private $_strict = false;
+    private $_strict = true;
 
     /**
      * Activate debug mode
@@ -164,7 +164,7 @@ class Settings
             'base' => $basePath,
             'config' => $basePath,
             'cert' => $basePath.'certs/',
-            'lib' => $basePath.'src/'
+            'lib' => $basePath.'src/Saml2/'
         );
 
         if (defined('ONELOGIN_CUSTOMPATH')) {
@@ -220,7 +220,21 @@ class Settings
      */
     public function getSchemasPath()
     {
-        return $this->_paths['lib'].'schemas/';
+        if (isset($this->_paths['schemas'])) {
+            return $this->_paths['schemas'];
+        }
+        return __DIR__ . '/schemas/';
+    }
+
+    /**
+     * Set schemas path
+     *
+     * @param string $path
+     * @return $this
+     */
+    public function setSchemasPath($path)
+    {
+        $this->_paths['schemas'] = $path;
     }
 
     /**
@@ -378,6 +392,16 @@ class Settings
             $this->_security['relaxDestinationValidation'] = false;
         }
 
+        // Strict Destination match validation
+        if (!isset($this->_security['destinationStrictlyMatches'])) {
+            $this->_security['destinationStrictlyMatches'] = false;
+        }
+
+        // InResponseTo
+        if (!isset($this->_security['rejectUnsolicitedResponsesWithInResponseTo'])) {
+            $this->_security['rejectUnsolicitedResponsesWithInResponseTo'] = false;
+        }
+
         // encrypt expected
         if (!isset($this->_security['wantAssertionsEncrypted'])) {
             $this->_security['wantAssertionsEncrypted'] = false;
@@ -520,6 +544,14 @@ class Settings
                 $errors[] = 'idp_slo_url_invalid';
             }
 
+            if (isset($idp['singleLogoutService'])
+                && isset($idp['singleLogoutService']['responseUrl'])
+                && !empty($idp['singleLogoutService']['responseUrl'])
+                && !filter_var($idp['singleLogoutService']['responseUrl'], FILTER_VALIDATE_URL)
+            ) {
+                $errors[] = 'idp_slo_response_url_invalid';
+            }
+
             if (isset($settings['security'])) {
                 $security = $settings['security'];
 
@@ -588,8 +620,10 @@ class Settings
             }
 
             if (isset($security['signMetadata']) && is_array($security['signMetadata'])) {
-                if (!isset($security['signMetadata']['keyFileName'])
-                    || !isset($security['signMetadata']['certFileName'])
+                if ((!isset($security['signMetadata']['keyFileName'])
+                    || !isset($security['signMetadata']['certFileName'])) &&
+                    (!isset($security['signMetadata']['privateKey'])
+                    || !isset($security['signMetadata']['x509cert']))
                 ) {
                     $errors[] = 'sp_signMetadata_invalid';
                 }
@@ -792,7 +826,7 @@ class Settings
      *
      * @param bool $alwaysPublishEncryptionCert When 'true', the returned
      * metadata will always include an 'encryption' KeyDescriptor. Otherwise,
-     * the 'encryption' KeyDescriptor will only be included if 
+     * the 'encryption' KeyDescriptor will only be included if
      * $advancedSettings['security']['wantNameIdEncrypted'] or
      * $advancedSettings['security']['wantAssertionsEncrypted'] are enabled.
      * @param int|null      $validUntil    Metadata's valid time
@@ -825,7 +859,7 @@ class Settings
         }
 
         //Sign Metadata
-        if (isset($this->_security['signMetadata']) && $this->_security['signMetadata'] !== false) {
+        if (isset($this->_security['signMetadata']) && $this->_security['signMetadata'] != false) {
             if ($this->_security['signMetadata'] === true) {
                 $keyMetadata = $this->getSPkey();
                 $certMetadata = $cert;
@@ -843,15 +877,8 @@ class Settings
                         Error::PUBLIC_CERT_FILE_NOT_FOUND
                     );
                 }
-            } else {
-                if (!isset($this->_security['signMetadata']['keyFileName'])
-                    || !isset($this->_security['signMetadata']['certFileName'])
-                ) {
-                    throw new Error(
-                        'Invalid Setting: signMetadata value of the sp is not valid',
-                        Error::SETTINGS_INVALID_SYNTAX
-                    );
-                }
+            } else if (isset($this->_security['signMetadata']['keyFileName']) &&
+                isset($this->_security['signMetadata']['certFileName'])) {
                 $keyFileName = $this->_security['signMetadata']['keyFileName'];
                 $certFileName = $this->_security['signMetadata']['certFileName'];
 
@@ -875,6 +902,29 @@ class Settings
                 }
                 $keyMetadata = file_get_contents($keyMetadataFile);
                 $certMetadata = file_get_contents($certMetadataFile);
+            } else if (isset($this->_security['signMetadata']['privateKey']) &&
+                isset($this->_security['signMetadata']['x509cert'])) {
+                $keyMetadata = Utils::formatPrivateKey($this->_security['signMetadata']['privateKey']);
+                $certMetadata = Utils::formatCert($this->_security['signMetadata']['x509cert']);
+                if (!$keyMetadata) {
+                    throw new Error(
+                        'Private key not found.',
+                        Error::PRIVATE_KEY_FILE_NOT_FOUND
+                    );
+                }
+
+                if (!$certMetadata) {
+                    throw new Error(
+                        'Public cert not found.',
+                        Error::PUBLIC_CERT_FILE_NOT_FOUND
+                    );
+                }
+            } else {
+                throw new Error(
+                    'Invalid Setting: signMetadata value of the sp is not valid',
+                    Error::SETTINGS_INVALID_SYNTAX
+                );
+
             }
 
             $signatureAlgorithm = $this->_security['signatureAlgorithm'];
@@ -898,7 +948,7 @@ class Settings
         assert(is_string($xml));
 
         $errors = array();
-        $res = Utils::validateXML($xml, 'saml-schema-metadata-2.0.xsd', $this->_debug);
+        $res = Utils::validateXML($xml, 'saml-schema-metadata-2.0.xsd', $this->_debug, $this->getSchemasPath());
         if (!$res instanceof DOMDocument) {
             $errors[] = $res;
         } else {
