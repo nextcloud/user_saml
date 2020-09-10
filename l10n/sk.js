@@ -82,6 +82,7 @@ OC.L10N.register(
     "Error" : "Chyba",
     "Account not provisioned." : "Účet nebol poskytnutý.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet nie je poskytnutý, prístup k tejto službe preto nie je možný.",
+    "Login options:" : "Možnosti prihlásenia:",
     "Choose a authentication provider" : "Vyberte poskytovateľa overovania"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
