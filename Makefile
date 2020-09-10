@@ -22,6 +22,7 @@ clean:
 	rm -rf node_modules
 
 appstore: clean
+	composer install --no-dev -d ./3rdparty/
 	mkdir -p $(sign_dir)
 	rsync -a \
 	--exclude=.drone.yml \
