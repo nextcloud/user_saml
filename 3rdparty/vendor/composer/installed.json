@@ -46,22 +46,22 @@
     },
     {
         "name": "onelogin/php-saml",
-        "version": "3.1.1",
-        "version_normalized": "3.1.1.0",
+        "version": "3.4.1",
+        "version_normalized": "3.4.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/onelogin/php-saml.git",
-            "reference": "c9026b26395a65184550055d9a01bdf9dbd30861"
+            "reference": "5fbf3486704ac9835b68184023ab54862c95f213"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/c9026b26395a65184550055d9a01bdf9dbd30861",
-            "reference": "c9026b26395a65184550055d9a01bdf9dbd30861",
+            "url": "https://api.github.com/repos/onelogin/php-saml/zipball/5fbf3486704ac9835b68184023ab54862c95f213",
+            "reference": "5fbf3486704ac9835b68184023ab54862c95f213",
             "shasum": ""
         },
         "require": {
             "php": ">=5.4",
-            "robrichards/xmlseclibs": ">=3.0.3"
+            "robrichards/xmlseclibs": ">=3.0.4"
         },
         "require-dev": {
             "pdepend/pdepend": "^2.5.0",
@@ -76,7 +76,7 @@
             "ext-gettext": "Install gettext and php5-gettext libs to handle translations",
             "ext-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)"
         },
-        "time": "2019-03-11T09:41:32+00:00",
+        "time": "2019-11-25T17:30:07+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -98,24 +98,24 @@
     },
     {
         "name": "robrichards/xmlseclibs",
-        "version": "3.0.3",
-        "version_normalized": "3.0.3.0",
+        "version": "3.1.1",
+        "version_normalized": "3.1.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/robrichards/xmlseclibs.git",
-            "reference": "406c68ac9124db033d079284b719958b829cb830"
+            "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/406c68ac9124db033d079284b719958b829cb830",
-            "reference": "406c68ac9124db033d079284b719958b829cb830",
+            "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/f8f19e58f26cdb42c54b214ff8a820760292f8df",
+            "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df",
             "shasum": ""
         },
         "require": {
             "ext-openssl": "*",
             "php": ">= 5.4"
         },
-        "time": "2018-11-15T11:59:02+00:00",
+        "time": "2020-09-05T13:00:25+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
