@@ -172,7 +172,7 @@ class Response
 
                 if ($security['wantXMLValidation']) {
                     $errorXmlMsg = "Invalid SAML Response. Not match the saml-schema-protocol-2.0.xsd";
-                    $res = Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive());
+                    $res = Utils::validateXML($this->document, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive(), $this->_settings->getSchemasPath());
                     if (!$res instanceof DOMDocument) {
                         throw new ValidationError(
                             $errorXmlMsg,
@@ -182,7 +182,7 @@ class Response
 
                     // If encrypted, check also the decrypted document
                     if ($this->encrypted) {
-                        $res = Utils::validateXML($this->decryptedDocument, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive());
+                        $res = Utils::validateXML($this->decryptedDocument, 'saml-schema-protocol-2.0.xsd', $this->_settings->isDebugActive(), $this->_settings->getSchemasPath());
                         if (!$res instanceof DOMDocument) {
                             throw new ValidationError(
                                 $errorXmlMsg,
@@ -195,16 +195,31 @@ class Response
 
                 $currentURL = Utils::getSelfRoutedURLNoQuery();
 
+                $responseInResponseTo = null;
                 if ($this->document->documentElement->hasAttribute('InResponseTo')) {
                     $responseInResponseTo = $this->document->documentElement->getAttribute('InResponseTo');
                 }
 
-                // Check if the InResponseTo of the Response matchs the ID of the AuthNRequest (requestId) if provided
-                if (isset($requestId) && isset($responseInResponseTo) && $requestId != $responseInResponseTo) {
+                if (!isset($requestId) && isset($responseInResponseTo) && $security['rejectUnsolicitedResponsesWithInResponseTo']) {
                     throw new ValidationError(
-                        "The InResponseTo of the Response: $responseInResponseTo, does not match the ID of the AuthNRequest sent by the SP: $requestId",
+                        "The Response has an InResponseTo attribute: " . $responseInResponseTo . " while no InResponseTo was expected",
                         ValidationError::WRONG_INRESPONSETO
                     );
+                }
+
+                // Check if the InResponseTo of the Response matchs the ID of the AuthNRequest (requestId) if provided
+                if (isset($requestId) && $requestId != $responseInResponseTo) {
+                    if ($responseInResponseTo == null) {
+                        throw new ValidationError(
+                            "No InResponseTo at the Response, but it was provided the requestId related to the AuthNRequest sent by the SP: $requestId",
+                            ValidationError::WRONG_INRESPONSETO
+                        );
+                    } else {
+                        throw new ValidationError(
+                            "The InResponseTo of the Response: $responseInResponseTo, does not match the ID of the AuthNRequest sent by the SP: $requestId",
+                            ValidationError::WRONG_INRESPONSETO
+                        );
+                    }
                 }
 
                 if (!$this->encrypted && $security['wantAssertionsEncrypted']) {
@@ -263,10 +278,11 @@ class Response
                             );
                         }
                     } else {
-                        if (strpos($destination, $currentURL) !== 0) {
+                        $urlComparisonLength = $security['destinationStrictlyMatches'] ? strlen($destination) : strlen($currentURL);
+                        if (strncmp($destination, $currentURL, $urlComparisonLength) !== 0) {
                             $currentURLNoRouted = Utils::getSelfURLNoQuery();
-
-                            if (strpos($destination, $currentURLNoRouted) !== 0) {
+                            $urlComparisonLength = $security['destinationStrictlyMatches'] ? strlen($destination) : strlen($currentURLNoRouted);
+                            if (strncmp($destination, $currentURLNoRouted, $urlComparisonLength) !== 0) {
                                 throw new ValidationError(
                                     "The response was received at $currentURL instead of $destination",
                                     ValidationError::WRONG_DESTINATION
@@ -383,7 +399,7 @@ class Response
                 $encryptedIDNodes = Utils::query($this->decryptedDocument, '/samlp:Response/saml:Assertion/saml:Subject/saml:EncryptedID');
                 if ($encryptedIDNodes->length > 0) {
                     throw new ValidationError(
-                        'Unsigned SAML Response that contains a signed and encrypted Assertion with encrypted nameId is not supported.',
+                        'SAML Response that contains an encrypted Assertion with encrypted nameId is not supported.',
                         ValidationError::NOT_SUPPORTED
                     );
                 }
@@ -448,7 +464,7 @@ class Response
 
     /**
      * @return string|null the ID of the assertion in the Response
-     * 
+     *
      * @throws ValidationError
      */
     public function getAssertionId()
