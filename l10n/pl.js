@@ -62,7 +62,7 @@ OC.L10N.register(
     "Name ID format" : "Format nazwy ID",
     "Identity Provider Data" : "Dane od dostawcy tożsamości",
     "Configure your IdP settings here." : "Tutaj skonfiguruj swoje ustawienia IdP.",
-    "Identifier of the IdP entity (must be a URI)" : "Tożsamość podmiotu IdP (musi być URI)",
+    "Identifier of the IdP entity (must be a URI)" : "Identyfikator jednostki IdP (musi być URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Adres URL IdP, z którego dostawca usług wyśle wiadomość o żądaniu uwierzytelnienia",
     "Show optional Identity Provider settings…" : "Pokaż opcjonalne ustawienia tożsamości dostawcy usług…",
     "URL Location of the IdP where the SP will send the SLO Request" : "Adres URL IdP gdzie dostawca usług wyśle żądanie SLO",
