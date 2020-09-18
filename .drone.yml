@@ -6,7 +6,7 @@ clone:
 
 steps:
   - name: app-code-check
-    image: nextcloudci/php7.2:php7.2-13
+    image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
