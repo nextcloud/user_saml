@@ -82,6 +82,7 @@ OC.L10N.register(
     "Error" : "Error",
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible.",
+    "Login options:" : "Opciones de login:",
     "Choose a authentication provider" : "Escoge un proveedor de autenticación"
 },
 "nplurals=2; plural=(n != 1);");
