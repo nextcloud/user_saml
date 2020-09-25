@@ -406,7 +406,12 @@ class SAMLController extends Controller {
 				$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');
 				$nameIdSPNameQualifier = $this->session->get('user_saml.samlNameIdSPNameQualifier');
 				$sessionIndex = $this->session->get('user_saml.samlSessionIndex');
-				$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
+				try {
+					$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
+				} catch (Error $e) {
+					$this->logger->logException($e, ['level' => ILogger::WARN]);
+					$this->userSession->logout();
+				}
 			}
 			if(!empty($targetUrl) && !$auth->getLastErrorReason()){
 				$this->userSession->logout();
