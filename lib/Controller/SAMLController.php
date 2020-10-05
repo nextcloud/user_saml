@@ -23,6 +23,8 @@
 namespace OCA\User_SAML\Controller;
 
 use Firebase\JWT\JWT;
+use OC\Core\Controller\ClientFlowLoginController;
+use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
@@ -184,11 +186,24 @@ class SAMLController extends Controller {
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
 
+				// Small hack to make user_saml work with the loginflows
+				$flowData = [];
+
+				if ($this->session->get(ClientFlowLoginController::STATE_NAME) !== null) {
+					$flowData['cf1'] = $this->session->get(ClientFlowLoginController::STATE_NAME);
+				} else if ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
+					$flowData['cf2'] = [
+						'name' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
+						'state' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
+					];
+				}
+
 				// Pack data as JSON so we can properly extract it later
 				$data = json_encode([
 					'AuthNRequestID' => $auth->getLastRequestID(),
 					'OriginalUrl' => $this->request->getParam('originalUrl', ''),
-					'Idp' => $idp
+					'Idp' => $idp,
+					'flow' => $flowData,
 				]);
 
 				// Encrypt it
@@ -284,6 +299,15 @@ class SAMLController extends Controller {
 		}
 		$data = json_decode($cookie, true);
 
+		if (isset($data['flow'])) {
+			if (isset($data['flow']['cf1'])) {
+				$this->session->set(ClientFlowLoginController::STATE_NAME, $data['flow']['cf1']);
+			} else if (isset($data['flow']['cf2'])) {
+				$this->session->set(ClientFlowLoginV2Controller::TOKEN_NAME, $data['flow']['cf2']['token']);
+				$this->session->set(ClientFlowLoginV2Controller::STATE_NAME, $data['flow']['cf2']['state']);
+			}
+
+		}
 
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
@@ -308,7 +332,9 @@ class SAMLController extends Controller {
 
 		if (!$auth->isAuthenticated()) {
 			$this->logger->info('Auth failed', ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response->invalidateCookie('saml_data');
+			return $response;
 		}
 
 		// Check whether the user actually exists, if not redirect to an error page
@@ -317,7 +343,9 @@ class SAMLController extends Controller {
 			$this->autoprovisionIfPossible($auth->getAttributes());
 		} catch (NoUserFoundException $e) {
 			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response->invalidateCookie('saml_data');
+			return $response;
 		}
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
@@ -338,7 +366,9 @@ class SAMLController extends Controller {
 			}
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => $this->appName]);
-			return new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response->invalidateCookie('saml_data');
+			return $response;
 		}
 
 		$originalUrl = $data['OriginalUrl'];
