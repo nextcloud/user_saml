@@ -189,12 +189,12 @@ class SAMLController extends Controller {
 				// Small hack to make user_saml work with the loginflows
 				$flowData = [];
 
-				if ($this->session->get(ClientFlowLoginController::STATE_NAME) !== null) {
-					$flowData['cf1'] = $this->session->get(ClientFlowLoginController::STATE_NAME);
-				} else if ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
+				if ($this->session->get('client.flow.state.token') !== null) {
+					$flowData['cf1'] = $this->session->get('client.flow.state.token');
+				} else if ($this->session->get('client.flow.v2.login.token') !== null) {
 					$flowData['cf2'] = [
-						'name' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
-						'state' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
+						'name' => $this->session->get('client.flow.v2.login.token'),
+						'state' => $this->session->get('client.flow.v2.state.token'),
 					];
 				}
 
@@ -301,10 +301,10 @@ class SAMLController extends Controller {
 
 		if (isset($data['flow'])) {
 			if (isset($data['flow']['cf1'])) {
-				$this->session->set(ClientFlowLoginController::STATE_NAME, $data['flow']['cf1']);
+				$this->session->set('client.flow.state.token', $data['flow']['cf1']);
 			} else if (isset($data['flow']['cf2'])) {
-				$this->session->set(ClientFlowLoginV2Controller::TOKEN_NAME, $data['flow']['cf2']['token']);
-				$this->session->set(ClientFlowLoginV2Controller::STATE_NAME, $data['flow']['cf2']['state']);
+				$this->session->set('client.flow.v2.login.token', $data['flow']['cf2']['token']);
+				$this->session->set('client.flow.v2.state.token', $data['flow']['cf2']['state']);
 			}
 
 		}
