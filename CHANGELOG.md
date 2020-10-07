@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.3.1
+### Fixed
+- 21 suport
+- login flow support with strict cookies
+
 ## 3.1.2
 ### Fixed
 - 19 support. This was broken due to stricter cookies
