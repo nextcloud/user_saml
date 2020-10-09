@@ -6,7 +6,7 @@ clone:
 
 steps:
   - name: app-code-check
-    image: nextcloudci/php7.2:php7.2-13
+    image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
@@ -35,8 +35,8 @@ clone:
   depth: 1
 
 steps:
-  - name: php7.2
-    image: nextcloudci/php7.2:php7.2-13
+  - name: php7.3
+    image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
@@ -47,8 +47,8 @@ steps:
       - cd ../server/apps/$APP_NAME
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
-  - name: php7.3
-    image: nextcloudci/php7.3:php7.3-5
+  - name: php7.4
+    image: nextcloudci/php7.4:php7.4-2
     environment:
       APP_NAME: user_saml
       CORE_BRANCH: master
