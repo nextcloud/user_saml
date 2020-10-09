@@ -193,7 +193,7 @@ class SAMLController extends Controller {
 					$flowData['cf1'] = $this->session->get(ClientFlowLoginController::STATE_NAME);
 				} else if ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
 					$flowData['cf2'] = [
-						'name' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
+						'token' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
 						'state' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
 					];
 				}
