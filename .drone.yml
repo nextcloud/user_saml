@@ -60,6 +60,14 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+---
+kind: pipeline
+name: integration-tests-master
+
+clone:
+  depth: 1
+
+steps:
   - name: integration-tests-master
     image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-3
     environment:
