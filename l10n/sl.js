@@ -49,6 +49,7 @@ OC.L10N.register(
     "Reset settings" : "Ponastavi nastavitve",
     "Metadata invalid" : "Neveljavni metapodatki",
     "Metadata valid" : "Veljavni metapodatki",
-    "Error" : "Napaka"
+    "Error" : "Napaka",
+    "Choose a authentication provider" : "Izberite ponudnika overitve"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
