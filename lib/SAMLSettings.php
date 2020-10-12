@@ -158,6 +158,11 @@ class SAMLSettings {
 			$settings['sp']['singleLogoutService'] = [
 				'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.singleLogoutService'),
 			];
+
+			$sloResponseUrl = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.responseUrl', '');
+			if($sloResponseUrl !== '') {
+				$settings['idp']['singleLogoutService']['responseUrl'] = $sloResponseUrl;
+			}
 		}
 
 		return $settings;

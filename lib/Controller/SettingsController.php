@@ -57,6 +57,7 @@ class SettingsController extends Controller {
 		$params = $this->admin->getForm()->getParams();
 		$params['idp'] = [
 			'singleLogoutService.url' => ['required' => false],
+			'singleLogoutService.responseUrl' => ['required' => false],
 			'singleSignOnService.url' => ['required' => false],
 			'entityId' => ['required' => false],
 			'x509cert' => ['required' => false],
@@ -91,6 +92,7 @@ class SettingsController extends Controller {
 		$params = $this->admin->getForm()->getParams();
 		$params['idp'] = [
 			'singleLogoutService.url' => null,
+			'singleLogoutService.responseUrl' => null,
 			'singleSignOnService.url' => null,
 			'idp-entityId' => null,
 		];
