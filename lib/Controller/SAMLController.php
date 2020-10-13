@@ -358,7 +358,7 @@ class SAMLController extends Controller {
 		try {
 			$user = $this->userManager->get($this->userBackend->getCurrentUserId());
 			if (!($user instanceof IUser)) {
-				throw new \InvalidArgumentException('User is not valid');
+				throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
 			}
 			$firstLogin = $user->updateLastLoginTimestamp();
 			if($firstLogin) {
