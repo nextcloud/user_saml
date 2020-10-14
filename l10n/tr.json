@@ -64,6 +64,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Hizmet sağlayıcının Kimlik Doğrulama İsteği İletisini gödereceği Kimlik Sağlayıcı hedef adresini yazın",
     "Show optional Identity Provider settings…" : "İsteğe bağlı ek Kimlik Sağlayıcısı ayarları …",
     "URL Location of the IdP where the SP will send the SLO Request" : "Hizmet sağlayıcının SLO İsteğini gödereceği Kimlik Sağlayıcı adresini yazın",
+    "URL Location of the IDP's SLO Response" : "Kimlik hizmeti sağlayıcının SLO yanıtı adresi",
     "Public X.509 certificate of the IdP" : "Kimlik Sağlayıcının herkese açık X.509 sertifikası",
     "Attribute mapping" : "Öznitelik eşleştirme",
     "If you want to optionally map attributes to the user you can configure these here." : "Öznitelikler isteğe bağlı olarak kullanıcı ile buradan eşleştirilebilir.",

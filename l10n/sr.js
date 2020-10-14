@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL одредиште добављача идентитета где ће добављач услуга слати Authentication Request Message",
     "Show optional Identity Provider settings…" : "Прикажи опционе поставке провајдера идентитета…",
     "URL Location of the IdP where the SP will send the SLO Request" : "URL локација добављача идентитета где ће добављач услуга послати SLO захтев",
+    "URL Location of the IDP's SLO Response" : "URL адреса IDP SLO одговора",
     "Public X.509 certificate of the IdP" : "Јавни X.509 сертификат добављача идентитета",
     "Attribute mapping" : "Мапирање атрибута",
     "If you want to optionally map attributes to the user you can configure these here." : "Ако желите да опционо мапирате атрибуте на корисника, то можете учинити овде.",
@@ -82,6 +83,7 @@ OC.L10N.register(
     "Error" : "Грешка",
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
+    "Login options:" : "Опције пријаве:",
     "Choose a authentication provider" : "Одаберите провајдера провере идентитета"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

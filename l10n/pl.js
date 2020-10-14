@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Adres URL IdP, z którego dostawca usług wyśle wiadomość o żądaniu uwierzytelnienia",
     "Show optional Identity Provider settings…" : "Pokaż opcjonalne ustawienia tożsamości dostawcy usług…",
     "URL Location of the IdP where the SP will send the SLO Request" : "Adres URL IdP gdzie dostawca usług wyśle żądanie SLO",
+    "URL Location of the IDP's SLO Response" : "Adres URL lokalizacji odpowiedzi SLO IDP",
     "Public X.509 certificate of the IdP" : "Publiczny certyfikat X.509 IdP",
     "Attribute mapping" : "Atrybut mapowania",
     "If you want to optionally map attributes to the user you can configure these here." : "Tutaj możesz opcjonalnie przypisać atrybuty użytkownikowi.",
