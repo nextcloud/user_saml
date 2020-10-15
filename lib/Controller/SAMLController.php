@@ -109,9 +109,9 @@ class SAMLController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
 		$this->l = $l;
+		$this->crypto = $crypto;
 		$this->userResolver = $userResolver;
 		$this->userData = $userData;
-		$this->crypto = $crypto;
 	}
 
 	/**
