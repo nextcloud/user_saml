@@ -64,6 +64,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL objetivo del IdP donde el SP mandará el  Mensaje de Solicitud de Autenticación",
     "Show optional Identity Provider settings…" : "Mostrar configuración del Proveedor de identidad opcional...",
     "URL Location of the IdP where the SP will send the SLO Request" : "Dirección URL de el IdP donde el SP enviará las peticiones SLO",
+    "URL Location of the IDP's SLO Response" : "Dirección URL de la respuesta SLO del IDP",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 del IdP",
     "Attribute mapping" : "Definición de atributos",
     "If you want to optionally map attributes to the user you can configure these here." : "Si opcionalmente quieres mapear atributos al usuario puedes configurar éstos aquí.",
