@@ -64,6 +64,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Cíl URL IdP, kam SP odešle zprávu s požadavkem na ověření se",
     "Show optional Identity Provider settings…" : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů…",
     "URL Location of the IdP where the SP will send the SLO Request" : "Umístění URL IdP, kam SP odešle SLO požadavek",
+    "URL Location of the IDP's SLO Response" : "Umístění URL IDP, kam SLO odešle odpověď",
     "Public X.509 certificate of the IdP" : "Veřejný X.509 certifikát poskytovatele přihlašovacích údajů",
     "Attribute mapping" : "Mapování atributů",
     "If you want to optionally map attributes to the user you can configure these here." : "Pokud chcete volitelně provést mapování atributů na uživatele, můžete to provést zde.",
