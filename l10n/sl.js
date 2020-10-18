@@ -28,6 +28,7 @@ OC.L10N.register(
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Izbirno prikazno ime ponudnika istovetnosti (privzeto: »Prijava SSO in SAML«)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Dovoli uporabo več uporabniških računov (na primer LDAP)",
     "SSO & SAML authentication" : "Overitev SSO in SAML",
+    "Authenticate using single sign-on" : "Overi z uporabo enojne prijave",
     "Open documentation" : "Odpri dokumentacijo",
     "Use built-in SAML authentication" : "Uporabi vgrajeno overitev SAML",
     "Use environment variable" : "Uporabi okoljsko spremenljivko",
@@ -45,12 +46,14 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Javno potrdilo X.509 IdP",
     "Security settings" : "Varnostne nastavitve",
     "Show security settings…" : "Pokaži varnostne nastavitve ...",
+    "Signatures and encryption offered" : "Ponujeni podpisi in šifriranje",
     "Signatures and encryption required" : "Zahtevani so podpisi in šifriranje",
     "Download metadata XML" : "Prejmi datoteko metapodatkov XML",
     "Reset settings" : "Ponastavi nastavitve",
     "Metadata invalid" : "Neveljavni metapodatki",
     "Metadata valid" : "Veljavni metapodatki",
     "Error" : "Napaka",
+    "Login options:" : "Možnosti prijave:",
     "Choose a authentication provider" : "Izberite ponudnika overitve"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
