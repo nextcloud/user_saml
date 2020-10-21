@@ -58,8 +58,14 @@ class DavPlugin extends ServerPlugin {
 			!$this->session->exists('user_saml.samlUserData')
 		) {
 			$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+			$uidRewritePattern = $this->config->getAppValue('user_saml', 'general-uid_rewrite_pattern');
+			$uidRewriteReplacement = $this->config->getAppValue('user_saml', 'general-uid_rewrite_replacement');
 			if (isset($this->auth[$uidMapping])) {
-				$this->session->set(Auth::DAV_AUTHENTICATED, $this->auth[$uidMapping]);
+				$uid = $this->auth[$uidMapping];
+				if (!empty($uidRewritePattern) && !empty($uidRewriteReplacement)) {
+					$uid = preg_replace($uidRewritePattern, $uidRewriteReplacement, $uid);
+				}
+				$this->session->set(Auth::DAV_AUTHENTICATED, $uid);
 				$this->session->set('user_saml.samlUserData', $this->auth);
 			}
 		}
