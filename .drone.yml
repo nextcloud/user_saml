@@ -60,6 +60,8 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+type: docker
+
 ---
 kind: pipeline
 name: integration-tests-master
@@ -69,9 +71,43 @@ clone:
 
 steps:
   - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-3
+    image: nextcloudci/user_saml_shibboleth-php7.3:user_saml_shibboleth_php7.3-1
     environment:
       CORE_BRANCH: master
+    commands:
+      - /start.sh &
+      - sleep 7
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      # use local clone
+      - cp -r /drone/src /var/www/html/apps/user_saml
+      - scl enable rh-php73 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
+      - chown -R apache:apache /var/www/html/
+      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+
+type: docker
+
+---
+kind: pipeline
+name: integration-tests-stable20
+
+clone:
+  depth: 1
+
+steps:
+  - name: integration-tests-stable20
+    image: nextcloudci/user_saml_shibboleth-php7.2:user_saml_shibboleth_php7.2-3
+    environment:
+      CORE_BRANCH: stable20
     commands:
       - /start.sh &
       - sleep 7
