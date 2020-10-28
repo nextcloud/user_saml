@@ -50,6 +50,7 @@ OC.L10N.register(
     "Error" : "Errorea",
     "Account not provisioned." : "Kontua ez dago hornituta.",
     "Your account is not provisioned, access to this service is thus not possible." : "Zure kontua ez dago hornituta. Zerbitzu honetara sarbidea, ondorioz, ez da posiblea.",
+    "Login options:" : "Saio-hasiera aukerak:",
     "Choose a authentication provider" : "Aukeratu autentifikazio-hornitzailea"
 },
 "nplurals=2; plural=(n != 1);");
