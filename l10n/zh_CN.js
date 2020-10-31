@@ -45,7 +45,7 @@ OC.L10N.register(
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "允许使用多个用户后端（例如 LDAP）",
     "SSO & SAML authentication" : "SSO & SAML 认证",
     "Authenticate using single sign-on" : "使用单点登录认证",
-    "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix." : "使用Nextcloud的SSO & SAML应用您可以很容易地将Nextcloud与您现有的单点登录解决方案集成。此外，您可以使用Nextcloud 用户提供者来为用户提供方便。（比如在共享时）\n以下提供者目前受到支持并已通过测试：\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **通过环境变量认证**\n\t* Kerberos (mod_auth_kerb)\n\t* 其他任意使用环境变量认证的提供者\n\n虽然理论上来说实现了以上标准之一的任何其他认证提供者都能与此应用兼容，但我们还是要提醒您它们不在内部测试矩阵之中。",
+    "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix." : "使用 Nextcloud 的SSO & SAML 应用您可以很容易地将 Nextcloud 与您现有的单点登录解决方案集成。此外，您可以使用 Nextcloud 用户提供者来为用户提供方便。（比如在共享时）\n以下提供者目前受到支持并已通过测试：\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **通过环境变量认证**\n\t* Kerberos (mod_auth_kerb)\n\t* 其他任意使用环境变量认证的提供者\n\n虽然理论上来说实现了以上标准之一的任何其他认证提供者都能与此应用兼容，但我们还是要提醒您它们不在内部测试矩阵之中。",
     "Open documentation" : "打开文档",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you enabled \"%s\" or you go directly to the URL %s." : "请确保设置一个能通过SSO访问实例的管理员用户。您将无法使用您的普通 %s 账号登录，除非您启用 \"%s\" 或直接访问URL %s。",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won't be possible anymore, unless you go directly to the URL %s." : "请确保设置一个能通过SSO访问实例的管理员用户。您将无法使用您的普通 %s 账号登录，除非您直接访问URL %s。",
@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL 的目标，其中 SP 将发送验证请求消息",
     "Show optional Identity Provider settings…" : "显示可选的身份提供者设置...",
     "URL Location of the IdP where the SP will send the SLO Request" : "URL 在 SP 发送 SLO 请求的 IdP 的位置",
+    "URL Location of the IDP's SLO Response" : "IDP 的 SLO 响应的 URL 位置",
     "Public X.509 certificate of the IdP" : "公共 X.509 证书的 IdP",
     "Attribute mapping" : "属性映射",
     "If you want to optionally map attributes to the user you can configure these here." : "如果要选择将属性映射到用户，可以在这里配置。",
@@ -82,6 +83,7 @@ OC.L10N.register(
     "Error" : "错误",
     "Account not provisioned." : "账号未配置。",
     "Your account is not provisioned, access to this service is thus not possible." : "您的账号未配置，因此无法访问此服务。",
+    "Login options:" : "登录选项：",
     "Choose a authentication provider" : "选择一个认证提供者"
 },
 "nplurals=1; plural=0;");
