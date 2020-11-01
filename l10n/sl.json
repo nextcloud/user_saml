@@ -13,6 +13,7 @@
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Določa, ali naj bodo sporočila, <samlp:logoutRequest> poslana prek tega spletnega ponudnika, podpisana.",
     "Whether the metadata should be signed." : "Ali naj bodo metapodatki podpisani.",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Določa zahtevo, da bodo <saml:Assertion> predmeti, prejeti prek ponudnika storitev, šifrirani.",
+    "Indicates if the SP will validate all received XML." : "Določa, ali bo ponudnik storitev overil vse prejete datoteke XML.",
     "Attribute to map the UID to." : "Atribut za preslikavo UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Overitev dovoli le, če račun obstaja na nekem drugem ozadnjem programu (npr. LDAP)",
     "Attribute to map the displayname to." : "Atribut za preslikavo prikaznega imena.",
