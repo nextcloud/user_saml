@@ -24,10 +24,14 @@ namespace OCA\User_SAML\Tests\Middleware;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
+use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
+	/** @var IURLGenerator|\PHPUnit\Framework\MockObject\MockObject */
+	protected $urlGenerator;
 	/** @var IControllerMethodReflector|\PHPUnit_Framework_MockObject_MockObject */
 	private $reflector;
 	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
@@ -38,9 +42,11 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 	protected function setUp(): void {
 		$this->reflector = $this->createMock(IControllerMethodReflector::class);
 		$this->userSession = $this->createMock(IUserSession::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->onlyLoggedInMiddleware = new OnlyLoggedInMiddleware(
 			$this->reflector,
-			$this->userSession
+			$this->userSession,
+			$this->urlGenerator
 		);
 
 		parent::setUp();
@@ -101,8 +107,14 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 	}
 
 	public function testAfterExceptionWithAlreadyLoggedInException() {
+		$homeUrl = 'https://my.nxt.cld/';
+		$this->urlGenerator->expects($this->atLeastOnce())
+			->method('getAbsoluteURL')
+			->with('/')
+			->willReturn($homeUrl);
+
 		$exception = new \Exception('User is already logged-in');
-		$expected = new JSONResponse('User is already logged-in', 403);
+		$expected = new RedirectResponse($homeUrl);
 		$this->assertEquals($expected, $this->onlyLoggedInMiddleware->afterException($this->createMock(Controller::class), 'bar', $exception));
 	}
 }

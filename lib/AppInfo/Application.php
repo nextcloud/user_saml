@@ -38,7 +38,8 @@ class Application extends App {
 		$container->registerService('OnlyLoggedInMiddleware', function (IAppContainer $c) {
 			return new OnlyLoggedInMiddleware(
 				$c->query('ControllerMethodReflector'),
-				$c->query('ServerContainer')->getUserSession()
+				$c->query('ServerContainer')->getUserSession(),
+				$c->query('ServerContainer')->getUrlGenerator()
 			);
 		});
 
