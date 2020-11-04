@@ -22,8 +22,10 @@
 namespace OCA\User_SAML\Middleware;
 
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
+use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 /**
@@ -37,15 +39,21 @@ class OnlyLoggedInMiddleware extends Middleware {
 	private $reflector;
 	/** @var IUserSession */
 	private $userSession;
+	/** @var IURLGenerator */
+	private $urlGenerator;
 
 	/**
 	 * @param IControllerMethodReflector $reflector
 	 * @param IUserSession $userSession
 	 */
-	public function __construct(IControllerMethodReflector $reflector,
-								IUserSession $userSession) {
+	public function __construct(
+		IControllerMethodReflector $reflector,
+		IUserSession $userSession,
+		IURLGenerator $urlGenerator
+	) {
 		$this->reflector = $reflector;
 		$this->userSession = $userSession;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -63,12 +71,12 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @param \OCP\AppFramework\Controller $controller
 	 * @param string $methodName
 	 * @param \Exception $exception
-	 * @return JSONResponse
+	 * @return RedirectResponse
 	 * @throws \Exception
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
 		if($exception->getMessage() === 'User is already logged-in') {
-			return new JSONResponse('User is already logged-in', 403);
+			return new RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
 		throw $exception;
