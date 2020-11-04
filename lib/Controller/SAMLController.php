@@ -287,6 +287,8 @@ class SAMLController extends Controller {
 
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
+		// need to keep the IdP config ID during session lifetime (SAMLSettings::getPrefix)
+		$this->session->set('user_saml.Idp', $idp);
 		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
 			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
