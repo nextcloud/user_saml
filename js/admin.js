@@ -351,6 +351,7 @@ $(function() {
 			// Checks on each request whether the settings make sense or not
 			$.ajax({
 				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
+				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
 				type: 'GET'
 			}).fail(function (e) {
 				if (e.status === 500) {
