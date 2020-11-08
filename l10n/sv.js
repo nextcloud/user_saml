@@ -53,7 +53,7 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Använd den inbyggda SAML-autentiseringen",
     "Use environment variable" : "Använd miljövariabel",
     "Global settings" : "Globala inställningar",
-    "Remove identity provider" : "Radera identity provider",
+    "Remove identity provider" : "Ta bort identity provider",
     "Add identity provider" : "Lägg till identity provider",
     "General" : "Allmänt",
     "Service Provider Data" : "Leverantörsdata",
