@@ -64,6 +64,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Cieľová URL IdP, kam SP zašle správu s požiadavkou na overenie totožnosti",
     "Show optional Identity Provider settings…" : "Zobraziť voliteľné nastavenia poskytovateľa identity…",
     "URL Location of the IdP where the SP will send the SLO Request" : "Umiestnenie URL IdP, kam SP zašle SLO požiadavku",
+    "URL Location of the IDP's SLO Response" : "Umiestnenie URL IDP, kam SLO pošle odpoveď",
     "Public X.509 certificate of the IdP" : "Verejný certifikát X.509 poskytovateľa prihlasovacích údajov",
     "Attribute mapping" : "Mapovanie atribútov",
     "If you want to optionally map attributes to the user you can configure these here." : "Ak chcete voliteľne priradiť atribúty k používateľom, môžete ich nastaviť tu.",
