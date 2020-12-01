@@ -35,6 +35,7 @@ use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\ISession;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use function base64_decode;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -506,6 +507,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			} else {
 				$uid = $samlData[$uidMapping];
 			}
+			$uid = $this->testEncodedObjectGUID($uid);
+
 			if($this->userExists($uid)) {
 				$this->session->set('last-password-confirm', strtotime('+4 year', time()));
 				return $uid;
@@ -699,7 +702,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 *
 	 */
 	public function testEncodedObjectGUID(string $uid): string {
-		$candidate = base64_decode($uid, true);
+		$candidate = base64_decode($uid, false);
 		if($candidate === false) {
 			return $uid;
 		}
