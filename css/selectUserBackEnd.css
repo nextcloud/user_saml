@@ -12,7 +12,7 @@
 }
 
 .login-option {
-	background-color: var(--color-primary-element);
+	background-color: var(--color-primary);
 	border: 1px solid var(--color-primary-text);
 	font-weight: 600;
 	height: 40px;
