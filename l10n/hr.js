@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Ciljni URL IdP-a za koji će DU poslati poruku zahtjeva za autentifikacijom",
     "Show optional Identity Provider settings…" : "Prikaži neobvezne postavke davatelja identiteta...",
     "URL Location of the IdP where the SP will send the SLO Request" : "Lokacija URL-a IdP-a gdje će DU poslati zahtjev za SLO",
+    "URL Location of the IDP's SLO Response" : "URL lokacija odgovora IDP SLO",
     "Public X.509 certificate of the IdP" : "Javna X.509 vjerodajnica IdP-a",
     "Attribute mapping" : "Mapiranje atributa",
     "If you want to optionally map attributes to the user you can configure these here." : "Ako želite mapirati atribute korisniku, možete ih ovdje konfigurirati.",
@@ -82,6 +83,7 @@ OC.L10N.register(
     "Error" : "Pogreška",
     "Account not provisioned." : "Račun nije uspostavljen.",
     "Your account is not provisioned, access to this service is thus not possible." : "Vaš račun nije uspostavljen, pristup ovoj usluzi nije moguć.",
+    "Login options:" : "Mogućnosti prijave:",
     "Choose a authentication provider" : "Odaberi davatelja usluge autentifikacije"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");
