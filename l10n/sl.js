@@ -64,6 +64,7 @@ OC.L10N.register(
     "Show optional Identity Provider settings…" : "Pokaži izbirne nastavitve IP (ponudnika istovetnosti) ...",
     "Public X.509 certificate of the IdP" : "Javno potrdilo X.509 IdP",
     "Attribute mapping" : "Preslikave atributov",
+    "If you want to optionally map attributes to the user you can configure these here." : "Če želite izbirno preslikati atribute na uporabnika, lahko to nastavite na tem mestu.",
     "Show attribute mapping settings…" : "Pokaži nastavitve preslikave atributov ...",
     "Security settings" : "Varnostne nastavitve",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Iz varnostnih razlogov je priporočljivo omogočiti nekatere nastavitve, če so te podprte znotraj zagnanega okolja.",
