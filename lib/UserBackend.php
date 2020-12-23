@@ -147,6 +147,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			}
 			$qb->execute();
 
+			// If we use per-user encryption the keys must be initialized first
+			$this->loginInitializeKeystore($uid, $attributes);
+
+			$userSecret = $this->getUserSecret($uid, $attributes);
+			if ($userSecret !== null) {
+				// Emit a post login action to initialize the encryption module with the user secret provided by the idp.
+				// Otherwise the homedir cannot be initialized due to uninitialized keystore.
+				\OC_Hook::emit('OC_User', 'post_login', ['run' => true, 'uid' => $uid, 'password' => $userSecret, 'isTokenLogin' => false]);
+			}
 			$this->initializeHomeDir($uid);
 
 		}
@@ -518,6 +527,16 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		return '';
 	}
 
+	/**
+	 * Optionally returns a stable per-user secret. This secret is for
+	 * instance used to secure file encryption keys.
+	 * @return string|null
+	 * @since 21.0.0
+	 */
+	public function getCurrentUserSecret() {
+		$samlData = $this->session->get('user_saml.samlUserData');
+		return $this->getUserSecret($this->getCurrentUserId(), $samlData);
+	}
 
 	/**
 	 * Backend name to be shown in user management
@@ -614,6 +633,21 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		return $value;
+	}
+
+	private function getUserSecret($uid, array $attributes) {
+		try {
+			$userSecret = $this->getAttributeValue('saml-attribute-mapping-user_secret_mapping', $attributes);
+			if ($userSecret === '') {
+				$this->logger->debug('Got no user_secret from idp', ['app' => 'user_saml']);
+			} else {
+				$this->logger->debug('Got user_secret from idp', ['app' => 'user_saml']);
+				return $userSecret;
+			}
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('No user_secret mapping configured', ['app' => 'user_saml']);
+		}
+		return null;
 	}
 
 	public function updateAttributes($uid,
