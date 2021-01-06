@@ -64,6 +64,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL провайдера идентификации (IdP), на который поставщик услуг (SP) будет отправлять запрос подтверждения подлинности",
     "Show optional Identity Provider settings…" : "Показать дополнительные настройки провайдера идентификации",
     "URL Location of the IdP where the SP will send the SLO Request" : "URL адрес IdP, куда SP будет оправлять запросы SLO.",
+    "URL Location of the IDP's SLO Response" : "URL адрес ответа IDP SLO",
     "Public X.509 certificate of the IdP" : "Открытый сертификат X.509 ldP",
     "Attribute mapping" : "Привязка атрибутов",
     "If you want to optionally map attributes to the user you can configure these here." : "Здесь можно настроить дополнительную привязку атрибутов пользователю.",
