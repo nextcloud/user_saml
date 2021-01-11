@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Αποδέκτης URL του IdP όπου το SP θα στείλει μήνυμα Αίτησης Ελέγχου Ταυτότητας",
     "Show optional Identity Provider settings…" : "Εμφάνιση προαιρετικών ρυθμίσεων Παροχέα Ταυτότητας ...",
     "URL Location of the IdP where the SP will send the SLO Request" : "Τοποθεσία URL του IdP όπου το SP θα στείλει Αίτηση SLO",
+    "URL Location of the IDP's SLO Response" : "Τοποθεσία URL της απάντησης SLO του IDP",
     "Public X.509 certificate of the IdP" : "Δημόσιο πιστοποιητικό X.509 του IdP",
     "Attribute mapping" : "Χαρτογράφηση χαρακτηριστικών",
     "If you want to optionally map attributes to the user you can configure these here." : "Αν επιθυμείτε προαιρετικά να χαρτογραφήσετε χαρακτηριστικά στον χρήστη, μπορείτε να τις διαμορφώσετε εδώ.",
