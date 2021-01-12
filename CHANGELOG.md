@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.3.3
+### Added
+- Possibility to overwrite direct login text
+
 ## 3.3.2
 ### Added
 - Possible url for SLO response
