@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Nextcloud <21 support
 
+## 3.3.3
+### Added
+- Possibility to add custom direct login message
+
 ## 3.3.2
 ### Added
 - Possible url for SLO response
