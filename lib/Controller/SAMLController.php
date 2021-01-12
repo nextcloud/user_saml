@@ -492,9 +492,16 @@ class SAMLController extends Controller {
 		$attributes = ['loginUrls' => []];
 
 		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
+			$displayName = $this->l->t('Direct log in');
+
+			$customDisplayName = $this->config->getAppValue('user_saml', 'directLoginName', '');
+			if ($customDisplayName !== '') {
+				$displayName = $customDisplayName;
+			}
+
 			$attributes['loginUrls']['directLogin'] = [
 				'url' => $this->getDirectLoginUrl($redirectUrl),
-				'display-name' => $this->l->t('Direct log in')
+				'display-name' => $displayName,
 			];
 		}
 
