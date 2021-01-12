@@ -26,8 +26,8 @@ declare(strict_types=1);
 namespace OCA\User_SAML\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -44,17 +44,17 @@ class Version3001Date20200630193443 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_users')) {
 			$table = $schema->createTable('user_saml_users');
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('displayname', Type::STRING, [
+			$table->addColumn('displayname', Types::STRING, [
 				'notnull' => true,
 				'length' => 255,
 				'default' => '',
 			]);
-			$table->addColumn('home', Type::STRING, [
+			$table->addColumn('home', Types::STRING, [
 				'notnull' => true,
 				'length' => 255,
 				'default' => '',
@@ -64,22 +64,22 @@ class Version3001Date20200630193443 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_auth_token')) {
 			$table = $schema->createTable('user_saml_auth_token');
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', Types::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
 				'length' => 4,
 				'unsigned' => true,
 			]);
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('name', Type::TEXT, [
+			$table->addColumn('name', Types::TEXT, [
 				'notnull' => true,
 				'default' => '',
 			]);
-			$table->addColumn('token', Type::STRING, [
+			$table->addColumn('token', Types::STRING, [
 				'notnull' => true,
 				'length' => 200,
 				'default' => '',

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 4.0.0
+### Removed
+- Nextcloud <21 support
+
 ## 3.3.2
 ### Added
 - Possible url for SLO response
