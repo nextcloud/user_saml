@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.3.2
+### Added
+- Possible url for SLO response
+
+### Fixed
+- Fix login flow support yet again
+- Buton colors
+- Translations
+- Fixed provisioning users from encoded uids
+- Fix missing IDP variable
+
 ## 3.3.1
 ### Fixed
 - 21 suport
