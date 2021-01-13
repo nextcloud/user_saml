@@ -8,7 +8,7 @@
     "This page should not be visited directly." : "Esta páxina non debe ser visitada directamente.",
     "Provider " : "Provedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do provedor do servizo",
-    "Private key of the Service Provider" : "Chave privada do provedor do servizo",
+    "Private key of the Service Provider" : "Clave privada do provedor do servizo",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que o nameID do <samlp:logoutRequest> enviado por este SP vai ser cifrado.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Indica se as mensaxes <samlp:AuthnRequest>enviadas por este SP van seren asinadas. [Os metadatos do SP ofrecerán esta información]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Indica se as mensaxes <samlp:logoutRequest> enviadas por este SP van seren asinadas.",
