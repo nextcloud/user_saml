@@ -661,8 +661,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 			if ($newGroups !== null) {
 				$prefix = '';
-				if ($this->config->getAppValue('user_saml', 'unique_groups_per_idp', '0') === '1') {
-					list(, $idp) = explode('@', $uid);
+				$mapping = $this->config->getSystemValue('user_saml.unique_groups_per_idp', '');
+				if ($mapping === '') {
+					$mapping = $this->config->getAppValue('user_saml', 'unique_groups_per_idp', '');
+				}
+
+				if ($mapping !== '' &&
+					array_key_exists($mapping, $attributes) &&
+					is_array($attributes[$mapping]) &&
+					sizeof($attributes[$mapping]) === 1) {
+					$realUid = $attributes[$mapping][0];
+					list(, $idp) = explode('@', $realUid);
 					$prefix = substr(md5($idp), 0, 7);
 					$newGroups = array_map(
 						function($g) use ($prefix) {
