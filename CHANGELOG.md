@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.2.2
+### Added
+- allow providing url for SLO response
+- allow chaging the direct login text
+
+### Fixed
+- Session handling with auth flow
+- Redirect to home page instead of generic error page
+- get SAML idp set in session
+
 ## 3.2.1
 ### Fixed
 - Login flow with strict cookies
