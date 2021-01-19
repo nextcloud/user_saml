@@ -31,6 +31,7 @@ OC.L10N.register(
     "Entity" : "יישות",
     "Kerberos" : "Kerberos",
     "X509 subject name" : "שם נושא X509",
+    "SSO & SAML authentication" : "אימות גישה אחודה (SSO) ו־SAML",
     "Open documentation" : "פתיחת תיעוד",
     "Use built-in SAML authentication" : "שימוש באימות SAML מובנה",
     "Use environment variable" : "שימוש במשתני סביבה",
