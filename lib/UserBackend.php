@@ -389,10 +389,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function isSessionActive() {
-		if($this->getCurrentUserId() !== '') {
-			return true;
-		}
-		return false;
+		return $this->session->get('user_saml.samlUserData') !== null;
 	}
 
 	/**
@@ -487,8 +484,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getCurrentUserId() {
-		$this->userData->setAttributes($this->session->get('user_saml.samlUserData') ?? []);
-		$uid = $this->userData->getEffectiveUid();
+		$user = \OC::$server->getUserSession()->getUser();
+
+		if($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
+			$uid = $user->getUID();
+		} else {
+			$this->userData->setAttributes($this->session->get('user_saml.samlUserData') ?? []);
+			$uid = $this->userData->getEffectiveUid();
+		}
+
 		if($uid !== '' && $this->userExists($uid)) {
 			$uid = $this->userData->testEncodedObjectGUID($uid);
 
