@@ -287,9 +287,4 @@ class UserBackendTest extends TestCase   {
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
 
-			['aaabbbcc@aa.bbbccdd.eee.ff', 'aaabbbcc@aa.bbbccdd.eee.ff'],
-			['aaabbbcccaa.bbbccdddeee', 'aaabbbcccaa.bbbccdddeee']
-
-
-
 }
