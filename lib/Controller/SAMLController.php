@@ -354,7 +354,7 @@ class SAMLController extends Controller {
 				$this->userBackend->initializeHomeDir($user->getUID());
 			}
 		} catch (NoUserFoundException $e) {
-			throw new \InvalidArgumentException('User is not valid');
+			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
 		} catch (\Exception $e) {
 			$this->logger->logException($e, ['app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));

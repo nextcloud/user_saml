@@ -100,7 +100,12 @@ class UserData {
 	 * base64-encoded binary string representing e.g. the objectGUID. Otherwise
 	 *
 	 */
-	protected function testEncodedObjectGUID(string $uid): string {
+	public function testEncodedObjectGUID(string $uid): string {
+		if (preg_match('/[^a-zA-Z0-9=+\/]/', $uid) !== 0) {
+			// certainly not encoded
+			return $uid;
+		}
+
 		$candidate = base64_decode($uid, true);
 		if($candidate === false) {
 			return $uid;
