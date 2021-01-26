@@ -490,7 +490,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->userData->setAttributes($this->session->get('user_saml.samlUserData') ?? []);
 		$uid = $this->userData->getEffectiveUid();
 		if($uid !== '' && $this->userExists($uid)) {
-			$uid = $this->testEncodedObjectGUID($uid);
+			$uid = $this->userData->testEncodedObjectGUID($uid);
 
 			$this->session->set('last-password-confirm', strtotime('+4 year', time()));
 			return $uid;
