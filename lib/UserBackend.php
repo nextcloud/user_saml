@@ -702,6 +702,11 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 *
 	 */
 	public function testEncodedObjectGUID(string $uid): string {
+		if (preg_match('/[^a-zA-Z0-9=+\/]/', $uid) !== 0) {
+			// certainly not encoded
+			return $uid;
+		}
+
 		$candidate = base64_decode($uid, false);
 		if($candidate === false) {
 			return $uid;
