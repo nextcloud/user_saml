@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 4.1.0
+### Added
+- Nextcloud 22 support
+
+### Fixed
+- logins with base64 resembling UIDs
+
 ## 4.0.0
 ### Removed
 - Nextcloud <21 support
