@@ -427,11 +427,19 @@ class SAMLController extends Controller {
 			$idp = $this->session->get('user_saml.Idp');
 			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
-			if($isFromIDP){
+			if ($isFromIDP) {
 				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
 				$targetUrl = $auth->processSLO($keepLocalSession, null, false, null, $stay);
+				
+				$errors = $auth->getErrors();
+				if (!empty($errors)) {
+					foreach($errors as $error) {
+						$this->logger->error($error, ['app' => $this->appName]);
+					}
+					$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
+				}
 			} else {
-				// If request is not from IDP, we must send him the logout request
+				// If request is not from IDP, we send the logout request to the IDP
 				$parameters = array();
 				$nameId = $this->session->get('user_saml.samlNameId');
 				$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
