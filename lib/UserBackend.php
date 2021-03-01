@@ -56,25 +56,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $settings;
 	/** @var ILogger */
 	private $logger;
+	/** @var UserData */
+	private $userData;
 
-	/**
-	 * @param IConfig $config
-	 * @param IURLGenerator $urlGenerator
-	 * @param ISession $session
-	 * @param IDBConnection $db
-	 * @param IUserManager $userManager
-	 * @param IGroupManager $groupManager
-	 * @param SAMLSettings $settings
-	 * @param ILogger $logger
-	 */
-	public function __construct(IConfig $config,
-								IURLGenerator $urlGenerator,
-								ISession $session,
-								IDBConnection $db,
-								IUserManager $userManager,
-								IGroupManager $groupManager,
-								SAMLSettings $settings,
-								ILogger $logger) {
+	public function __construct(
+		IConfig $config,
+		IURLGenerator $urlGenerator,
+		ISession $session,
+		IDBConnection $db,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
+		SAMLSettings $settings,
+		ILogger $logger,
+		UserData $userData
+) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -83,6 +78,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->groupManager = $groupManager;
 		$this->settings = $settings;
 		$this->logger = $logger;
+		$this->userData = $userData;
 	}
 
 	/**
@@ -393,10 +389,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function isSessionActive() {
-		if($this->getCurrentUserId() !== '') {
-			return true;
-		}
-		return false;
+		return $this->session->get('user_saml.samlUserData') !== null;
 	}
 
 	/**
@@ -441,9 +434,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['uid']);
 		}
 
-
 		return $userData;
-
 	}
 
 	/**
@@ -453,6 +444,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return array
 	 */
 	private function formatUserData($attributes) {
+		$this->userData->setAttributes($attributes);
 
 		$result = ['formatted' => [], 'raw' => $attributes];
 
@@ -481,12 +473,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$result['formatted']['groups'] = null;
 		}
 
-		$prefix = $this->settings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		$result['formatted']['uid'] = '';
-		if (isset($attributes[$uidMapping])) {
-			$result['formatted']['uid'] = $attributes[$uidMapping][0];
-		}
+		$result['formatted']['uid'] = $this->userData->getEffectiveUid();
 
 		return $result;
 	}
@@ -497,24 +484,21 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getCurrentUserId() {
-		$samlData = $this->session->get('user_saml.samlUserData');
-		$prefix = $this->settings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping', '');
+		$user = \OC::$server->getUserSession()->getUser();
 
-		if($uidMapping !== '' && isset($samlData[$uidMapping])) {
-			if(is_array($samlData[$uidMapping])) {
-				$uid = $samlData[$uidMapping][0];
-			} else {
-				$uid = $samlData[$uidMapping];
-			}
-			$uid = $this->testEncodedObjectGUID($uid);
-
-			if($this->userExists($uid)) {
-				$this->session->set('last-password-confirm', strtotime('+4 year', time()));
-				return $uid;
-			}
+		if($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
+			$uid = $user->getUID();
+		} else {
+			$this->userData->setAttributes($this->session->get('user_saml.samlUserData') ?? []);
+			$uid = $this->userData->getEffectiveUid();
 		}
 
+		if($uid !== '' && $this->userExists($uid)) {
+			$uid = $this->userData->testEncodedObjectGUID($uid);
+
+			$this->session->set('last-password-confirm', strtotime('+4 year', time()));
+			return $uid;
+		}
 		return '';
 	}
 
@@ -696,52 +680,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 	}
 
-	/**
-	 * returns the plain text UUID if the provided $uid string is a
-	 * base64-encoded binary string representing e.g. the objectGUID. Otherwise
-	 *
-	 */
-	public function testEncodedObjectGUID(string $uid): string {
-		if (preg_match('/[^a-zA-Z0-9=+\/]/', $uid) !== 0) {
-			// certainly not encoded
-			return $uid;
-		}
 
-		$candidate = base64_decode($uid, false);
-		if($candidate === false) {
-			return $uid;
-		}
-		$candidate = $this->convertObjectGUID2Str($candidate);
-		// the regex only matches the structure of the UUID, not its semantic
-		// (i.e. version or variant) simply to be future compatible
-		if(preg_match('/^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}$/i', $candidate) === 1) {
-			$uid = $candidate;
-		}
-		return $uid;
-	}
-
-	/**
-	 * @see \OCA\User_LDAP\Access::convertObjectGUID2Str
-	 */
-	protected function convertObjectGUID2Str($oguid) {
-		$hex_guid = bin2hex($oguid);
-		$hex_guid_to_guid_str = '';
-		for($k = 1; $k <= 4; ++$k) {
-			$hex_guid_to_guid_str .= substr($hex_guid, 8 - 2 * $k, 2);
-		}
-		$hex_guid_to_guid_str .= '-';
-		for($k = 1; $k <= 2; ++$k) {
-			$hex_guid_to_guid_str .= substr($hex_guid, 12 - 2 * $k, 2);
-		}
-		$hex_guid_to_guid_str .= '-';
-		for($k = 1; $k <= 2; ++$k) {
-			$hex_guid_to_guid_str .= substr($hex_guid, 16 - 2 * $k, 2);
-		}
-		$hex_guid_to_guid_str .= '-' . substr($hex_guid, 16, 4);
-		$hex_guid_to_guid_str .= '-' . substr($hex_guid, 20);
-
-		return strtoupper($hex_guid_to_guid_str);
-	}
 
 	public function countUsers() {
 		$query = $this->db->getQueryBuilder();
