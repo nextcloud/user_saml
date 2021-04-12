@@ -660,17 +660,43 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			}
 
 			if ($newGroups !== null) {
+				$prefix = '';
+				$mapping = $this->config->getSystemValue('user_saml.unique_groups_per_idp', '');
+				if ($mapping === '') {
+					$mapping = $this->config->getAppValue('user_saml', 'unique_groups_per_idp', '');
+				}
+
+				if ($mapping !== '' &&
+					array_key_exists($mapping, $attributes) &&
+					is_array($attributes[$mapping]) &&
+					sizeof($attributes[$mapping]) === 1) {
+					$realUid = $attributes[$mapping][0];
+					list(, $idp) = explode('@', $realUid);
+					$prefix = substr(md5($idp), 0, 7);
+					$newGroups = array_map(
+						function($g) use ($prefix) {
+							return $prefix . '-' . $g;
+						}, $newGroups
+					);
+				}
+
 				$groupManager = $this->groupManager;
 				$oldGroups = $groupManager->getUserGroupIds($user);
 
 				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
 				$groupsToRemove = array_diff($oldGroups, $newGroups);
 
-				foreach ($groupsToAdd as $group) {
-					if (!($groupManager->groupExists($group))) {
-						$groupManager->createGroup($group);
+				foreach ($groupsToAdd as $gid) {
+					if (!($groupManager->groupExists($gid))) {
+						$group = $groupManager->createGroup($gid);
+						if ($prefix !== '') {
+							$group->setDisplayName(substr($gid, strlen($prefix) + 1));
+						}
+					} else {
+						$group = $groupManager->get($gid);
 					}
-					$groupManager->get($group)->addUser($user);
+
+					$group->addUser($user);
 				}
 
 				foreach ($groupsToRemove as $group) {
