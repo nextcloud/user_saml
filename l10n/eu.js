@@ -7,6 +7,7 @@ OC.L10N.register(
     "Unknown error, please check the log file for more details." : "Errore ezezaguna, mesedez egiaztatu egunkari fitxategia xehetasun gehiagorako.",
     "Direct log in" : "Saio-hasiera zuzena",
     "SSO & SAML log in" : "SSO eta SAML saio-hasiera",
+    "This page should not be visited directly." : "Orri hau ez litzateke zuzenean bisitatu beharko.",
     "Provider " : "Hornitzailea",
     "X.509 certificate of the Service Provider" : "Zerbitzu-hornitzailearen X.509 ziurtagiria",
     "Private key of the Service Provider" : "Zerbitzu-hornitzaileraren gako pribatua",
