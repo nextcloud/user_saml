@@ -66,6 +66,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "SPが認証要求メッセージを送信するIdPのURLターゲット",
     "Show optional Identity Provider settings…" : "オプションのIdentity Provider設定を表示する...",
     "URL Location of the IdP where the SP will send the SLO Request" : "URL SPがSLO要求を送信するIdPの場所",
+    "URL Location of the IDP's SLO Response" : "IDPがSLOレスポンスを提供するURL",
     "Public X.509 certificate of the IdP" : "IdPの公開X.509証明書",
     "Attribute mapping" : "属性マッピング",
     "If you want to optionally map attributes to the user you can configure these here." : "オプションで属性をユーザーにマップする場合は、ここでそれらを構成できます。",
@@ -82,6 +83,7 @@ OC.L10N.register(
     "Error" : "エラー",
     "Account not provisioned." : "アカウントがプロビジョニングされていない",
     "Your account is not provisioned, access to this service is thus not possible." : "アカウントにプロビジョニングされていないため、このサービスへのアクセスはできません。",
+    "Login options:" : "ログインオプション: ",
     "Choose a authentication provider" : "認証プロバイダを選択する"
 },
 "nplurals=1; plural=0;");
