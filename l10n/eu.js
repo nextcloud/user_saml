@@ -15,6 +15,7 @@ OC.L10N.register(
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "SP honek bidalitako  <samlp:logoutResponse> mezuak sinatu behar diren ala ez adierazten du.",
     "Indicates whether the  <samlp:logoutResponse> messages sent by this SP will be signed." : "SP honek bidalitako <samlp:logoutResponse> mezuak sinatu behar diren ala ez adierazten du.",
     "Whether the metadata should be signed." : "Metadatuek sinatuta egon behar duten ala ez.",
+    "Attribute to map the UID to." : "UIDa mapatzeko atributua.",
     "Email address" : "Posta helbidea",
     "Encrypted" : "Zifratua",
     "Entity" : "Entitatea",
