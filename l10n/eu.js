@@ -27,6 +27,7 @@ OC.L10N.register(
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Baimendu erabiltzaile atzealde anitzen erabilpena (adib. LDAP)",
     "SSO & SAML authentication" : "SSO eta SAML autentifikazioa",
     "Open documentation" : "Ireki dokumentazioa",
+    "Use built-in SAML authentication" : "Erabili integratutako SAML autentifikazioa",
     "Use environment variable" : "Erabili inguruneko aldagaia",
     "Global settings" : "Ezarpen orokorrak",
     "Remove identity provider" : "Kendu identitate hornitzailea",
