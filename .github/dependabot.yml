@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: composer
+  directory: "/3rdparty"
+  schedule:
+    interval: daily
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+  ignore:
+  - dependency-name: onelogin/php-saml
+    versions:
+    - 3.5.1
+    - 3.6.0
+  - dependency-name: firebase/php-jwt
+    versions:
+    - 5.2.0
+- package-ecosystem: composer
+  directory: "/tests/integration"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: guzzlehttp/guzzle
+    versions:
+    - 7.2.0
