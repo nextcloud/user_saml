@@ -70,7 +70,7 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Öffentliches X.509-Zertifikat des Identitätsanbieters",
     "Attribute mapping" : "Attribute zuordnen",
     "If you want to optionally map attributes to the user you can configure these here." : "Wenn Sie optional Attribute dem Benutzer zuordnen möchten, können Sie dies hier einstellen.",
-    "Show attribute mapping settings…" : "Einstellungen der Attribute-Zuordnung anzeigen…",
+    "Show attribute mapping settings…" : "Einstellungen der Attribute-Zuordnung anzeigen …",
     "Security settings" : "Sicherheitseinstellungen",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Um die Sicherheit zu erhöhen empfehlen wir die nachfolgenden Einstellungen, soweit diese von Ihrer Installation unterstützt werden.",
     "Show security settings…" : "Sicherheitseinstellungen anzeigen …",
