@@ -418,7 +418,13 @@ class SAMLController extends Controller {
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
 			if($isFromIDP){
 				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
-				$targetUrl = $auth->processSLO($keepLocalSession, null, false, null, $stay);
+				$targetUrl = $auth->processSLO(
+					$this->SAMLSettings->usesSloWebServerDecode(),
+					null,
+					false,
+					null,
+					$stay
+				);
 			} else {
 				// If request is not from IDP, we must send him the logout request
 				$parameters = array();
