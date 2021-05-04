@@ -83,7 +83,8 @@ class AdminTest extends \Test\TestCase  {
 			'signatureAlgorithm' => [
 				'type' => 'line',
 				'text' => 'Algorithm that the toolkit will use on signing process.'
-			]
+			],
+			'sloWebServerDecode' => 'Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests.',
 		];
 		$generalSettings = [
 			'idp0_display_name' => [
