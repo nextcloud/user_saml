@@ -90,7 +90,8 @@ class Admin implements ISettings {
 			'signatureAlgorithm' => [
 				'type' => 'line',
 				'text' => $this->l10n->t('Algorithm that the toolkit will use on signing process.')
-			]
+			],
+			'sloWebServerDecode' => $this->l10n->t('Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests.'),
 		];
 		$generalSettings = [
 			'uid_mapping' => [
