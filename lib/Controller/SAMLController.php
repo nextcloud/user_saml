@@ -419,9 +419,9 @@ class SAMLController extends Controller {
 			if ($isFromIDP) {
 				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
 				$targetUrl = $auth->processSLO(
-					$this->SAMLSettings->usesSloWebServerDecode(),
+					$keepLocalSession,
 					null,
-					false,
+					$this->SAMLSettings->usesSloWebServerDecode(),
 					null,
 					$stay
 				);
