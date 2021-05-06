@@ -88,6 +88,10 @@ class SAMLSettings {
 		return  ($setting === '1' && $type === 'saml');
 	}
 
+	public function usesSloWebServerDecode() : bool {
+		return $this->config->getAppValue('user_saml', 'security-sloWebServerDecode', '0') === '1';
+	}
+
 	/**
 	 * get config for given IDP
 	 *
