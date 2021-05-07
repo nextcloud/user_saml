@@ -22,6 +22,7 @@
     "Indicates if the SP will validate all received XML." : "Wskazuje, czy dostawca usług zatwierdzi wszystkie odebrane XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Dane ADFS URL-Encodes SAML są małymi literami a narzędzie standardowo obsługuje duże litery. Włącz dla ADFS kompatybilność weryfikacji podpisu.",
     "Algorithm that the toolkit will use on signing process." : "Algorytm, który zostanie użyty podczas procesu podpisywania.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Pobierz parametry zapytania z $_SERVER. Niektóre serwery SAML wymagają tego w żądaniach SLO.",
     "Attribute to map the UID to." : "Atrybut do mapowania UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Zezwalaj na uwierzytelnienie tylko wtedy, jeśli konto istnieje na jakiejś innej platformie (np. LDAP)",
     "Attribute to map the displayname to." : "Atrybut do mapowania wyświetlanej nazwy użytkownika.",
