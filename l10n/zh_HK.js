@@ -24,6 +24,7 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "指定 SP 是否驗證所有接收到的 XML。",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL - 將 SAML 數據編碼為小寫，默認情況下，該工具包使用大寫。 在簽名驗證時啟用 ADFS 兼容性。",
     "Algorithm that the toolkit will use on signing process." : "該工具包將在簽名過程中使用的算法。",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "從$ _SERVER檢索查詢參數。 某些SAML伺服器在SLO請求上要求這樣做。",
     "Attribute to map the UID to." : "映射到 UID 的屬性。",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "僅在其他後端存在賬號時才允許身分驗證。 （例如 LDAP）",
     "Attribute to map the displayname to." : "映射到顯示名稱的屬性。",
