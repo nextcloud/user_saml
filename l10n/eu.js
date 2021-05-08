@@ -24,6 +24,7 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "SPk jasotako XML guztia balioztatuko duen adierazten du.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-k SAML datuak minuskulaz kodetzen ditu eta lehenespenez tresna-multzoak maiuskula erabiltzen du. Gaitu ADFS bateragarritasuna sinadura egiaztatzerakoan.",
     "Algorithm that the toolkit will use on signing process." : "Tresnak sinadura prozesuan erabiliko duen algoritmoa.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Berreskuratu kontsultaren parametroak $ _SERVER-etik. SAML zerbitzari batzuek hori eskatzen dute SLO eskaeretan.",
     "Attribute to map the UID to." : "UIDa mapatzeko atributua.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Baimendu autentifikazioa beste atzeko sistema batean kontu bat baldin badago. (adibidez, LDAP)",
     "Attribute to map the displayname to." : "Atributua bistaratze-izena esleitzeko.",
