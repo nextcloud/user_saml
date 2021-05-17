@@ -711,12 +711,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$image = new \OCP\Image();
 				$fileData = file_get_contents($newAvatar);
 				$image->loadFromData($fileData);
-				$this->setOwnCloudAvatar($uid, $image);
+				$this->setAvatarFromSamlProvider($uid, $image);
 			}
 		}
 	}
 
-	private function setOwnCloudAvatar($uid, $image) {
+	private function setAvatarFromSamlProvider($uid, $image) {
 		if (!$image->valid()) {
 			$this->logger->debug('avatar image data from LDAP invalid for ' . $uid);
 			return false;
