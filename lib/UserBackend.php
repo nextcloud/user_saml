@@ -716,7 +716,16 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$image = new \OCP\Image();
 				$fileData = file_get_contents($newAvatar);
 				$image->loadFromData($fileData);
-				$this->setAvatarFromSamlProvider($uid, $image);
+
+				$checksum = md5($image->data());
+				if ($checksum !== $this->config->getUserValue($uid, 'user_saml', 'lastAvatarChecksum')) {
+					// use the checksum before modifications
+					if ($this->setAvatarFromSamlProvider($uid, $image)) {
+						// save checksum only after successful setting
+						$this->config->setUserValue($uid, 'user_saml', 'lastAvatarChecksum', $checksum);
+						var_dump('Avatar changed'); die();
+					}
+				}
 			}
 		}
 	}
@@ -735,7 +744,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			return false;
 		}
 
-		if (Filesystem::$loaded) {
+		if (!Filesystem::$loaded) {
 			\OC_Util::setupFS($uid);
 		}
 
