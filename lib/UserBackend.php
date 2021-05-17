@@ -21,8 +21,8 @@
 
 namespace OCA\User_SAML;
 
+use OC\Files\Filesystem;
 use OC\User\Backend;
-use OCA\User_LDAP\FilesystemHelper;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\NotPermittedException;
@@ -734,9 +734,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			return false;
 		}
 
-		$fs = new FilesystemHelper();
-		if (!$fs->isLoaded()) {
-			$fs->setup($uid);
+		if (Filesystem::$loaded) {
+			\OC_Util::setupFS($uid);
 		}
 
 		try {
