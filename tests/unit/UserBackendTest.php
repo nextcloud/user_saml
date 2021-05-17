@@ -24,6 +24,7 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
+use OCP\IAvatarManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -56,6 +57,8 @@ class UserBackendTest extends TestCase   {
 	private $SAMLSettings;
 	/** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
 	private $logger;
+	/** @var \PHPUnit_Framework_MockObject_MockObject|IAvatarManager */
+	private $avatarManager;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -69,6 +72,7 @@ class UserBackendTest extends TestCase   {
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
 		$this->userData = $this->createMock(UserData::class);
+		$this->avatarManager = $this->createMock(IAvatarManager::class);
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
@@ -84,6 +88,7 @@ class UserBackendTest extends TestCase   {
 					$this->SAMLSettings,
 					$this->logger,
 					$this->userData,
+					$this->avatarManager,
 				])
 				->setMethods($mockedFunctions)
 				->getMock();
@@ -97,7 +102,8 @@ class UserBackendTest extends TestCase   {
 				$this->groupManager,
 				$this->SAMLSettings,
 				$this->logger,
-				$this->userData
+				$this->userData,
+				$this->avatarManager
 			);
 		}
 	}

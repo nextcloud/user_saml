@@ -60,7 +60,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getGroupManager(),
 	$samlSettings,
 	\OC::$server->getLogger(),
-	$userData
+	$userData,
+	\OC::$server->getAvatarManager()
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);

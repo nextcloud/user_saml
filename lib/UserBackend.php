@@ -26,6 +26,7 @@ use OC\User\Backend;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\NotPermittedException;
+use OCP\IAvatarManager;
 use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
@@ -60,6 +61,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $logger;
 	/** @var UserData */
 	private $userData;
+	/** @var IAvatarManager */
+	private $avatarManager;
 
 	public function __construct(
 		IConfig $config,
@@ -70,7 +73,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		IGroupManager $groupManager,
 		SAMLSettings $settings,
 		ILogger $logger,
-		UserData $userData
+		UserData $userData,
+		IAvatarManager $avatarManager
 ) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -81,6 +85,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->settings = $settings;
 		$this->logger = $logger;
 		$this->userData = $userData;
+		$this->avatarManager = $avatarManager;
 	}
 
 	/**
@@ -735,9 +740,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		try {
-			$avatarManager = \OC::$server->getAvatarManager();
-
-			$avatar = $avatarManager->getAvatar($uid);
+			$avatar = $this->avatarManager->getAvatar($uid);
 			$avatar->set($image);
 			return true;
 		} catch (\Exception $e) {

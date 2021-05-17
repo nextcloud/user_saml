@@ -26,7 +26,6 @@ namespace OCA\User_SAML;
 
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCP\IConfig;
-use OCP\Image;
 
 class UserData {
 	private $uid;
@@ -38,14 +37,11 @@ class UserData {
 	private $samlSettings;
 	/** @var IConfig */
 	private $config;
-	/** @var Image */
-	private $image;
 
 	public function __construct(UserResolver $userResolver, SAMLSettings $samlSettings, IConfig $config) {
 		$this->userResolver = $userResolver;
 		$this->samlSettings = $samlSettings;
 		$this->config = $config;
-		$this->image = new Image();
 	}
 
 	public function setAttributes(array $attributes): void {
