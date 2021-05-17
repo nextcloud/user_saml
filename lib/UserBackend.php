@@ -95,14 +95,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			return true;
 		}
 		try {
-			if (empty(trim($this->getAttributeKeys('saml-attribute-mapping-avatar_mapping')[0]))) {
-				return true;
-			}
+			return empty(trim($this->getAttributeKeys('saml-attribute-mapping-avatar_mapping')[0]));
 		} catch(\InvalidArgumentException $e) {
 			return true;
 		}
-
-		return false;
 	}
 
 	/**
