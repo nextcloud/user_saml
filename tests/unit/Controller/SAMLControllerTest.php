@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\Tests\Controller;
 
+use Exception;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
@@ -114,16 +115,16 @@ class SAMLControllerTest extends TestCase  {
 
 	}
 
-	/**
-	 * @expectedExceptionMessage Type of "UnknownValue" is not supported for user_saml
-	 * @expectedException \Exception
-	 */
 	public function testLoginWithInvalidAppValue() {
 		$this->config
 			->expects($this->once())
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('UnknownValue');
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage('Type of "UnknownValue" is not supported for user_saml');
+
 		$this->samlController->login(1);
 	}
 
