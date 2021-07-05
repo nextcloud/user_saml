@@ -49,7 +49,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var GroupManager */
+	/** @var IGroupManager */
 	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
