@@ -24,6 +24,7 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "Označuje, či SP overí všetky prijaté XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-kóduje SAML malými písmenami a sada nástrojov predvolene používa veľké písmená. Povoliť kompatibilitu ADFS pri overovaní podpisu.",
     "Algorithm that the toolkit will use on signing process." : "Algoritmus, ktorý sa použije v procese podpisovania.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Načítavať parametre dotazu z $ _SERVER. Niektoré servery SAML to vyžadujú pri požiadavkách SLO.",
     "Attribute to map the UID to." : "Atribút na priradenie UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Overenie totožnosti povoľte iba v prípade, že účet existuje na nejakom inom serveri. (napr. LDAP)",
     "Attribute to map the displayname to." : "Atribút na priradenie zobrazovaného mena.",
