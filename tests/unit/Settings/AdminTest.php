@@ -140,6 +140,11 @@ class AdminTest extends \Test\TestCase  {
 				'type' => 'line',
 				'required' => true,
 			],
+			'user_secret_mapping' => [
+				'text' => $this->l10n->t('Attribute to use as user secret e.g. for the encryption app.'),
+				'type' => 'line',
+				'required' => false,
+			],
 		];
 
 		$nameIdFormats = [
