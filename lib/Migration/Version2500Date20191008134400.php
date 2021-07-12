@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\User_SAML\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
+use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
@@ -24,17 +24,17 @@ class Version2500Date20191008134400 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_users')) {
 			$table = $schema->createTable('user_saml_users');
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('displayname', Type::STRING, [
+			$table->addColumn('displayname', Types::STRING, [
 				'notnull' => true,
 				'length' => 255,
 				'default' => '',
 			]);
-			$table->addColumn('home', Type::STRING, [
+			$table->addColumn('home', Types::STRING, [
 				'notnull' => true,
 				'length' => 255,
 				'default' => '',
@@ -44,17 +44,17 @@ class Version2500Date20191008134400 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_groups')) {
 			$table = $schema->createTable('user_saml_groups');
-			$table->addColumn('gid', Type::STRING, [
+			$table->addColumn('gid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('displayname', Type::STRING, [
+			$table->addColumn('displayname', Types::STRING, [
 				'notnull' => true,
 				'length' => 255,
 				'default' => '',
 			]);
-			$table->addColumn('saml_gid', Type::STRING, [
+			$table->addColumn('saml_gid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
@@ -65,22 +65,22 @@ class Version2500Date20191008134400 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_auth_token')) {
 			$table = $schema->createTable('user_saml_auth_token');
-			$table->addColumn('id', Type::INTEGER, [
+			$table->addColumn('id', Types::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
 				'length' => 4,
 				'unsigned' => true,
 			]);
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('name', Type::TEXT, [
+			$table->addColumn('name', Types::TEXT, [
 				'notnull' => true,
 				'default' => '',
 			]);
-			$table->addColumn('token', Type::STRING, [
+			$table->addColumn('token', Types::STRING, [
 				'notnull' => true,
 				'length' => 200,
 				'default' => '',
@@ -90,12 +90,12 @@ class Version2500Date20191008134400 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('user_saml_group_members')) {
 			$table = $schema->createTable('user_saml_group_members');
-			$table->addColumn('uid', Type::STRING, [
+			$table->addColumn('uid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->addColumn('gid', Type::STRING, [
+			$table->addColumn('gid', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 				'default' => '',
