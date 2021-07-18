@@ -61,9 +61,9 @@ class GroupManager
 			return;
 		}
 		$this->translateGroupToIds($samlGroups);
-		$assigned = $this->groupManager->getUserGroups($uid);
+		$assigned = $this->groupManager->getUserGroups($user);
 		$this->removeGroups($user, array_diff($assigned, $samlGroups));
-		$this->addGroups($uid, array_diff($samlGroups, $assigned));
+		$this->addGroups($user, array_diff($samlGroups, $assigned));
 	}
 
 	protected function translateGroupToIds(array &$samlGroups) {
