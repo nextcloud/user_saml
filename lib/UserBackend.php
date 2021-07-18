@@ -28,7 +28,7 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\IGroupManager;
+use OCA\User_SAML\GroupManager;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;
@@ -48,7 +48,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $db;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var IGroupManager */
+	/** @var GroupManager */
 	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
@@ -65,7 +65,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param ISession $session
 	 * @param IDBConnection $db
 	 * @param IUserManager $userManager
-	 * @param IGroupManager $groupManager
+	 * @param GroupManager $groupManager
 	 * @param SAMLSettings $settings
 	 * @param ILogger $logger
 	 */
@@ -75,7 +75,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		ISession $session,
 		IDBConnection $db,
 		IUserManager $userManager,
-		IGroupManager $groupManager,
+		GroupManager $groupManager,
 		SAMLSettings $settings,
 		ILogger $logger,
 		UserData $userData
@@ -674,7 +674,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			}
 			$this->groupManager->replaceGroups($user->getUID(), $newGroups);
 			// TODO: drop following line with dropping NC 18 support
-			$this->groupManager->evaluateGroupMigrations($newGroups);
+			// $this->groupManager->evaluateGroupMigrations($newGroups);
 		}
 	}
 
