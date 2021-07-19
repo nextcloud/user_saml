@@ -12,6 +12,7 @@ tasks:
   - name: Nextcloud Server
     init: |
       cd gitpod
+      EXTERNAL_URL=https://8082-${GITPOD_WORKSPACE_URL#https://}/simplesaml/
       docker-compose up --no-start
     command: |
       git config core.fileMode false

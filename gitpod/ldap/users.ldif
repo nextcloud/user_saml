@@ -1,0 +1,31 @@
+dn: cn=admin,dc=user_saml_gitpod
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+userPassword: password
+description: LDAP administrator
+
+
+dn: uid=test1,ou=People,dc=user_saml_gitpod
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: inetOrgPerson
+givenName: Test
+uid: test1
+sn: Person 1
+cn: test person 1
+mail: test1@example.com/
+userPassword: test1password
+
+dn: uid=test2,ou=People,dc=user_saml_gitpod
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: inetOrgPerson
+givenName: Test
+uid: test1
+sn: Person 2
+cn: test person 2
+mail: test2@example.com/
+userPassword: test2password

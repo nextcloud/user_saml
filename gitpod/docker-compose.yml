@@ -55,3 +55,16 @@ services:
       - NEXTCLOUD_ADMIN_PASSWORD=t2qQ1C6ktYUv7
       - NEXTCLOUD_TRUSTED_DOMAINS=*.gitpod.io
       - OVERWRITEPROTOCOL=https
+
+  simplesamlphp:
+    build:
+      context: ./simplesamlphp/
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      - EXTERNAL_URL
+
+  ldap:
+    build: ./ldap/
