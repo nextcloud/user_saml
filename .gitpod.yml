@@ -1,0 +1,31 @@
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addCheck: true
+    addComment: false
+    addBadge: true
+
+tasks:
+  - name: Nextcloud Server
+    init: |
+      cd gitpod
+      docker-compose up --no-start
+    command: |
+      git config core.fileMode false
+      chmod -R 777 .
+      cd gitpod
+      docker-compose up
+
+  - name: Terminal
+    command: clear
+
+ports:
+  - port: 8080
+    onOpen: open-browser
+    visibility: private
+  - port: 8081
+    visibility: private
+    onOpen: ignore
