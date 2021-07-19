@@ -14,8 +14,8 @@ $metadata['https://idptestbed/idp/simplesamlphp'] = array(
 	'host' => 'idptestbed',
 
 	// X.509 key and certificate. Relative to the cert directory.
-	'privatekey' => 'server.pem',
-	'certificate' => 'server.crt',
+	'privatekey' => 'gitpod.pem',
+	'certificate' => 'gitpod.crt',
 
 	/*
 	 * Authentication source to use. Must be one that is configured in
