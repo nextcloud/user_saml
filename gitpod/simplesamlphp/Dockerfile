@@ -1,6 +1,5 @@
 FROM unicon/simplesamlphp
 
-COPY etc-httpd /etc/httpd/
 COPY var-simplesamlphp /var/simplesamlphp/
 COPY var-www-html/ /var/www/html/
 
