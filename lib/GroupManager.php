@@ -62,6 +62,9 @@ class GroupManager
 		}
 		$this->translateGroupToIds($samlGroups);
 		$assigned = $this->groupManager->getUserGroups($user);
+		$assigned = array_map(function(IGroup $group){
+			return $group->getGID();
+		}, $assigned);
 		$this->removeGroups($user, array_diff($assigned, $samlGroups));
 		$this->addGroups($user, array_diff($samlGroups, $assigned));
 	}
@@ -162,12 +165,9 @@ class GroupManager
 	}
 
 	protected function hasSamlBackend(IGroup $group): bool {
-		$reflected = new \ReflectionClass($group);
-		$backendsProperty = $reflected->getProperty('backends');
-		$backendsProperty->setAccessible(true);
-		$backends = $backendsProperty->getValue();
+		$backends = $group->getBackendNames();
 		foreach ($backends as $backend) {
-			if($backend instanceof GroupBackend) {
+			if($backend === 'OCA\User_SAML\GroupBackend') {
 				return true;
 			}
 		}
