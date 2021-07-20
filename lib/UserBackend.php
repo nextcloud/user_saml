@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML;
 
+use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\NotPermittedException;
@@ -672,9 +673,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			if ($newGroups === null) {
 				$newGroups = [];
 			}
-			$this->groupManager->replaceGroups($user->getUID(), $newGroups);
+			try {
+				$this->groupManager->replaceGroups($user->getUID(), $newGroups);
+			} catch (AddUserToGroupException $e) {
+				$this->logger->error('Failed to add user to group: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
+			}
 			// TODO: drop following line with dropping NC 18 support
-			// $this->groupManager->evaluateGroupMigrations($newGroups);
+			$this->groupManager->evaluateGroupMigrations($newGroups);
 		}
 	}
 

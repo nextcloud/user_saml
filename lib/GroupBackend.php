@@ -3,11 +3,13 @@
 namespace OCA\User_SAML;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
+use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\ICreateGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -174,5 +176,18 @@ class GroupBackend extends ABackend {
 		$this->groupCache[$gid] = $gid;
 
 		return $result === 1;
+	}
+
+	public function addToGroup(string $uid, string $gid): bool {
+		try {
+			$qb = $this->dbc->getQueryBuilder();
+			$qb->insert(self::TABLE_MEMBERS)
+				->setValue('uid', $qb->createNamedParameter($uid))
+				->setValue('gid', $qb->createNamedParameter($gid))
+				->execute();
+			return true;
+		} catch (\Exception $e) {
+			throw new AddUserToGroupException($e->getMessage());
+		}
 	}
 }
