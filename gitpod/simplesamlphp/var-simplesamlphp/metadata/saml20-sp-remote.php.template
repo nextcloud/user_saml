@@ -6,7 +6,6 @@ $$metadata['$NEXTCLOUD_URL/apps/user_saml/saml/metadata'] = array (
   array (
   ),
   'metadata-set' => 'saml20-sp-remote',
-  'expire' => 1626869980,
   'AssertionConsumerService' => 
   array (
     0 => 
