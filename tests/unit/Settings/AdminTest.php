@@ -147,6 +147,11 @@ class AdminTest extends \Test\TestCase {
 				'type' => 'line',
 				'required' => true,
 			],
+			'group_mapping_prefix' => [
+				'text' => $this->l10n->t('Group Mapping Prefix'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$nameIdFormats = [

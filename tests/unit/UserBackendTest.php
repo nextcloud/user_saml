@@ -28,7 +28,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
-use OCP\IGroupManager;
+use OCA\User_SAML\GroupManager;
 use OCP\ILogger;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -51,7 +51,7 @@ class UserBackendTest extends TestCase {
 	private $db;
 	/** @var IUserManager|MockObject */
 	private $userManager;
-	/** @var IGroupManager|MockObject */
+	/** @var GroupManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $groupManager;
 	/** @var UserBackend|MockObject */
 	private $userBackend;
@@ -70,7 +70,7 @@ class UserBackendTest extends TestCase {
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->groupManager = $this->createMock(GroupManager::class);
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
 		$this->userData = $this->createMock(UserData::class);

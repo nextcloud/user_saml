@@ -3,6 +3,7 @@
 namespace OCA\User_SAML;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\FetchMode;
 use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
@@ -114,7 +115,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend {
 			->from(self::TABLE_GROUPS)
 			->where($qb->expr()->eq('saml_gid', $qb->createNamedParameter($samlGid)))
 			->execute();
-		$result = $cursor->fetch();
+		$result = $cursor->fetch(FetchMode::NUMERIC);
 		$cursor->closeCursor();
 
 		if ($result !== false) {
