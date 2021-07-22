@@ -16,7 +16,13 @@ tasks:
       cd gitpod
       export SIMPLESAML_URL=$(gp url 8082)/simplesaml
       export NEXTCLOUD_URL=$(gp url 8080)
-      sudo apt install -y gettext
+      
+      #sudo apt install -y gettext
+
+      curl -L https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-`uname -s`-`uname -m` -o envsubst
+      chmod +x envsubst
+      sudo mv envsubst /usr/local/bin
+
       envsubst < mariadb/prepopulate.sql.template > mariadb/prepopulate.sql
       envsubst < simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php.template > simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php
       docker-compose up

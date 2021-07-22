@@ -1,6 +1,6 @@
 <?php
 
-$metadata['$NEXTCLOUD_URL/apps/user_saml/saml/metadata'] = array (
+$$metadata['$NEXTCLOUD_URL/apps/user_saml/saml/metadata'] = array (
   'entityid' => '$NEXTCLOUD_URL/apps/user_saml/saml/metadata',
   'contacts' => 
   array (
