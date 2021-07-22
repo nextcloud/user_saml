@@ -3,7 +3,7 @@ FROM nextcloud
 COPY custom-entrypoint.sh /custom-entrypoint.sh
 RUN chmod +x /custom-entrypoint.sh
 
-COPY debug.config.php /var/www/html/config/
+COPY debug.config.php /debug.config.php
 
 ENTRYPOINT ["/custom-entrypoint.sh"]
 
