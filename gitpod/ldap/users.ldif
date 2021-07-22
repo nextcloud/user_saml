@@ -24,8 +24,24 @@ objectClass: person
 objectClass: top
 objectClass: inetOrgPerson
 givenName: Test
-uid: test1
+uid: test2
 sn: Person 2
 cn: test person 2
 mail: test2@example.com/
 userPassword: test2password
+
+dn: cn=Bender Bending Rodriguez,ou=People,dc=user_saml_gitpod
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Bender Bending Rodriguez
+description: Robot
+displayName: Bender
+employeeType: Ship's Robot
+givenName: Bender
+mail: bender@planetexpress.com
+ou: People
+uid: bender
+userPassword: bender
+sn: Rodriguez

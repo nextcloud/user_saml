@@ -14,6 +14,7 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb_read_only_compressed=OFF
     volumes:
       - db:/var/lib/mysql
+      - ./mariadb:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=wdGq73jQB0p373gLdf6yLRj5
       - MYSQL_PASSWORD=wdGq73jQB0p373gLdf6yLRj5
@@ -64,7 +65,8 @@ services:
     ports:
       - 8082:80
     environment:
-      - EXTERNAL_URL
-
+      - SIMPLESAML_URL
+      - NEXTCLOUD_URL
+  
   ldap:
     build: ./ldap/

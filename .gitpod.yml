@@ -10,14 +10,14 @@ github:
 
 tasks:
   - name: Nextcloud Server
-    init: |
-      cd gitpod
-      EXTERNAL_URL=https://8082-${GITPOD_WORKSPACE_URL#https://}/simplesaml/
-      docker-compose up --no-start
     command: |
       git config core.fileMode false
       chmod -R 777 .
       cd gitpod
+      export SIMPLESAML_URL=https://8082-${GITPOD_WORKSPACE_URL#https://}/simplesaml/
+      export NEXTCLOUD_URL=https://8080-${GITPOD_WORKSPACE_URL#https://}/
+      sudo apt install gettext
+      envsubst < mariadb/prepopulate.sql.template > mariadb/prepopulate.sql
       docker-compose up
 
   - name: Terminal

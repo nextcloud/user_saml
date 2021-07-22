@@ -42,28 +42,28 @@ $config = array(
         // Which attributes should be retrieved from the LDAP server.
         // This can be an array of attribute names, or NULL, in which case
         // all attributes are fetched.
-        'attributes' => array('cn', 'givenName', 'mail', 'sn'),
+        'attributes' => null,
 
         // The pattern which should be used to create the users DN given the username.
         // %username% in this pattern will be replaced with the users username.
         //
         // This option is not used if the search.enable option is set to TRUE.
-        'dnpattern' => 'uid=%username%,ou=people,dc=user_saml_gitpod',
+        'dnpattern' => 'uid=%username%,ou=People,dc=user_saml_gitpod',
 
         // As an alternative to specifying a pattern for the users DN, it is possible to
         // search for the username in a set of attributes. This is enabled by this option.
-        'search.enable' => FALSE,
+        'search.enable' => true,
 
         // The DN which will be used as a base for the search.
         // This can be a single string, in which case only that DN is searched, or an
         // array of strings, in which case they will be searched in the order given.
-        'search.base' => 'ou=people,dc=user_saml_gitpod',
+        'search.base' => 'ou=People,dc=user_saml_gitpod',
 
         // The attribute(s) the username should match against.
         //
         // This is an array with one or more attribute names. Any of the attributes in
         // the array may match the value the username.
-        'search.attributes' => array('uid'),
+        'search.attributes' => ['uid', 'mail'],
 
         // The username & password the SimpleSAMLphp should bind to before searching. If
         // this is left as NULL, no bind will be performed before searching.
