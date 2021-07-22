@@ -1,7 +1,7 @@
 <?php
 
-$metadata['https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/saml/metadata'] = array (
-  'entityid' => 'https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/saml/metadata',
+$metadata['$NEXTCLOUD_URL/apps/user_saml/saml/metadata'] = array (
+  'entityid' => '$NEXTCLOUD_URL/apps/user_saml/saml/metadata',
   'contacts' => 
   array (
   ),
@@ -12,7 +12,7 @@ $metadata['https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/s
     0 => 
     array (
       'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-      'Location' => 'https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/saml/acs',
+      'Location' => '$NEXTCLOUD_URL/apps/user_saml/saml/acs',
       'index' => 1,
     ),
   ),
@@ -21,7 +21,7 @@ $metadata['https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/s
     0 => 
     array (
       'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-      'Location' => 'https://8080-yellow-bovid-j1jnuetx.ws-eu11.gitpod.io/apps/user_saml/saml/sls',
+      'Location' => '$NEXTCLOUD_URL/apps/user_saml/saml/sls',
     ),
   ),
   'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
