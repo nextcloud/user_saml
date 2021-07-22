@@ -9,3 +9,4 @@
 build
 
 gitpod/mariadb/prepopulate.sql
+gitpod/simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php
