@@ -14,8 +14,8 @@ tasks:
       git config core.fileMode false
       chmod -R 777 .
       cd gitpod
-      export SIMPLESAML_URL=https://8082-${GITPOD_WORKSPACE_URL#https://}/simplesaml
-      export NEXTCLOUD_URL=https://8080-${GITPOD_WORKSPACE_URL#https://}
+      export SIMPLESAML_URL=$(gp url 8082)/simplesaml
+      export NEXTCLOUD_URL=$(gp url 8080)
       sudo apt install -y gettext
       envsubst < mariadb/prepopulate.sql.template > mariadb/prepopulate.sql
       envsubst < simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php.template > simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php
@@ -29,5 +29,8 @@ ports:
     onOpen: open-browser
     visibility: private
   - port: 8081
+    visibility: private
+    onOpen: ignore
+  - port: 8082
     visibility: private
     onOpen: ignore
