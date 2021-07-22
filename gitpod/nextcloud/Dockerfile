@@ -3,6 +3,8 @@ FROM nextcloud
 COPY custom-entrypoint.sh /custom-entrypoint.sh
 RUN chmod +x /custom-entrypoint.sh
 
+COPY debug.config.php /var/www/html/config/
+
 ENTRYPOINT ["/custom-entrypoint.sh"]
 
 # Needs to be set again, even though it is already in base image
