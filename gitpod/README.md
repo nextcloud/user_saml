@@ -10,7 +10,7 @@ It will automatically spin up and configure a full Nextcloud, MariaDB, PhpMyAdmi
 - If not go to the Remote Explorer Tab and open port 8080
 
 ## Ports
-- 80: Nextcloud
+- 8080: Nextcloud
 - 8081: PhpMyAdmin
 - 8082: SimpleSAMLphp Admin (/simplesaml subdirectory)
 

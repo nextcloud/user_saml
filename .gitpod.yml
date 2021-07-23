@@ -17,6 +17,7 @@ tasks:
       cd gitpod
       export SIMPLESAML_URL=$(gp url 8082)/simplesaml
       export NEXTCLOUD_URL=$(gp url 8080)
+      export HOSTIP=$(ip -4 addr show scope global dev eth0 | grep inet | awk '{print $2}' | cut -d / -f 1 | sed -n 1p)
       
       curl -L https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-`uname -s`-`uname -m` -o envsubst
       chmod +x envsubst
@@ -30,7 +31,7 @@ tasks:
     command: clear
 
 ports:
-  - port: 80
+  - port: 8080
     onOpen: open-browser
     visibility: private
   - port: 8081

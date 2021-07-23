@@ -39,7 +39,10 @@ services:
       context: ./nextcloud
       dockerfile: Dockerfile
     restart: always
-    network_mode: "host"
+    ports:
+      - 8080:80
+    links:
+      - db
     volumes:
       - nextcloud:/var/www/html
       - config:/var/www/html/config
@@ -54,6 +57,8 @@ services:
       - NEXTCLOUD_TRUSTED_DOMAINS=*.gitpod.io
       - OVERWRITEPROTOCOL=https
       - NEXTCLOUD_UPDATE=1
+    extra_hosts:
+      - host:${HOSTIP}
 
   simplesamlphp:
     build:
