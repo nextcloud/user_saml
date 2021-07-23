@@ -5,76 +5,20 @@
  */
 
 $config = array(
-
-    /**
-     * Setup the following parameters to match the directory of your installation.
-     * See the user manual for more details.
-     *
-     * Valid format for baseurlpath is:
-     * [(http|https)://(hostname|fqdn)[:port]]/[path/to/simplesaml/]
-     * (note that it must end with a '/')
-     *
-     * The full url format is useful if your SimpleSAMLphp setup is hosted behind
-     * a reverse proxy. In that case you can specify the external url here.
-     *
-     * Please note that SimpleSAMLphp will then redirect all queries to the
-     * external url, no matter where you come from (direct access or via the
-     * reverse proxy).
-     */
     'baseurlpath' => getenv('SIMPLESAML_URL'),
     'certdir' => 'cert/',
     'loggingdir' => 'log/',
     'datadir' => 'data/',
 
-    /*
-     * A directory where SimpleSAMLphp can save temporary files.
-     *
-     * SimpleSAMLphp will attempt to create this directory if it doesn't exist.
-     */
     'tempdir' => '/tmp/simplesaml',
 
+    'debug' => true,
 
-    /*
-     * If you enable this option, SimpleSAMLphp will log all sent and received messages
-     * to the log file.
-     *
-     * This option also enables logging of the messages that are encrypted and decrypted.
-     *
-     * Note: The messages are logged with the DEBUG log level, so you also need to set
-     * the 'logging.level' option to LOG_DEBUG.
-     */
-    'debug' => false,
-
-    /*
-     * When showerrors is enabled, all error messages and stack traces will be output
-     * to the browser.
-     *
-     * When errorreporting is enabled, a form will be presented for the user to report
-     * the error to technicalcontact_email.
-     */
     'showerrors' => true,
     'errorreporting' => true,
 
-    /**
-     * Custom error show function called from SimpleSAML_Error_Error::show.
-     * See docs/simplesamlphp-errorhandling.txt for function code example.
-     *
-     * Example:
-     *   'errors.show_function' => array('sspmod_example_Error_Show', 'show'),
-     */
-
-    /**
-     * This option allows you to enable validation of XML data against its
-     * schemas. A warning will be written to the log if validation fails.
-     */
     'debug.validatexml' => false,
 
-    /**
-     * This password must be kept secret, and modified from the default value 123.
-     * This password will give access to the installation page of SimpleSAMLphp with
-     * metadata listing and diagnostics pages.
-     * You can also put a hash here; run "bin/pwgen.php" to generate one.
-     */
     'auth.adminpassword' => '1234',
     'admin.protectindexpage' => false,
     'admin.protectmetadata' => false,
@@ -89,89 +33,17 @@ $config = array(
      */
     'secretsalt' => '9ce4uikx2xn9a6py96fv4yn3m3h8ck4r',
 
-    /*
-     * Some information about the technical persons running this installation.
-     * The email address will be used as the recipient address for error reports, and
-     * also as the technical contact in generated metadata.
-     */
     'technicalcontact_name' => 'Administrator',
 
-    /*
-     * The timezone of the server. This option should be set to the timezone you want
-     * SimpleSAMLphp to report the time in. The default is to guess the timezone based
-     * on your system timezone.
-     *
-     * See this page for a list of valid timezones: http://php.net/manual/en/timezones.php
-     */
     'timezone' => null,
 
-    /*
-     * Logging.
-     *
-     * define the minimum log level to log
-     *		SimpleSAML_Logger::ERR		No statistics, only errors
-     *		SimpleSAML_Logger::WARNING	No statistics, only warnings/errors
-     *		SimpleSAML_Logger::NOTICE	Statistics and errors
-     *		SimpleSAML_Logger::INFO		Verbose logs
-     *		SimpleSAML_Logger::DEBUG	Full debug logs - not recommended for production
-     *
-     * Choose logging handler.
-     *
-     * Options: [syslog,file,errorlog]
-     *
-     */
-    'logging.level' => SimpleSAML_Logger::NOTICE,
+    'logging.level' => SimpleSAML_Logger::DEBUG,
     'logging.handler' => 'syslog',
 
-    /*
-     * Specify the format of the logs. Its use varies depending on the log handler used (for instance, you cannot
-     * control here how dates are displayed when using the syslog or errorlog handlers), but in general the options
-     * are:
-     *
-     * - %date{<format>}: the date and time, with its format specified inside the brackets. See the PHP documentation
-     *   of the strftime() function for more information on the format. If the brackets are omitted, the standard
-     *   format is applied. This can be useful if you just want to control the placement of the date, but don't care
-     *   about the format.
-     *
-     * - %process: the name of the SimpleSAMLphp process. Remember you can configure this in the 'logging.processname'
-     *   option below.
-     *
-     * - %level: the log level (name or number depending on the handler used).
-     *
-     * - %stat: if the log entry is intended for statistical purposes, it will print the string 'STAT ' (bear in mind
-     *   the trailing space).
-     *
-     * - %trackid: the track ID, an identifier that allows you to track a single session.
-     *
-     * - %srcip: the IP address of the client. If you are behind a proxy, make sure to modify the
-     *   $_SERVER['REMOTE_ADDR'] variable on your code accordingly to the X-Forwarded-For header.
-     *
-     * - %msg: the message to be logged.
-     *
-     */
-    //'logging.format' => '%date{%b %d %H:%M:%S} %process %level %stat[%trackid] %msg',
-
-    /*
-     * Choose which facility should be used when logging with syslog.
-     *
-     * These can be used for filtering the syslog output from SimpleSAMLphp into its
-     * own file by configuring the syslog daemon.
-     *
-     * See the documentation for openlog (http://php.net/manual/en/function.openlog.php) for available
-     * facilities. Note that only LOG_USER is valid on windows.
-     *
-     * The default is to use LOG_LOCAL5 if available, and fall back to LOG_USER if not.
-     */
     'logging.facility' => defined('LOG_LOCAL5') ? constant('LOG_LOCAL5') : LOG_USER,
 
-    /*
-     * The process name that should be used when logging to syslog.
-     * The value is also written out by the other logging handlers.
-     */
     'logging.processname' => 'simplesamlphp',
 
-    /* Logging: file - Logfilename in the loggingdir from above.
-     */
     'logging.logfile' => 'simplesamlphp.log',
 
     /* (New) statistics output configuration.
@@ -179,85 +51,13 @@ $config = array(
      * This is an array of outputs. Each output has at least a 'class' option, which
      * selects the output.
      */
-    'statistics.out' => array(// Log statistics to the normal log.
-        /*
+    'statistics.out' => array(
         array(
             'class' => 'core:Log',
             'level' => 'notice',
         ),
-        */
-        // Log statistics to files in a directory. One file per day.
-        /*
-        array(
-            'class' => 'core:File',
-            'directory' => '/var/log/stats',
-        ),
-        */
     ),
 
-
-
-    /*
-     * Database
-     *
-     * This database configuration is optional. If you are not using
-     * core functionality or modules that require a database, you can
-     * skip this configuration.
-     */
-
-    /*
-     * Database connection string.
-     * Ensure that you have the required PDO database driver installed
-     * for your connection string.
-     */
-    'database.dsn' => 'mysql:host=localhost;dbname=saml',
-
-    /*
-     * SQL database credentials
-     */
-    'database.username' => 'simplesamlphp',
-    'database.password' => 'secret',
-
-    /*
-     * (Optional) Table prefix
-     */
-    'database.prefix' => '',
-
-    /*
-     * True or false if you would like a persistent database connection
-     */
-    'database.persistent' => false,
-
-    /*
-     * Database slave configuration is optional as well. If you are only
-     * running a single database server, leave this blank. If you have
-     * a master/slave configuration, you can define as many slave servers
-     * as you want here. Slaves will be picked at random to be queried from.
-     *
-     * Configuration options in the slave array are exactly the same as the
-     * options for the master (shown above) with the exception of the table
-     * prefix.
-     */
-    'database.slaves' => array(
-        /*
-        array(
-            'dsn' => 'mysql:host=myslave;dbname=saml',
-            'username' => 'simplesamlphp',
-            'password' => 'secret',
-            'persistent' => false,
-        ),
-        */
-    ),
-
-
-
-    /*
-     * Enable
-     *
-     * Which functionality in SimpleSAMLphp do you want to enable. Normally you would enable only
-     * one of the functionalities below, but in some cases you could run multiple functionalities.
-     * In example when you are setting up a federation bridge.
-     */
     'enable.saml20-idp' => true,
     'enable.shib13-idp' => false,
     'enable.adfs-idp' => false,
@@ -409,47 +209,8 @@ $config = array(
     'language.cookie.path' => '/',
     'language.cookie.lifetime' => (60 * 60 * 24 * 900),
 
-    /**
-     * Custom getLanguage function called from SimpleSAML_XHTML_Template::getLanguage().
-     * Function should return language code of one of the available languages or NULL.
-     * See SimpleSAML_XHTML_Template::getLanguage() source code for more info.
-     *
-     * This option can be used to implement a custom function for determining
-     * the default language for the user.
-     *
-     * Example:
-     *   'language.get_language_function' => array('sspmod_example_Template', 'getLanguage'),
-     */
-
-    /*
-     * Extra dictionary for attribute names.
-     * This can be used to define local attributes.
-     *
-     * The format of the parameter is a string with <module>:<dictionary>.
-     *
-     * Specifying this option will cause us to look for modules/<module>/dictionaries/<dictionary>.definition.json
-     * The dictionary should look something like:
-     *
-     * {
-     *     "firstattribute": {
-     *         "en": "English name",
-     *         "no": "Norwegian name"
-     *     },
-     *     "secondattribute": {
-     *         "en": "English name",
-     *         "no": "Norwegian name"
-     *     }
-     * }
-     *
-     * Note that all attribute names in the dictionary must in lowercase.
-     *
-     * Example: 'attributes.extradictionary' => 'ourmodule:ourattributes',
-     */
     'attributes.extradictionary' => null,
 
-    /*
-     * Which theme directory should be used?
-     */
     'theme.use' => 'default',
 
 
@@ -469,17 +230,6 @@ $config = array(
 
     'idpdisco.extDiscoveryStorage' => null,
 
-    /*
-     * IdP Discovery service look configuration.
-     * Wether to display a list of idp or to display a dropdown box. For many IdP' a dropdown box
-     * gives the best use experience.
-     *
-     * When using dropdown box a cookie is used to highlight the previously chosen IdP in the dropdown.
-     * This makes it easier for the user to choose the IdP
-     *
-     * Options: [links,dropdown]
-     *
-     */
     'idpdisco.layout' => 'dropdown',
 
     /*
@@ -577,83 +327,6 @@ $config = array(
 
     ),
 
-
-    /*
-     * This option configures the metadata sources. The metadata sources is given as an array with
-     * different metadata sources. When searching for metadata, simpleSAMPphp will search through
-     * the array from start to end.
-     *
-     * Each element in the array is an associative array which configures the metadata source.
-     * The type of the metadata source is given by the 'type' element. For each type we have
-     * different configuration options.
-     *
-     * Flat file metadata handler:
-     * - 'type': This is always 'flatfile'.
-     * - 'directory': The directory we will load the metadata files from. The default value for
-     *                this option is the value of the 'metadatadir' configuration option, or
-     *                'metadata/' if that option is unset.
-     *
-     * XML metadata handler:
-     * This metadata handler parses an XML file with either an EntityDescriptor element or an
-     * EntitiesDescriptor element. The XML file may be stored locally, or (for debugging) on a remote
-     * web server.
-     * The XML hetadata handler defines the following options:
-     * - 'type': This is always 'xml'.
-     * - 'file': Path to the XML file with the metadata.
-     * - 'url': The URL to fetch metadata from. THIS IS ONLY FOR DEBUGGING - THERE IS NO CACHING OF THE RESPONSE.
-     *
-     * MDX metadata handler:
-     * This metadata handler looks up for the metadata of an entity at the given MDX server.
-     * The MDX metadata handler defines the following options:
-     * - 'type': This is always 'mdx'.
-     * - 'server': URL of the MDX server (url:port). Mandatory.
-     * - 'validateFingerprint': The fingerprint of the certificate used to sign the metadata.
-     *                          You don't need this option if you don't want to validate the signature on the metadata. Optional.
-     * - 'cachedir': Directory where metadata can be cached. Optional.
-     * - 'cachelength': Maximum time metadata cah be cached, in seconds. Default to 24
-     *                  hours (86400 seconds). Optional.
-     *
-     * PDO metadata handler:
-     * This metadata handler looks up metadata of an entity stored in a database.
-     *
-     * Note: If you are using the PDO metadata handler, you must configure the database
-     * options in this configuration file.
-     *
-     * The PDO metadata handler defines the following options:
-     * - 'type': This is always 'pdo'.
-     *
-     *
-     * Examples:
-     *
-     * This example defines two flatfile sources. One is the default metadata directory, the other
-     * is a metadata directory with autogenerated metadata files.
-     *
-     * 'metadata.sources' => array(
-     *     array('type' => 'flatfile'),
-     *     array('type' => 'flatfile', 'directory' => 'metadata-generated'),
-     *     ),
-     *
-     * This example defines a flatfile source and an XML source.
-     * 'metadata.sources' => array(
-     *     array('type' => 'flatfile'),
-     *     array('type' => 'xml', 'file' => 'idp.example.org-idpMeta.xml'),
-     *     ),
-     *
-     * This example defines an mdx source.
-     * 'metadata.sources' => array(
-     *     array('type' => 'mdx', server => 'http://mdx.server.com:8080', 'cachedir' => '/var/simplesamlphp/mdx-cache', 'cachelength' => 86400)
-     *     ),
-     *
-     * This example defines an pdo source.
-     * 'metadata.sources' => array(
-     *     array('type' => 'pdo')
-     *     ),
-     *
-     * Default:
-     * 'metadata.sources' => array(
-     *     array('type' => 'flatfile')
-     *     ),
-     */
     'metadata.sources' => array(
         array('type' => 'flatfile'),
     ),

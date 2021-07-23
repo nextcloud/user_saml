@@ -1,5 +1,6 @@
 FROM nextcloud
 
+RUN apt update
 RUN apt install -y php-xdebug
 
 COPY custom-entrypoint.sh /custom-entrypoint.sh

@@ -8,13 +8,6 @@ ServerRoot = /usr/lib64/dirsrv
 SuiteSpotGroup = nobody
 SuiteSpotUserID = nobody
 
-[admin]
-Port = 9830
-ServerAdminID = admin
-ServerAdminPwd = admin
-ServerIpAddress = 0.0.0.0
-SysUser = nobody
-
 [slapd]
 AddOrgEntries = Yes
 AddSampleEntries = No
