@@ -38,7 +38,7 @@ tasks:
     command: clear
 
 ports:
-  - port: 8080
+  - port: 80
     onOpen: open-browser
     visibility: private
   - port: 8081
