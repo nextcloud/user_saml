@@ -41,6 +41,7 @@ services:
     restart: always
     ports:
       - 8080:80
+      - 9003:9003
     links:
       - db
     volumes:

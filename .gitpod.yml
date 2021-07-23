@@ -43,3 +43,4 @@ ports:
 vscode:
   extensions:
     - ms-azuretools.vscode-docker
+    - felixfbecker.php-debug
