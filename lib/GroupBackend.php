@@ -8,9 +8,10 @@ use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -190,5 +191,15 @@ class GroupBackend extends ABackend implements IAddToGroupBackend {
 		} catch (\Exception $e) {
 			throw new AddUserToGroupException($e->getMessage());
 		}
+	}
+
+	public function removeFromGroup(string $uid, string $gid): bool {
+		$qb = $this->dbc->getQueryBuilder();
+		$qb->delete(self::TABLE_MEMBERS)
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+			->executeStatement();
+
+		return true;
 	}
 }
