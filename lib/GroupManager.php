@@ -5,6 +5,7 @@ namespace OCA\User_SAML;
 use OC\BackgroundJob\JobList;
 use OC\Hooks\PublicEmitter;
 use OCA\User_SAML\Jobs\MigrateGroups;
+use OCA\User_SAML\SAMLSettings;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -35,6 +36,8 @@ class GroupManager
 	private $config;
 	/** @var JobList */
 	private $jobList;
+	/** @var SAMLSettings */
+	private $settings;
 
 
 	public function __construct(
@@ -44,7 +47,8 @@ class GroupManager
 		IUserManager $userManager,
 		GroupBackend $ownGroupBackend,
 		IConfig $config,
-		JobList $jobList
+		JobList $jobList,
+		SAMLSettings $settings
 	) {
 		$this->db = $db;
 		$this->duplicateChecker = $duplicateChecker;
@@ -53,6 +57,7 @@ class GroupManager
 		$this->ownGroupBackend = $ownGroupBackend;
 		$this->config = $config;
 		$this->jobList = $jobList;
+		$this->settings = $settings;
 	}
 
 	public function replaceGroups($uid, $samlGroups) {
@@ -106,7 +111,9 @@ class GroupManager
 				$group = $this->createGroupInBackend($gid);
 			} else if($e->getCode() === 2) {
 				//FIXME: probably need config flag. Previous to 17, gid was used as displayname
-				$group = $this->createGroupInBackend('__saml__' . $gid, $gid);
+				$idpPrefix = $this->settings->getPrefix('saml-attribute-mapping-group_mapping_prefix');
+				$groupPrefix = $this->config->getAppValue('user_saml', $idpPrefix . 'saml-attribute-mapping-group_mapping_prefix', 'SAML_');
+				$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
 			} else {
 				throw $e;
 			}
