@@ -50,7 +50,14 @@ try {
 $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
 \OC::$server->getGroupManager()->addBackend($groupBackend);
 
-\OC::$server->registerService('SAMLGroupManager', function(\OCA\User_SAML\GroupBackend $groupBackend) {
+$samlSettings = new \OCA\User_SAML\SAMLSettings(
+	$urlGenerator,
+	$config,
+	$request,
+	$session
+);
+
+\OC::$server->registerService('SAMLGroupManager', function(\OCA\User_SAML\GroupBackend $groupBackend, $samlSettings) {
     return new OCA\User_SAML\GroupManager(
         \OC::$server->getDatabaseConnection(),
         \OC::$server->query('SAMLGroupDuplicateChecker'),
@@ -58,16 +65,10 @@ $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnect
 		\OC::$server->getUserManager(),
 		$groupBackend,
 		\OC::$server->getConfig(),
-		\OC::$server->getJobList()
+		\OC::$server->getJobList(),
+		$samlSettings,
     );
 });
-
-$samlSettings = new \OCA\User_SAML\SAMLSettings(
-	$urlGenerator,
-	$config,
-	$request,
-	$session
-);
 
 $userData = new \OCA\User_SAML\UserData(
 	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
