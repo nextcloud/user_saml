@@ -66,10 +66,7 @@ class GroupManager
 			return;
 		}
 		$this->translateGroupToIds($samlGroups);
-		$assigned = $this->groupManager->getUserGroups($user);
-		$assigned = array_map(function(IGroup $group){
-			return $group->getGID();
-		}, $assigned);
+		$assigned = $this->groupManager->getUserGroupIds($user);
 		$this->removeGroups($user, array_diff($assigned, $samlGroups));
 		$this->addGroups($user, array_diff($samlGroups, $assigned));
 	}
