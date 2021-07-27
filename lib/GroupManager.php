@@ -88,7 +88,7 @@ class GroupManager
 
 	public function removeGroup(IUser $user, string $gid) {
 		$group = $this->groupManager->get($gid);
-		if($group === null) {
+		if($group === null || !$this->hasSamlBackend($group)) {
 			return;
 		}
 		$group->removeUser($user);
