@@ -60,15 +60,42 @@ class GroupManager
 		$this->settings = $settings;
 	}
 
+	private function getGroupsToRemove($samlGroups, $assignedGroups): array {
+		$groupsToRemove = [];
+		foreach($assignedGroups as $group) {
+			// if group is not supplied by SAML and group has SAML backend
+			if (!in_array($group->getGID(), $samlGroups) && $this->hasSamlBackend($group)) {
+				$groupsToRemove[] = $group->getGID();
+			}
+		}
+		return $groupsToRemove;
+	}
+
+	private function getGroupsToAdd($samlGroups, $assignedGroupIds): array {
+		$groupsToAdd = [];
+		foreach($samlGroups as $group) {
+			// if user is not assigend to the group or the provided group has a non SAML backend
+			if (!in_array($group, $assignedGroupIds) || !$this->hasSamlBackend($this->groupManager->get($group))) {
+				$groupsToAdd[] = $group;
+			}
+		}
+		return $groupsToAdd;
+	}
+
 	public function replaceGroups($uid, $samlGroups) {
 		$user = $this->userManager->get($uid);
 		if($user === null) {
 			return;
 		}
 		$this->translateGroupToIds($samlGroups);
-		$assigned = $this->groupManager->getUserGroupIds($user);
-		$this->removeGroups($user, array_diff($assigned, $samlGroups));
-		$this->addGroups($user, array_diff($samlGroups, $assigned));
+		$assignedGroups = $this->groupManager->getUserGroups($user);
+		$assignedGroupIds = array_map(function(IGroup $group){
+			return $group->getGID();
+		}, $assignedGroups);
+		$groupsToRemove = $this->getGroupsToRemove($samlGroups, $assignedGroups);
+		$groupsToAdd = $this->getGroupsToAdd($samlGroups, $assignedGroupIds);
+		$this->removeGroups($user, $groupsToRemove);
+		$this->addGroups($user, $groupsToAdd);
 	}
 
 	protected function translateGroupToIds(array &$samlGroups) {
@@ -88,7 +115,7 @@ class GroupManager
 
 	public function removeGroup(IUser $user, string $gid) {
 		$group = $this->groupManager->get($gid);
-		if($group === null || !$this->hasSamlBackend($group)) {
+		if($group === null) {
 			return;
 		}
 		$group->removeUser($user);
