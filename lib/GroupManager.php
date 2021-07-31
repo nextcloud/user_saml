@@ -119,6 +119,9 @@ class GroupManager
 			return;
 		}
 		$group->removeUser($user);
+		if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
+			$group->delete();
+		}
 	}
 
 	public function addGroups(IUser $user, $groupIds) {

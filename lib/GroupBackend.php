@@ -7,11 +7,13 @@ use Doctrine\DBAL\FetchMode;
 use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
+use OCP\Group\Backend\ICountUsersBackend;
 use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\Group\Backend\IDeleteGroupBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend, ICountUsersBackend, IDeleteGroupBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -200,6 +202,48 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGr
 			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
 			->executeStatement();
 
+		return true;
+	}
+
+	public function countUsersInGroup(string $gid, string $search = ''): int {
+		$query = $this->dbc->getQueryBuilder();
+		$query->select($query->func()->count('*', 'num_users'))
+			->from(self::TABLE_MEMBERS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
+
+		if ($search !== '') {
+			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
+				'%' . $this->dbConn->escapeLikeParameter($search) . '%'
+			)));
+		}
+
+		$result = $query->executeQuery();
+		$count = $result->fetchOne();
+		$result->closeCursor();
+
+		if ($count !== false) {
+			$count = (int)$count;
+		} else {
+			$count = 0;
+		}
+
+		return $count;
+	}
+
+	public function deleteGroup(string $gid): bool {
+		$query = $this->dbc->getQueryBuilder();
+		// delete the group
+		$query->delete(self::TABLE_GROUPS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->executeStatement();
+
+		// delete group user relation
+		$query->delete(self::TABLE_MEMBERS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->executeStatement();
+
+		// remove from cache
+		unset($this->groupCache[$gid]);
 		return true;
 	}
 }
