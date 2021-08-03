@@ -100,8 +100,10 @@ class GroupManagerTest extends TestCase {
 	}
 
 	public function testReplaceGroups() {
-		$this->getGroupManager(['removeGroups', 'addGroups', 'translateGroupToIds']);
+		$this->getGroupManager(['removeGroups', 'addGroups', 'translateGroupToIds', 'hasSamlBackend']);
 		$user = $this->createMock(IUser::class);
+		$groupA = $this->createMock(IGroup::class);
+		$groupB = $this->createMock(IGroup::class);
 		$this->userManager
 			->expects($this->once())
 			->method('get')
@@ -114,9 +116,21 @@ class GroupManagerTest extends TestCase {
 		// assert user is actually assigned to groupA and groupB
 		$this->groupManager
 			->expects($this->once())
-			->method('getUserGroupIds')
+			->method('getUserGroups')
 			->with($user)
-			->willReturn(['groupA', 'groupB']);
+			->willReturn([$groupA, $groupB]);
+		$groupA->method('getGID')
+			->willReturn('groupA');
+		$groupB->method('getGID')
+			->willReturn('groupB');
+		$this->groupManager
+			->method('get')
+			->with('groupB')
+			->willReturn($groupB);
+		// assert all groups are supplied by SAML backend
+		$this->ownGroupManager
+			->method('hasSamlBackend')
+			->willReturn(true);
 		// assert removing membership to groupA
 		$this->ownGroupManager
 			->expects($this->once())
@@ -126,7 +140,7 @@ class GroupManagerTest extends TestCase {
 		$this->ownGroupManager
 			->expects($this->once())
 			->method('addGroups')
-			->with($user, [1 => 'groupC']);
+			->with($user, ['groupC']);
 		
 		// assert SAML provides user groups groupB and groupC
 		$this->ownGroupManager->replaceGroups('ExistingUser', ['groupB', 'groupC']);
@@ -136,35 +150,26 @@ class GroupManagerTest extends TestCase {
 		$this->getGroupManager();
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
-		$groupB = $this->createMock(IGroup::class);
 		$this->groupManager
 			->expects($this->at(0))
 			->method('get')
 			->with('groupA')
 			->willReturn($groupA);
-		// assert SAML group backend
-		$groupA->expects($this->once())
-			->method('getBackendNames')
-			->willReturn(['OCA\User_SAML\GroupBackend']);
 		// assert membership gets removed
 		$groupA->expects($this->once())
 			->method('removeUser')
 			->with($user);
-		$this->groupManager
-			->expects($this->at(1))
-			->method('get')
-			->with('groupB')
-			->willReturn($groupB);
-		// assert different group backend
-		$groupB->expects($this->once())
-			->method('getBackendNames')
-			->willReturn(['OC\Group\Database']);
-		// assert user retains membership
-		$groupB->expects($this->never())
-			->method('removeUser')
-			->with($user);
+		// assert no remaining group memberships
+		$this->ownGroupBackend
+			->expects($this->once())
+			->method('countUsersInGroup')
+			->with('groupA')
+			->willReturn(0);
+		// assert group is deleted
+		$groupA->expects($this->once())
+			->method('delete');
 
-		$this->ownGroupManager->removeGroups($user, ['groupA', 'groupB']);
+		$this->ownGroupManager->removeGroups($user, ['groupA']);
 	}
 
 	public function testAddToExistingGroup() {
