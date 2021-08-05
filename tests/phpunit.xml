@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="bootstrap.php"
+		 verbose="true"
+		 convertDeprecationsToExceptions="true"
+		 timeoutForSmallTests="900"
+		 timeoutForMediumTests="900"
+		 timeoutForLargeTests="900"
+>
+	<testsuites>
+		<testsuite name='unit'>
+			<directory suffix='Test.php'>./unit/</directory>
+		</testsuite>
+		<testsuite name='integration'>
+			<directory suffix='Test.php'>./integration/</directory>
+			<exclude>./integration/vendor/</exclude>
+		</testsuite>
+	</testsuites>
+	<!-- filters for code coverage -->
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../../user_saml/appinfo</directory>
+			<directory suffix=".php">../../user_saml/lib</directory>
+		</whitelist>
+	</filter>
+</phpunit>
