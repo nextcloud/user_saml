@@ -119,9 +119,9 @@ class GroupManager
 		if($group === null) {
 			return;
 		}
-		$group->removeUser($user);
+		$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
 		if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
-			$group->delete();
+			$this->ownGroupBackend->deleteGroup($group->getGID());
 		}
 	}
 
