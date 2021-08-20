@@ -13,7 +13,7 @@ use OCP\Group\Backend\IDeleteGroupBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend, ICountUsersBackend, IDeleteGroupBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend, ICountUsersBackend {
 	/** @var IDBConnection */
 	private $dbc;
 

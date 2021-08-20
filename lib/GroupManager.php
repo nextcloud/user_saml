@@ -121,7 +121,7 @@ class GroupManager
 		}
 		$group->removeUser($user);
 		if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
-			$group->delete();
+			$this->ownGroupBackend->deleteGroup($group->getGID());
 		}
 	}
 
