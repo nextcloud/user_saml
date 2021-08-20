@@ -200,7 +200,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGr
 		$qb->delete(self::TABLE_MEMBERS)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
-			->executeStatement();
+			->execute();
 
 		return true;
 	}
@@ -217,7 +217,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGr
 			)));
 		}
 
-		$result = $query->executeQuery();
+		$result = $query->execute();
 		$count = $result->fetchOne();
 		$result->closeCursor();
 
@@ -235,12 +235,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGr
 		// delete the group
 		$query->delete(self::TABLE_GROUPS)
 			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->executeStatement();
+			->execute();
 
 		// delete group user relation
 		$query->delete(self::TABLE_MEMBERS)
 			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->executeStatement();
+			->execute();
 
 		// remove from cache
 		unset($this->groupCache[$gid]);

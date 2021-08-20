@@ -4,6 +4,7 @@ namespace OCA\User_SAML;
 
 use OC\BackgroundJob\JobList;
 use OC\Hooks\PublicEmitter;
+use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\Jobs\MigrateGroups;
 use OCA\User_SAML\SAMLSettings;
 use OCP\IConfig;
@@ -199,9 +200,14 @@ class GroupManager
 	}
 
 	protected function hasSamlBackend(IGroup $group): bool {
-		$backends = $group->getBackendNames();
+		$reflected = new \ReflectionObject($group);
+		$backendsProperty = $reflected->getProperty('backends');
+		$backendsProperty->setAccessible(true);
+		$backends = $backendsProperty->getValue($group);
+		// available at nextcloud 22
+		// $backends = $group->getBackendNames();
 		foreach ($backends as $backend) {
-			if($backend === 'OCA\User_SAML\GroupBackend') {
+			if($backend instanceof GroupBackend) {
 				return true;
 			}
 		}
