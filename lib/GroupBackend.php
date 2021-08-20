@@ -8,12 +8,9 @@ use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\ICountUsersBackend;
-use OCP\Group\Backend\ICreateGroupBackend;
-use OCP\Group\Backend\IDeleteGroupBackend;
-use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, IRemoveFromGroupBackend, ICountUsersBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
