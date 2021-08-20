@@ -15,6 +15,8 @@ It will automatically spin up and configure a full Nextcloud, MariaDB, PhpMyAdmi
 - 8082: SimpleSAMLphp Admin (/simplesaml subdirectory)
 
 ## Nextcloud Direct Login:
+**URL:** [https://8080-[Workspace Name].gitpod.io/login?direct=1]()
+
 **Username:** dev
 
 **Password:** t2qQ1C6ktYUv7
