@@ -12,10 +12,12 @@ OC.L10N.register(
     "Open documentation" : "Avaa dokumentaatio",
     "Use built-in SAML authentication" : "Käytä sisäänrakennettua SAML-tunnistautumista",
     "Use environment variable" : "Käytä ympäristömuuttujaa",
+    "Global settings" : "Yleiset asetukset",
     "General" : "Yleiset",
     "Show Service Provider settings…" : "Näytä palveluntarjoajan asetukset…",
     "Security settings" : "Turvallisuusasetukset",
     "Show security settings…" : "Näytä turvallisuusasetukset…",
+    "Reset settings" : "Nollaa asetukset",
     "Error" : "Virhe"
 },
 "nplurals=2; plural=(n != 1);");

@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\Tests\Middleware;
 
+use Exception;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
@@ -79,10 +80,6 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 		$this->onlyLoggedInMiddleware->beforeController($this->createMock(Controller::class), 'bar');
 	}
 
-	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage User is already logged-in
-	 */
 	public function testBeforeControllerWithAnnotationAndLoggedIn() {
 		$this->reflector
 			->expects($this->once())
@@ -94,15 +91,19 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 			->method('isLoggedIn')
 			->willReturn(true);
 
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage('User is already logged-in');
+
 		$this->onlyLoggedInMiddleware->beforeController($this->createMock(Controller::class), 'bar');
 	}
 
-	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage My Exception
-	 */
 	public function testAfterExceptionWithNormalException() {
-		$exception = new \Exception('My Exception');
+		$exceptionMsg = 'My Exception';
+		$exception = new Exception($exceptionMsg);
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage($exceptionMsg);
+
 		$this->onlyLoggedInMiddleware->afterException($this->createMock(Controller::class), 'bar', $exception);
 	}
 
@@ -113,7 +114,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
 			->with('/')
 			->willReturn($homeUrl);
 
-		$exception = new \Exception('User is already logged-in');
+		$exception = new Exception('User is already logged-in');
 		$expected = new RedirectResponse($homeUrl);
 		$this->assertEquals($expected, $this->onlyLoggedInMiddleware->afterException($this->createMock(Controller::class), 'bar', $exception));
 	}
