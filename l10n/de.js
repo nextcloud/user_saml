@@ -32,7 +32,6 @@ OC.L10N.register(
     "Attribute to map the quota to." : "Attribut, dem das Kontingent zugeordnet werden soll.",
     "Attribute to map the users groups to." : "Attribut, dem die Gruppen des Benutzers zugeordnet werden sollen.",
     "Attribute to map the users home to." : "Attribut, dem das zu Hause des Benutzers zugeordnet werden soll.",
-    "Attribute to map the users avatar to." : "Attribut, dem das das Profilbild des Benutzers zugeordnet werden soll.",
     "Email address" : "E-Mail-Adresse",
     "Encrypted" : "Verschlüsselt",
     "Entity" : "Einheit",
