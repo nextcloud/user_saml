@@ -637,7 +637,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		if ($user !== null) {
-			$currentEmail = (string)$user->getEMailAddress();
+			$currentEmail = (string)(method_exists($user, 'getSystemEMailAddress') ? $user->getSystemEMailAddress() : $user->getEMailAddress());
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
 				$user->setEMailAddress($newEmail);
