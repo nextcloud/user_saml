@@ -3,13 +3,14 @@
 namespace OCA\User_SAML;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\FetchMode;
 use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
-use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\Group\Backend\ICountUsersBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -114,7 +115,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend {
 			->from(self::TABLE_GROUPS)
 			->where($qb->expr()->eq('saml_gid', $qb->createNamedParameter($samlGid)))
 			->execute();
-		$result = $cursor->fetch();
+		$result = $cursor->fetch(FetchMode::NUMERIC);
 		$cursor->closeCursor();
 
 		if ($result !== false) {
@@ -190,4 +191,59 @@ class GroupBackend extends ABackend implements IAddToGroupBackend {
 			throw new AddUserToGroupException($e->getMessage());
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	public function removeFromGroup(string $uid, string $gid): bool {
+		$qb = $this->dbc->getQueryBuilder();
+		$qb->delete(self::TABLE_MEMBERS)
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+			->execute();
+
+		return true;
+	}
+
+	public function countUsersInGroup(string $gid, string $search = ''): int {
+		$query = $this->dbc->getQueryBuilder();
+		$query->select($query->func()->count('*', 'num_users'))
+			->from(self::TABLE_MEMBERS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
+
+		if ($search !== '') {
+			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
+				'%' . $this->dbConn->escapeLikeParameter($search) . '%'
+			)));
+		}
+
+		$result = $query->execute();
+		$count = $result->fetchOne();
+		$result->closeCursor();
+
+		if ($count !== false) {
+			$count = (int)$count;
+		} else {
+			$count = 0;
+		}
+
+		return $count;
+	}
+
+	public function deleteGroup(string $gid): bool {
+		$query = $this->dbc->getQueryBuilder();
+		// delete the group
+		$query->delete(self::TABLE_GROUPS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->execute();
+
+		// delete group user relation
+		$query->delete(self::TABLE_MEMBERS)
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->execute();
+
+		// remove from cache
+		unset($this->groupCache[$gid]);
+		return true;
+	}
+>>>>>>> groupbackend
 }

@@ -4,7 +4,9 @@ namespace OCA\User_SAML;
 
 use OC\BackgroundJob\JobList;
 use OC\Hooks\PublicEmitter;
+use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\Jobs\MigrateGroups;
+use OCA\User_SAML\SAMLSettings;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -35,6 +37,8 @@ class GroupManager
 	private $config;
 	/** @var JobList */
 	private $jobList;
+	/** @var SAMLSettings */
+	private $settings;
 
 
 	public function __construct(
@@ -44,7 +48,8 @@ class GroupManager
 		IUserManager $userManager,
 		GroupBackend $ownGroupBackend,
 		IConfig $config,
-		JobList $jobList
+		JobList $jobList,
+		SAMLSettings $settings
 	) {
 		$this->db = $db;
 		$this->duplicateChecker = $duplicateChecker;
@@ -53,6 +58,29 @@ class GroupManager
 		$this->ownGroupBackend = $ownGroupBackend;
 		$this->config = $config;
 		$this->jobList = $jobList;
+		$this->settings = $settings;
+	}
+
+	private function getGroupsToRemove($samlGroups, $assignedGroups): array {
+		$groupsToRemove = [];
+		foreach($assignedGroups as $group) {
+			// if group is not supplied by SAML and group has SAML backend
+			if (!in_array($group->getGID(), $samlGroups) && $this->hasSamlBackend($group)) {
+				$groupsToRemove[] = $group->getGID();
+			}
+		}
+		return $groupsToRemove;
+	}
+
+	private function getGroupsToAdd($samlGroups, $assignedGroupIds): array {
+		$groupsToAdd = [];
+		foreach($samlGroups as $group) {
+			// if user is not assigend to the group or the provided group has a non SAML backend
+			if (!in_array($group, $assignedGroupIds) || !$this->hasSamlBackend($this->groupManager->get($group))) {
+				$groupsToAdd[] = $group;
+			}
+		}
+		return $groupsToAdd;
 	}
 
 	public function replaceGroups($uid, $samlGroups) {
@@ -61,12 +89,14 @@ class GroupManager
 			return;
 		}
 		$this->translateGroupToIds($samlGroups);
-		$assigned = $this->groupManager->getUserGroups($user);
-		$assigned = array_map(function(IGroup $group){
+		$assignedGroups = $this->groupManager->getUserGroups($user);
+		$assignedGroupIds = array_map(function(IGroup $group){
 			return $group->getGID();
-		}, $assigned);
-		$this->removeGroups($user, array_diff($assigned, $samlGroups));
-		$this->addGroups($user, array_diff($samlGroups, $assigned));
+		}, $assignedGroups);
+		$groupsToRemove = $this->getGroupsToRemove($samlGroups, $assignedGroups);
+		$groupsToAdd = $this->getGroupsToAdd($samlGroups, $assignedGroupIds);
+		$this->removeGroups($user, $groupsToRemove);
+		$this->addGroups($user, $groupsToAdd);
 	}
 
 	protected function translateGroupToIds(array &$samlGroups) {
@@ -89,7 +119,10 @@ class GroupManager
 		if($group === null) {
 			return;
 		}
-		$group->removeUser($user);
+		$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
+		if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
+			$this->ownGroupBackend->deleteGroup($group->getGID());
+		}
 	}
 
 	public function addGroups(IUser $user, $groupIds) {
@@ -106,7 +139,9 @@ class GroupManager
 				$group = $this->createGroupInBackend($gid);
 			} else if($e->getCode() === 2) {
 				//FIXME: probably need config flag. Previous to 17, gid was used as displayname
-				$group = $this->createGroupInBackend('__saml__' . $gid, $gid);
+				$idpPrefix = $this->settings->getPrefix('saml-attribute-mapping-group_mapping_prefix');
+				$groupPrefix = $this->config->getAppValue('user_saml', $idpPrefix . 'saml-attribute-mapping-group_mapping_prefix', 'SAML_');
+				$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
 			} else {
 				throw $e;
 			}
@@ -165,7 +200,16 @@ class GroupManager
 	}
 
 	protected function hasSamlBackend(IGroup $group): bool {
+<<<<<<< HEAD
 		$backends = $group->getBackendNames();
+=======
+		$reflected = new \ReflectionObject($group);
+		$backendsProperty = $reflected->getProperty('backends');
+		$backendsProperty->setAccessible(true);
+		$backends = $backendsProperty->getValue($group);
+		// available at nextcloud 22
+		// $backends = $group->getBackendNames();
+>>>>>>> groupbackend
 		foreach ($backends as $backend) {
 			if($backend === 'OCA\User_SAML\GroupBackend') {
 				return true;

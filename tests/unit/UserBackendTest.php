@@ -27,7 +27,7 @@ use OCA\User_SAML\UserData;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
-use OCP\IGroupManager;
+use OCA\User_SAML\GroupManager;
 use OCP\ILogger;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -48,7 +48,7 @@ class UserBackendTest extends TestCase   {
 	private $db;
 	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
-	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var GroupManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $groupManager;
 	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;
@@ -65,7 +65,7 @@ class UserBackendTest extends TestCase   {
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->groupManager = $this->createMock(GroupManager::class);
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
 		$this->userData = $this->createMock(UserData::class);
@@ -146,8 +146,6 @@ class UserBackendTest extends TestCase   {
 		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
 		$user = $this->createMock(IUser::class);
-		$groupA = $this->createMock(IGroup::class);
-		$groupC = $this->createMock(IGroup::class);
 
 		$this->config
 			->expects($this->at(0))
@@ -199,35 +197,8 @@ class UserBackendTest extends TestCase   {
 
 		$this->groupManager
 			->expects($this->once())
-			->method('getUserGroupIds')
-			->with($user)
-			->willReturn(['groupA', 'groupB']);
-		$this->groupManager
-			->expects($this->once())
-			->method('groupExists')
-			->with('groupC')
-			->willReturn(false);
-		$this->groupManager
-			->expects($this->once())
-			->method('createGroup')
-			->with('groupC');
-
-		// updateAttributes first adds new groups, then removes old ones
-		// In this test groupA is removed from the user, groupB is unchanged
-		// and groupC is added
-		$this->groupManager
-			->expects($this->exactly(2))
-			->method('get')
-			->withConsecutive(['groupC'], ['groupA'])
-			->willReturnOnConsecutiveCalls($groupC, $groupA);
-		$groupA
-			->expects($this->once())
-			->method('removeUser')
-			->with($user);
-		$groupC
-			->expects($this->once())
-			->method('addUser')
-			->with($user);
+			->method('replaceGroups')
+			->with($user->getUID(), ['groupB', 'groupC']);
 
 		$this->userBackend->updateAttributes('ExistingUser', [
 			'email' => 'new@example.com',
