@@ -173,6 +173,9 @@ class GroupManager
 			null
 		);
 		$strictBackendCheck = null === $migrationWhiteList;
+		if ($migrationWhiteList !== null) {
+			$migrationWhiteList = \json_decode($migrationWhiteList, true);
+		}
 		if(!$strictBackendCheck && in_array($gid, $migrationWhiteList['groups'], true)) {
 			$group = $this->groupManager->get($gid);
 			if($group === null) {

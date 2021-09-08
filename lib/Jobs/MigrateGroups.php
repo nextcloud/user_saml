@@ -140,7 +140,7 @@ class MigrateGroups extends QueuedJob {
 			$reflected = new \ReflectionClass($group);
 			$backendsProperty = $reflected->getProperty('backends');
 			$backendsProperty->setAccessible(true);
-			$backends = $backendsProperty->getValue();
+			$backends = $backendsProperty->getValue($group);
 			foreach ($backends as $backend) {
 				if($backend instanceof Database) {
 					return true;

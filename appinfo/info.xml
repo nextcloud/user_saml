@@ -46,4 +46,9 @@ While theoretically any other authentication provider implementing either one of
 		<admin>OCA\User_SAML\Settings\Admin</admin>
 		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
 	</settings>
+	<repair-steps>
+		<post-migration>
+			<step>OCA\User_SAML\Migration\RememberLocalGroupsForPotentialMigrations</step>
+		</post-migration>
+	</repair-steps>
 </info>
