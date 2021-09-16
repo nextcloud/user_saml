@@ -144,6 +144,17 @@ class UserBackendTest extends TestCase {
 			->method('getDisplayName')
 			->with('ExistingUser')
 			->willReturn('');
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('ExistingUser');
+		$this->groupManager
+			->expects($this->once())
+			->method('replaceGroups')
+			->with('ExistingUser', []);
+		$this->groupManager
+			->expects($this->once())
+			->method('evaluateGroupMigrations')
+			->with([]);
 		$this->userBackend->updateAttributes('ExistingUser', []);
 	}
 
@@ -216,12 +227,21 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('setDisplayName')
 			->with('ExistingUser', 'New Displayname');
-
 		$this->groupManager
 			->expects($this->once())
 			->method('replaceGroups')
-			->with($user->getUID(), ['groupB', 'groupC']);
-
+			->with('ExistingUser', ['groupB', 'groupC']);
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('ExistingUser');
+		$this->groupManager
+			->expects($this->once())
+			->method('evaluateGroupMigrations')
+			->with(['groupB', 'groupC']);
+		$this->groupManager
+			->expects($this->once())
+			->method('evaluateGroupMigrations')
+			->with(['groupB', 'groupC']);
 		$this->userBackend->updateAttributes('ExistingUser', [
 			'email' => 'new@example.com',
 			'displayname' => 'New Displayname',
@@ -287,6 +307,17 @@ class UserBackendTest extends TestCase {
 		$this->eventDispatcher->expects($this->once())
 			->method('dispatchTyped')
 			->with(new UserChangedEvent($user, 'displayName', 'New Displayname', ''));
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('ExistingUser');
+		$this->groupManager
+			->expects($this->once())
+			->method('replaceGroups')
+			->with('ExistingUser', []);
+		$this->groupManager
+			->expects($this->once())
+			->method('evaluateGroupMigrations')
+			->with([]);
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
 }
