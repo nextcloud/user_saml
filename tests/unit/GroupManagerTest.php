@@ -155,25 +155,31 @@ class GroupManagerTest extends TestCase {
 			->method('get')
 			->with('groupA')
 			->willReturn($groupA);
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('uid');
+		$groupA->expects($this->exactly(2))
+			->method('getGID')
+			->willReturn('gid');
 		// assert membership gets removed
-		$groupA->expects($this->once())
-			->method('removeUser')
-			->with($user);
+		$this->ownGroupBackend
+			->expects($this->once())
+			->method('removeFromGroup');
 		// assert no remaining group memberships
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('countUsersInGroup')
-			->with('groupA')
 			->willReturn(0);
 		// assert group is deleted
-		$groupA->expects($this->once())
-			->method('delete');
+		$this->ownGroupBackend
+			->expects($this->once())
+			->method('deleteGroup');
 
 		$this->ownGroupManager->removeGroups($user, ['groupA']);
 	}
 
 	public function testAddToExistingGroup() {
-		$this->getGroupManager();
+		$this->getGroupManager(['hasSamlBackend', 'createGroupInBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 
@@ -184,13 +190,16 @@ class GroupManagerTest extends TestCase {
 			->with('groupA')
 			->willReturn($groupA);
 		// assert SAML group backend
-		$groupA->expects($this->once())
-			->method('getBackendNames')
-			->willReturn(['OCA\User_SAML\GroupBackend']);
-		// assert user gets added to group
+		$this->ownGroupManager
+			->expects($this->once())
+			->method('hasSamlBackend')
+			->willReturn(true);
 		$groupA->expects($this->once())
 			->method('addUser')
 			->with($user);
+		$this->ownGroupManager
+			->expects($this->never())
+			->method('createGroupInBackend');
 		
 		$this->ownGroupManager->addGroups($user, ['groupA']);
 	}
@@ -226,7 +235,7 @@ class GroupManagerTest extends TestCase {
 	}
 
 	public function testAddGroupsWithCollision() {
-		$this->getGroupManager();
+		$this->getGroupManager(['hasSamlBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupC = $this->createMock(IGroup::class);
 
@@ -237,9 +246,10 @@ class GroupManagerTest extends TestCase {
 			->with('groupC')
 			->willReturn($groupC);
 		// assert differnt group backend
-		$groupC->expects($this->once())
-			->method('getBackendNames')
-			->willReturn(['OC\Groups\Database']);
+		$this->ownGroupManager
+			->expects($this->once())
+			->method('hasSamlBackend')
+			->willReturn(false);
 		// assert there is only one idp config present
 		$this->settings
 			->expects($this->once())
