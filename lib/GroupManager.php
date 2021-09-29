@@ -83,7 +83,7 @@ class GroupManager
 		return $groupsToAdd;
 	}
 
-	public function replaceGroups($uid, $samlGroups) {
+	public function replaceGroups(string $uid, array $samlGroups): void {
 		$user = $this->userManager->get($uid);
 		if($user === null) {
 			return;
