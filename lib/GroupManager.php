@@ -114,7 +114,7 @@ class GroupManager
 		}
 	}
 
-	public function removeGroup(IUser $user, string $gid) {
+	public function removeGroup(IUser $user, string $gid): void {
 		$group = $this->groupManager->get($gid);
 		if($group === null) {
 			return;
