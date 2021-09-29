@@ -125,7 +125,7 @@ class GroupManager
 		}
 	}
 
-	public function addGroups(IUser $user, $groupIds) {
+	public function addGroups(IUser $user, $groupIds): void {
 		foreach ($groupIds as $gid) {
 			$this->addGroup($user, $gid);
 		}
