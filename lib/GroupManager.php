@@ -131,7 +131,7 @@ class GroupManager
 		}
 	}
 
-	public function addGroup(IUser $user, $gid) {
+	public function addGroup(IUser $user, string $gid): void {
 		try {
 			$group = $this->findGroup($gid);
 		} catch (\RuntimeException $e) {
