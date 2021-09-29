@@ -72,7 +72,7 @@ class GroupManager
 		return $groupsToRemove;
 	}
 
-	private function getGroupsToAdd($samlGroups, $assignedGroupIds): array {
+	private function getGroupsToAdd(array $samlGroups, array $assignedGroupIds): array {
 		$groupsToAdd = [];
 		foreach($samlGroups as $group) {
 			// if user is not assigend to the group or the provided group has a non SAML backend
