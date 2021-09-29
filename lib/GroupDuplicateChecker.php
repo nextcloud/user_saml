@@ -33,7 +33,7 @@ class GroupDuplicateChecker
 		$this->logger = $logger;
 	}
 
-	public function checkForDuplicates($group) {
+	public function checkForDuplicates(string $group): void {
 		$existingGroup = $this->groupManager->get($group);
 		if ($existingGroup !== null) {
 			$reflection = new \ReflectionClass($existingGroup);
