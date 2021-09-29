@@ -99,7 +99,7 @@ class GroupManager
 		$this->addGroups($user, $groupsToAdd);
 	}
 
-	protected function translateGroupToIds(array &$samlGroups) {
+	protected function translateGroupToIds(array &$samlGroups): void {
 		array_walk($samlGroups, function (&$gid){
 			$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
 			if($altGid !== null) {
