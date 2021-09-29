@@ -150,7 +150,7 @@ class GroupManager
 		$group->addUser($user);
 	}
 
-	protected function createGroupInBackend($gid, $originalGid = null) {
+	protected function createGroupInBackend(string $gid, ?string $originalGid = null): ?IGroup {
 		if($this->groupManager instanceof PublicEmitter) {
 			$this->groupManager->emit('\OC\Group', 'preCreate', array($gid));
 		}
