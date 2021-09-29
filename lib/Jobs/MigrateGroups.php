@@ -94,13 +94,13 @@ class MigrateGroups extends QueuedJob {
 		);
 	}
 
-	protected function migrateGroups(array $toMigrate) {
+	protected function migrateGroups(array $toMigrate): array {
 		return array_filter($toMigrate, function ($gid) {
 			return $this->migrateGroup($gid);
 		});
 	}
 
-	protected function migrateGroup(string $gid) {
+	protected function migrateGroup(string $gid): bool {
 		try {
 			$this->dbc->beginTransaction();
 
@@ -127,7 +127,7 @@ class MigrateGroups extends QueuedJob {
 		return false;
 	}
 
-	protected function getGroupsToMigrate(array $samlGroups, array $pool) {
+	protected function getGroupsToMigrate(array $samlGroups, array $pool): array {
 		return array_filter($samlGroups, function (string $gid) use ($pool) {
 			if(!in_array($gid, $pool)) {
 				return false;

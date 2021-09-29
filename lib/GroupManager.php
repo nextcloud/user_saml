@@ -166,7 +166,7 @@ class GroupManager
 		return $group;
 	}
 
-	protected function findGroup($gid): IGroup {
+	protected function findGroup(string $gid): IGroup {
 		$migrationWhiteList = $this->config->getAppValue(
 			'user_saml',
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
@@ -217,7 +217,7 @@ class GroupManager
 		return false;
 	}
 
-	public function evaluateGroupMigrations(array $groups) {
+	public function evaluateGroupMigrations(array $groups): void {
 		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, null);
 		if($candidateInfo === null) {
 			return;
