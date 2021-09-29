@@ -108,7 +108,7 @@ class GroupManager
 		});
 	}
 
-	public function removeGroups(IUser $user, array $groupIds) {
+	public function removeGroups(IUser $user, array $groupIds): void {
 		foreach ($groupIds as $gid) {
 			$this->removeGroup($user, $gid);
 		}
