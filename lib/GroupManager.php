@@ -61,7 +61,7 @@ class GroupManager
 		$this->settings = $settings;
 	}
 
-	private function getGroupsToRemove($samlGroups, $assignedGroups): array {
+	private function getGroupsToRemove(array $samlGroups, array $assignedGroups): array {
 		$groupsToRemove = [];
 		foreach($assignedGroups as $group) {
 			// if group is not supplied by SAML and group has SAML backend
