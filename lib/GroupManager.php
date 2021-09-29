@@ -155,7 +155,7 @@ class GroupManager
 			$this->groupManager->emit('\OC\Group', 'preCreate', array($gid));
 		}
 		if(!$this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid)) {
-			return;
+			return null;
 		}
 
 		$group = $this->groupManager->get($gid);
