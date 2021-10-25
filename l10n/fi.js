@@ -8,6 +8,7 @@ OC.L10N.register(
     "X.509 certificate of the Service Provider" : "Palveluntarjoajan X.509-varmenne",
     "Private key of the Service Provider" : "Palveluntarjoajan yksityinen avain",
     "Email address" : "Sähköpostiosoite",
+    "Encrypted" : "Salattu",
     "SSO & SAML authentication" : "SSO- ja SAML-tunnistautuminen",
     "Open documentation" : "Avaa dokumentaatio",
     "Use built-in SAML authentication" : "Käytä sisäänrakennettua SAML-tunnistautumista",

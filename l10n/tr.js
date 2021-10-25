@@ -10,7 +10,7 @@ OC.L10N.register(
     "This page should not be visited directly." : "Bu sayfaya doğrudan erişilememelidir.",
     "Provider " : "Hizmet sağlayıcı",
     "X.509 certificate of the Service Provider" : "Hizmet sağlayıcısının X.509 sertifikası",
-    "Private key of the Service Provider" : "Hizmet sağlayıcısının özel anahtarı",
+    "Private key of the Service Provider" : "Hizmet sağlayıcısının kişisel anahtarı",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Bu hizmet sağlayıcı tarafından gönderilen <samlp:logoutRequest> NameID değerinin şifrelenmiş olup olmayacağını gösterir.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Bu hizmet sağlayıcı tarafından gönderilen <samlp:AuthnRequest> iletilerinin imzalanmış olup olmayacağını gösterir [bu bilgi hizmet sağlayıcının üst verilerinde bulunur].",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Bu hizmet sağlayıcı tarafından gönderilen <samlp:logoutRequest> iletilerinin imzalanmış olup olmayacağını gösterir.",
