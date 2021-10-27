@@ -494,8 +494,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 
 		if($uid !== '' && $this->userExists($uid)) {
-			$uid = $this->userData->testEncodedObjectGUID($uid);
-
 			$this->session->set('last-password-confirm', strtotime('+4 year', time()));
 			return $uid;
 		}

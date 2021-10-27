@@ -252,6 +252,12 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 		$this->userData
 			->expects($this->any())
+			->method('testEncodedObjectGUID')
+			->willReturnCallback(function ($uid) {
+				return $uid;
+			});
+		$this->userData
+			->expects($this->any())
 			->method('getEffectiveUid')
 			->willReturn($userState > 0 ? 'MyUid' : '');
 
