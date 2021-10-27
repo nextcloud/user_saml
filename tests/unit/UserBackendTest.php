@@ -117,10 +117,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn(null);
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn(null);
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn(null);
+		}
 		$user
 			->expects($this->never())
 			->method('setEMailAddress');
@@ -175,10 +182,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn('old@example.com');
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn('old@example.com');
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn('old@example.com');
+		}
 		$user
 			->expects($this->once())
 			->method('setEMailAddress')
@@ -263,10 +277,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn('old@example.com');
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn('old@example.com');
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn('old@example.com');
+		}
 		$user
 			->expects($this->once())
 			->method('setEMailAddress')
