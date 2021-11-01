@@ -1,0 +1,47 @@
+
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addCheck: true
+    addComment: false
+    addBadge: true
+
+tasks:
+  - name: Nextcloud Server
+    command: |
+      git config core.fileMode false
+      chmod -R 777 .
+      cd gitpod
+      export SIMPLESAML_URL=$(gp url 8082)/simplesaml
+      export NEXTCLOUD_URL=$(gp url 8080)
+      export HOSTIP=$(ip -4 addr show scope global dev eth0 | grep inet | awk '{print $2}' | cut -d / -f 1 | sed -n 1p)
+      
+      curl -L https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-`uname -s`-`uname -m` -o envsubst
+      chmod +x envsubst
+      sudo mv envsubst /usr/local/bin
+
+      envsubst < mariadb/prepopulate.sql.template > mariadb/prepopulate.sql
+      envsubst < simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php.template > simplesamlphp/var-simplesamlphp/metadata/saml20-sp-remote.php
+      docker-compose up
+
+  - name: Terminal
+    command: clear
+
+ports:
+  - port: 8080
+    onOpen: open-browser
+    visibility: private
+  - port: 8081
+    visibility: private
+    onOpen: ignore
+  - port: 8082
+    visibility: private
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - ms-azuretools.vscode-docker
+    - felixfbecker.php-debug
