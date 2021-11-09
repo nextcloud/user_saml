@@ -30,17 +30,17 @@ Util::addScript('user_saml', 'selectUserBackEnd');
 
 	<?php } else { ?>
 
-		<?php if (isset($_['loginUrls']['directLogin'])) : ?>
-			<div class="login-option">
-				<a href="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></a>
-			</div>
-		<?php endif; ?>
-
 		<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
 			<div class="login-option">
 				<a href="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></a>
 			</div>
 		<?php } ?>
+
+		<?php if (isset($_['loginUrls']['directLogin'])) : ?>
+			<div class="login-option">
+				<a href="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></a>
+			</div>
+		<?php endif; ?>
 
 	<?php } ?>
 
