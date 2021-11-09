@@ -23,8 +23,10 @@
 
 namespace OCA\User_SAML\Controller;
 
+use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -35,21 +37,32 @@ class SettingsController extends Controller {
 	private $config;
 	/** @var Admin */
 	private $admin;
+	/** @var SAMLSettings */
+	private $samlSettings;
 
-	public function __construct($appName,
-								IRequest $request,
-								IConfig $config,
-								Admin $admin) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		IConfig $config,
+		Admin $admin,
+		SAMLSettings $samlSettings
+	) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
 		$this->admin = $admin;
+		$this->samlSettings = $samlSettings;
+	}
+
+	public function getSamlProviderIds(): DataResponse {
+		$keys = array_keys($this->samlSettings->getListOfIdps());
+		return new DataResponse([ 'providerIds' => implode(',', $keys)]);
 	}
 
 	/**
 	 * @param $providerId
 	 * @return array of categories containing entries for each config parameter with their value
 	 */
-	public function getSamlProviderSettings($providerId) {
+	public function getSamlProviderSettings(int $providerId) {
 		/**
 		 * This uses the list of available config parameters from the admin section
 		 * and extends it with fields that are not coming from \OCA\User_SAML\Settings\Admin
@@ -64,12 +77,12 @@ class SettingsController extends Controller {
 		];
 		/* Fetch all config values for the given providerId */
 		$settings = [];
+		$storedSettings = $this->samlSettings->get($providerId);
 		foreach ($params as $category => $content) {
 			if (empty($content) || $category === 'providers' || $category === 'type') {
 				continue;
 			}
 			foreach ($content as $setting => $details) {
-				$prefix = $providerId === '1' ? '' : $providerId . '-';
 				/* use security as category instead of security-* */
 				if (strpos($category, 'security-') === 0) {
 					$category = 'security';
@@ -78,42 +91,34 @@ class SettingsController extends Controller {
 				// as this is the only category that has the saml- prefix on config keys
 				if (strpos($category, 'attribute-mapping') === 0) {
 					$category = 'attribute-mapping';
-					$key = $prefix . 'saml-attribute-mapping' . '-' . $setting;
+					$key = 'saml-attribute-mapping' . '-' . $setting;
 				} else {
-					$key = $prefix . $category . '-' . $setting;
+					$key = $category . '-' . $setting;
 				}
-				$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
+
+				if (isset ($details['global']) && $details['global']) {
+					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
+				} else {
+					$settings[$category][$setting] = $storedSettings[$key] ?? '';
+				}
 			}
 		}
 		return $settings;
 	}
 
 	public function deleteSamlProviderSettings($providerId) {
-		$params = $this->admin->getForm()->getParams();
-		$params['idp'] = [
-			'singleLogoutService.url' => null,
-			'singleLogoutService.responseUrl' => null,
-			'singleSignOnService.url' => null,
-			'idp-entityId' => null,
-		];
-		/* Fetch all config values for the given providerId */
-		foreach ($params as $category => $content) {
-			if (!is_array($content) || $category === 'providers') {
-				continue;
-			}
-			foreach ($content as $setting => $details) {
-				if (isset($details['global']) && $details['global'] === true) {
-					continue;
-				}
-				$prefix = $providerId === '1' ? '' : $providerId . '-';
-				$key = $prefix . $category . '-' . $setting;
-				/* use security as category instead of security-* */
-				if (strpos($category, 'security-') === 0) {
-					$category = 'security';
-				}
-				$this->config->deleteAppValue('user_saml', $key);
-			}
-		}
+		$this->samlSettings->delete($providerId);
 		return new Response();
+	}
+
+	public function setProviderSetting(int $providerId, string $configKey, string $configValue) {
+		$configuration = $this->samlSettings->get($providerId);
+		$configuration[$configKey] = $configValue;
+		$this->samlSettings->set($providerId, $configuration);
+		return new Response();
+	}
+
+	public function newSamlProviderSettingsId() {
+		return new DataResponse(['id' => $this->samlSettings->getNewProviderId()]);
 	}
 }

@@ -23,6 +23,7 @@
 
 namespace OCA\User_SAML\Settings;
 
+use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IConfig;
@@ -37,30 +38,33 @@ class Admin implements ISettings {
 	private $defaults;
 	/** @var IConfig */
 	private $config;
+	/** @var SAMLSettings */
+	private $samlSettings;
 
 	/**
 	 * @param IL10N $l10n
 	 * @param Defaults $defaults
 	 * @param IConfig $config
 	 */
-	public function __construct(IL10N $l10n,
-								Defaults $defaults,
-								IConfig $config) {
+	public function __construct(
+		IL10N        $l10n,
+		Defaults     $defaults,
+		IConfig      $config,
+		SAMLSettings $samlSettings
+	) {
 		$this->l10n = $l10n;
 		$this->defaults = $defaults;
 		$this->config = $config;
+		$this->samlSettings = $samlSettings;
 	}
 
 	/**
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
-		natsort($providerIds);
+		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
-		foreach ($providerIds as $id) {
-			$prefix = $id === '1' ? '' : $id .'-';
-			$name = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
+		foreach ($providerIds as $id => $name) {
 			$providers[] = [
 				'id' => $id,
 				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
@@ -134,43 +138,42 @@ class Admin implements ISettings {
 
 		];
 
-		$selectedNameIdFormat = $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED);
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
 				'label' => $this->l10n->t('Email address'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_EMAIL_ADDRESS,
+				'selected' => false,
 			],
 			Constants::NAMEID_ENCRYPTED => [
 				'label' => $this->l10n->t('Encrypted'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENCRYPTED,
+				'selected' => false,
 			],
 			Constants::NAMEID_ENTITY => [
 				'label' => $this->l10n->t('Entity'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENTITY,
+				'selected' => false,
 			],
 			Constants::NAMEID_KERBEROS => [
 				'label' => $this->l10n->t('Kerberos'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_KERBEROS,
+				'selected' => false,
 			],
 			Constants::NAMEID_PERSISTENT => [
 				'label' => $this->l10n->t('Persistent'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_PERSISTENT,
+				'selected' => false,
 			],
 			Constants::NAMEID_TRANSIENT => [
 				'label' => $this->l10n->t('Transient'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_TRANSIENT,
+				'selected' => false,
 			],
 			Constants::NAMEID_UNSPECIFIED => [
 				'label' => $this->l10n->t('Unspecified'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_UNSPECIFIED,
+				'selected' => false,
 			],
 			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
 				'label' => $this->l10n->t('Windows domain qualified name'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME,
+				'selected' => false,
 			],
 			Constants::NAMEID_X509_SUBJECT_NAME => [
 				'label' => $this->l10n->t('X509 subject name'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_X509_SUBJECT_NAME,
+				'selected' => false,
 			],
 		];
 

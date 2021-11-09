@@ -21,14 +21,19 @@
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class AdminTest extends \Test\TestCase {
-	/** @var \OCA\User_SAML\Settings\Admin */
+class AdminTest extends \Test\TestCase  {
+	/** @var SAMLSettings|MockObject */
+	private $settings;
+	/** @var Admin */
 	private $admin;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
 	private $l10n;
@@ -41,11 +46,13 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->settings = $this->createMock(SAMLSettings::class);
 
-		$this->admin = new \OCA\User_SAML\Settings\Admin(
+		$this->admin = new Admin(
 			$this->l10n,
 			$this->defaults,
-			$this->config
+			$this->config,
+			$this->settings
 		);
 
 		parent::setUp();
@@ -55,7 +62,7 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->will($this->returnCallback(function ($text, $parameters = []) {
+			->will($this->returnCallback(function($text, $parameters = array()) {
 				return vsprintf($text, $parameters);
 			}));
 
@@ -169,7 +176,7 @@ class AdminTest extends \Test\TestCase {
 			],
 			Constants::NAMEID_UNSPECIFIED => [
 				'label' => 'Unspecified',
-				'selected' => true,
+				'selected' => false,
 			],
 			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
 				'label' => 'Windows domain qualified name',
@@ -199,26 +206,14 @@ class AdminTest extends \Test\TestCase {
 	}
 
 	public function testGetFormWithoutType() {
+		$this->settings->expects($this->once())
+			->method('getListOfIdps')
+			->willReturn([
+				1 => 'Provider 1',
+				2 => 'Provider 2',
+			]);
 		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'providerIds')
-			->willReturn('1,2');
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->willReturn('Provider 1');
-		$this->config
-			->expects($this->at(2))
-			->method('getAppValue')
-			->willReturn('Provider 2');
-		$this->config
-			->expects($this->at(3))
-			->method('getAppValue')
-			->with('user_saml', 'sp-name-id-format')
-			->will($this->returnArgument(2));
-		$this->config
-			->expects($this->at(4))
+			->expects($this->once())
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('');
@@ -234,26 +229,14 @@ class AdminTest extends \Test\TestCase {
 	}
 
 	public function testGetFormWithSaml() {
+		$this->settings->expects($this->once())
+			->method('getListOfIdps')
+			->willReturn([
+				1 => 'Provider 1',
+				2 => 'Provider 2',
+			]);
 		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'providerIds')
-			->willReturn('1,2');
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->willReturn('Provider 1');
-		$this->config
-			->expects($this->at(2))
-			->method('getAppValue')
-			->willReturn('Provider 2');
-		$this->config
-			->expects($this->at(3))
-			->method('getAppValue')
-			->with('user_saml', 'sp-name-id-format')
-			->will($this->returnArgument(2));
-		$this->config
-			->expects($this->at(4))
+			->expects($this->once())
 			->method('getAppValue')
 			->with('user_saml', 'type')
 			->willReturn('saml');

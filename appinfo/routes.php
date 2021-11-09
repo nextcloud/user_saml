@@ -70,12 +70,30 @@ return [
 			'verb' => 'GET',
 		],
 		[
+			'name' => 'Settings#getSamlProviderIds',
+			'url' => '/settings/providers',
+			'verb' => 'GET',
+		],
+		[
 			'name' => 'Settings#getSamlProviderSettings',
 			'url' => '/settings/providerSettings/{providerId}',
 			'verb' => 'GET',
 			'defaults' => [
-				'providerId' => '1'
+				'providerId' => 1
 			]
+		],
+		[
+			'name' => 'Settings#setProviderSetting',
+			'url' => '/settings/providerSettings/{providerId}',
+			'verb' => 'POST',
+			'defaults' => [
+				'providerId' => 1
+			]
+		],
+		[
+			'name' => 'Settings#newSamlProviderSettingsId',
+			'url' => '/settings/providerSettings',
+			'verb' => 'PUT',
 		],
 		[
 			'name' => 'Settings#deleteSamlProviderSettings',

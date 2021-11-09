@@ -23,6 +23,7 @@ namespace OCA\User_SAML\AppInfo;
 
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\SabrePluginEvent;
@@ -48,7 +49,8 @@ class Application extends App {
 			return new DavPlugin(
 				$server->getSession(),
 				$server->getConfig(),
-				$_SERVER
+				$_SERVER,
+				$server->get(SAMLSettings::class)
 			);
 		});
 

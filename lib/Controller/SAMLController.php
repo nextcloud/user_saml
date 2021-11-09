@@ -51,7 +51,7 @@ class SAMLController extends Controller {
 	/** @var IUserSession */
 	private $userSession;
 	/** @var SAMLSettings */
-	private $SAMLSettings;
+	private $samlSettings;
 	/** @var UserBackend */
 	private $userBackend;
 	/** @var IConfig */
@@ -76,7 +76,7 @@ class SAMLController extends Controller {
 	 * @param IRequest $request
 	 * @param ISession $session
 	 * @param IUserSession $userSession
-	 * @param SAMLSettings $SAMLSettings
+	 * @param SAMLSettings $samlSettings
 	 * @param UserBackend $userBackend
 	 * @param IConfig $config
 	 * @param IURLGenerator $urlGenerator
@@ -84,24 +84,24 @@ class SAMLController extends Controller {
 	 * @param IL10N $l
 	 */
 	public function __construct(
-		$appName,
-		IRequest $request,
-		ISession $session,
-		IUserSession $userSession,
-		SAMLSettings $SAMLSettings,
-		UserBackend $userBackend,
-		IConfig $config,
+					  $appName,
+		IRequest      $request,
+		ISession      $session,
+		IUserSession  $userSession,
+		SAMLSettings  $samlSettings,
+		UserBackend   $userBackend,
+		IConfig       $config,
 		IURLGenerator $urlGenerator,
-		ILogger $logger,
-		IL10N $l,
-		UserResolver $userResolver,
-		UserData $userData,
-		ICrypto $crypto
+		ILogger       $logger,
+		IL10N         $l,
+		UserResolver  $userResolver,
+		UserData      $userData,
+		ICrypto       $crypto
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
 		$this->userSession = $userSession;
-		$this->SAMLSettings = $SAMLSettings;
+		$this->samlSettings = $samlSettings;
 		$this->userBackend = $userBackend;
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -171,7 +171,7 @@ class SAMLController extends Controller {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch ($type) {
 			case 'saml':
-				$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
 
@@ -242,7 +242,7 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function getMetadata($idp) {
-		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
+		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
 		$errors = $settings->validateMetadata($metadata);
 		if (empty($errors)) {
@@ -304,7 +304,7 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
-		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+		$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 		$auth->processResponse($AuthNRequestID);
 
 		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
@@ -411,14 +411,14 @@ class SAMLController extends Controller {
 
 		if ($pass) {
 			$idp = $this->session->get('user_saml.Idp');
-			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
+			$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
 			if ($isFromIDP) {
 				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
 				$targetUrl = $auth->processSLO(
 					$keepLocalSession,
 					null,
-					$this->SAMLSettings->usesSloWebServerDecode(),
+					$this->samlSettings->usesSloWebServerDecode(),
 					null,
 					$stay
 				);
@@ -490,7 +490,7 @@ class SAMLController extends Controller {
 	public function selectUserBackEnd($redirectUrl) {
 		$attributes = ['loginUrls' => []];
 
-		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
+		if ($this->samlSettings->allowMultipleUserBackEnds()) {
 			$displayName = $this->l->t('Direct log in');
 
 			$customDisplayName = $this->config->getAppValue('user_saml', 'directLoginName', '');
@@ -520,7 +520,7 @@ class SAMLController extends Controller {
 	 */
 	private function getIdps($redirectUrl) {
 		$result = [];
-		$idps = $this->SAMLSettings->getListOfIdps();
+		$idps = $this->samlSettings->getListOfIdps();
 		foreach ($idps as $idpId => $displayName) {
 			$result[] = [
 				'url' => $this->getSSOUrl($redirectUrl, $idpId),

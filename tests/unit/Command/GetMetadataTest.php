@@ -23,79 +23,48 @@ namespace OCA\User_SAML\Tests\Command;
 
 use OCA\User_SAML\Command\GetMetadata;
 use OCA\User_SAML\SAMLSettings;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use OCP\IConfig;
-use OCP\IRequest;
-use OCP\ISession;
-use OCP\IURLGenerator;
 
 class GetMetadataTest extends \Test\TestCase {
 
-	/** @var GetMetadata|\PHPUnit_Framework_MockObject_MockObject*/
-	protected $GetMetadata;
-	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
-	private $request;
-	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
-	private $session;
-	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject*/
-	private $samlSettings;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-	private $config;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
-	private $urlGenerator;
+    /** @var GetMetadata|MockObject*/
+    protected $GetMetadata;
+    /** @var SAMLSettings|MockObject*/
+    private $samlSettings;
 
+    protected function setUp(): void {
+        $this->samlSettings = $this->createMock(SAMLSettings::class);
+        $this->GetMetadata = new GetMetadata($this->samlSettings);
 
-	protected function setUp(): void {
-		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->config = $this->createMock(IConfig::class);
-		$this->request = $this->createMock(IRequest::class);
-		$this->session = $this->createMock(ISession::class);
-
-		$this->samlSettings = new SAMLSettings($this->urlGenerator,
-								$this->config,
-								$this->request,
-								$this->session);
-		$this->GetMetadata = new GetMetadata($this->samlSettings);
-
-		parent::setUp();
-	}
-
-	public function testGetMetadata() {
+        parent::setUp();
+    }
+	public function testGetMetadata(){
 		$inputInterface = $this->createMock(InputInterface::class);
 		$outputInterface = $this->createMock(OutputInterface::class);
-		$this->urlGenerator
-			->expects($this->at(0))
-			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.base')
-			->willReturn('https://nextcloud.com/base/');
-		$this->urlGenerator
-			->expects($this->at(1))
-			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.getMetadata')
-			->willReturn('https://nextcloud.com/metadata/');
-		$this->urlGenerator
-			->expects($this->at(2))
-			->method('linkToRouteAbsolute')
-			->with('user_saml.SAML.assertionConsumerService')
-			->willReturn('https://nextcloud.com/acs/');
-		$this->config->expects($this->any())->method('getAppValue')
-			 ->willReturnCallback(function ($app, $key, $default) {
-			 	if ($key == 'idp-entityId') {
-			 		return "dummy";
-			 	}
-			 	if ($key == 'idp-singleSignOnService.url') {
-			 		return "https://example.com/sso";
-			 	}
-			 	if ($key == 'idp-x509cert') {
-			 		return "DUMMY CERTIFICATE";
-			 	}
-			 	return $default;
-			 });
+
+		$this->samlSettings->expects($this->any())
+			->method('getOneLoginSettingsArray')
+			->willReturn([
+				'baseurl' => 'https://nextcloud.com/base/',
+				'idp' => [
+					'entityId' => 'dummy',
+					'singleSignOnService' => ['url' => 'https://example.com/sso'],
+					'x509cert' => 'DUMMY CERTIFICATE',
+				],
+				'sp' => [
+					'entityId' => 'https://nextcloud.com/metadata/',
+					'assertionConsumerService' => [
+						'url' => 'https://nextcloud.com/acs/',
+					],
+				]
+			]);
 
 		$outputInterface->expects($this->once())->method('writeln')
-			  ->with($this->stringContains('md:EntityDescriptor'));
+			->with($this->stringContains('md:EntityDescriptor'));
 
 		$this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
 	}
+
 }

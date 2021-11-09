@@ -16,7 +16,7 @@ The following providers are supported and tested at the moment:
 	* Any other provider that authenticates using the environment variable
 
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.]]></description>
-	<version>4.3.0</version>
+	<version>5.0.0</version>
 	<licence>agpl</licence>
 	<author>Lukas Reschke</author>
 	<namespace>User_SAML</namespace>

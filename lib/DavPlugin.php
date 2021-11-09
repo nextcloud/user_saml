@@ -35,11 +35,13 @@ class DavPlugin extends ServerPlugin {
 	private $auth;
 	/** @var Server */
 	private $server;
+	private SAMLSettings $samlSettings;
 
-	public function __construct(ISession $session, IConfig $config, array $auth) {
+	public function __construct(ISession $session, IConfig $config, array $auth, SAMLSettings $samlSettings) {
 		$this->session = $session;
 		$this->config = $config;
 		$this->auth = $auth;
+		$this->samlSettings = $samlSettings;
 	}
 
 
@@ -54,7 +56,7 @@ class DavPlugin extends ServerPlugin {
 			$this->config->getAppValue('user_saml', 'type') === 'environment-variable' &&
 			!$this->session->exists('user_saml.samlUserData')
 		) {
-			$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+			$uidMapping = $this->samlSettings->get(1)['general-uid_mapping'];
 			if (isset($this->auth[$uidMapping])) {
 				$this->session->set(Auth::DAV_AUTHENTICATED, $this->auth[$uidMapping]);
 				$this->session->set('user_saml.samlUserData', $this->auth);

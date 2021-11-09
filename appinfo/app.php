@@ -38,12 +38,8 @@ try {
 	\OC::$server->getLogger()->logException($e);
 	return;
 }
-$samlSettings = new \OCA\User_SAML\SAMLSettings(
-	$urlGenerator,
-	$config,
-	$request,
-	$session
-);
+
+$samlSettings = \OC::$server->query(\OCA\User_SAML\SAMLSettings::class);
 
 $userData = new \OCA\User_SAML\UserData(
 	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
