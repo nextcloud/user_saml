@@ -71,7 +71,7 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Certificat public X.509 de l'IdP",
     "Attribute mapping" : "Mappage des attributs",
     "If you want to optionally map attributes to the user you can configure these here." : "Si vous préférez relier les attributs à l'utilisateur, vous pouvez les configurer ici.",
-    "Show attribute mapping settings…" : "Montrer les paramètres du mappage des attributs...",
+    "Show attribute mapping settings…" : "Afficher les paramètres de mappage des attributs...",
     "Security settings" : "Paramètres de sécurité",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pour augmenter la sécurité nous recommandons d'activer les paramètres suivants s'ils sont supportés par votre environnement.",
     "Show security settings…" : "Afficher les paramètres de sécurité...",
