@@ -29,6 +29,36 @@ type: docker
 
 ---
 kind: pipeline
+name: compatibility-23
+
+clone:
+  depth: 1
+
+steps:
+  - name: app-code-check
+    image: nextcloudci/php7.3:php7.3-5
+    environment:
+      APP_NAME: user_saml
+      CORE_BRANCH: stable23
+      DB: sqlite
+    commands:
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      - ./occ app:check-code $APP_NAME -c strong-comparison -c deprecation
+      - cd apps/$APP_NAME/
+
+trigger:
+  branch:
+    - master
+  event:
+    - pull_request
+    - push
+
+type: docker
+
+---
+kind: pipeline
 name: compatibility-22
 
 clone:
