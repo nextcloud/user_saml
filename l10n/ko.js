@@ -30,6 +30,8 @@ OC.L10N.register(
     "Attribute to map the quota to." : "할당량을 매핑할 속성입니다.",
     "Attribute to map the users groups to." : "사용자 그룹을 매핑할 속성입니다.",
     "Attribute to map the users home to." : "사용자 홈 경로를 매핑할 속성입니다.",
+    "Email address" : "이메일 주소",
+    "Encrypted" : "암호화",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s 데스크톱 클라이언트에 SAML 인증을 사용합니다(사용자 재인증이 필요함)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "인증 공급자 표시 이름(선택 사항, 기본값: \"SSO 및 SAML 로그인\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "다중 사용자 백엔드 허용(예: LDAP)",
@@ -49,6 +51,7 @@ OC.L10N.register(
     "Service Provider Data" : "서비스 공급자 데이터",
     "If your Service Provider should use certificates you can optionally specify them here." : "서비스 공급자가 인증서를 사용한다면 여기에 추가적으로 지정할 수 있습니다.",
     "Show Service Provider settings…" : "서비스 공급자 설정 표시…",
+    "Name ID format" : "이름 ID 포맷",
     "Identity Provider Data" : "인증 공급자 데이터",
     "Configure your IdP settings here." : "IdP를 여기에서 설정할 수 있습니다.",
     "Identifier of the IdP entity (must be a URI)" : "IdP 엔티티 식별자(URI여야 함)",
@@ -71,6 +74,7 @@ OC.L10N.register(
     "Error" : "오류",
     "Account not provisioned." : "계정이 프로비전되지 않았습니다.",
     "Your account is not provisioned, access to this service is thus not possible." : "계정이 프로비전되지 않아서 이 서비스에 접근할 수 없습니다.",
+    "Login options:" : "로그인 옵션",
     "Choose a authentication provider" : "인증 공급자 선택"
 },
 "nplurals=1; plural=0;");
