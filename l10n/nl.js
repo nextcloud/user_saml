@@ -4,7 +4,7 @@ OC.L10N.register(
     "This user account is disabled, please contact your administrator." : "Dit gebruikersaccount is uitgeschakeld, neem a.u.b. contact op met je beheerder.",
     "Saved" : "Bewaard",
     "Provider" : "Provider",
-    "Unknown error, please check the log file for more details." : "Onbekende fout, controleer de log voor meer details.",
+    "Unknown error, please check the log file for more details." : "Onbekende fout, controleer de logbestand voor meer details.",
     "Direct log in" : "Directe log-in",
     "SSO & SAML log in" : "SSO & SAML login",
     "This page should not be visited directly." : "Deze pagina zou niet rechtstreeks bezocht moeten worden. ",
