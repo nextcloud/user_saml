@@ -74,6 +74,15 @@ class FeatureContext implements Context {
 				)
 			);
 		}
+
+		shell_exec(
+			sprintf(
+				'sudo -u apache %s %s saml:config:delete 1',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+			)
+		);
+
 		$this->changedSettings = [];
 	}
 
@@ -85,14 +94,34 @@ class FeatureContext implements Context {
 	 */
 	public function theSettingIsSetTo($settingName,
 									  $value) {
-		$this->changedSettings[] = $settingName;
+
+		if (in_array($settingName, [
+			'type',
+			'general-require_provisioned_account',
+			'general-allow_multiple_user_back_ends',
+			'general-use_saml_auth_for_desktop'
+		])) {
+			$this->changedSettings[] = $settingName;
+			shell_exec(
+				sprintf(
+					'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$value,
+					$settingName
+				)
+			);
+			return;
+		}
+
 		shell_exec(
 			sprintf(
-				'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+				'sudo -u apache %s %s saml:config:set --"%s"="%s" %d',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
+				$settingName,
 				$value,
-				$settingName
+				1
 			)
 		);
 	}

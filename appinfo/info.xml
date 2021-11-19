@@ -36,6 +36,10 @@ While theoretically any other authentication provider implementing either one of
 		<nextcloud min-version="21" max-version="24" />
 	</dependencies>
 	<commands>
+		<command>OCA\User_SAML\Command\ConfigCreate</command>
+		<command>OCA\User_SAML\Command\ConfigDelete</command>
+		<command>OCA\User_SAML\Command\ConfigGet</command>
+		<command>OCA\User_SAML\Command\ConfigSet</command>
 		<command>OCA\User_SAML\Command\GetMetadata</command>
 	</commands>
 	<settings>
