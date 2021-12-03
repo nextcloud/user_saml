@@ -596,7 +596,7 @@ class SAMLController extends Controller {
 			$key = $this->config->getSystemValue('gss.jwt.key', '');
 			// New (safer) way to call "decode"
 			$publicKey = new Firebase\JWT\Key($key, 'HS256');
-			JWT::decode($jwt, $key);
+			JWT::decode($jwt, $publicKey);
 		} catch (\Exception $e) {
 			return false;
 		}
