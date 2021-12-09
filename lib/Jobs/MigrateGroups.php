@@ -111,16 +111,8 @@ class MigrateGroups extends QueuedJob {
 			if($affected === 0) {
 				throw new \RuntimeException('Could not delete group from local backend');
 			}
-			$samlGid = $gid;
-			if (strlen($gid) < 6 || substr($gid, 0, 5) !== 'SAML_') {
-				$samlGid = 'SAML_'.$gid;
-				$query = $this->dbc->getQueryBuilder();
-				$query->update(GroupBackend::TABLE_MEMBERS)
-					->set('gid', $query->createNamedParameter($samlGid))
-					->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-					->execute();
-			}
-			if(!$this->ownGroupBackend->createGroup($samlGid, $gid)) {
+
+			if(!$this->ownGroupBackend->createGroup($gid)) {
 				throw new \RuntimeException('Could not create group in SAML backend');
 			}
 

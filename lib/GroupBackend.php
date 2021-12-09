@@ -50,13 +50,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 		$groups = [];
 		while( $row = $cursor->fetch()) {
-			if (strlen($row['gid']) < 6 || substr($row['gid'], 0, 5) !== 'SAML_') {
-				$groups[] = 'SAML_' . $row['gid'];
-				$this->groupCache[$row['gid']] = 'SAML_' . $row['gid'];
-			} else {
-				$groups[] = $row['gid'];
-				$this->groupCache[$row['gid']] = $row['gid'];
-			}
+			$groups[] = $row['gid'];
+			$this->groupCache[$row['gid']] = $row['gid'];
 		}
 		$cursor->closeCursor();
 
