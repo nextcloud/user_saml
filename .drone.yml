@@ -21,6 +21,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -51,6 +52,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -81,6 +83,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -111,6 +114,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -162,6 +166,14 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
 type: docker
 
 ---
@@ -192,6 +204,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -243,6 +256,14 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
 type: docker
 
 ---
@@ -273,6 +294,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -324,6 +346,14 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
 type: docker
 
 ---
@@ -354,6 +384,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
@@ -404,6 +435,14 @@ steps:
       - cd tests/unit/
       - phpunit --configuration phpunit.xml
 
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
 type: docker
 
 ---
@@ -434,6 +473,7 @@ steps:
 trigger:
   branch:
     - master
+    - stable*
   event:
     - pull_request
     - push
