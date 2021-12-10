@@ -30,7 +30,7 @@ use OCP\IL10N;
 use OneLogin\Saml2\Constants;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AdminTest extends \Test\TestCase  {
+class AdminTest extends \Test\TestCase {
 	/** @var SAMLSettings|MockObject */
 	private $settings;
 	/** @var Admin */
@@ -62,7 +62,7 @@ class AdminTest extends \Test\TestCase  {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->will($this->returnCallback(function($text, $parameters = array()) {
+			->will($this->returnCallback(function ($text, $parameters = []) {
 				return vsprintf($text, $parameters);
 			}));
 

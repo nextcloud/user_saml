@@ -96,7 +96,7 @@ class SettingsController extends Controller {
 					$key = $category . '-' . $setting;
 				}
 
-				if (isset ($details['global']) && $details['global']) {
+				if (isset($details['global']) && $details['global']) {
 					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';

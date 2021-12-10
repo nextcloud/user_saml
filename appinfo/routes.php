@@ -80,6 +80,9 @@ return [
 			'verb' => 'GET',
 			'defaults' => [
 				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
 			]
 		],
 		[
@@ -88,6 +91,9 @@ return [
 			'verb' => 'POST',
 			'defaults' => [
 				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
 			]
 		],
 		[
@@ -100,7 +106,10 @@ return [
 			'url' => '/settings/providerSettings/{providerId}',
 			'verb' => 'DELETE',
 			'defaults' => [
-				'providerId' => '1'
+				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
 			]
 		],
 		[

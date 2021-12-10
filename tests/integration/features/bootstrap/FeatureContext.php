@@ -94,7 +94,6 @@ class FeatureContext implements Context {
 	 */
 	public function theSettingIsSetTo($settingName,
 									  $value) {
-
 		if (in_array($settingName, [
 			'type',
 			'general-require_provisioned_account',

@@ -29,18 +29,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GetMetadataTest extends \Test\TestCase {
 
-    /** @var GetMetadata|MockObject*/
-    protected $GetMetadata;
-    /** @var SAMLSettings|MockObject*/
-    private $samlSettings;
+	/** @var GetMetadata|MockObject*/
+	protected $GetMetadata;
+	/** @var SAMLSettings|MockObject*/
+	private $samlSettings;
 
-    protected function setUp(): void {
-        $this->samlSettings = $this->createMock(SAMLSettings::class);
-        $this->GetMetadata = new GetMetadata($this->samlSettings);
+	protected function setUp(): void {
+		$this->samlSettings = $this->createMock(SAMLSettings::class);
+		$this->GetMetadata = new GetMetadata($this->samlSettings);
 
-        parent::setUp();
-    }
-	public function testGetMetadata(){
+		parent::setUp();
+	}
+	public function testGetMetadata() {
 		$inputInterface = $this->createMock(InputInterface::class);
 		$outputInterface = $this->createMock(OutputInterface::class);
 
@@ -66,5 +66,4 @@ class GetMetadataTest extends \Test\TestCase {
 
 		$this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
 	}
-
 }

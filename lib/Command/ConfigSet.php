@@ -68,7 +68,7 @@ class ConfigSet extends Base {
 		$settings = $this->samlSettings->get($pId);
 
 		foreach ($input->getOptions() as $key => $value) {
-			if(!in_array($key, SAMLSettings::IDP_CONFIG_KEYS) || $value === null) {
+			if (!in_array($key, SAMLSettings::IDP_CONFIG_KEYS) || $value === null) {
 				continue;
 			}
 			if ($value === '') {

@@ -16,7 +16,6 @@ use OCP\Migration\SimpleMigrationStep;
  * Auto-generated migration step: Please modify to your needs!
  */
 class Version5000Date20211025124248 extends SimpleMigrationStep {
-
 	private const IDP_CONFIG_KEYS = [
 		'general-idp0_display_name',
 		'general-uid_mapping',
@@ -187,7 +186,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		$isPrefixed = \preg_match('/^[0-9]*-/', $prefixedKey, $matches);
 		if ($isPrefixed === 0) {
 			return $prefixedKey;
-		} else if ($isPrefixed === 1) {
+		} elseif ($isPrefixed === 1) {
 			return \substr($prefixedKey, strlen($matches[0]));
 		}
 		throw new \RuntimeException('Invalid regex pattern');

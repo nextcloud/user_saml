@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2020 Arthur Schiwon <blizzz@arthur-schiwon.de>
@@ -66,7 +67,7 @@ class UserData {
 	}
 
 	public function getEffectiveUid(): string {
-		if($this->uid !== null) {
+		if ($this->uid !== null) {
 			return $this->uid;
 		}
 		$this->assertIsInitialized();
@@ -83,7 +84,7 @@ class UserData {
 
 	protected function extractSamlUserId(): string {
 		$uidMapping = $this->getUidMappingAttribute();
-		if($uidMapping !== null && isset($this->attributes[$uidMapping])) {
+		if ($uidMapping !== null && isset($this->attributes[$uidMapping])) {
 			if (is_array($this->attributes[$uidMapping])) {
 				return trim($this->attributes[$uidMapping][0]);
 			} else {
@@ -105,13 +106,13 @@ class UserData {
 		}
 
 		$candidate = base64_decode($uid, true);
-		if($candidate === false) {
+		if ($candidate === false) {
 			return $uid;
 		}
 		$candidate = $this->convertObjectGUID2Str($candidate);
 		// the regex only matches the structure of the UUID, not its semantic
 		// (i.e. version or variant) simply to be future compatible
-		if(preg_match('/^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}$/i', $candidate) === 1) {
+		if (preg_match('/^[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}$/i', $candidate) === 1) {
 			$uid = $candidate;
 		}
 		return $uid;
@@ -123,15 +124,15 @@ class UserData {
 	protected function convertObjectGUID2Str($oguid): string {
 		$hex_guid = bin2hex($oguid);
 		$hex_guid_to_guid_str = '';
-		for($k = 1; $k <= 4; ++$k) {
+		for ($k = 1; $k <= 4; ++$k) {
 			$hex_guid_to_guid_str .= substr($hex_guid, 8 - 2 * $k, 2);
 		}
 		$hex_guid_to_guid_str .= '-';
-		for($k = 1; $k <= 2; ++$k) {
+		for ($k = 1; $k <= 2; ++$k) {
 			$hex_guid_to_guid_str .= substr($hex_guid, 12 - 2 * $k, 2);
 		}
 		$hex_guid_to_guid_str .= '-';
-		for($k = 1; $k <= 2; ++$k) {
+		for ($k = 1; $k <= 2; ++$k) {
 			$hex_guid_to_guid_str .= substr($hex_guid, 16 - 2 * $k, 2);
 		}
 		$hex_guid_to_guid_str .= '-' . substr($hex_guid, 16, 4);
@@ -141,7 +142,7 @@ class UserData {
 	}
 
 	protected function assertIsInitialized() {
-		if($this->attributes === null) {
+		if ($this->attributes === null) {
 			throw new \LogicException('UserData have to be initialized with setAttributes first');
 		}
 	}

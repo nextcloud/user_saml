@@ -45,7 +45,8 @@ class ConfigurationsMapper extends QBMapper {
 
 	public function deleteById(int $id): void {
 		$entity = new ConfigurationsEntity();
-		$entity->setId($id);;
+		$entity->setId($id);
+		;
 		$this->delete($entity);
 	}
 
@@ -98,5 +99,4 @@ class ConfigurationsMapper extends QBMapper {
 		$newEntity->importConfiguration([]);
 		return $this->insert($newEntity)->getId();
 	}
-
 }

@@ -241,7 +241,7 @@ class SAMLSettings {
 			return;
 		}
 
-		if ($idp !== -1)  {
+		if ($idp !== -1) {
 			$this->configurations[$idp] = $this->mapper->get($idp);
 		} else {
 			$configs = $this->mapper->getAll();
