@@ -24,11 +24,8 @@ namespace OCA\User_SAML;
 use OCA\DAV\Connector\Sabre\Auth;
 use OCP\IConfig;
 use OCP\ISession;
-use Sabre\DAV\CorePlugin;
-use Sabre\DAV\FS\Directory;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
-use Sabre\DAV\Tree;
 use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
 

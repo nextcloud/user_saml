@@ -27,7 +27,7 @@ use OCP\IConfig;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
 
-class AdminTest extends \Test\TestCase  {
+class AdminTest extends \Test\TestCase {
 	/** @var \OCA\User_SAML\Settings\Admin */
 	private $admin;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
@@ -55,7 +55,7 @@ class AdminTest extends \Test\TestCase  {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->will($this->returnCallback(function($text, $parameters = array()) {
+			->will($this->returnCallback(function ($text, $parameters = []) {
 				return vsprintf($text, $parameters);
 			}));
 

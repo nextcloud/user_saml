@@ -24,13 +24,12 @@ namespace OCA\User_SAML\Tests\Middleware;
 use Exception;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 
-class OnlyLoggedInMiddlewareTest extends \Test\TestCase  {
+class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 	/** @var IURLGenerator|\PHPUnit\Framework\MockObject\MockObject */
 	protected $urlGenerator;
 	/** @var IControllerMethodReflector|\PHPUnit_Framework_MockObject_MockObject */
