@@ -28,7 +28,7 @@ use OCP\AppFramework\IAppContainer;
 use OCP\SabrePluginEvent;
 
 class Application extends App {
-	public function __construct(array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('user_saml', $urlParams);
 		$container = $this->getContainer();
 
@@ -57,7 +57,6 @@ class Application extends App {
 	}
 
 	public function registerDavAuth() {
-
 		$container = $this->getContainer();
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
@@ -74,7 +73,7 @@ class Application extends App {
 		$config = $container->getServer()->getConfig();
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function() use ($session, $config, $userSession) {
+		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
 			}

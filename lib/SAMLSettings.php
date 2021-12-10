@@ -21,7 +21,6 @@
 
 namespace OCA\User_SAML;
 
-use OCP\AppFramework\Http;
 use OCP\IConfig;
 use OCP\IRequest;
 use OCP\ISession;
@@ -99,7 +98,6 @@ class SAMLSettings {
 	 * @return array
 	 */
 	public function getOneLoginSettingsArray($idp) {
-
 		$prefix = '';
 		if ($idp > 1) {
 			$prefix = $idp . '-';
@@ -142,20 +140,20 @@ class SAMLSettings {
 
 		$spx509cert = $this->config->getAppValue('user_saml', $prefix . 'sp-x509cert', '');
 		$spxprivateKey = $this->config->getAppValue('user_saml', $prefix . 'sp-privateKey', '');
-		if($spx509cert !== '') {
+		if ($spx509cert !== '') {
 			$settings['sp']['x509cert'] = $spx509cert;
 		}
-		if($spxprivateKey !== '') {
+		if ($spxprivateKey !== '') {
 			$settings['sp']['privateKey'] = $spxprivateKey;
 		}
 
 		$idpx509cert = $this->config->getAppValue('user_saml', $prefix . 'idp-x509cert', '');
-		if($idpx509cert !== '') {
+		if ($idpx509cert !== '') {
 			$settings['idp']['x509cert'] = $idpx509cert;
 		}
 
 		$slo = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', '');
-		if($slo !== '') {
+		if ($slo !== '') {
 			$settings['idp']['singleLogoutService'] = [
 				'url' => $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', ''),
 			];
@@ -164,7 +162,7 @@ class SAMLSettings {
 			];
 
 			$sloResponseUrl = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.responseUrl', '');
-			if($sloResponseUrl !== '') {
+			if ($sloResponseUrl !== '') {
 				$settings['idp']['singleLogoutService']['responseUrl'] = $sloResponseUrl;
 			}
 		}
@@ -179,7 +177,6 @@ class SAMLSettings {
 	 * @return string
 	 */
 	public function getPrefix($setting = '') {
-
 		$prefix = '';
 		if (!empty($setting) && in_array($setting, $this->globalSettings)) {
 			return $prefix;
@@ -192,5 +189,4 @@ class SAMLSettings {
 
 		return $prefix;
 	}
-
 }

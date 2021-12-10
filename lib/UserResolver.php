@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2020 Arthur Schiwon <blizzz@arthur-schiwon.de>
@@ -40,18 +41,18 @@ class UserResolver {
 	 * @throws NoUserFoundException
 	 */
 	public function findExistingUserId(string $rawUidCandidate, bool $force = false): string {
-		if($force) {
+		if ($force) {
 			$this->ensureUser($rawUidCandidate);
 		}
-		if($this->userManager->userExists($rawUidCandidate)) {
+		if ($this->userManager->userExists($rawUidCandidate)) {
 			return $rawUidCandidate;
 		}
 		try {
 			$sanitized = $this->sanitizeUserIdCandidate($rawUidCandidate);
-		} catch(\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException $e) {
 			$sanitized = '';
 		}
-		if($this->userManager->userExists($sanitized)) {
+		if ($this->userManager->userExists($sanitized)) {
 			return $sanitized;
 		}
 		throw new NoUserFoundException('User' . $rawUidCandidate . ' not valid or not found');
@@ -63,7 +64,7 @@ class UserResolver {
 	public function findExistingUser(string $rawUidCandidate): IUser {
 		$uid = $this->findExistingUserId($rawUidCandidate);
 		$user = $this->userManager->get($uid);
-		if($user === null) {
+		if ($user === null) {
 			throw new NoUserFoundException('User' . $rawUidCandidate . ' not valid or not found');
 		}
 		return $user;
@@ -73,7 +74,7 @@ class UserResolver {
 		try {
 			$this->findExistingUserId($uid, $force);
 			return true;
-		} catch(NoUserFoundException $e) {
+		} catch (NoUserFoundException $e) {
 			return false;
 		}
 	}
@@ -91,7 +92,7 @@ class UserResolver {
 
 		// Transliteration to ASCII
 		$transliterated = @iconv('UTF-8', 'ASCII//TRANSLIT', $sanitized);
-		if($transliterated !== false) {
+		if ($transliterated !== false) {
 			// depending on system config iconv can work or not
 			$sanitized = $transliterated;
 		}
@@ -102,7 +103,7 @@ class UserResolver {
 		// Every remaining disallowed characters will be removed
 		$sanitized = preg_replace('/[^a-zA-Z0-9_.@-]/u', '', $sanitized);
 
-		if($sanitized === '') {
+		if ($sanitized === '') {
 			throw new \InvalidArgumentException('provided name template for username does not contain any allowed characters');
 		}
 
