@@ -84,6 +84,7 @@ class Application extends App {
 			$timezoneDB = $config->getUserValue($user->getUID(), 'core', 'timezone', '');
 
 			if ($timezoneDB === '' || !$session->exists('timezone')) {
+				\OCP\Util::addScript('user_saml', 'vendor/jstz.min');
 				\OCP\Util::addScript('user_saml', 'timezone');
 			}
 		});
