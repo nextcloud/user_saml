@@ -88,7 +88,7 @@ return [
 		[
 			'name' => 'Settings#setProviderSetting',
 			'url' => '/settings/providerSettings/{providerId}',
-			'verb' => 'POST',
+			'verb' => 'PUT',
 			'defaults' => [
 				'providerId' => 1
 			],
@@ -99,7 +99,7 @@ return [
 		[
 			'name' => 'Settings#newSamlProviderSettingsId',
 			'url' => '/settings/providerSettings',
-			'verb' => 'PUT',
+			'verb' => 'POST',
 		],
 		[
 			'name' => 'Settings#deleteSamlProviderSettings',

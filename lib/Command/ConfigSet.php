@@ -28,6 +28,7 @@ namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
 use OCA\User_SAML\SAMLSettings;
+use OCP\DB\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -65,7 +66,18 @@ class ConfigSet extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pId = (int)$input->getArgument('providerId');
-		$settings = $this->samlSettings->get($pId);
+
+		if ((string)$pId !== $input->getArgument('providerId')) {
+			// Make sure we don't delete provider with id 0 by error
+			$output->writeln('<error>providerId argument needs to be an number. Got: ' . $pId . '</error>');
+			return 1;
+		}
+		try {
+			$settings = $this->samlSettings->get($pId);
+		} catch (Exception $e) {
+			$output->writeln('<error>Provider with id: ' . $providerId . ' does not exist.</error>');
+			return 1;
+		}
 
 		foreach ($input->getOptions() as $key => $value) {
 			if (!in_array($key, SAMLSettings::IDP_CONFIG_KEYS) || $value === null) {
@@ -78,6 +90,7 @@ class ConfigSet extends Base {
 			$settings[$key] = $value;
 		}
 		$this->samlSettings->set($pId, $settings);
+		$output->writeln('The provider\'s config was updated.');
 
 		return 0;
 	}

@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - occ commands for modifying SAML configurations
 
+### Removed
+- Ability to change SAML configuration with occ app-config, use the new occ commands instead
+
 ## 4.1.0
 ### Added
 - Nextcloud 22 support

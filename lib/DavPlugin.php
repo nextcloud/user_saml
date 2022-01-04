@@ -35,7 +35,8 @@ class DavPlugin extends ServerPlugin {
 	private $auth;
 	/** @var Server */
 	private $server;
-	private SAMLSettings $samlSettings;
+	/** @var SAMLSettings */
+	private $samlSettings;
 
 	public function __construct(ISession $session, IConfig $config, array $auth, SAMLSettings $samlSettings) {
 		$this->session = $session;

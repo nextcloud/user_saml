@@ -28,6 +28,7 @@ namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
 use OCA\User_SAML\SAMLSettings;
+use OCP\DB\Exception;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,7 +54,19 @@ class ConfigDelete extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pId = (int)$input->getArgument('providerId');
-		$this->samlSettings->delete($pId);
+
+		if ((string)$pId !== $input->getArgument('providerId')) {
+			// Make sure we don't delete provider with id 0 by error
+			$output->writeln('<error>providerId argument needs to be an number. Got: ' . $pId . '</error>');
+			return 1;
+		}
+		try {
+			$this->samlSettings->delete($pId);
+			$output->writeln('Provider deleted.');
+		} catch (Exception $e) {
+			$output->writeln('<error>Provider with id: ' . $providerId . ' does not exist.</error>');
+			return 1;
+		}
 		return 0;
 	}
 }

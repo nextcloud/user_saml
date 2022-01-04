@@ -50,21 +50,22 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	private $dbc;
 
+	/** @var ?IQueryBuilder */
+	private $insertQuery;
+
+	/** @var ?IQueryBuilder */
+	private $deleteQuery;
+
+	/** @var ?IQueryBuilder */
+	private $readQuery;
+
 	public function __construct(IDBConnection $dbc) {
 		$this->dbc = $dbc;
 	}
 
 	/**
 	 * @param IOutput $output
-	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array $options
-	 */
-	public function preSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
-	}
-
-	/**
-	 * @param IOutput $output
-	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param Closure():ISchemaWrapper $schemaClosure
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
@@ -93,7 +94,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 
 	/**
 	 * @param IOutput $output
-	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param Closure():IschemaWrapper $schemaClosure
 	 * @param array $options
 	 */
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
@@ -117,6 +118,10 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 				$gRows->next();
 			}
 
+			if (empty($configData)) {
+				continue; // No config found
+			}
+
 			if ($this->insertConfiguration($prefix, $configData) && !empty($keysToDelete)) {
 				$this->deleteOldConfiguration($keysToDelete);
 			}
@@ -125,56 +130,60 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		$this->deletePrefixes();
 	}
 
+	/**
+	 * @psalm-param list<string> $keys the list of keys to delete
+	 */
 	protected function deleteOldConfiguration(array $keys): bool {
-		static $deleteQuery;
-		if (!$deleteQuery) {
-			$deleteQuery = $this->dbc->getQueryBuilder();
+		if (!$this->deleteQuery) {
+			$this->deleteQuery = $this->dbc->getQueryBuilder();
 
-			$deleteQuery->delete('appconfig')
-				->where($deleteQuery->expr()->eq('appid', $deleteQuery->createNamedParameter('user_saml')))
-				->andWhere($deleteQuery->expr()->in('configkey', $deleteQuery->createParameter('cfgKeys')));
+			$this->deleteQuery->delete('appconfig')
+				->where($this->deleteQuery->expr()->eq('appid', $this->deleteQuery->createNamedParameter('user_saml')))
+				->andWhere($this->deleteQuery->expr()->in('configkey', $this->deleteQuery->createParameter('cfgKeys')));
 		}
 
-		$deletedRows = $deleteQuery
+		$deletedRows = $this->deleteQuery
 			->setParameter('cfgKeys', $keys, IQueryBuilder::PARAM_STR_ARRAY)
-			->executeStatement();
+			->execute();
 
 		return $deletedRows > 0;
 	}
 
+	/**
+	 * @param array<string, string> $configData The key-value map of config to save
+	 */
 	protected function insertConfiguration(int $id, array $configData): bool {
-		static $insertQuery;
-		if (!$insertQuery) {
-			$insertQuery = $this->dbc->getQueryBuilder();
-			$insertQuery->insert('user_saml_configurations')
+		if (!$this->insertQuery) {
+			$this->insertQuery = $this->dbc->getQueryBuilder();
+			$this->insertQuery->insert('user_saml_configurations')
 				->values([
-					'id' => $insertQuery->createParameter('configId'),
-					'name' => $insertQuery->createParameter('displayName'),
-					'configuration' => $insertQuery->createParameter('configuration'),
+					'id' => $this->insertQuery->createParameter('configId'),
+					'name' => $this->insertQuery->createParameter('displayName'),
+					'configuration' => $this->insertQuery->createParameter('configuration'),
 				]);
 		}
 
-		$insertedRows = $insertQuery
+		$insertedRows = $this->insertQuery
 			->setParameter('configId', $id)
 			->setParameter('displayName', $configData['general-idp0_display_name'] ?? '')
 			->setParameter('configuration', \json_encode($configData, JSON_THROW_ON_ERROR))
-			->executeStatement();
+			->execute();
 
 		return $insertedRows > 0;
 	}
 
+	/** @psalm-param list<string> $configKeys */
 	protected function readConfiguration(array $configKeys): \Generator {
-		static $readQuery;
-		if (!$readQuery) {
-			$readQuery = $this->dbc->getQueryBuilder();
+		if (!$this->readQuery) {
+			$this->readQuery = $this->dbc->getQueryBuilder();
+			$this->readQuery->select('configkey', 'configvalue')
+				->from('appconfig')
+				->where($this->readQuery->expr()->eq('appid', $this->readQuery->createNamedParameter('user_saml')))
+				->andWhere($this->readQuery->expr()->in('configkey', $this->readQuery->createParameter('cfgKeys')));
 		}
-		$readQuery->select('configkey', 'configvalue')
-			->from('appconfig')
-			->where($readQuery->expr()->eq('appid', $readQuery->createNamedParameter('user_saml')))
-			->andWhere($readQuery->expr()->in('configkey', $readQuery->createParameter('cfgKeys')));
 
-		$r = $readQuery->setParameter('cfgKeys', $configKeys, IQueryBuilder::PARAM_STR_ARRAY)
-			->executeQuery();
+		$r = $this->readQuery->setParameter('cfgKeys', $configKeys, IQueryBuilder::PARAM_STR_ARRAY)
+			->execute();
 
 		while ($row = $r->fetch()) {
 			yield $row;
@@ -192,6 +201,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		throw new \RuntimeException('Invalid regex pattern');
 	}
 
+	/** @psalm-return list<int> */
 	protected function fetchPrefixes(): array {
 		$q = $this->dbc->getQueryBuilder();
 		$q->select('configvalue')
@@ -199,10 +209,10 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 			->where($q->expr()->eq('appid', $q->createNamedParameter('user_saml')))
 			->andWhere($q->expr()->eq('configkey', $q->createNamedParameter('providerIds')));
 
-		$r = $q->executeQuery();
+		$r = $q->execute();
 		$prefixes = $r->fetchOne();
 		if ($prefixes === false) {
-			return [];
+			return [1]; // 1 is the default value for providerIds
 		}
 		return array_map('intval', explode(',', $prefixes));
 	}
@@ -212,6 +222,6 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		$q->delete('appconfig')
 			->where($q->expr()->eq('appid', $q->createNamedParameter('user_saml')))
 			->andWhere($q->expr()->eq('configkey', $q->createNamedParameter('providerIds')))
-			->executeStatement();
+			->execute();
 	}
 }

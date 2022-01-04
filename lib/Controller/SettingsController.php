@@ -97,6 +97,7 @@ class SettingsController extends Controller {
 				}
 
 				if (isset($details['global']) && $details['global']) {
+					// Read legacy data from oc_appconfig
 					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';

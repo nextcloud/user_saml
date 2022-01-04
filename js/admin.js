@@ -73,7 +73,7 @@
 		 */
 		addProvider: function (callback) {
 			var xhr = new XMLHttpRequest();
-			xhr.open('PUT', OC.generateUrl('/apps/user_saml/settings/providerSettings'));
+			xhr.open('POST', OC.generateUrl('/apps/user_saml/settings/providerSettings'));
 			xhr.setRequestHeader('Content-Type', 'application/json')
 			xhr.setRequestHeader('requesttoken', OC.requestToken)
 
@@ -95,7 +95,7 @@
 
 		updateProvider: function (configKey, configValue, successCb, errorCb) {
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST', OC.generateUrl('/apps/user_saml/settings/providerSettings/' + this.currentConfig));
+			xhr.open('PUT', OC.generateUrl('/apps/user_saml/settings/providerSettings/' + this.currentConfig));
 			xhr.setRequestHeader('Content-Type', 'application/json');
 			xhr.setRequestHeader('requesttoken', OC.requestToken);
 
@@ -235,7 +235,7 @@ $(function() {
 				});
 			});
 			$('input:checkbox[value="1"]').attr('checked', true);
-			$('input:checkbox[value="0"]').removeAttr('checked', false);
+			$('input:checkbox[value="0"]').prop('checked', false);
 			var xmlDownloadButton = $('#get-metadata');
 			var url = xmlDownloadButton.data('base') + '?idp=' + providerId;
 			xmlDownloadButton.attr('href', url);

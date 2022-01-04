@@ -104,7 +104,7 @@ class SAMLSettings {
 	}
 
 	/**
-	 * get list of the configured IDPs
+	 * Get list of the configured IDPs
 	 *
 	 * @return array<int, string>
 	 * @throws Exception
@@ -122,7 +122,7 @@ class SAMLSettings {
 	}
 
 	/**
-	 * check if multiple user back ends are allowed
+	 * Check if multiple user back ends are allowed
 	 */
 	public function allowMultipleUserBackEnds(): bool {
 		$type = $this->config->getAppValue('user_saml', 'type');
@@ -135,7 +135,7 @@ class SAMLSettings {
 	}
 
 	/**
-	 * get config for given IDP
+	 * Get config for given IDP
 	 *
 	 * @throws Exception
 	 */
