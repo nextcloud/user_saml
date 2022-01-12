@@ -68,11 +68,6 @@ $returnScript = false;
 $type = '';
 switch ($config->getAppValue('user_saml', 'type')) {
 	case 'saml':
-		try {
-			$oneLoginSettings = new \OneLogin\Saml2\Settings($samlSettings->getOneLoginSettingsArray(1));
-		} catch (\OneLogin\SAML2\Error $e) {
-			$returnScript = true;
-		}
 		$type = 'saml';
 		break;
 	case 'environment-variable':
