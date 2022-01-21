@@ -218,7 +218,7 @@ class SAMLController extends Controller {
 					if ($e->getMessage()) {
 						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
 					}
-					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+					$ssoUrl = $this->getDirectLoginUrl($ssoUrl);
 				}
 				$response = new Http\RedirectResponse($ssoUrl);
 				break;
