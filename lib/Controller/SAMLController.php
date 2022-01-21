@@ -220,7 +220,13 @@ class SAMLController extends Controller {
 					if ($e->getMessage()) {
 						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
 					}
-					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+					// TODO: do this with a config switch ?
+					//$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+					$args = [
+						'direct' => 1,
+						'redirect_url' => $ssoUrl
+					];
+					$ssoUrl = $this->urlGenerator->linkToRoute('core.login.showLoginForm', $args);
 				}
 				$response = new Http\RedirectResponse($ssoUrl);
 				break;
