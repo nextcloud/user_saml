@@ -206,7 +206,8 @@ class Admin implements ISettings {
 			'attribute-mapping' => $attributeMappingSettings,
 			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
-			'providers' => $providers
+			'providers' => $providers,
+			'config' => isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null,
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);

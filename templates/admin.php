@@ -55,12 +55,12 @@ style('user_saml', 'admin');
 		<?php foreach ($_['general'] as $key => $attribute): ?>
 			<?php if ($attribute['type'] === 'checkbox' && $attribute['global']): ?>
 				<p>
-					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-'.$key] ?? '0') ?>">
 					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 				</p>
 			<?php elseif ($attribute['type'] === 'line' && isset($attribute['global'])): ?>
 				<p>
-					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 				</p>
 			<?php endif; ?>
 		<?php endforeach; ?>
@@ -85,12 +85,12 @@ style('user_saml', 'admin');
 			<?php foreach ($_['general'] as $key => $attribute): ?>
 				<?php if ($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
-						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '0')) ?>">
+						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-'.$key] ?? '0') ?>">
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 					</p>
 				<?php elseif ($attribute['type'] === 'line' && !isset($attribute['global'])): ?>
 					<p>
-						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'general-'.$key, '')) ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -118,7 +118,7 @@ style('user_saml', 'admin');
 				</select>
 				<?php foreach ($_['sp'] as $key => $text): ?>
 					<p>
-						<textarea name="<?php p($key) ?>" placeholder="<?php p($text) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'sp-'.$key, '')) ?></textarea>
+						<textarea name="<?php p($key) ?>" placeholder="<?php p($text) ?>"><?php p($_['config']['sp-'.$key] ?? '') ?></textarea>
 					</p>
 				<?php endforeach; ?>
 			</div>
@@ -129,13 +129,13 @@ style('user_saml', 'admin');
 				<?php print_unescaped($l->t('Configure your IdP settings here.')) ?>
 							</p>
 
-			<p><input data-key="idp-entityId" name="entityId" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-entityId', '')) ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
-			<p><input name="singleSignOnService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleSignOnService.url', '')) ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
+			<p><input data-key="idp-entityId" name="entityId" value="<?php p($_['config']['idp-entityId'] ?? '') ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
+			<p><input name="singleSignOnService.url" value="<?php p($_['config']['idp-singleSignOnService.url'] ?? '') ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
 			<p><span class="toggle"><?php p($l->t('Show optional Identity Provider settings…')) ?></span></p>
 			<div class="hidden">
-				<p><input name="singleLogoutService.url" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleLogoutService.url', '')) ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?>"/></p>
-				<p><input name="singleLogoutService.responseUrl" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-singleLogoutService.responseUrl', '')) ?>" type="text" placeholder="<?php p($l->t('URL Location of the IDP\'s SLO Response')) ?>"/></p>
-				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'idp-x509cert', '')) ?></textarea></p>
+				<p><input name="singleLogoutService.url" value="<?php p($_['config']['idp-singleLogoutService.url'] ?? '') ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?>"/></p>
+				<p><input name="singleLogoutService.responseUrl" value="<?php p($_['config']['idp-singleLogoutService.responseUrl'] ?? '') ?>" type="text" placeholder="<?php p($l->t('URL Location of the IDP\'s SLO Response')) ?>"/></p>
+				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p($_['config']['idp-x509cert'] ?? '') ?></textarea></p>
 			</div>
 		</div>
 
@@ -151,7 +151,7 @@ style('user_saml', 'admin');
 					<?php
 					if ($attribute['type'] === 'line'): ?>
 					<p>
-						<input name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'saml-attribute-mapping-'.$key, '')) ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+						<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
 					<?php endif; ?>
 				<?php endforeach; ?>
@@ -168,14 +168,14 @@ style('user_saml', 'admin');
 				<h4><?php p($l->t('Signatures and encryption offered')) ?></h4>
 				<?php foreach ($_['security-offer'] as $key => $text): ?>
 					<p>
-						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label><br/>
 					</p>
 				<?php endforeach; ?>
 				<h4><?php p($l->t('Signatures and encryption required')) ?></h4>
 				<?php foreach ($_['security-required'] as $key => $text): ?>
 					<p>
-						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
 					</p>
 				<?php endforeach; ?>
@@ -185,12 +185,12 @@ style('user_saml', 'admin');
 						<?php $text = $attribute['text'] ?>
 						<p>
 							<label><?php p($attribute['text']) ?></label><br />
-							<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '')) ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+							<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['security-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
 						</p>
 					<?php } else { ?>
 						<?php $text = $attribute ?>
 						<p>
-							<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p(\OC::$server->getConfig()->getAppValue('user_saml', 'security-'.$key, '0')) ?>" class="checkbox">
+							<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
 							<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label><br/>
 						</p>
 					<?php } ?>
