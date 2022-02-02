@@ -22,6 +22,7 @@
     "Indicates if the SP will validate all received XML." : "Mutatja ha az SP validálja az összes fogadott XML-t.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Az ADFS kisbetűvel URL-kódolja a SAML adatokat, és az eszköz alapértelmezetten nagybetűket használ. Kapcsold be az ADFS kompatibilitáshoz az aláírás ellenőrzéskor.",
     "Algorithm that the toolkit will use on signing process." : "Algoritmus, amelyet az eszközkészlet használni fog az aláírási folyamat során.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Lekérdezés paraméterek visszahozása innen: $_SERVER. Néhány SAML szervernek szüksége van erre az SLO kéréseknél.",
     "Attribute to map the UID to." : "Attribútum melyre az UID leképeződik.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Csak akkor engedd a hitelesítést, ha egy másik háttérszolgáltatásban is létezik a fiók. (pl: LDAP)",
     "Attribute to map the displayname to." : "Attribútum melyre az megjelenítendő név leképeződik.",
