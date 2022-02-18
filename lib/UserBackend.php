@@ -59,6 +59,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $logger;
 	/** @var UserData */
 	private $userData;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	public function __construct(
 		IConfig $config,
@@ -69,7 +71,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		IGroupManager $groupManager,
 		SAMLSettings $settings,
 		ILogger $logger,
-		UserData $userData
+		UserData $userData,
+		IEventDispatcher $eventDispatcher
 ) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -80,6 +83,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->settings = $settings;
 		$this->logger = $logger;
 		$this->userData = $userData;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -647,8 +651,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$currentDisplayname = (string)$this->getDisplayName($uid);
 			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
-				$dispatcher = \OC::$server->get(IEventDispatcher::class);
-				$dispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
+				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
 				$this->setDisplayName($uid, $newDisplayname);
 			}
 
