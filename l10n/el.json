@@ -22,6 +22,7 @@
     "Indicates if the SP will validate all received XML." : "Υποδεικνύει εάν το SP θα επικυρώσει όλες τις ληφθείσες XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Διεύθυνση URL ADFS - Κωδικοποιεί τα δεδομένα SAML ως πεζά και το κιτ εργαλείων χρησιμοποιεί από προεπιλογή κεφαλαία γράμματα. Ενεργοποιήστε τη συμβατότητα ADFS κατά την επαλήθευση υπογραφής.",
     "Algorithm that the toolkit will use on signing process." : "Αλγόριθμος που θα χρησιμοποιήσει η εργαλειοθήκη κατά τη διαδικασία υπογραφής.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Ανάκτηση παραμέτρων αιτήματος από $_SERVER. Μερικοί SAML διακομιστές το απαιτούν για SLO αιτήματα",
     "Attribute to map the UID to." : "Χαρακτηριστικό χαρτογράφησης του UID.",
     "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Να επιτρέπεται η πιστοποίηση μόνον εάν ένας λογαριασμός υπάρχει σε κάποιο άλλο backend. (πχ. LDAP)",
     "Attribute to map the displayname to." : "Χαρακτηριστικό για τη χαρτογράφηση του ονόματος εμφάνισης.",
