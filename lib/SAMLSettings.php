@@ -130,8 +130,9 @@ class SAMLSettings {
 		return ($setting === '1' && $type === 'saml');
 	}
 
-	public function usesSloWebServerDecode(): bool {
-		return $this->config->getAppValue('user_saml', 'security-sloWebServerDecode', '0') === '1';
+	public function usesSloWebServerDecode(int $idp): bool {
+		$config = $this->get($idp);
+		return ($config['security-sloWebServerDecode'] ?? false) === '1';
 	}
 
 	/**
@@ -161,6 +162,7 @@ class SAMLSettings {
 				'requestedAuthnContext' => false,
 				'lowercaseUrlencoding' => ($this->configurations[$idp]['security-lowercaseUrlencoding'] ?? '0') === '1',
 				'signatureAlgorithm' => $this->configurations[$idp]['security-signatureAlgorithm'] ?? null,
+				// "sloWebServerDecode" is not expected to be passed to the OneLogin class
 			],
 			'sp' => [
 				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),

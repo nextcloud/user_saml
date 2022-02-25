@@ -418,7 +418,7 @@ class SAMLController extends Controller {
 				$targetUrl = $auth->processSLO(
 					$keepLocalSession,
 					null,
-					$this->samlSettings->usesSloWebServerDecode(),
+					$this->samlSettings->usesSloWebServerDecode($idp),
 					null,
 					$stay
 				);
@@ -432,7 +432,6 @@ class SAMLController extends Controller {
 				}
 			} else {
 				// If request is not from IDP, we send the logout request to the IDP
-				$parameters = [];
 				$nameId = $this->session->get('user_saml.samlNameId');
 				$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
 				$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');

@@ -210,35 +210,34 @@ $(function() {
 		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
 		OCA.User_SAML.Admin.currentConfig = '' + providerId;
 		$.get(OC.generateUrl('/apps/user_saml/settings/providerSettings/' + providerId)).done(function(data) {
-			Object.keys(data).forEach(function(category, index){
+			Object.keys(data).forEach(function(category){
 				var entries = data[category];
 				Object.keys(entries).forEach(function (configKey) {
-					var element = $('#user-saml-settings *[data-key="' + configKey + '"]');
-					if ($('#user-saml-settings #user-saml-' + category + ' #user-saml-' + configKey).length) {
-						element = $('#user-saml-' + category + ' #user-saml-' + configKey);
+					var htmlElement = document.querySelector('#user-saml-settings *[data-key="' + configKey + '"]')
+						|| document.querySelector('#user-saml-' + category + ' #user-saml-' + configKey)
+						|| document.querySelector('#user-saml-' + category + ' [name="' + configKey + '"]');
+
+					if (!htmlElement) {
+						console.log("could not find element for " + configKey);
+						return;
 					}
-					if ($('#user-saml-settings #user-saml-' + category + ' [name="' + configKey + '"]').length) {
-						element = $('#user-saml-' + category + ' [name="' + configKey + '"]');
-					}
-					if(element.is('input') && element.prop('type') === 'text') {
-						element.val(entries[configKey])
-					}
-					else if(element.is('textarea')) {
-						element.val(entries[configKey]);
-					}
-					else if(element.prop('type') === 'checkbox') {
-						var value = entries[configKey] === '1' ? '1' : '0';
-						element.val(value);
+
+					if ((htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'text')
+						 || htmlElement.tagName === 'TEXTAREA'
+					) {
+						htmlElement.nodeValue = entries[configKey];
+					} else if (htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'checkbox') {
+						htmlElement.checked = entries[configKey] === '1';
+						htmlElement.setAttribute('value', entries[configKey] === '1' ? '1' : '0');
 					} else {
-						console.log('unable to find element for ' + configKey);
+						console.error("Could not handle " + configKey + " Tag is " + htmlElement.tagName + " and type is " + htmlElement.getAttribute("type"));
 					}
 				});
 			});
-			$('input:checkbox[value="1"]').attr('checked', true);
-			$('input:checkbox[value="0"]').prop('checked', false);
-			var xmlDownloadButton = $('#get-metadata');
-			var url = xmlDownloadButton.data('base') + '?idp=' + providerId;
-			xmlDownloadButton.attr('href', url);
+
+			var xmlDownloadButton = document.getElementById('get-metadata');
+			var url = xmlDownloadButton.dataset.base + '?idp=' + providerId;
+			xmlDownloadButton.setAttribute('href', url);
 		});
 	};
 

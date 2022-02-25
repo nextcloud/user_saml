@@ -34,6 +34,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		'security-required',
 		'security-signatureAlgorithm',
 		'security-signMetadata',
+		'security-sloWebServerDecode',
 		'security-wantAssertionsEncrypted',
 		'security-wantAssertionsSigned',
 		'security-wantMessagesSigned',
