@@ -46,6 +46,9 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		'saml-attribute-mapping-group_mapping',
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
+		'sp-x509cert',
+		'sp-name-id-format',
+		'sp-privateKey',
 	];
 
 	/** @var IDBConnection */
