@@ -229,6 +229,8 @@ $(function() {
 					} else if (htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'checkbox') {
 						htmlElement.checked = entries[configKey] === '1';
 						htmlElement.setAttribute('value', entries[configKey] === '1' ? '1' : '0');
+					} else if (htmlElement.tagName === 'SELECT') {
+						htmlElement.querySelector('[value="' + entries[configKey] + '"]').selected = true;
 					} else {
 						console.error("Could not handle " + configKey + " Tag is " + htmlElement.tagName + " and type is " + htmlElement.getAttribute("type"));
 					}

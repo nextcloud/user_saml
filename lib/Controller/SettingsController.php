@@ -30,6 +30,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
 use OCP\IRequest;
+use OneLogin\Saml2\Constants;
 
 class SettingsController extends Controller {
 
@@ -76,7 +77,9 @@ class SettingsController extends Controller {
 			'x509cert' => ['required' => false],
 		];
 		/* Fetch all config values for the given providerId */
-		$settings = [];
+
+		// initialize settings with default value for option box (others are left empty)
+		$settings['sp']['name-id-format'] = Constants::NAMEID_UNSPECIFIED;
 		$storedSettings = $this->samlSettings->get($providerId);
 		foreach ($params as $category => $content) {
 			if (empty($content) || $category === 'providers' || $category === 'type') {
@@ -92,6 +95,12 @@ class SettingsController extends Controller {
 				if (strpos($category, 'attribute-mapping') === 0) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
+				} else if($category === 'name-id-formats') {
+					if ($setting === $storedSettings['sp-name-id-format']) {
+						$settings['sp']['name-id-format'] = $storedSettings['sp-name-id-format'];
+						//continue 2;
+					}
+					continue;
 				} else {
 					$key = $category . '-' . $setting;
 				}

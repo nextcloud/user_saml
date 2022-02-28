@@ -138,6 +138,7 @@ class Admin implements ISettings {
 
 		];
 
+		$firstIdPConfig = isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null;
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
 				'label' => $this->l10n->t('Email address'),
@@ -176,6 +177,11 @@ class Admin implements ISettings {
 				'selected' => false,
 			],
 		];
+		if ($firstIdPConfig !== null && isset($nameIdFormats[$firstIdPConfig['sp-name-id-format']])) {
+			$nameIdFormats[$firstIdPConfig['sp-name-id-format']]['selected'] = true;
+		} else {
+			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
+		}
 
 		$type = $this->config->getAppValue('user_saml', 'type');
 		if ($type === 'saml') {
@@ -207,7 +213,7 @@ class Admin implements ISettings {
 			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
 			'providers' => $providers,
-			'config' => isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null,
+			'config' => $firstIdPConfig,
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);
