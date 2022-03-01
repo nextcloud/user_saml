@@ -19,7 +19,7 @@
 				if (xhr.status >= 200 && xhr.status < 300) {
 					if (response.providerIds !== "") {
 						OCA.User_SAML.Admin.providerIds += ',' + response.providerIds;
-						OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',').sort()[0];
+						OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',')[0];
 					}
 					callback();
 				} else {
