@@ -177,8 +177,9 @@ class Admin implements ISettings {
 				'selected' => false,
 			],
 		];
-		if ($firstIdPConfig !== null && isset($nameIdFormats[$firstIdPConfig['sp-name-id-format']])) {
-			$nameIdFormats[$firstIdPConfig['sp-name-id-format']]['selected'] = true;
+		$chosenFormat = $firstIdPConfig['sp-name-id-format'] ?? '';
+		if ($firstIdPConfig !== null && isset($nameIdFormats[$chosenFormat])) {
+			$nameIdFormats[$chosenFormat]['selected'] = true;
 		} else {
 			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
 		}

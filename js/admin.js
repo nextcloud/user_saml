@@ -210,6 +210,17 @@ $(function() {
 		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
 		OCA.User_SAML.Admin.currentConfig = '' + providerId;
 		$.get(OC.generateUrl('/apps/user_saml/settings/providerSettings/' + providerId)).done(function(data) {
+			document.querySelectorAll('#user-saml-settings input[type="text"], #user-saml-settings textarea').forEach(function (inputNode) {
+				inputNode.value = '';
+			});
+			document.querySelectorAll('#user-saml-settings input[type="checkbox"]').forEach(function (inputNode) {
+				inputNode.checked = false;
+				inputNode.setAttribute('value', '0');
+			});
+			document.querySelectorAll('#user-saml-settings select option').forEach(function (inputNode) {
+				inputNode.selected = false;
+			});
+
 			Object.keys(data).forEach(function(category){
 				var entries = data[category];
 				Object.keys(entries).forEach(function (configKey) {
@@ -226,9 +237,10 @@ $(function() {
 						 || htmlElement.tagName === 'TEXTAREA'
 					) {
 						htmlElement.nodeValue = entries[configKey];
+						htmlElement.value = entries[configKey];
 					} else if (htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'checkbox') {
 						htmlElement.checked = entries[configKey] === '1';
-						htmlElement.setAttribute('value', entries[configKey] === '1' ? '1' : '0');
+						htmlElement.value = entries[configKey] === '1' ? '1' : '0';
 					} else if (htmlElement.tagName === 'SELECT') {
 						htmlElement.querySelector('[value="' + entries[configKey] + '"]').selected = true;
 					} else {

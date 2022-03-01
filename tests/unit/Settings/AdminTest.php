@@ -176,7 +176,7 @@ class AdminTest extends \Test\TestCase {
 			],
 			Constants::NAMEID_UNSPECIFIED => [
 				'label' => 'Unspecified',
-				'selected' => false,
+				'selected' => true,
 			],
 			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
 				'label' => 'Windows domain qualified name',
@@ -200,6 +200,7 @@ class AdminTest extends \Test\TestCase {
 				['id' => 2, 'name' => 'Provider 2']
 			],
 			'name-id-formats' => $nameIdFormats,
+			'config' => [],
 		];
 
 		return $params;
