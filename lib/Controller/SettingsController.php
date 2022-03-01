@@ -95,7 +95,7 @@ class SettingsController extends Controller {
 				if (strpos($category, 'attribute-mapping') === 0) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
-				} else if($category === 'name-id-formats') {
+				} elseif ($category === 'name-id-formats') {
 					if ($setting === $storedSettings['sp-name-id-format']) {
 						$settings['sp']['name-id-format'] = $storedSettings['sp-name-id-format'];
 						//continue 2;
