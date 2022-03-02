@@ -63,7 +63,7 @@ final class Application extends BaseApplication
      *
      * @return InputDefinition An InputDefinition instance
      */
-    public function getDefaultInputDefinition()
+    public function getDefaultInputDefinition(): InputDefinition
     {
         return new InputDefinition(array(
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
@@ -75,8 +75,8 @@ final class Application extends BaseApplication
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
-            new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debuggin information about current environment.'),
-            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display this behat version.'),
+            new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debugging information about current environment.'),
+            new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
                 '--colors', null, InputOption::VALUE_NONE,
@@ -124,7 +124,7 @@ final class Application extends BaseApplication
         return parent::doRun($input, $output);
     }
 
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
 
@@ -210,7 +210,7 @@ final class Application extends BaseApplication
      *
      * @return string The command name
      */
-    protected function getCommandName(InputInterface $input)
+    protected function getCommandName(InputInterface $input): string
     {
         if ($input->hasParameterOption(array('--config-reference'))) {
             return 'dump-reference';

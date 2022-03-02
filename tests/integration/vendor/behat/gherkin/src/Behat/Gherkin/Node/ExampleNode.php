@@ -41,23 +41,29 @@ class ExampleNode implements ScenarioInterface
      * @var null|StepNode[]
      */
     private $steps;
+    /**
+     * @var string
+     */
+    private $outlineTitle;
 
     /**
      * Initializes outline.
      *
-     * @param string     $title
-     * @param string[]   $tags
-     * @param StepNode[] $outlineSteps
-     * @param string[]   $tokens
-     * @param integer    $line
+     * @param string      $title
+     * @param string[]    $tags
+     * @param StepNode[]  $outlineSteps
+     * @param string[]    $tokens
+     * @param integer     $line
+     * @param string|null $outlineTitle
      */
-    public function __construct($title, array $tags, $outlineSteps, array $tokens, $line)
+    public function __construct($title, array $tags, $outlineSteps, array $tokens, $line, $outlineTitle = null)
     {
         $this->title = $title;
         $this->tags = $tags;
         $this->outlineSteps = $outlineSteps;
         $this->tokens = $tokens;
         $this->line = $line;
+        $this->outlineTitle = $outlineTitle;
     }
 
     /**
@@ -95,7 +101,7 @@ class ExampleNode implements ScenarioInterface
      *
      * @param string $tag
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasTag($tag)
     {
@@ -105,7 +111,7 @@ class ExampleNode implements ScenarioInterface
     /**
      * Checks if outline has tags (both inherited from feature and own).
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasTags()
     {
@@ -125,7 +131,7 @@ class ExampleNode implements ScenarioInterface
     /**
      * Checks if outline has steps.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasSteps()
     {
@@ -160,6 +166,16 @@ class ExampleNode implements ScenarioInterface
     public function getLine()
     {
         return $this->line;
+    }
+
+    /**
+     * Returns outline title.
+     *
+     * @return string
+     */
+    public function getOutlineTitle()
+    {
+        return $this->outlineTitle;
     }
 
     /**

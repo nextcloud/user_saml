@@ -39,20 +39,27 @@ final class ContextExtension implements Extension
     /**
      * Available services
      */
-    const FACTORY_ID = 'context.factory';
-    const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
-    const AGGREGATE_RESOLVER_FACTORY_ID = 'context.argument.aggregate_resolver_factory';
+    public const FACTORY_ID = 'context.factory';
+    public const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
+    public const AGGREGATE_RESOLVER_FACTORY_ID = 'context.argument.aggregate_resolver_factory';
+    private const ENVIRONMENT_HANDLER_ID = EnvironmentExtension::HANDLER_TAG . '.context';
+    private const ENVIRONMENT_READER_ID = EnvironmentExtension::READER_TAG . '.context';
+    private const SUITE_SETUP_ID = SuiteExtension::SETUP_TAG . '.suite_with_contexts';
+    private const ANNOTATED_CONTEXT_READER_ID = self::READER_TAG . '.annotated';
+    private const ATTRIBUTED_CONTEXT_READER_ID = self::READER_TAG . '.attributed';
 
     /*
      * Available extension points
      */
-    const CLASS_RESOLVER_TAG = 'context.class_resolver';
-    const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
-    const INITIALIZER_TAG = 'context.initializer';
-    const READER_TAG = 'context.reader';
-    const ANNOTATION_READER_TAG = 'context.annotation_reader';
-    const CLASS_GENERATOR_TAG = 'context.class_generator';
-    const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
+    public const CLASS_RESOLVER_TAG = 'context.class_resolver';
+    public const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
+    public const INITIALIZER_TAG = 'context.initializer';
+    public const READER_TAG = 'context.reader';
+    public const ANNOTATION_READER_TAG = 'context.annotation_reader';
+    public const ATTRIBUTE_READER_TAG = 'context.attribute_reader';
+    public const CLASS_GENERATOR_TAG = 'context.class_generator';
+    public const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
+    public const DOC_BLOCK_HELPER_ID = 'context.docblock_helper';
 
     /**
      * @var ServiceProcessor
@@ -106,6 +113,7 @@ final class ContextExtension implements Extension
         $this->loadSnippetsController($container);
         $this->loadDefaultClassGenerators($container);
         $this->loadDefaultContextReaders($container);
+        $this->loadDocblockHelper($container);
     }
 
     /**
@@ -120,6 +128,7 @@ final class ContextExtension implements Extension
         $this->processContextReaders($container);
         $this->processClassGenerators($container);
         $this->processAnnotationReaders($container);
+        $this->processAttributeReaders($container);
     }
 
     /**
@@ -142,7 +151,7 @@ final class ContextExtension implements Extension
      */
     private function loadArgumentResolverFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Argument\CompositeFactory');
+        $definition = new Definition('Behat\Behat\Context\Argument\CompositeArgumentResolverFactory');
         $container->setDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID, $definition);
     }
 
@@ -158,7 +167,7 @@ final class ContextExtension implements Extension
             new Reference(self::AGGREGATE_RESOLVER_FACTORY_ID)
         ));
         $definition->addTag(EnvironmentExtension::HANDLER_TAG, array('priority' => 50));
-        $container->setDefinition(self::getEnvironmentHandlerId(), $definition);
+        $container->setDefinition(self::ENVIRONMENT_HANDLER_ID, $definition);
     }
 
     /**
@@ -170,7 +179,7 @@ final class ContextExtension implements Extension
     {
         $definition = new Definition('Behat\Behat\Context\Environment\Reader\ContextEnvironmentReader');
         $definition->addTag(EnvironmentExtension::READER_TAG, array('priority' => 50));
-        $container->setDefinition(self::getEnvironmentReaderId(), $definition);
+        $container->setDefinition(self::ENVIRONMENT_READER_ID, $definition);
     }
 
     /**
@@ -185,7 +194,7 @@ final class ContextExtension implements Extension
             new Reference(FilesystemExtension::LOGGER_ID)
         ));
         $definition->addTag(SuiteExtension::SETUP_TAG, array('priority' => 20));
-        $container->setDefinition(self::getSuiteSetupId(), $definition);
+        $container->setDefinition(self::SUITE_SETUP_ID, $definition);
     }
 
     /**
@@ -248,15 +257,57 @@ final class ContextExtension implements Extension
      */
     private function loadDefaultContextReaders(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader');
-        $container->setDefinition(self::getAnnotatedContextReaderId(), $definition);
+        $this->loadAnnotatedContextReader($container);
+
+        $this->loadAttributedContextReader($container);
+
+        $this->loadTranslatableContextReader($container);
+    }
+
+    /**
+     * Loads AnnotatedContextReader
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAnnotatedContextReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader', array(
+            new Reference(self::DOC_BLOCK_HELPER_ID)
+        ));
+        $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID, $definition);
 
         $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', array(
-            new Reference(self::getAnnotatedContextReaderId())
+            new Reference(self::ANNOTATED_CONTEXT_READER_ID)
         ));
         $definition->addTag(self::READER_TAG, array('priority' => 50));
-        $container->setDefinition(self::getAnnotatedContextReaderId() . '.cached', $definition);
+        $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID . '.cached', $definition);
+    }
 
+    /**
+     * Loads AttributedContextReader
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadAttributedContextReader(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Reader\AttributeContextReader');
+        $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID, $definition);
+
+        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', array(
+            new Reference(self::ATTRIBUTED_CONTEXT_READER_ID)
+        ));
+        $definition->addTag(self::READER_TAG, array('priority' => 50));
+        $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID . '.cached', $definition);
+        return $definition;
+    }
+
+    /**
+     * Loads TranslatableContextReader
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadTranslatableContextReader(ContainerBuilder $container)
+    {
         $definition = new Definition('Behat\Behat\Context\Reader\TranslatableContextReader', array(
             new Reference(TranslatorExtension::TRANSLATOR_ID)
         ));
@@ -270,6 +321,18 @@ final class ContextExtension implements Extension
     }
 
     /**
+     * Loads DocBlockHelper
+     *
+     * @param ContainerBuilder $container
+     */
+    private function loadDocblockHelper(ContainerBuilder $container)
+    {
+        $definition = new Definition('Behat\Behat\Context\Annotation\DocBlockHelper');
+
+        $container->setDefinition(self::DOC_BLOCK_HELPER_ID, $definition);
+    }
+
+    /**
      * Processes all class resolvers.
      *
      * @param ContainerBuilder $container
@@ -277,7 +340,7 @@ final class ContextExtension implements Extension
     private function processClassResolvers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_RESOLVER_TAG);
-        $definition = $container->getDefinition(self::getEnvironmentHandlerId());
+        $definition = $container->getDefinition(self::ENVIRONMENT_HANDLER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerClassResolver', array($reference));
@@ -337,7 +400,7 @@ final class ContextExtension implements Extension
     private function processContextReaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::READER_TAG);
-        $definition = $container->getDefinition(self::getEnvironmentReaderId());
+        $definition = $container->getDefinition(self::ENVIRONMENT_READER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerContextReader', array($reference));
@@ -352,7 +415,7 @@ final class ContextExtension implements Extension
     private function processClassGenerators(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_GENERATOR_TAG);
-        $definition = $container->getDefinition(self::getSuiteSetupId());
+        $definition = $container->getDefinition(self::SUITE_SETUP_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerClassGenerator', array($reference));
@@ -367,7 +430,7 @@ final class ContextExtension implements Extension
     private function processAnnotationReaders(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ANNOTATION_READER_TAG);
-        $definition = $container->getDefinition(self::getAnnotatedContextReaderId());
+        $definition = $container->getDefinition(self::ANNOTATED_CONTEXT_READER_ID);
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerAnnotationReader', array($reference));
@@ -375,42 +438,17 @@ final class ContextExtension implements Extension
     }
 
     /**
-     * Returns context environment handler service id.
+     * Processes all attribute readers.
      *
-     * @return string
+     * @param ContainerBuilder $container
      */
-    private static function getEnvironmentHandlerId()
+    private function processAttributeReaders(ContainerBuilder $container)
     {
-        return EnvironmentExtension::HANDLER_TAG . '.context';
-    }
+        $references = $this->processor->findAndSortTaggedServices($container, self::ATTRIBUTE_READER_TAG);
+        $definition = $container->getDefinition(self::ATTRIBUTED_CONTEXT_READER_ID);
 
-    /**
-     * Returns context environment reader id.
-     *
-     * @return string
-     */
-    private static function getEnvironmentReaderId()
-    {
-        return EnvironmentExtension::READER_TAG . '.context';
-    }
-
-    /**
-     * Returns context suite setup id.
-     *
-     * @return string
-     */
-    private static function getSuiteSetupId()
-    {
-        return SuiteExtension::SETUP_TAG . '.suite_with_contexts';
-    }
-
-    /**
-     * Returns annotated context reader id.
-     *
-     * @return string
-     */
-    private static function getAnnotatedContextReaderId()
-    {
-        return self::READER_TAG . '.annotated';
+        foreach ($references as $reference) {
+            $definition->addMethodCall('registerAttributeReader', array($reference));
+        }
     }
 }

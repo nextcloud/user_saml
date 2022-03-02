@@ -1,3 +1,78 @@
+4.9.0 / 2021-10-12
+==================
+
+* Simplify the boolean condition for the tag matching by @stof in https://github.com/Behat/Gherkin/pull/219
+* Remove symfony phpunit bridge by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/220
+* Ignore the bin folder in archives by @stof in https://github.com/Behat/Gherkin/pull/226
+* Cast table node exceptions into ParserExceptions when throwing by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/216
+* Cucumber changelog in PRs and using correct hash by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/225
+* Support alternative docstrings format (```) by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/214
+* Fix DocBlocks (Boolean -> bool) by @simonhammes in https://github.com/Behat/Gherkin/pull/237
+* Tag parsing by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/215
+* Remove test - cucumber added an example with Rule which is not supported by @ciaranmcnulty in https://github.com/Behat/Gherkin/pull/239
+* Add PHP 8.1 support by @javer in https://github.com/Behat/Gherkin/pull/242
+* Fix main branch alias version by @mvorisek in https://github.com/Behat/Gherkin/pull/244
+
+4.8.0 / 2021-02-04
+==================
+
+* Drop support for PHP before version 7.2
+
+4.7.3 / 2021-02-04
+==================
+
+* Refactored comments parsing to avoid Maximum function nesting level errors
+
+4.7.2 / 2021-02-03
+==================
+
+* Issue where Scenario Outline title was not populated into Examples
+* Updated translations from cucumber 16.0.0
+
+4.7.1 / 2021-01-26
+==================
+
+* Issue parsing comments before scenarios when following an Examples table
+
+4.7.0 / 2021-01-24
+==================
+
+ * Provides better messages for TableNode construct errors
+ * Now allows single character steps 
+ * Supports multiple Example Tables with tags
+
+4.6.2 / 2020-03-17
+==================
+
+ * Fixed issues due to incorrect cache key
+
+4.6.1 / 2020-02-27
+==================
+
+ * Fix AZ translations
+ * Correctly filter features, now that the base path is correctly set 
+
+4.6.0 / 2019-01-16
+==================
+
+ * Updated translations (including 'Example' as synonym for 'Scenario' in `en`)
+
+4.5.1 / 2017-08-30
+==================
+
+  * Fix regression in `PathsFilter`
+
+4.5.0 / 2017-08-30
+==================
+
+  * Sync i18n with Cucumber Gherkin
+  * Drop support for HHVM tests on Travis
+  * Add `TableNode::fromList()` method (thanks @TravisCarden)
+  * Add `ExampleNode::getOutlineTitle()` method (thanks @duxet)
+  * Use realpath, so the feature receives the cwd prefixed (thanks @glennunipro)
+  * Explicitly handle non-two-dimensional arrays in TableNode (thanks @TravisCarden)
+  * Fix to line/linefilter scenario runs which take relative paths to files (thanks @generalconsensus)
+
 4.4.5 / 2016-10-30
 ==================
 

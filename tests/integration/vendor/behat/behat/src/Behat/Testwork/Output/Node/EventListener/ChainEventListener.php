@@ -11,10 +11,10 @@
 namespace Behat\Testwork\Output\Node\EventListener;
 
 use ArrayIterator;
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Countable;
 use IteratorAggregate;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Used to compose formatter event listeners.
@@ -51,7 +51,7 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return count($this->listeners);
     }
@@ -59,7 +59,7 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->listeners);
     }

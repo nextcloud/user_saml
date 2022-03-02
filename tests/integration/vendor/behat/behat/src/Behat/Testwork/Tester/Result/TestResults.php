@@ -21,7 +21,7 @@ use IteratorAggregate;
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {
-    const NO_TESTS = -100;
+    public const NO_TESTS = -100;
 
     /**
      * @var TestResult[]
@@ -62,7 +62,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function count()
+    public function count(): int
     {
         return count($this->results);
     }
@@ -70,7 +70,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->results);
     }

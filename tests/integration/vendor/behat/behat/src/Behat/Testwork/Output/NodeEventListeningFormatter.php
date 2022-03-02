@@ -10,10 +10,10 @@
 
 namespace Behat\Testwork\Output;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Output\Printer\OutputPrinter;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Formatter built around the idea of event delegation and composition.
@@ -79,7 +79,13 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public function listenEvent(Event $event, $eventName = null)
     {
-        $eventName = $eventName ?: $event->getName();
+        if (null === $eventName) {
+            if (method_exists($event, 'getName')) {
+                $eventName = $event->getName();
+            } else {
+                $eventName = get_class($event);
+            }
+        }
 
         $this->listener->listenEvent($this, $event, $eventName);
     }
@@ -121,6 +127,6 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public function getParameter($name)
     {
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+        return $this->parameters[$name] ?? null;
     }
 }

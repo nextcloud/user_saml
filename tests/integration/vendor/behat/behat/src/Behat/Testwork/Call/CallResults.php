@@ -12,7 +12,6 @@ namespace Behat\Testwork\Call;
 
 use ArrayIterator;
 use Countable;
-use Iterator;
 use IteratorAggregate;
 
 /**
@@ -53,7 +52,7 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Checks if any call in collection throws an exception.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasExceptions()
     {
@@ -69,7 +68,7 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Checks if any call in collection produces an output.
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasStdOuts()
     {
@@ -87,7 +86,7 @@ final class CallResults implements Countable, IteratorAggregate
      *
      * @return integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->results);
     }
@@ -95,9 +94,9 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Returns collection iterator.
      *
-     * @return Iterator
+     * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->results);
     }

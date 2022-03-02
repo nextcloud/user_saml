@@ -23,9 +23,6 @@ interface ExtensionInterface
     /**
      * Loads a specific configuration.
      *
-     * @param array            $configs   An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configs, ContainerBuilder $container);
@@ -33,14 +30,14 @@ interface ExtensionInterface
     /**
      * Returns the namespace to be used for this extension (XML namespace).
      *
-     * @return string The XML namespace
+     * @return string
      */
     public function getNamespace();
 
     /**
      * Returns the base path for the XSD files.
      *
-     * @return string The XSD base path
+     * @return string|false
      */
     public function getXsdValidationBasePath();
 
@@ -49,7 +46,7 @@ interface ExtensionInterface
      *
      * This alias is also the mandatory prefix to use when using YAML.
      *
-     * @return string The alias
+     * @return string
      */
     public function getAlias();
 }
