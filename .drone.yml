@@ -10,14 +10,14 @@ steps:
     environment:
       CORE_BRANCH: master
     commands:
-      - /start.sh &
+      - /start.sh
+      - /wait-for-services.sh
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       # use local clone
       - cp -r /drone/src /var/www/html/apps/user_saml
-      - /wait-for-services.sh
       - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
       - php /var/www/html/occ app:enable user_saml
       - chown -R apache:apache /var/www/html/
