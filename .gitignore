@@ -7,5 +7,5 @@
 3rdparty/vendor/onelogin/php-saml/endpoints/
 
 build
-vendor
+/vendor/
 .php_cs.cache
