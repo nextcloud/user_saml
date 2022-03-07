@@ -12,7 +12,9 @@ The following providers are supported and tested at the moment:
 - Active Directory Federation Services (ADFS)
 - Authentication via Environment Variable
 
-**Kerberos (mod_auth_kerb)**
+**Authentication via Environment Variable**
+- Kerberos (mod_auth_kerb)
+- CAS
+- Any other provider that authenticates using the environment variable
 
-Any other provider that authenticates using the environment variable.
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are **not** part of any internal test matrix.
