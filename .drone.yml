@@ -41,13 +41,13 @@ clone:
   depth: 1
 
 steps:
-  - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7.3:user_saml_shibboleth_php7.3-2
+  - name: integration-tests-stable23
+    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php7.3:latest
     environment:
       CORE_BRANCH: stable23
     commands:
       - /start.sh &
-      - sleep 7
+      - /wait-for-services.sh
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
@@ -76,13 +76,13 @@ clone:
   depth: 1
 
 steps:
-  - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7.3:user_saml_shibboleth_php7.3-2
+  - name: integration-tests-stable22
+    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php7.3:latest
     environment:
       CORE_BRANCH: stable22
     commands:
       - /start.sh &
-      - sleep 7
+      - /wait-for-services.sh
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
@@ -111,13 +111,13 @@ clone:
   depth: 1
 
 steps:
-  - name: integration-tests-master
-    image: nextcloudci/user_saml_shibboleth-php7.3:user_saml_shibboleth_php7.3-2
+  - name: integration-tests-stable21
+    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php7.3:latest
     environment:
       CORE_BRANCH: stable21
     commands:
       - /start.sh &
-      - sleep 7
+      - /wait-for-services.sh
       - rm -rf /var/www/html
       - cd /var/www/
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
