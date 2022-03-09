@@ -37,6 +37,9 @@ class ContainerParametersResource implements ResourceInterface
         return 'container_parameters_'.md5(serialize($this->parameters));
     }
 
+    /**
+     * @return array Tracked parameters
+     */
     public function getParameters(): array
     {
         return $this->parameters;

@@ -152,7 +152,7 @@ class Alias
     /**
      * Returns the Id of this alias.
      *
-     * @return string
+     * @return string The alias id
      */
     public function __toString()
     {

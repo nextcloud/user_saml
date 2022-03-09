@@ -44,14 +44,6 @@ class IniFileLoader extends FileLoader
                 $this->container->setParameter($key, $this->phpize($value));
             }
         }
-
-        if ($this->env && \is_array($result['parameters@'.$this->env] ?? null)) {
-            foreach ($result['parameters@'.$this->env] as $key => $value) {
-                $this->container->setParameter($key, $this->phpize($value));
-            }
-        }
-
-        return null;
     }
 
     /**

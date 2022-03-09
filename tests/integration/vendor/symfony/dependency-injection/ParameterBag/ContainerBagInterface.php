@@ -24,7 +24,7 @@ interface ContainerBagInterface extends ContainerInterface
     /**
      * Gets the service container parameters.
      *
-     * @return array
+     * @return array An array of parameters
      */
     public function all();
 

@@ -17,9 +17,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Loader\FileLoader as BaseFileLoader;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Resource\GlobResource;
-use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Component\DependencyInjection\ChildDefinition;
-use Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -40,11 +38,11 @@ abstract class FileLoader extends BaseFileLoader
     protected $singlyImplemented = [];
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = true;
 
-    public function __construct(ContainerBuilder $container, FileLocatorInterface $locator, string $env = null)
+    public function __construct(ContainerBuilder $container, FileLocatorInterface $locator)
     {
         $this->container = $container;
 
-        parent::__construct($locator, $env);
+        parent::__construct($locator);
     }
 
     /**
@@ -52,7 +50,7 @@ abstract class FileLoader extends BaseFileLoader
      *
      * @param bool|string $ignoreErrors Whether errors should be ignored; pass "not_found" to ignore only when the loaded resource is not found
      */
-    public function import($resource, string $type = null, $ignoreErrors = false, string $sourceResource = null, $exclude = null)
+    public function import($resource, $type = null, $ignoreErrors = false, $sourceResource = null, $exclude = null)
     {
         $args = \func_get_args();
 
@@ -63,7 +61,7 @@ abstract class FileLoader extends BaseFileLoader
         }
 
         try {
-            return parent::import(...$args);
+            parent::import(...$args);
         } catch (LoaderLoadException $e) {
             if (!$ignoreNotFound || !($prev = $e->getPrevious()) instanceof FileLocatorFileNotFoundException) {
                 throw $e;
@@ -79,8 +77,6 @@ abstract class FileLoader extends BaseFileLoader
                 throw $e;
             }
         }
-
-        return null;
     }
 
     /**
@@ -91,7 +87,7 @@ abstract class FileLoader extends BaseFileLoader
      * @param string               $resource  The directory to look for classes, glob-patterns allowed
      * @param string|string[]|null $exclude   A globbed path of files to exclude or an array of globbed paths of files to exclude
      */
-    public function registerClasses(Definition $prototype, string $namespace, string $resource, $exclude = null)
+    public function registerClasses(Definition $prototype, $namespace, $resource, $exclude = null)
     {
         if (!str_ends_with($namespace, '\\')) {
             throw new InvalidArgumentException(sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
@@ -100,27 +96,11 @@ abstract class FileLoader extends BaseFileLoader
             throw new InvalidArgumentException(sprintf('Namespace is not a valid PSR-4 prefix: "%s".', $namespace));
         }
 
-        $autoconfigureAttributes = new RegisterAutoconfigureAttributesPass();
-        $autoconfigureAttributes = $autoconfigureAttributes->accept($prototype) ? $autoconfigureAttributes : null;
-        $classes = $this->findClasses($namespace, $resource, (array) $exclude, $autoconfigureAttributes);
+        $classes = $this->findClasses($namespace, $resource, (array) $exclude);
         // prepare for deep cloning
         $serializedPrototype = serialize($prototype);
 
         foreach ($classes as $class => $errorMessage) {
-            if (null === $errorMessage && $autoconfigureAttributes && $this->env) {
-                $r = $this->container->getReflectionClass($class);
-                $attribute = null;
-                foreach ($r->getAttributes(When::class) as $attribute) {
-                    if ($this->env === $attribute->newInstance()->env) {
-                        $attribute = null;
-                        break;
-                    }
-                }
-                if (null !== $attribute) {
-                    continue;
-                }
-            }
-
             if (interface_exists($class, false)) {
                 $this->interfaces[] = $class;
             } else {
@@ -154,8 +134,10 @@ abstract class FileLoader extends BaseFileLoader
 
     /**
      * Registers a definition in the container with its instanceof-conditionals.
+     *
+     * @param string $id
      */
-    protected function setDefinition(string $id, Definition $definition)
+    protected function setDefinition($id, Definition $definition)
     {
         $this->container->removeBindings($id);
 
@@ -169,7 +151,7 @@ abstract class FileLoader extends BaseFileLoader
         }
     }
 
-    private function findClasses(string $namespace, string $pattern, array $excludePatterns, ?RegisterAutoconfigureAttributesPass $autoconfigureAttributes): array
+    private function findClasses(string $namespace, string $pattern, array $excludePatterns): array
     {
         $parameterBag = $this->container->getParameterBag();
 
@@ -226,10 +208,6 @@ abstract class FileLoader extends BaseFileLoader
 
             if ($r->isInstantiable() || $r->isInterface()) {
                 $classes[$class] = null;
-            }
-
-            if ($autoconfigureAttributes && !$r->isInstantiable()) {
-                $autoconfigureAttributes->processClass($this->container, $r);
             }
         }
 

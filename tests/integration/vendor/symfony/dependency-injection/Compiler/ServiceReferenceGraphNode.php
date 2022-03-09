@@ -51,7 +51,7 @@ class ServiceReferenceGraphNode
     /**
      * Checks if the value of this node is an Alias.
      *
-     * @return bool
+     * @return bool True if the value is an Alias instance
      */
     public function isAlias()
     {
@@ -61,7 +61,7 @@ class ServiceReferenceGraphNode
     /**
      * Checks if the value of this node is a Definition.
      *
-     * @return bool
+     * @return bool True if the value is a Definition instance
      */
     public function isDefinition()
     {
@@ -101,7 +101,7 @@ class ServiceReferenceGraphNode
     /**
      * Returns the value of this Node.
      *
-     * @return mixed
+     * @return mixed The value
      */
     public function getValue()
     {

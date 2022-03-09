@@ -28,8 +28,6 @@ class GlobFileLoader extends FileLoader
         }
 
         $this->container->addResource($globResource);
-
-        return null;
     }
 
     /**

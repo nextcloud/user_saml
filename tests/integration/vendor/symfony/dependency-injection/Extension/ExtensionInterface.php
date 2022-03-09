@@ -30,7 +30,7 @@ interface ExtensionInterface
     /**
      * Returns the namespace to be used for this extension (XML namespace).
      *
-     * @return string
+     * @return string The XML namespace
      */
     public function getNamespace();
 
@@ -46,7 +46,7 @@ interface ExtensionInterface
      *
      * This alias is also the mandatory prefix to use when using YAML.
      *
-     * @return string
+     * @return string The alias
      */
     public function getAlias();
 }

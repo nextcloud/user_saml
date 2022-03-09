@@ -38,8 +38,6 @@ class DirectoryLoader extends FileLoader
                 $this->import($dir, null, false, $path);
             }
         }
-
-        return null;
     }
 
     /**

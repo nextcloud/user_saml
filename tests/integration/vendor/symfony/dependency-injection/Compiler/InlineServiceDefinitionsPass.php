@@ -110,7 +110,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
     protected function processValue($value, bool $isRoot = false)
     {
         if ($value instanceof ArgumentInterface) {
-            // References found in ArgumentInterface::getValues() are not inlineable
+            // Reference found in ArgumentInterface::getValues() are not inlineable
             return $value;
         }
 
@@ -176,7 +176,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
                 $srcId = $edge->getSourceNode()->getId();
                 $this->connectedIds[$srcId] = true;
                 if ($edge->isWeak() || $edge->isLazy()) {
-                    return !$this->connectedIds[$id] = true;
+                    return false;
                 }
             }
 
@@ -198,7 +198,9 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
 
         $srcIds = [];
         $srcCount = 0;
+        $isReferencedByConstructor = false;
         foreach ($this->graph->getNode($id)->getInEdges() as $edge) {
+            $isReferencedByConstructor = $isReferencedByConstructor || $edge->isReferencedByConstructor();
             $srcId = $edge->getSourceNode()->getId();
             $this->connectedIds[$srcId] = true;
             if ($edge->isWeak() || $edge->isLazy()) {

@@ -32,7 +32,9 @@ class Compiler
     }
 
     /**
-     * @return PassConfig
+     * Returns the PassConfig.
+     *
+     * @return PassConfig The PassConfig instance
      */
     public function getPassConfig()
     {
@@ -40,13 +42,18 @@ class Compiler
     }
 
     /**
-     * @return ServiceReferenceGraph
+     * Returns the ServiceReferenceGraph.
+     *
+     * @return ServiceReferenceGraph The ServiceReferenceGraph instance
      */
     public function getServiceReferenceGraph()
     {
         return $this->serviceReferenceGraph;
     }
 
+    /**
+     * Adds a pass to the PassConfig.
+     */
     public function addPass(CompilerPassInterface $pass, string $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
         $this->passConfig->addPass($pass, $type, $priority);
@@ -65,7 +72,9 @@ class Compiler
     }
 
     /**
-     * @return array
+     * Returns the log.
+     *
+     * @return array Log array
      */
     public function getLog()
     {

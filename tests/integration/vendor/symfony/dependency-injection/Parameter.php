@@ -26,7 +26,7 @@ class Parameter
     }
 
     /**
-     * @return string
+     * @return string The parameter key
      */
     public function __toString()
     {
