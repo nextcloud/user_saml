@@ -172,7 +172,8 @@ class SAMLController extends Controller {
 		switch ($type) {
 			case 'saml':
 				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
-				$ssoUrl = $auth->login(null, [], false, false, true);
+				$returnUrl = $this->request->getParam('originalUrl', $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login'));
+				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
 
 				// Small hack to make user_saml work with the loginflows
@@ -359,7 +360,7 @@ class SAMLController extends Controller {
 			return $response;
 		}
 
-		$originalUrl = $data['OriginalUrl'];
+		$originalUrl = $data['RelayState'] ?? $data['OriginalUrl'];
 		if ($originalUrl !== null && $originalUrl !== '') {
 			$response = new Http\RedirectResponse($originalUrl);
 		} else {
