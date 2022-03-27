@@ -10,7 +10,6 @@ The following providers are supported and tested at the moment:
 - OneLogin
 - Shibboleth
 - Active Directory Federation Services (ADFS)
-- Authentication via Environment Variable
 
 **Authentication via Environment Variable**
 - Kerberos (mod_auth_kerb)
