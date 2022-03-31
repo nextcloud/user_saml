@@ -104,7 +104,7 @@ class Admin implements ISettings {
 				'required' => true,
 			],
 			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
+				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
 				'type' => 'checkbox',
 				'global' => true,
 			]
