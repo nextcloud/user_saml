@@ -21,6 +21,10 @@ jobs:
         php-versions: ['7.4', '8.0']
         databases: ['sqlite']
         server-versions: ['stable21', 'stable22', 'stable23', 'master']
+        include:
+          - php-versions: '8.1'
+            server-versions: 'master'
+            databases: 'sqlite'
   
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
 
@@ -38,7 +42,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
