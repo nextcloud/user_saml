@@ -70,19 +70,46 @@ return [
 			'verb' => 'GET',
 		],
 		[
+			'name' => 'Settings#getSamlProviderIds',
+			'url' => '/settings/providers',
+			'verb' => 'GET',
+		],
+		[
 			'name' => 'Settings#getSamlProviderSettings',
 			'url' => '/settings/providerSettings/{providerId}',
 			'verb' => 'GET',
 			'defaults' => [
-				'providerId' => '1'
+				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
 			]
+		],
+		[
+			'name' => 'Settings#setProviderSetting',
+			'url' => '/settings/providerSettings/{providerId}',
+			'verb' => 'PUT',
+			'defaults' => [
+				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
+			]
+		],
+		[
+			'name' => 'Settings#newSamlProviderSettingsId',
+			'url' => '/settings/providerSettings',
+			'verb' => 'POST',
 		],
 		[
 			'name' => 'Settings#deleteSamlProviderSettings',
 			'url' => '/settings/providerSettings/{providerId}',
 			'verb' => 'DELETE',
 			'defaults' => [
-				'providerId' => '1'
+				'providerId' => 1
+			],
+			'requirements' => [
+				'providerId' => '\d+'
 			]
 		],
 		[

@@ -57,9 +57,8 @@ class UserData {
 
 	public function hasUidMappingAttribute(): bool {
 		$this->assertIsInitialized();
-		$prefix = $this->samlSettings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		return isset($this->attributes[$uidMapping]);
+		$attribute = $this->getUidMappingAttribute();
+		return $attribute !== null && isset($this->attributes[$attribute]);
 	}
 
 	public function getOriginalUid(): string {
@@ -84,9 +83,8 @@ class UserData {
 	}
 
 	protected function extractSamlUserId(): string {
-		$prefix = $this->samlSettings->getPrefix();
-		$uidMapping = $this->config->getAppValue('user_saml', $prefix . 'general-uid_mapping');
-		if (isset($this->attributes[$uidMapping])) {
+		$uidMapping = $this->getUidMappingAttribute();
+		if ($uidMapping !== null && isset($this->attributes[$uidMapping])) {
 			if (is_array($this->attributes[$uidMapping])) {
 				return trim($this->attributes[$uidMapping][0]);
 			} else {
@@ -147,5 +145,13 @@ class UserData {
 		if ($this->attributes === null) {
 			throw new \LogicException('UserData have to be initialized with setAttributes first');
 		}
+	}
+
+	protected function getProviderSettings(): array {
+		return $this->samlSettings->get($this->samlSettings->getProviderId());
+	}
+
+	protected function getUidMappingAttribute(): ?string {
+		return $this->getProviderSettings()['general-uid_mapping'] ?? null;
 	}
 }
