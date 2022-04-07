@@ -18,6 +18,8 @@ use Behat\Testwork\Suite\Suite;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @deprecated since 3.4. Use `ArgumentResolverFactory` instead
  */
 interface SuiteScopedResolverFactory
 {

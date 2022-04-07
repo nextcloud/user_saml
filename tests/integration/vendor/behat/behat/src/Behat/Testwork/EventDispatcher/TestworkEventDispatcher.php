@@ -10,8 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Extends Symfony2 event dispatcher with catch-all listeners.
@@ -20,13 +20,38 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 final class TestworkEventDispatcher extends EventDispatcher
 {
-    const BEFORE_ALL_EVENTS = '*~';
-    const AFTER_ALL_EVENTS = '~*';
+    public const BEFORE_ALL_EVENTS = '*~';
+    public const AFTER_ALL_EVENTS = '~*';
+    public const DISPATCHER_VERSION = 2;
 
     /**
      * {@inheritdoc}
+     *
+     * @param string|null $eventName
      */
-    public function dispatch($eventName, Event $event = null)
+    public function getListeners($eventName = null): array
+    {
+        if (null === $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
+            return parent::getListeners($eventName);
+        }
+
+        return array_merge(
+            parent::getListeners(self::BEFORE_ALL_EVENTS),
+            parent::getListeners($eventName),
+            parent::getListeners(self::AFTER_ALL_EVENTS)
+        );
+    }
+
+    public function dispatch($event, $eventName = null): object
+    {
+        if (is_object($event)) {
+            return $this->bcAwareDispatch($event, $eventName);
+        }
+
+        return $this->bcAwareDispatch($eventName, $event);
+    }
+
+    private function bcAwareDispatch(object $event, $eventName)
     {
         if (null === $event) {
             $event = new Event();
@@ -36,24 +61,6 @@ final class TestworkEventDispatcher extends EventDispatcher
             $event->setName($eventName);
         }
 
-        $this->doDispatch($this->getListeners($eventName), $eventName, $event);
-
-        return $event;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getListeners($eventName = null)
-    {
-        if (null == $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
-            return parent::getListeners($eventName);
-        }
-
-        return array_merge(
-            parent::getListeners(self::BEFORE_ALL_EVENTS),
-            parent::getListeners($eventName),
-            parent::getListeners(self::AFTER_ALL_EVENTS)
-        );
+        return parent::dispatch($event, $eventName);
     }
 }

@@ -19,6 +19,7 @@ use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -55,12 +56,14 @@ final class EventDispatchingStepTester implements StepTester
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         $event = new BeforeStepTested($env, $feature, $step);
-        $this->eventDispatcher->dispatch($event::BEFORE, $event);
+
+        $this->eventDispatcher->dispatch($event, $event::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
         $event = new AfterStepSetup($env, $feature, $step, $setup);
-        $this->eventDispatcher->dispatch($event::AFTER_SETUP, $event);
+
+        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
 
         return $setup;
     }
@@ -79,12 +82,14 @@ final class EventDispatchingStepTester implements StepTester
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);
-        $this->eventDispatcher->dispatch($event::BEFORE_TEARDOWN, $event);
+
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
 
         $event = new AfterStepTested($env, $feature, $step, $result, $teardown);
-        $this->eventDispatcher->dispatch($event::AFTER, $event);
+
+        $this->eventDispatcher->dispatch($event, $event::AFTER);
 
         return $teardown;
     }

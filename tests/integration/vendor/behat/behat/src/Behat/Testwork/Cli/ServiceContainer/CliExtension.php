@@ -27,14 +27,14 @@ final class CliExtension implements Extension
     /*
      * Available services
      */
-    const COMMAND_ID = 'cli.command';
-    const INPUT_ID = 'cli.input';
-    const OUTPUT_ID = 'cli.output';
+    public const COMMAND_ID = 'cli.command';
+    public const INPUT_ID = 'cli.input';
+    public const OUTPUT_ID = 'cli.output';
 
     /*
      * Available extension points
      */
-    const CONTROLLER_TAG = 'cli.controller';
+    public const CONTROLLER_TAG = 'cli.controller';
 
     /**
      * @var ServiceProcessor
@@ -81,6 +81,7 @@ final class CliExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadCommand($container);
+        $this->loadSyntheticServices($container);
     }
 
     /**
@@ -99,7 +100,14 @@ final class CliExtension implements Extension
     protected function loadCommand(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Cli\Command', array('%cli.command.name%', array()));
+        $definition->setPublic(true);
         $container->setDefinition(self::COMMAND_ID, $definition);
+    }
+
+    protected function loadSyntheticServices(ContainerBuilder $container)
+    {
+        $container->register(self::INPUT_ID)->setSynthetic(true)->setPublic(true);
+        $container->register(self::OUTPUT_ID)->setSynthetic(true)->setPublic(true);
     }
 
     /**

@@ -45,12 +45,12 @@ class PathsFilter extends SimpleFilter
      *
      * @param FeatureNode $feature Feature instance
      *
-     * @return Boolean
+     * @return bool
      */
     public function isFeatureMatch(FeatureNode $feature)
     {
         foreach ($this->filterPaths as $path) {
-            if (0 === strpos($feature->getFile(), $path)) {
+            if (0 === strpos(realpath($feature->getFile()), $path)) {
                 return true;
             }
         }

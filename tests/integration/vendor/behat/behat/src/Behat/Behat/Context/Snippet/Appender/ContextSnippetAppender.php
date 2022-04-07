@@ -25,7 +25,7 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * @const PendingException class
      */
-    const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
+    public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
     /**
      * @var FilesystemLogger
@@ -81,7 +81,7 @@ final class ContextSnippetAppender implements SnippetAppender
      * @param string $class
      * @param string $contextFileContent
      *
-     * @return Boolean
+     * @return bool
      */
     private function isClassImported($class, $contextFileContent)
     {

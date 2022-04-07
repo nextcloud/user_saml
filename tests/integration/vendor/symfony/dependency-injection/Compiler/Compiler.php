@@ -22,15 +22,13 @@ use Symfony\Component\DependencyInjection\Exception\EnvParameterException;
 class Compiler
 {
     private $passConfig;
-    private $log = array();
-    private $loggingFormatter;
+    private $log = [];
     private $serviceReferenceGraph;
 
     public function __construct()
     {
         $this->passConfig = new PassConfig();
         $this->serviceReferenceGraph = new ServiceReferenceGraph();
-        $this->loggingFormatter = new LoggingFormatter();
     }
 
     /**
@@ -54,48 +52,23 @@ class Compiler
     }
 
     /**
-     * Returns the logging formatter which can be used by compilation passes.
-     *
-     * @return LoggingFormatter
-     */
-    public function getLoggingFormatter()
-    {
-        return $this->loggingFormatter;
-    }
-
-    /**
      * Adds a pass to the PassConfig.
-     *
-     * @param CompilerPassInterface $pass     A compiler pass
-     * @param string                $type     The type of the pass
-     * @param int                   $priority Used to sort the passes
      */
-    public function addPass(CompilerPassInterface $pass, $type = PassConfig::TYPE_BEFORE_OPTIMIZATION/*, $priority = 0*/)
+    public function addPass(CompilerPassInterface $pass, string $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
-        if (func_num_args() >= 3) {
-            $priority = func_get_arg(2);
-        } else {
-            if (__CLASS__ !== get_class($this)) {
-                $r = new \ReflectionMethod($this, __FUNCTION__);
-                if (__CLASS__ !== $r->getDeclaringClass()->getName()) {
-                    @trigger_error(sprintf('Method %s() will have a third `$priority = 0` argument in version 4.0. Not defining it is deprecated since 3.2.', get_class($this), __FUNCTION__), E_USER_DEPRECATED);
-                }
-            }
-
-            $priority = 0;
-        }
-
         $this->passConfig->addPass($pass, $type, $priority);
     }
 
     /**
-     * Adds a log message.
-     *
-     * @param string $string The log message
+     * @final
      */
-    public function addLogMessage($string)
+    public function log(CompilerPassInterface $pass, string $message)
     {
-        $this->log[] = $string;
+        if (str_contains($message, "\n")) {
+            $message = str_replace("\n", "\n".\get_class($pass).': ', trim($message));
+        }
+
+        $this->log[] = \get_class($pass).': '.$message;
     }
 
     /**
@@ -110,8 +83,6 @@ class Compiler
 
     /**
      * Run the Compiler and process all Passes.
-     *
-     * @param ContainerBuilder $container
      */
     public function compile(ContainerBuilder $container)
     {
@@ -120,7 +91,7 @@ class Compiler
                 $pass->process($container);
             }
         } catch (\Exception $e) {
-            $usedEnvs = array();
+            $usedEnvs = [];
             $prev = $e;
 
             do {
@@ -138,6 +109,8 @@ class Compiler
             }
 
             throw $e;
+        } finally {
+            $this->getServiceReferenceGraph()->clear();
         }
     }
 }

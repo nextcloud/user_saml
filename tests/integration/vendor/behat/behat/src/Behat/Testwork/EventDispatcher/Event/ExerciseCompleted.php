@@ -10,8 +10,9 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
-use Symfony\Component\EventDispatcher\Event;
+
 
 /**
  * Represents an exercise event.
@@ -20,10 +21,10 @@ use Symfony\Component\EventDispatcher\Event;
  */
 abstract class ExerciseCompleted extends Event
 {
-    const BEFORE = 'tester.exercise_completed.before';
-    const AFTER_SETUP = 'tester.exercise_completed.after_setup';
-    const BEFORE_TEARDOWN = 'tester.exercise_completed.before_teardown';
-    const AFTER = 'tester.exercise_completed.after';
+    public const BEFORE = 'tester.exercise_completed.before';
+    public const AFTER_SETUP = 'tester.exercise_completed.after_setup';
+    public const BEFORE_TEARDOWN = 'tester.exercise_completed.before_teardown';
+    public const AFTER = 'tester.exercise_completed.after';
 
     /**
      * Returns specification iterators.

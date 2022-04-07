@@ -16,9 +16,12 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Closure;
+use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionParameter;
+use ReflectionNamedType;
 
 /**
  * By-type object transformation.
@@ -126,8 +129,13 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     {
         $type = $reflection->getReturnType();
 
-        if (null === $type || $type->isBuiltin()) {
+        // Skip ReflectionUnionType as they can't be relied on for a transform
+        if (null === $type || !($type instanceof \ReflectionNamedType) || $type->isBuiltin()) {
             return null;
+        }
+
+        if ($type instanceof ReflectionNamedType) {
+            return $type->getName();
         }
 
         return (string) $type;
@@ -147,9 +155,14 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
             array_filter($this->getCallParameters($definitionCall),
                 $this->hasIndex($argumentIndex)
             ),
-            $this->isClass()
+            $this->getClassReflection()
         );
-        return count($parameters) ? current($parameters)->getClass()->getName() : null;
+
+        if (count($parameters) == 0) {
+            return null;
+        }
+
+        return ($this->getClassReflection())(current($parameters))->getName();
     }
 
     /**
@@ -209,10 +222,22 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @return Closure
      */
-    private function isClass()
+    private function getClassReflection() : closure
     {
-        return function (ReflectionParameter $parameter) {
-            return $parameter->getClass();
+        return function (ReflectionParameter $parameter) : ?ReflectionClass
+        {
+            $t = $parameter->getType();
+
+            if ($t instanceof ReflectionNamedType) {
+                try {
+                    return new ReflectionClass($t->getName());
+                }
+                catch (ReflectionException $t) {
+                    return null;
+                }
+            }
+
+            return null;
         };
     }
 }
