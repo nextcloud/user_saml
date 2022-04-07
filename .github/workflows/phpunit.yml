@@ -51,6 +51,10 @@ jobs:
       - name: Set up PHPUnit
         working-directory: apps/${{ env.APP_NAME }}
         run: composer i
+      
+      - name: Install additional dependencies
+        working-directory: apps/${{ env.APP_NAME }}/3rdparty
+        run: composer i
 
       - name: Set up Nextcloud
         env:

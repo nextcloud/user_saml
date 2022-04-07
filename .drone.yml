@@ -18,10 +18,12 @@ steps:
       - cd /var/www/html && git submodule update --init
       # use local clone
       - cp -r /drone/src /var/www/html/apps/user_saml
+      - cd /opt/ && curl -sS https://getcomposer.org/installer | php
+      - php /opt/composer.phar install --no-dev -d /var/www/html/apps/user_saml/3rdparty/
       - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
       - php /var/www/html/occ app:enable user_saml
       - chown -R apache:apache /var/www/html/
-      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+      - cd /var/www/html/apps/user_saml/tests/integration && php /opt/composer.phar composer install && vendor/bin/behat
 
 trigger:
   branch:
@@ -54,9 +56,11 @@ steps:
       - cd /var/www/html && git submodule update --init
       # use local clone
       - cp -r /drone/src /var/www/html/apps/user_saml
+      - scl enable rh-php73 "bash -c 'cd /opt/ && curl -sS https://getcomposer.org/installer | php'"
+      - scl enable rh-php73 "bash -c 'cd /var/www/html/apps/user_saml/ && php /opt/composer.phar install --no-dev'"
       - scl enable rh-php73 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && php /opt/composer.phar install && vendor/bin/behat'"
 
 trigger:
   branch:
@@ -88,10 +92,11 @@ steps:
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       # use local clone
-      - cp -r /drone/src /var/www/html/apps/user_saml
+      - scl enable rh-php73 "bash -c 'cd /opt/ && curl -sS https://getcomposer.org/installer | php'"
+      - scl enable rh-php73 "bash -c 'php /opt/composer.phar install --no-dev -d /var/www/html/apps/user_saml/3rdparty"
       - scl enable rh-php73 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && php /opt/composer.phar install && vendor/bin/behat'"
 
 trigger:
   branch:
@@ -123,10 +128,11 @@ steps:
       - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
       - cd /var/www/html && git submodule update --init
       # use local clone
-      - cp -r /drone/src /var/www/html/apps/user_saml
+      - scl enable rh-php73 "bash -c 'cd /opt/ && curl -sS https://getcomposer.org/installer | php'"
+      - scl enable rh-php73 "bash -c 'php /opt/composer.phar install --no-dev -d /var/www/html/apps/user_saml/3rdparty"
       - scl enable rh-php73 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
       - chown -R apache:apache /var/www/html/
-      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && php /opt/composer.phar install &&  vendor/bin/behat'"
 
 trigger:
   branch:
