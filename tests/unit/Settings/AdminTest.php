@@ -105,7 +105,7 @@ class AdminTest extends \Test\TestCase {
 				'required' => true,
 			],
 			'require_provisioned_account' => [
-				'text' => 'Only allow authentication if an account exists on some other backend. (e.g. LDAP)',
+				'text' => 'Only allow authentication if an account exists on some other backend (e.g. LDAP).',
 				'type' => 'checkbox',
 				'global' => true,
 			],
