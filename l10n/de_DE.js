@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Dieses Nutzerkonto ist deaktiviert. Bitte kontaktieren Sie Ihren Administrator.",
     "Saved" : "Gespeichert",
+    "Could not save" : "Konnte nicht speichern",
     "Provider" : "Anbieter",
     "Unknown error, please check the log file for more details." : "Unbekannter Fehler, bitte prüfen Sie die Log-Datei für weitere Informationen.",
     "Direct log in" : "Direkte Anmeldung",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algorithmus, den das Toolkit beim Signieren verwendet.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Abfrageparameter von $_SERVER abrufen. Einige SAML-Server erfordern dies bei SLO-Anfragen.",
     "Attribute to map the UID to." : "Attribut dem die UID zugeordnet werden soll.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Anmeldung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z.B. LDAP)",
     "Attribute to map the displayname to." : "Attribut dem der Anzeigename zugeordnet werden soll.",
     "Attribute to map the email address to." : "Attribut, dem die E-Mail-Adresse zugeordnet werden soll.",
     "Attribute to map the quota to." : "Attribut, dem das Speicherkontingent zugeordnet werden soll.",

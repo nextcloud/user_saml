@@ -26,7 +26,6 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Алгоритм для подписания. ",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Получать параметры из $ _SERVER. Требуется для серверов SAML при обработке SLO запросов. ",
     "Attribute to map the UID to." : "Атрибут для привязки UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Позволять аутентификацию только если учётная запись существует на другом внутреннем интерфейсе (например, LDAP).",
     "Attribute to map the displayname to." : "Атрибут для привязки отображаемого имени.",
     "Attribute to map the email address to." : "Атрибут для привязки email.",
     "Attribute to map the quota to." : "Атрибут для сопоставления квоты.",

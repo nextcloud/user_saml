@@ -24,7 +24,6 @@
     "Algorithm that the toolkit will use on signing process." : "该工具包将在签名过程中使用的算法。",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "从 $_SERVER 检索查询参数。一些 SAML 服务器的 SLO 请求需要这个。",
     "Attribute to map the UID to." : "映射到 UID 的属性。",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "仅在其他后端存在账号时才允许身份验证。 （例如 LDAP）",
     "Attribute to map the displayname to." : "映射到显示名称的属性。",
     "Attribute to map the email address to." : "将电子邮件地址映射到的属性。",
     "Attribute to map the quota to." : "要将配额映射到的属性。",

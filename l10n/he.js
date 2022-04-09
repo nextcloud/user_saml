@@ -20,7 +20,6 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "מציין אם ספק השירות יאמת את כל ה־XML שמתקבל",
     "Algorithm that the toolkit will use on signing process." : "האלגוריתם בו תשתמש ערכת הכלים בתהליך החתימה.",
     "Attribute to map the UID to." : "מאפיין למפות אליו את ה־UID (מזהה המשתמש).",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "לאפשר אימות רק אם קיים חשבון במנגנון אחר כלשהו (למשל LDAP)",
     "Attribute to map the displayname to." : "מאפיין למפות אליו את displayname (שם התצוגה).",
     "Attribute to map the email address to." : "מאפיין למפות אליו את email (כתובת הדוא״ל).",
     "Attribute to map the quota to." : "מאפיין למפות אליו את quota (מיכסה).",

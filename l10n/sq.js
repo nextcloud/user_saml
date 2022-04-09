@@ -17,7 +17,6 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "Tregon nëse SP do të quaj të vlefshëm të gjitha XML e marra.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Kodon të dhënat SAMP në shkronja të vogla, dhe toolkit sipas parapërzgjedhjes përdor shkronja të vogla. Aktivizo pajtueshmërinë e ADFS në verifikimin e firmës.",
     "Attribute to map the UID to." : "Atributi për të identifikuar UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Lejo autentikimin vetëm nëse një llogari ekziston në një backend tjetër. (p.sh. LDAP)",
     "Attribute to map the displayname to." : "Atributi për të mapuar emrin e shfaqjes në.",
     "Attribute to map the email address to." : "Atributi për të hartuar adresën e postës elektronike në.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Përdor vërtetimin SAML  për desktopët klient %s( kërkon ri-vërtetimin e përdoruesit)",

@@ -25,7 +25,6 @@ OC.L10N.register(
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "Protokol ADFS URL kodira podatke SAML v malih črkah, orodja pa privzeto uporabljajo velike. Za overitev podpisa mora biti v primeru ADFS možnost omogočena.",
     "Algorithm that the toolkit will use on signing process." : "Algoritem, ki ga uporabljajo orodja za postopek prijave.",
     "Attribute to map the UID to." : "Atribut za preslikavo UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Overitev dovoli le, če račun obstaja na nekem drugem ozadnjem programu (npr. LDAP)",
     "Attribute to map the displayname to." : "Atribut za preslikavo prikaznega imena.",
     "Attribute to map the email address to." : "Atribut za preslikavo elektronskega naslova.",
     "Attribute to map the quota to." : "Atribut za preslikavo količinske omejitve.",

@@ -24,7 +24,6 @@
     "Algorithm that the toolkit will use on signing process." : "Algorisme que s'emprarà en el procés de signatura.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Recupereu els paràmetres de consulta de $_SERVER. Alguns servidors SAML ho requereixen a les sol·licituds SLO.",
     "Attribute to map the UID to." : "Atribut per assignar un UID a.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Només permetre l'autenticació si hi ha un compte en un altre suport. (p. ex., LDAP)",
     "Attribute to map the displayname to." : "Atribut per assignar el nom de la pantalla a.",
     "Attribute to map the email address to." : "Atribut per assignar l'adreça de correu electrònic a.",
     "Attribute to map the quota to." : "Atribut per mapejar la quota.",

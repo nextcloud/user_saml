@@ -26,7 +26,6 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Tresnak sinadura-prozesuan erabiliko duen algoritmoa.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Berreskuratu kontsulta-parametroak $ _SERVER-etik. SAML zerbitzari batzuek hori eskatzen dute SLO eskaeretan.",
     "Attribute to map the UID to." : "UIDa esleitzeko atributua.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Baimendu autentifikazioa beste atzeko sistema batean kontu bat baldin badago bakarrik. (adibidez, LDAP)",
     "Attribute to map the displayname to." : "Atributua bistaratze-izena esleitzeko.",
     "Attribute to map the email address to." : "Atributua helbide elektronikoa esleitzeko.",
     "Attribute to map the quota to." : "Kuota esleitzeko atributua.",

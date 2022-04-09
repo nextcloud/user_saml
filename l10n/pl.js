@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "To konto użytkownika jest wyłączone, skontaktuj się z administratorem.",
     "Saved" : "Zapisano",
+    "Could not save" : "Nie można zapisać",
     "Provider" : "Dostawca",
     "Unknown error, please check the log file for more details." : "Nieznany błąd, sprawdź plik dziennika, aby dowiedzieć się więcej.",
     "Direct log in" : "Bezpośrednie logowanie",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algorytm, który zostanie użyty podczas procesu podpisywania.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Pobierz parametry zapytania z $_SERVER. Niektóre serwery SAML wymagają tego w żądaniach SLO.",
     "Attribute to map the UID to." : "Atrybut do mapowania UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Zezwalaj na uwierzytelnianie tylko wtedy, gdy konto istnieje na innym zapleczu (np. LDAP).",
     "Attribute to map the displayname to." : "Atrybut do mapowania wyświetlanej nazwy użytkownika.",
     "Attribute to map the email address to." : "Atrybut do zamapowania adresu e-mail.",
     "Attribute to map the quota to." : "Atrybut do mapowania przydziału.",

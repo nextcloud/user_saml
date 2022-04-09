@@ -24,7 +24,6 @@
     "Algorithm that the toolkit will use on signing process." : "Algoritmu chi su toolkit at a impreare pro su protzessu de firma.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Recùpera is paràmetros de sa rechesta dae $_SERVER. B'at serbidores SAML chi ddu rechedent pro is rechestas SLO.",
     "Attribute to map the UID to." : "Atributu a su chi assotziare s'UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Permiti s'autenticatzione isceti si unu contu esistit in carchi àteru motore (es. LDAP)",
     "Attribute to map the displayname to." : "Atributu a su chi assotziare su nùmene visualizadu.",
     "Attribute to map the email address to." : "Atributu a su chi assotziare s'indiritzu de posta eletrònica.",
     "Attribute to map the quota to." : "Atributu a su chi assotziare sa cuota.",

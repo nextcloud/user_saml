@@ -21,7 +21,6 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "Indicates if the SP will validate all received XML.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.",
     "Attribute to map the UID to." : "Attribute to map the UID to.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Only allow authentication if an account exists on some other backend. (e.g. LDAP)",
     "Attribute to map the displayname to." : "Attribute to map the displayname to.",
     "Attribute to map the email address to." : "Attribute to map the email address to.",
     "Attribute to map the quota to." : "Attribute to map the quota to.",

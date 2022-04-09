@@ -25,7 +25,6 @@ OC.L10N.register(
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-koder SAML-data som små bokstaver, og verktøyssettet bruker store bokstaver som forvalg. Skru på for ADFS-kompabilitet for signaturbekreftelse.",
     "Algorithm that the toolkit will use on signing process." : "Algoritme som verktøysettet skal bruke ved signeringsprosessen.",
     "Attribute to map the UID to." : "Attributt å binde UID til.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Bare tillat autentisering hvis en konto finnes på en annen bakende. (f.eks. LDAP)",
     "Attribute to map the displayname to." : "Attributt å binde visningsnavnet til.",
     "Attribute to map the email address to." : "Attributt å binde e-postadressen til.",
     "Attribute to map the quota to." : "Egenskap å tilordne kvoten til.",
