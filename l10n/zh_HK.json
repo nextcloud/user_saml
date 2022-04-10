@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "此用戶賬號已被停用，請聯繫管理員。",
     "Saved" : "已儲存",
+    "Could not save" : "無法保存",
     "Provider" : "提供者",
     "Unknown error, please check the log file for more details." : "未知錯誤，請在日誌檔案檢查更多詳情。",
     "Direct log in" : "直接登入",
@@ -24,6 +25,7 @@
     "Algorithm that the toolkit will use on signing process." : "該工具包將在簽名過程中使用的算法。",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "從$ _SERVER檢索查詢參數。某些SAML伺服器在SLO請求上要求這樣做。",
     "Attribute to map the UID to." : "映射到 UID 的屬性。",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "僅在其他後端存在賬號時才允許身分驗證（例如 LDAP）。",
     "Attribute to map the displayname to." : "映射到顯示名稱的屬性。",
     "Attribute to map the email address to." : "將電子郵件地址映射到的屬性。",
     "Attribute to map the quota to." : "要將配額映射到的屬性。",
