@@ -56,7 +56,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getGroupManager(),
 	$samlSettings,
 	\OC::$server->getLogger(),
-	$userData
+	$userData,
+	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);

@@ -35,6 +35,8 @@ use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\ISession;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\User\Events\UserChangedEvent;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -57,6 +59,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private $logger;
 	/** @var UserData */
 	private $userData;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 
 	public function __construct(
 		IConfig $config,
@@ -67,7 +71,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		IGroupManager $groupManager,
 		SAMLSettings $settings,
 		ILogger $logger,
-		UserData $userData
+		UserData $userData,
+		IEventDispatcher $eventDispatcher
 ) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -78,6 +83,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$this->settings = $settings;
 		$this->logger = $logger;
 		$this->userData = $userData;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -645,13 +651,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$currentDisplayname = (string)$this->getDisplayName($uid);
 			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
-				\OC_Hook::emit('OC_User', 'changeUser',
-					[
-						'user' => $user,
-						'feature' => 'displayName',
-						'value' => $newDisplayname
-					]
-				);
+				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
 				$this->setDisplayName($uid, $newDisplayname);
 			}
 
