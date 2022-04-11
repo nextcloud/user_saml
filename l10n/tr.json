@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Kullanıcı hesabı devre dışı bırakılmış. Lütfen yöneticiniz ile görüşün.",
     "Saved" : "Kaydedildi",
+    "Could not save" : "Kaydedilemedi",
     "Provider" : "Hizmet sağlayıcı",
     "Unknown error, please check the log file for more details." : "Bilinmeyen bir sorun çıktı. Ayrıntılı bilgi almak için günlük dosyalarına bakabilirsiniz.",
     "Direct log in" : "Doğrudan oturum açma",
@@ -24,6 +25,7 @@
     "Algorithm that the toolkit will use on signing process." : "İmzalama işleminde araç takımı tarafından kullanılacak algoritma.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Sorgu parametreleri $_SERVER üzerinden alınsın. Bazı SAML sunucuları Tek oturum kapatma istekleri için buna gerek duyar.",
     "Attribute to map the UID to." : "UID değerinin eşleştirileceği öznitelik.",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Kimlik yalnız, hesap başka bir arka sistemde varsa (LDAP gibi) doğrulansın.",
     "Attribute to map the displayname to." : "Görüntülenecek ad değerinin eşleştirileceği öznitelik.",
     "Attribute to map the email address to." : "E-posta adresi değerinin eşleştirileceği özellik.",
     "Attribute to map the quota to." : "Kime kotası değerinin eşleştirileceği öznitelik.",
