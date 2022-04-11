@@ -11,6 +11,16 @@ updates:
   - dependency-type: direct
   - dependency-type: indirect
 - package-ecosystem: composer
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  allow:
+  - dependency-type: direct
+  - dependency-type: indirect
+- package-ecosystem: composer
   directory: "/tests/integration"
   schedule:
     interval: weekly
