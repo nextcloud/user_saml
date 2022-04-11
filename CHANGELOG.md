@@ -11,6 +11,18 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Ability to change SAML configuration with occ app-config, use the new occ commands instead
 
+### Fixed
+- Use effective uid for autoprovisioning new users
+- Handle mobile login flow with direct=1
+- Set proper relaystate url
+
+## 4.1.1
+
+### Added
+- Add logging for SLO errors
+- sanitize and test user id received from IdP, if original does not match
+- Allow setting of "retrieveParametersFromServer
+
 ## 4.1.0
 ### Added
 - Nextcloud 22 support
