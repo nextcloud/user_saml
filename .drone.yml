@@ -42,11 +42,11 @@ clone:
 
 steps:
   - name: integration-tests-stable24
-    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php7.3:latest
+    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php8.0:latest
     environment:
       CORE_BRANCH: stable24
     commands:
-      - /start.sh &
+      - /start.sh
       - /wait-for-services.sh
       - rm -rf /var/www/html
       - cd /var/www/
@@ -54,9 +54,10 @@ steps:
       - cd /var/www/html && git submodule update --init
       # use local clone
       - cp -r /drone/src /var/www/html/apps/user_saml
-      - scl enable rh-php73 "bash -c 'php /var/www/html/occ maintenance:install --database sqlite --admin-pass password; php /var/www/html/occ app:enable user_saml'"
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
       - chown -R apache:apache /var/www/html/
-      - scl enable rh-php73  "bash -c 'cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat'"
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
 
 trigger:
   branch:
