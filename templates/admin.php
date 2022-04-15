@@ -10,9 +10,9 @@ style('user_saml', 'admin');
 	   title="<?php p($l->t('Open documentation'));?>"
 	   href="https://portal.nextcloud.com/article/configuring-single-sign-on-10.html"></a>
 
-	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;"><?php p($l->t('Saved')); ?></div>
-
-
+	<div id="user-saml-save-indicator" class="msg success inlineblock" style="display: none;">
+		<?php p($l->t('Saved')); ?>
+	</div>
 
 	<div class="warning hidden" id="user-saml-warning-admin-user">
 		<?php
@@ -51,7 +51,7 @@ style('user_saml', 'admin');
 	</div>
 
 	<div id="user-saml-global" class="hidden">
-		<h3><?php p($l->t('Global settings')) ?></h3>
+		<h2><?php p($l->t('Global settings')) ?></h2>
 		<?php foreach ($_['general'] as $key => $attribute): ?>
 			<?php if ($attribute['type'] === 'checkbox' && $attribute['global']): ?>
 				<p>
@@ -79,9 +79,7 @@ style('user_saml', 'admin');
 	<div id="user-saml-settings" class="hidden">
 
 		<div id="user-saml-general" class="hidden">
-			<h3>
-				<?php p($l->t('General')) ?>
-			</h3>
+			<h2><?php p($l->t('General')) ?></h2>
 			<?php foreach ($_['general'] as $key => $attribute): ?>
 				<?php if ($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
@@ -99,7 +97,7 @@ style('user_saml', 'admin');
 		</div>
 
 		<div id="user-saml-sp">
-			<h3><?php p($l->t('Service Provider Data')) ?></h3>
+			<h2><?php p($l->t('Service Provider Data')) ?></h2>
 			<p>
 				<?php print_unescaped($l->t('If your Service Provider should use certificates you can optionally specify them here.')) ?>
 				<span class="toggle"><?php p($l->t('Show Service Provider settings…')) ?></span>
@@ -124,10 +122,8 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 		<div id="user-saml-idp">
-			<h3><?php p($l->t('Identity Provider Data')) ?></h3>
-			<p>
-				<?php print_unescaped($l->t('Configure your IdP settings here.')) ?>
-							</p>
+			<h2><?php p($l->t('Identity Provider Data')) ?></h2>
+			<p><?php print_unescaped($l->t('Configure your IdP settings here.')) ?></p>
 
 			<p><input data-key="idp-entityId" name="entityId" value="<?php p($_['config']['idp-entityId'] ?? '') ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
 			<p><input name="singleSignOnService.url" value="<?php p($_['config']['idp-singleSignOnService.url'] ?? '') ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
@@ -140,7 +136,7 @@ style('user_saml', 'admin');
 		</div>
 
 		<div id="user-saml-attribute-mapping" class="hidden">
-			<h3><?php p($l->t('Attribute mapping')) ?></h3>
+			<h2><?php p($l->t('Attribute mapping')) ?></h2>
 			<p>
 				<?php print_unescaped($l->t('If you want to optionally map attributes to the user you can configure these here.')) ?>
 				<span class="toggle"><?php p($l->t('Show attribute mapping settings…')) ?></span>
@@ -159,7 +155,7 @@ style('user_saml', 'admin');
 		</div>
 
 		<div id="user-saml-security">
-			<h3><?php p($l->t('Security settings')) ?></h3>
+			<h2><?php p($l->t('Security settings')) ?></h2>
 			<p>
 				<?php print_unescaped($l->t('For increased security we recommend enabling the following settings if supported by your environment.')) ?>
 				<span class="toggle"><?php p($l->t('Show security settings…')) ?></span>
@@ -204,7 +200,6 @@ style('user_saml', 'admin');
 		</a>
 
 		<button id="user-saml-reset-settings"><?php p($l->t('Reset settings')) ?></button>
-
 
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
