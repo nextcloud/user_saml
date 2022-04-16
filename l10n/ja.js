@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "このユーザーアカウントは無効です。管理者に連絡してください。",
     "Saved" : "保存しました",
+    "Could not save" : "保存できませんでした",
     "Provider" : "プロバイダー",
     "Unknown error, please check the log file for more details." : "不明なエラー、詳細はログファイルを確認してください。",
     "Direct log in" : "ダイレクトログイン",
@@ -26,6 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "ツールキットが署名処理で使用するアルゴリズム。",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "クエリパラメータを $_SERVER から取得します。SAMLサーバの中には、SLOリクエストでこれを要求するものもあります。",
     "Attribute to map the UID to." : "UIDをマップする属性。",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "他のバックエンドにアカウントが存在する場合のみ、認証を許可します。 (例: LDAP)",
     "Attribute to map the displayname to." : "表示名をにマップする属性。",
     "Attribute to map the email address to." : "電子メールアドレスをマップする属性。",
     "Attribute to map the quota to." : "クオータをマップする属性。",
