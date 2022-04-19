@@ -33,7 +33,7 @@ While theoretically any other authentication provider implementing either one of
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/1.png</screenshot>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/2.png</screenshot>
 	<dependencies>
-		<nextcloud min-version="21" max-version="24" />
+		<nextcloud min-version="21" max-version="25" />
 	</dependencies>
 	<commands>
 		<command>OCA\User_SAML\Command\ConfigCreate</command>
