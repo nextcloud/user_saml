@@ -23,6 +23,7 @@
     "Attribute to map the email address to." : "Attribute to map the email address to.",
     "Attribute to map the quota to." : "Attribute to map the quota to.",
     "Attribute to map the users groups to." : "Attribute to map the users groups to.",
+    "Encrypted" : "Encrypted",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Use SAML auth for the %s desktop clients (requires user re-authentication)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Optional display name of the identity provider (default: \"SSO & SAML log in\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Allow the use of multiple user back-ends (e.g. LDAP)",

@@ -4,6 +4,7 @@
     "Provider " : "المزوّد",
     "Private key of the Service Provider" : "المفتاح الشخصي لموفر الخدمة",
     "Email address" : "عنوان البريد الإلكتروني",
+    "Encrypted" : "مشفّر",
     "SSO & SAML authentication" : "المصادقة عبر SSO و SAML",
     "Open documentation" : "فتح الدليل",
     "Global settings" : "الإعدادات العامة",

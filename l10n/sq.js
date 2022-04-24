@@ -19,6 +19,7 @@ OC.L10N.register(
     "Attribute to map the UID to." : "Atributi për të identifikuar UID.",
     "Attribute to map the displayname to." : "Atributi për të mapuar emrin e shfaqjes në.",
     "Attribute to map the email address to." : "Atributi për të hartuar adresën e postës elektronike në.",
+    "Encrypted" : "E ekriptuar",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Përdor vërtetimin SAML  për desktopët klient %s( kërkon ri-vërtetimin e përdoruesit)",
     "SSO & SAML authentication" : "Identifikim SSO & SAML",
     "Open documentation" : "Dokumentacion i hapur",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Provider" : "Fornecedor",
     "Provider " : "Fornecedor",
+    "Email address" : "Endereço de email",
     "SSO & SAML authentication" : "Autenticação SSO e SAML",
     "Open documentation" : "Abrir documentação",
     "Global settings" : "Definições globais",
