@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Този потребителски профил е деактивиран, моля свържете се с вашия администратор.",
     "Saved" : "Запазено",
+    "Could not save" : "Не можа да се запише",
     "Provider" : "Доставчик",
     "Unknown error, please check the log file for more details." : "Неизвестна грешка, моля, проверете регистрационния файл/журнал/ за повече подробности.",
     "Direct log in" : "Директно вписване",
@@ -26,6 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Алгоритъм, който инструментариумът ще използва при процеса на подписване.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Извличане на параметрите на заявката от $_SERVER. Някои SAML сървъри изискват това при SLO заявки.",
     "Attribute to map the UID to." : "Атрибут за съпоставяне на UID.",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Разрешаване на удостоверяване, само ако профил съществува на друг сървър. (напр. LDAP).",
     "Attribute to map the displayname to." : "Атрибут за съпоставяне на показваното име.",
     "Attribute to map the email address to." : "Атрибут за съпоставяне на имейл адреса.",
     "Attribute to map the quota to." : "Атрибут за съпоставяне на квотата.",
