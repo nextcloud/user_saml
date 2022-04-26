@@ -26,7 +26,7 @@ class GroupDuplicateChecker
 	public function __construct(
 		IConfig $config,
 		IGroupManager $groupManager,
-		ILogger $logger
+		LoggerInterface $logger
 	) {
 		$this->config = $config;
 		$this->groupManager = $groupManager;
