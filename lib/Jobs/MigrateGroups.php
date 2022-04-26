@@ -49,7 +49,7 @@ class MigrateGroups extends QueuedJob {
 	private $dbc;
 	/** @var GroupBackend */
 	private $ownGroupBackend;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	private $logger;
 
 	public function __construct(
