@@ -4,7 +4,7 @@ namespace OCA\User_SAML;
 
 use OCP\IConfig;
 use OCP\IGroupManager;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class GroupDuplicateChecker
 {
