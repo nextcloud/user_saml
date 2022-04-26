@@ -63,16 +63,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
-	 /**
-	 * @param IConfig $config
-	 * @param IURLGenerator $urlGenerator
-	 * @param ISession $session
-	 * @param IDBConnection $db
-	 * @param IUserManager $userManager
-	 * @param GroupManager $groupManager
-	 * @param SAMLSettings $settings
-	 * @param ILogger $logger
-	 */
 	public function __construct(
 		IConfig $config,
 		IURLGenerator $urlGenerator,
