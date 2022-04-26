@@ -57,7 +57,7 @@ class MigrateGroups extends QueuedJob {
 		IGroupManager $groupManager,
 		IDBConnection $dbc,
 		GroupBackend $ownGroupBackend,
-		ILogger $logger
+		LoggerInterface $logger
 	) {
 		$this->config = $config;
 		$this->groupManager = $groupManager;
