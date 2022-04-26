@@ -57,7 +57,7 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$session
 );
 
-\OC::$server->registerService('SAMLGroupManager', function(\OCA\User_SAML\GroupBackend $groupBackend, $samlSettings) {
+\OC::$server->registerService(OCA\User_SAML\GroupManager::class, function(\OCA\User_SAML\GroupBackend $groupBackend, $samlSettings) {
     return new OCA\User_SAML\GroupManager(
         \OC::$server->getDatabaseConnection(),
         \OC::$server->query('SAMLGroupDuplicateChecker'),
