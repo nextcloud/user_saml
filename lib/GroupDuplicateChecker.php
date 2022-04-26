@@ -19,7 +19,7 @@ class GroupDuplicateChecker
 	protected $groupManager;
 
 	/**
-	 * @var ILogger
+	 * @var LoggerInterface
 	 */
 	protected $logger;
 
