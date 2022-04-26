@@ -39,7 +39,7 @@ try {
 	return;
 }
 
-\OC::$server->registerService('SAMLGroupDuplicateChecker', function() use($config) {
+\OC::$server->registerService(OCA\User_SAML\GroupDuplicateChecker::class, function() use($config) {
     return new OCA\User_SAML\GroupDuplicateChecker(
         $config,
         \OC::$server->getGroupManager(),
