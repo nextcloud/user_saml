@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Dit gebruikersaccount is uitgeschakeld, neem a.u.b. contact op met je beheerder.",
     "Saved" : "Bewaard",
+    "Could not save" : "Kon niet opslaan",
     "Provider" : "Provider",
     "Unknown error, please check the log file for more details." : "Onbekende fout, controleer de logbestand voor meer details.",
     "Direct log in" : "Directe log-in",
