@@ -15,9 +15,6 @@
       <code><![CDATA[DavPlugin]]></code>
       <code><![CDATA[DavPlugin]]></code>
     </MissingDependency>
-    <UndefinedDocblockClass>
-      <code><![CDATA[$event->getServer()]]></code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Controller/SAMLController.php">
     <RedundantCondition>
