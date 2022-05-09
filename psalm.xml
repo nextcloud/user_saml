@@ -18,6 +18,7 @@
     </projectFiles>
     <extraFiles>
         <directory name="vendor/nextcloud/ocp" />
+		<directory name="3rdparty" />
     </extraFiles>
 	<issueHandlers>
 		<DeprecatedMethod>

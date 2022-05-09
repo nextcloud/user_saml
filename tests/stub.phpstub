@@ -72,7 +72,33 @@ namespace OC\DB\Exceptions {
 		}
 	}
 }
+namespace OC\Security\CSRF {
+	class CsrfToken {
+		public function getEncryptedValue(): string {
+			return 'token';
+		}
+	}
+}
 
 namespace OCP\Log {
 	public function logger(?string $appId = null): \Psr\Log\LoggerInterface;
+}
+
+namespace OC\Security\CSRF {
+	class CsrfTokenManager {
+			abstract public function getToken(): CsrfToken;
+	}
+}
+
+class OC {
+	static $WEBROOT = '';
+}
+
+class \OC_Util {
+	public static function copySkeleton($userId, \OCP\Files\Folder $userDirectory) {}
+}
+
+class OC_User {
+	static function useBackend($userBackend) {}
+	static function handleApacheAuth() {}
 }

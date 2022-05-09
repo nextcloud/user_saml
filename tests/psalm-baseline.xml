@@ -1,181 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
- - SPDX-License-Identifier: AGPL-3.0-or-later
--->
-<files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
+<files psalm-version="5.25.0@01a8eb06b9e9cc6cfb6a320bf9fb14331919d505">
   <file src="lib/AppInfo/Application.php">
-    <DeprecatedMethod>
-      <code>registerMiddleWare</code>
-      <code>registerService</code>
-      <code>registerService</code>
-    </DeprecatedMethod>
     <MissingDependency>
-      <code>DavPlugin</code>
-      <code>DavPlugin</code>
-      <code>DavPlugin</code>
+      <code><![CDATA[DavPlugin]]></code>
+      <code><![CDATA[DavPlugin]]></code>
+      <code><![CDATA[DavPlugin]]></code>
     </MissingDependency>
-    <UndefinedDocblockClass>
-      <code><![CDATA[$event->getServer()]]></code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Command/ConfigCreate.php">
     <UndefinedClass>
-      <code>Base</code>
+      <code><![CDATA[Base]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Command/ConfigDelete.php">
     <UndefinedClass>
-      <code>Base</code>
+      <code><![CDATA[Base]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Command/ConfigGet.php">
     <UndefinedClass>
-      <code>Base</code>
+      <code><![CDATA[Base]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Command/ConfigSet.php">
     <UndefinedClass>
-      <code>Base</code>
+      <code><![CDATA[Base]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/SAMLController.php">
     <RedundantCondition>
-      <code>!$userExists</code>
-      <code>!$userExists</code>
-      <code>!$userExists</code>
-      <code>!$userExists</code>
-      <code>$autoProvisioningAllowed</code>
+      <code><![CDATA[!$userExists]]></code>
+      <code><![CDATA[!$userExists]]></code>
+      <code><![CDATA[!$userExists]]></code>
+      <code><![CDATA[!$userExists]]></code>
+      <code><![CDATA[$autoProvisioningAllowed]]></code>
     </RedundantCondition>
     <UndefinedClass>
-      <code>$auth</code>
-      <code>$auth</code>
-      <code>Auth</code>
-      <code>Auth</code>
-      <code>Auth</code>
-      <code>ClientFlowLoginController</code>
-      <code>ClientFlowLoginController</code>
-      <code>ClientFlowLoginController</code>
-      <code>ClientFlowLoginV2Controller</code>
-      <code>ClientFlowLoginV2Controller</code>
-      <code>ClientFlowLoginV2Controller</code>
-      <code>ClientFlowLoginV2Controller</code>
-      <code>ClientFlowLoginV2Controller</code>
-      <code>CsrfTokenManager</code>
-      <code>Error</code>
-      <code>Error</code>
-      <code>Error</code>
-      <code>JWT</code>
-      <code>Settings</code>
+      <code><![CDATA[ClientFlowLoginController]]></code>
+      <code><![CDATA[ClientFlowLoginController]]></code>
+      <code><![CDATA[ClientFlowLoginController]]></code>
+      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
+      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
+      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
+      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
+      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
+      <code><![CDATA[CsrfTokenManager]]></code>
     </UndefinedClass>
     <UndefinedDocblockClass>
-      <code>$csrfTokenManager</code>
-      <code>$csrfTokenManager</code>
-      <code>Error</code>
-      <code>Error</code>
-      <code>Error</code>
-      <code>ValidationError</code>
+      <code><![CDATA[$csrfTokenManager]]></code>
+      <code><![CDATA[$csrfTokenManager]]></code>
     </UndefinedDocblockClass>
-  </file>
-  <file src="lib/Controller/SettingsController.php">
-    <UndefinedClass>
-      <code>Constants</code>
-    </UndefinedClass>
   </file>
   <file src="lib/DavPlugin.php">
     <UndefinedClass>
-      <code>ServerPlugin</code>
+      <code><![CDATA[ServerPlugin]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/ConfigurationsMapper.php">
     <MissingTemplateParam>
-      <code>ConfigurationsMapper</code>
+      <code><![CDATA[ConfigurationsMapper]]></code>
     </MissingTemplateParam>
     <UndefinedMagicMethod>
-      <code>getConfigurationArray</code>
-      <code>getConfigurationArray</code>
+      <code><![CDATA[getConfigurationArray]]></code>
+      <code><![CDATA[getConfigurationArray]]></code>
     </UndefinedMagicMethod>
   </file>
   <file src="lib/GroupBackend.php">
     <LessSpecificImplementedReturnType>
-      <code>string[]</code>
+      <code><![CDATA[string[]]]></code>
     </LessSpecificImplementedReturnType>
   </file>
   <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
     <DeprecatedMethod>
-      <code>hasAnnotation</code>
+      <code><![CDATA[hasAnnotation]]></code>
     </DeprecatedMethod>
   </file>
   <file src="lib/Migration/Version5000Date20211025124248.php">
     <DeprecatedMethod>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
     </DeprecatedMethod>
-  </file>
-  <file src="lib/SAMLSettings.php">
-    <UndefinedClass>
-      <code>Constants</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Settings/Admin.php">
-    <InvalidArgument>
-      <code>0</code>
-      <code>0</code>
-    </InvalidArgument>
-    <UndefinedClass>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-      <code>Constants</code>
-    </UndefinedClass>
   </file>
   <file src="lib/UserBackend.php">
     <DeprecatedMethod>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>execute</code>
-      <code>fetchColumn</code>
-      <code>setEMailAddress</code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[execute]]></code>
+      <code><![CDATA[fetchColumn]]></code>
+      <code><![CDATA[setEMailAddress]]></code>
     </DeprecatedMethod>
-    <FalsableReturnStatement>
-      <code>false</code>
-    </FalsableReturnStatement>
     <ImplementedParamTypeMismatch>
-      <code>$limit</code>
-      <code>$offset</code>
+      <code><![CDATA[$limit]]></code>
+      <code><![CDATA[$offset]]></code>
     </ImplementedParamTypeMismatch>
     <InvalidArgument>
-      <code>$limit</code>
-      <code>$limit</code>
-      <code>$offset</code>
-      <code>$offset</code>
+      <code><![CDATA[$limit]]></code>
+      <code><![CDATA[$limit]]></code>
+      <code><![CDATA[$offset]]></code>
+      <code><![CDATA[$offset]]></code>
     </InvalidArgument>
     <UndefinedClass>
-      <code>CsrfTokenManager</code>
-      <code>\OC</code>
-      <code>\OC</code>
-      <code>\OC\User\Backend</code>
-      <code>\OC\User\Backend</code>
-      <code>\OC\User\Backend</code>
-      <code>\OC\User\Backend</code>
+      <code><![CDATA[CsrfTokenManager]]></code>
+      <code><![CDATA[\OC]]></code>
+      <code><![CDATA[\OC]]></code>
     </UndefinedClass>
     <UndefinedInterfaceMethod>
-      <code>setDisplayName</code>
+      <code><![CDATA[setDisplayName]]></code>
     </UndefinedInterfaceMethod>
   </file>
 </files>
