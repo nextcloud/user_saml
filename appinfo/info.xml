@@ -46,4 +46,9 @@ While theoretically any other authentication provider implementing either one of
 		<admin>OCA\User_SAML\Settings\Admin</admin>
 		<admin-section>OCA\User_SAML\Settings\Section</admin-section>
 	</settings>
+	<sabre>
+		<plugins>
+			<plugin>OCA\User_SAML\DavPlugin</plugin>
+		</plugins>
+	</sabre>
 </info>
