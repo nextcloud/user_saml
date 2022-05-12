@@ -125,7 +125,7 @@ if (!$cli &&
 	} catch (\LogicException $e) {
 		// ignore exception when PUT is called since getParams cannot parse parameters in that case
 	}
-	if (isset($params['direct'])) {
+	if (isset($params['direct']) && ($params['direct'] === 1 || $params['direct'] === '1')) {
 		return;
 	}
 	$redirectSituation = true;
