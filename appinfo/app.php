@@ -116,9 +116,7 @@ if ($user !== null) {
 // redirected to the SAML login endpoint
 if (!$cli &&
 	!$userSession->isLoggedIn() &&
-	(\OC::$server->getRequest()->getPathInfo() === '/login'
-		|| \OC::$server->getRequest()->getPathInfo() === '/login/v2/flow'
-		|| \OC::$server->getRequest()->getPathInfo() === '/login/flow') &&
+	\OC::$server->getRequest()->getPathInfo() === '/login' &&
 	$type !== '') {
 	try {
 		$params = $request->getParams();
