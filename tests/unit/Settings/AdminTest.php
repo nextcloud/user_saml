@@ -237,17 +237,25 @@ class AdminTest extends \Test\TestCase {
 				2 => 'Provider 2',
 			]);
 		$this->config
-			->expects($this->once())
+			->expects($this->exactly(4)) # mode + three global values
 			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('saml');
+			->withConsecutive(
+				['user_saml', 'type'],
+				['user_saml', 'general-require_provisioned_account'],
+				['user_saml', 'general-use_saml_auth_for_desktop'],
+				['user_saml', 'general-allow_multiple_user_back_ends'],
+			)
+			->willReturnOnConsecutiveCalls('saml', 0, 0, '');
 		$this->defaults
-			->expects($this->once())
+			->expects($this->any())
 			->method('getName')
 			->willReturn('Nextcloud');
 
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
+		$params['general']['require_provisioned_account']['value'] = 0;
+		$params['general']['use_saml_auth_for_desktop']['value'] = 0;
+		$params['general']['allow_multiple_user_back_ends']['value'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());
