@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.0.1
+### Fixed
+- Direct login silently fails under some circumstances
+- Mobile login shows regular web interfaces instead of Grant Access page
+- Global checkboxes always unticked in SAML settings
+
 ## 5.0.0
 ### Changed
 - store configurations in a separate database table, not appconfig
