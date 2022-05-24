@@ -49,6 +49,9 @@ return [
 			'name' => 'SAML#assertionConsumerService',
 			'url' => '/saml/acs',
 			'verb' => 'POST',
+                        'defaults' => [
+                                'idp' => 1
+                        ],
 		],
 		[
 			'name' => 'SAML#singleLogoutService',
