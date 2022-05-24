@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Збережено",
     "Email address" : "Адреса ел.пошти",
-    "Encrypted" : "Зашифровано",
     "Open documentation" : "Відкрити документацію",
     "General" : "Загальна",
     "Error" : "Помилка"
