@@ -60,4 +60,4 @@ OC.L10N.register(
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
     "Your account is not provisioned, access to this service is thus not possible." : "Tu cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
