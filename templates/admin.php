@@ -55,12 +55,12 @@ style('user_saml', 'admin');
 		<?php foreach ($_['general'] as $key => $attribute): ?>
 			<?php if ($attribute['type'] === 'checkbox' && $attribute['global']): ?>
 				<p>
-					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-'.$key] ?? '0') ?>">
+					<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($attribute['value'] ?? '0') ?>">
 					<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 				</p>
 			<?php elseif ($attribute['type'] === 'line' && isset($attribute['global'])): ?>
 				<p>
-					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+					<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($attribute['value'] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 				</p>
 			<?php endif; ?>
 		<?php endforeach; ?>
