@@ -127,6 +127,23 @@
 			}
 		},
 
+		testMetaData: function() {
+			// Checks on each request whether the settings make sense or not
+			$.ajax({
+				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
+				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
+				type: 'GET'
+			}).fail(function (e) {
+				if (e.status === 500) {
+					$('#user-saml-settings-complete').addClass('hidden');
+					$('#user-saml-settings-incomplete').removeClass('hidden');
+				}
+			}).success(function () {
+				$('#user-saml-settings-complete').removeClass('hidden');
+				$('#user-saml-settings-incomplete').addClass('hidden');
+			});
+		},
+
 		setSamlConfigValue: function(category, setting, value, global) {
 			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
@@ -137,6 +154,7 @@
 			var callbacks = {
 				success: function () {
 					OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
+					OCA.User_SAML.Admin.testMetaData();
 				},
 				error: function() {
 					OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'error', data: {message: t('user_saml', 'Could not save')}});
@@ -391,25 +409,6 @@ $(function() {
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
 			OCA.User_SAML.Admin.setSamlConfigValue('saml-attribute-mapping', key, $(this).val());
-		}
-	});
-
-	$('#user-saml').change(function() {
-		if(type === 'saml') {
-			// Checks on each request whether the settings make sense or not
-			$.ajax({
-				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
-				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
-				type: 'GET'
-			}).fail(function (e) {
-				if (e.status === 500) {
-					$('#user-saml-settings-complete').addClass('hidden');
-					$('#user-saml-settings-incomplete').removeClass('hidden');
-				}
-			}).success(function (e) {
-				$('#user-saml-settings-complete').removeClass('hidden');
-				$('#user-saml-settings-incomplete').addClass('hidden');
-			})
 		}
 	});
 
