@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.0.2
+### Fixed
+- Fix setup with only one idp by using 1 as default value in routes.
+
 ## 5.0.1
 ### Fixed
 - Direct login silently fails under some circumstances
