@@ -138,7 +138,7 @@ if (!$cli &&
 // SAML at the moment.
 $useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
 if ($useSamlForDesktopClients === '1') {
-	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
+	$currentUrl = substr(explode('?', $request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
 	if (substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
 		if (!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
 			$redirectSituation = true;
