@@ -107,7 +107,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 		try {
 			return empty(trim($this->getAttributeKeys('saml-attribute-mapping-avatar_mapping')[0]));
-		} catch(\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException $e) {
 			return true;
 		}
 	}
