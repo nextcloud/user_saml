@@ -32,18 +32,18 @@ abstract class TesterExtension implements Extension
     /*
      * Available services
      */
-    const EXERCISE_ID = 'tester.exercise';
-    const SUITE_TESTER_ID = 'tester.suite';
-    const SPECIFICATION_TESTER_ID = 'tester.specification';
-    const RESULT_INTERPRETER_ID = 'tester.result.interpreter';
+    public const EXERCISE_ID = 'tester.exercise';
+    public const SUITE_TESTER_ID = 'tester.suite';
+    public const SPECIFICATION_TESTER_ID = 'tester.specification';
+    public const RESULT_INTERPRETER_ID = 'tester.result.interpreter';
 
     /**
      * Available extension points
      */
-    const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
-    const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
-    const SPECIFICATION_TESTER_WRAPPER_TAG = 'tester.specification.wrapper';
-    const RESULT_INTERPRETATION_TAG = 'test.result.interpretation';
+    public const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
+    public const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
+    public const SPECIFICATION_TESTER_WRAPPER_TAG = 'tester.specification.wrapper';
+    public const RESULT_INTERPRETATION_TAG = 'test.result.interpretation';
 
     /**
      * @var ServiceProcessor
@@ -123,7 +123,7 @@ abstract class TesterExtension implements Extension
      * Loads exercise cli controllers.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $skip
+     * @param bool          $skip
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
@@ -142,7 +142,7 @@ abstract class TesterExtension implements Extension
      * Loads exercise cli controllers.
      *
      * @param ContainerBuilder $container
-     * @param Boolean          $strict
+     * @param bool          $strict
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {

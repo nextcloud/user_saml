@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Tento uživatelský účet byl znepřístupněn, obraťte se na správce.",
     "Saved" : "Uloženo",
+    "Could not save" : "Není možné uložit",
     "Provider" : "Poskytovatel",
     "Unknown error, please check the log file for more details." : "Neznámá chyba, podrobnosti naleznete v záznamu událostí.",
     "Direct log in" : "Přímé přihlášení",
@@ -26,7 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algoritmus který sada nástrojů použije při procesu podepisování.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Získat parametry dotazu ze $_SERVER. Některé SAML servery toto vyžadují v případě SLO požadavků.",
     "Attribute to map the UID to." : "Atribut k přiřazení UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Přihlášení povolit pouze pokud účet už existuje i někde jinde. (např. LDAP)",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Přihlášení povolit pouze pokud účet už existuje i někde jinde (např. LDAP).",
     "Attribute to map the displayname to." : "Atribut, na který se má mapovat zobrazované jméno.",
     "Attribute to map the email address to." : "Atribut, na který se má mapovat e-mailová adresa.",
     "Attribute to map the quota to." : "Atribut, na který namapovat kvótu.",

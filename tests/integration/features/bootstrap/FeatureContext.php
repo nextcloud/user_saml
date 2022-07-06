@@ -41,12 +41,10 @@ class FeatureContext implements Context {
 			'cookies' => $jar,
 			'verify' => false,
 			'allow_redirects' => [
-				'referer'         => true,
+				'referer' => true,
 				'track_redirects' => true,
 			],
 		]);
-
-
 	}
 
 	/** @AfterScenario */
@@ -55,7 +53,7 @@ class FeatureContext implements Context {
 			'student1',
 		];
 
-		foreach($users as $user) {
+		foreach ($users as $user) {
 			shell_exec(
 				sprintf(
 					'sudo -u apache %s %s user:delete %s',
@@ -66,7 +64,7 @@ class FeatureContext implements Context {
 			);
 		}
 
-		foreach($this->changedSettings as $setting) {
+		foreach ($this->changedSettings as $setting) {
 			shell_exec(
 				sprintf(
 					'sudo -u apache %s %s config:app:delete user_saml %s',
@@ -76,6 +74,15 @@ class FeatureContext implements Context {
 				)
 			);
 		}
+
+		shell_exec(
+			sprintf(
+				'sudo -u apache %s %s saml:config:delete 1',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+			)
+		);
+
 		$this->changedSettings = [];
 	}
 
@@ -87,14 +94,33 @@ class FeatureContext implements Context {
 	 */
 	public function theSettingIsSetTo($settingName,
 									  $value) {
-		$this->changedSettings[] = $settingName;
+		if (in_array($settingName, [
+			'type',
+			'general-require_provisioned_account',
+			'general-allow_multiple_user_back_ends',
+			'general-use_saml_auth_for_desktop'
+		])) {
+			$this->changedSettings[] = $settingName;
+			shell_exec(
+				sprintf(
+					'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$value,
+					$settingName
+				)
+			);
+			return;
+		}
+
 		shell_exec(
 			sprintf(
-				'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+				'sudo -u apache %s %s saml:config:set --"%s"="%s" %d',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
+				$settingName,
 				$value,
-				$settingName
+				1
 			)
 		);
 	}
@@ -135,10 +161,10 @@ class FeatureContext implements Context {
 		];
 
 		// Remove everything after a comma in the URL since cookies are passed there
-		list($url['path'])=explode(';', $url['path']);
+		[$url['path']] = explode(';', $url['path']);
 
-		foreach($paramsToCheck as $param) {
-			if($targetUrl[$param] !== $url[$param]) {
+		foreach ($paramsToCheck as $param) {
+			if ($targetUrl[$param] !== $url[$param]) {
 				throw new InvalidArgumentException(
 					sprintf(
 						'Expected %s for parameter %s, got %s',
@@ -181,10 +207,9 @@ class FeatureContext implements Context {
 		$inputElements = $xpath->query('//input');
 		if (is_object($inputElements)) {
 			/** @var DOMElement $node */
-			foreach($inputElements as $node) {
-				$postData[$node->getAttribute('name')] =  $node->getAttribute('value');
+			foreach ($inputElements as $node) {
+				$postData[$node->getAttribute('name')] = $node->getAttribute('value');
 			}
-
 		}
 
 		$this->response = $this->client->request(
@@ -203,7 +228,7 @@ class FeatureContext implements Context {
 	 * @param string $value
 	 * @throws UnexpectedValueException
 	 */
-	public function thUserValueShouldBe($key, $value)  {
+	public function thUserValueShouldBe($key, $value) {
 		$this->response = $this->client->request(
 			'GET',
 			'http://localhost/ocs/v1.php/cloud/user',
@@ -223,7 +248,7 @@ class FeatureContext implements Context {
 		}
 		$actualValue = $responseArray['data'][$key];
 
-		if($actualValue !== $value) {
+		if ($actualValue !== $value) {
 			throw new UnexpectedValueException(
 				sprintf(
 					'Expected %s as value but got %s',
@@ -267,7 +292,7 @@ class FeatureContext implements Context {
 
 		$response = trim($response);
 		$expectedStringStart = "$uid`s last login: ";
-		if(substr($response, 0, strlen($expectedStringStart)) !== $expectedStringStart) {
+		if (substr($response, 0, strlen($expectedStringStart)) !== $expectedStringStart) {
 			throw new UnexpectedValueException("Expected last login message, found instead '$response'");
 		}
 	}
@@ -275,7 +300,7 @@ class FeatureContext implements Context {
 	/**
 	 * @Given The environment variable :key is set to :value
 	 */
-	public function theEnvironmentVariableIsSetTo($key, $value)  {
+	public function theEnvironmentVariableIsSetTo($key, $value) {
 		file_put_contents(__DIR__ . '/../../../../../../.htaccess', "\nSetEnv $key $value\n", FILE_APPEND);
 	}
 }

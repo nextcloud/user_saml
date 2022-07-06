@@ -5,6 +5,7 @@ OC.L10N.register(
     "Saved" : "Guardado",
     "Provider" : "Fornecedor",
     "Provider " : "Fornecedor",
+    "Email address" : "Endereço de email",
     "SSO & SAML authentication" : "Autenticação SSO e SAML",
     "Open documentation" : "Abrir documentação",
     "Global settings" : "Definições globais",
@@ -17,4 +18,4 @@ OC.L10N.register(
     "Metadata valid" : "Metadados válidos",
     "Error" : "Erro"
 },
-"nplurals=2; plural=(n != 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

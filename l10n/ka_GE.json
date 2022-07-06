@@ -15,7 +15,6 @@
     "Indicates if the SP will validate all received XML." : "ანიშნებს გაუწევს თუ არა SP ვალიდაციას ყველა შემოსულ XML-ს.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL უწევს SAML მონაცემებს კოდირებას პატარა ასოებით, ხელსაწყობის ნაკრები კი საწყისად იყენებს დიდ ასოებს. ჩართეთ ADFS თავსებადობა ხელმოწერის დამოწმებებზე.",
     "Attribute to map the UID to." : "ატრიბუტი რომელსაც მიებმევა UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "აუტენტიფიკაციის უფლება დართეთ მხოლოდ მაშინ, თუ ანგარიში არსებობს რაიმე სხვა ბექენდზეც. (მაგ. LDAP-ზე)",
     "Attribute to map the displayname to." : "ატრიბუტი რომელსაც მიებმევა დისპლეის სახელი.",
     "Attribute to map the email address to." : "ატრიბუტი რომელსაც მიებმევა ელ-ფოსტის მისამართი.",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "გამოიყენეთ SAML აუტენტიფიკაცია %s დესკტოპ კლიენტებისთვის (საჭიროებს ხელახალ აუტენტიფიკაციას)",

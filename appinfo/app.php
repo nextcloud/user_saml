@@ -24,7 +24,7 @@ require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 // If we run in CLI mode do not setup the app as it can fail the OCC execution
 // since the URLGenerator isn't accessible.
 $cli = false;
-if(OC::$CLI) {
+if (OC::$CLI) {
 	$cli = true;
 }
 try {
@@ -38,12 +38,8 @@ try {
 	\OC::$server->getLogger()->logException($e);
 	return;
 }
-$samlSettings = new \OCA\User_SAML\SAMLSettings(
-	$urlGenerator,
-	$config,
-	$request,
-	$session
-);
+
+$samlSettings = \OC::$server->query(\OCA\User_SAML\SAMLSettings::class);
 
 $userData = new \OCA\User_SAML\UserData(
 	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
@@ -61,7 +57,8 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	$samlSettings,
 	\OC::$server->getLogger(),
 	$userData,
-	\OC::$server->getAvatarManager()
+	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
+	\OC::$server->getAvatarManager(),
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
@@ -71,13 +68,8 @@ $params = [];
 // Setting up the one login config may fail, if so, do not catch the requests later.
 $returnScript = false;
 $type = '';
-switch($config->getAppValue('user_saml', 'type')) {
+switch ($config->getAppValue('user_saml', 'type')) {
 	case 'saml':
-		try {
-			$oneLoginSettings = new \OneLogin\Saml2\Settings($samlSettings->getOneLoginSettingsArray(1));
-		} catch (\OneLogin\SAML2\Error $e) {
-			$returnScript = true;
-		}
 		$type = 'saml';
 		break;
 	case 'environment-variable':
@@ -97,7 +89,7 @@ if ($type === 'environment-variable') {
 	OC_User::handleApacheAuth();
 }
 
-if($returnScript === true) {
+if ($returnScript === true) {
 	return;
 }
 
@@ -123,7 +115,7 @@ if ($user !== null) {
 
 // All requests that are not authenticated and match against the "/login" route are
 // redirected to the SAML login endpoint
-if(!$cli &&
+if (!$cli &&
 	!$userSession->isLoggedIn() &&
 	\OC::$server->getRequest()->getPathInfo() === '/login' &&
 	$type !== '') {
@@ -132,7 +124,7 @@ if(!$cli &&
 	} catch (\LogicException $e) {
 		// ignore exception when PUT is called since getParams cannot parse parameters in that case
 	}
-	if (isset($params['direct'])) {
+	if (isset($params['direct']) && ($params['direct'] === 1 || $params['direct'] === '1')) {
 		return;
 	}
 	$redirectSituation = true;
@@ -146,10 +138,10 @@ if(!$cli &&
 // UX (users don't have to reauthenticate) we default to disallow the access via
 // SAML at the moment.
 $useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
-if($useSamlForDesktopClients === '1') {
-	$currentUrl = substr(explode('?',$request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
-	if(substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-		if(!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
+if ($useSamlForDesktopClients === '1') {
+	$currentUrl = substr(explode('?', $request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
+	if (substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
+		if (!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
 			$redirectSituation = true;
 
 			if (preg_match('/^.*\/(\d+\.\d+\.\d+).*$/', $request->getHeader('USER_AGENT'), $matches) === 1) {
@@ -174,7 +166,7 @@ if ($redirectSituation === true && $showLoginOptions) {
 		// ignore exception when PUT is called since getParams cannot parse parameters in that case
 	}
 	$redirectUrl = '';
-	if(isset($params['redirect_url'])) {
+	if (isset($params['redirect_url'])) {
 		$redirectUrl = $params['redirect_url'];
 	}
 
@@ -186,17 +178,16 @@ if ($redirectSituation === true && $showLoginOptions) {
 	);
 	header('Location: '.$targetUrl);
 	exit();
-
 }
 
-if($redirectSituation === true) {
+if ($redirectSituation === true) {
 	try {
 		$params = $request->getParams();
 	} catch (\LogicException $e) {
 		// ignore exception when PUT is called since getParams cannot parse parameters in that case
 	}
 	$originalUrl = '';
-	if(isset($params['redirect_url'])) {
+	if (isset($params['redirect_url'])) {
 		$originalUrl = $urlGenerator->getAbsoluteURL($params['redirect_url']);
 	}
 

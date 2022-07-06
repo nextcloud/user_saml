@@ -24,6 +24,7 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IAvatarManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -34,30 +35,34 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\User\Events\UserChangedEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
-class UserBackendTest extends TestCase   {
-	/** @var UserData|\PHPUnit\Framework\MockObject\MockObject */
+class UserBackendTest extends TestCase {
+	/** @var UserData|MockObject */
 	private $userData;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IConfig|MockObject */
 	private $config;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
-	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var ISession|MockObject */
 	private $session;
-	/** @var IDBConnection|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IDBConnection|MockObject */
 	private $db;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|MockObject */
 	private $userManager;
-	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IGroupManager|MockObject */
 	private $groupManager;
-	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var UserBackend|MockObject */
 	private $userBackend;
-	/** @var \PHPUnit_Framework_MockObject_MockObject|SAMLSettings */
+	/** @var SAMLSettings|MockObject */
 	private $SAMLSettings;
-	/** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
+	/** @var ILogger|MockObject */
 	private $logger;
-	/** @var \PHPUnit_Framework_MockObject_MockObject|IAvatarManager */
+	/** @var IEventDispatcher|MockObject */
+	private $eventDispatcher;
+	/** @var IAvatarManager|MockObject */
 	private $avatarManager;
 
 	protected function setUp(): void {
@@ -72,11 +77,12 @@ class UserBackendTest extends TestCase   {
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
 		$this->logger = $this->createMock(ILogger::class);
 		$this->userData = $this->createMock(UserData::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->avatarManager = $this->createMock(IAvatarManager::class);
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
-		if($mockedFunctions !== []) {
+		if ($mockedFunctions !== []) {
 			$this->userBackend = $this->getMockBuilder(UserBackend::class)
 				->setConstructorArgs([
 					$this->config,
@@ -88,6 +94,7 @@ class UserBackendTest extends TestCase   {
 					$this->SAMLSettings,
 					$this->logger,
 					$this->userData,
+					$this->eventDispatcher
 					$this->avatarManager,
 				])
 				->setMethods($mockedFunctions)
@@ -103,6 +110,7 @@ class UserBackendTest extends TestCase   {
 				$this->SAMLSettings,
 				$this->logger,
 				$this->userData,
+				$this->eventDispatcher,
 				$this->avatarManager
 			);
 		}
@@ -115,7 +123,7 @@ class UserBackendTest extends TestCase   {
 
 	public function testUpdateAttributesWithoutAttributes() {
 		$this->getMockedBuilder(['getDisplayName']);
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->userManager
@@ -123,10 +131,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn(null);
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn(null);
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn(null);
+		}
 		$user
 			->expects($this->never())
 			->method('setEMailAddress');
@@ -150,7 +165,7 @@ class UserBackendTest extends TestCase   {
 
 	public function testUpdateAttributes() {
 		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 		$groupC = $this->createMock(IGroup::class);
@@ -181,10 +196,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn('old@example.com');
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn('old@example.com');
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn('old@example.com');
+		}
 		$user
 			->expects($this->once())
 			->method('setEMailAddress')
@@ -234,6 +256,9 @@ class UserBackendTest extends TestCase   {
 			->expects($this->once())
 			->method('addUser')
 			->with($user);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new UserChangedEvent($user, 'displayName', 'New Displayname', ''));
 
 		$this->userBackend->updateAttributes('ExistingUser', [
 			'email' => 'new@example.com',
@@ -245,7 +270,7 @@ class UserBackendTest extends TestCase   {
 
 	public function testUpdateAttributesQuotaDefaultFallback() {
 		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|\PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
 		$this->config
@@ -269,10 +294,17 @@ class UserBackendTest extends TestCase   {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		$user
-			->expects($this->once())
-			->method('getEMailAddress')
-			->willReturn('old@example.com');
+		if (method_exists($user, 'getSystemEMailAddress')) {
+			$user
+				->expects($this->once())
+				->method('getSystemEMailAddress')
+				->willReturn('old@example.com');
+		} else {
+			$user
+				->expects($this->once())
+				->method('getEMailAddress')
+				->willReturn('old@example.com');
+		}
 		$user
 			->expects($this->once())
 			->method('setEMailAddress')
@@ -290,7 +322,9 @@ class UserBackendTest extends TestCase   {
 			->expects($this->once())
 			->method('setDisplayName')
 			->with('ExistingUser', 'New Displayname');
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new UserChangedEvent($user, 'displayName', 'New Displayname', ''));
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
-
 }

@@ -1,21 +1,31 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Tämä käyttäjätili ei ole käytössä. Ota yhteys ylläpitoon.",
     "Saved" : "Tallennettu",
+    "Provider" : "Tarjoaja",
+    "Unknown error, please check the log file for more details." : "Tuntematon virhe. Tarkista lisätiedot lokista.",
     "Direct log in" : "Suora kirjautuminen",
     "SSO & SAML log in" : "SSO- ja SAML-kirjautuminen",
+    "Provider " : "Tarjoaja",
     "X.509 certificate of the Service Provider" : "Palveluntarjoajan X.509-varmenne",
     "Private key of the Service Provider" : "Palveluntarjoajan yksityinen avain",
     "Email address" : "Sähköpostiosoite",
+    "Encrypted" : "Salattu",
+    "Entity" : "Entiteetti",
+    "Kerberos" : "Kerberos",
     "SSO & SAML authentication" : "SSO- ja SAML-tunnistautuminen",
+    "Authenticate using single sign-on" : "Tunnistaudu käyttäen kertakirjautumista",
     "Open documentation" : "Avaa dokumentaatio",
     "Use built-in SAML authentication" : "Käytä sisäänrakennettua SAML-tunnistautumista",
     "Use environment variable" : "Käytä ympäristömuuttujaa",
     "Global settings" : "Yleiset asetukset",
+    "Remove identity provider" : "Poista identiteetin tarjoaja",
+    "Add identity provider" : "Lisää identiteetin tarjoaja",
     "General" : "Yleiset",
     "Show Service Provider settings…" : "Näytä palveluntarjoajan asetukset…",
     "Security settings" : "Turvallisuusasetukset",
     "Show security settings…" : "Näytä turvallisuusasetukset…",
     "Reset settings" : "Nollaa asetukset",
-    "Error" : "Virhe"
+    "Error" : "Virhe",
+    "Login options:" : "Kirjautumisvalinnat:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

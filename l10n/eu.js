@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Erabiltzaile-kontu hau desgaitua dago, jarri harremanetan administratzailearekin",
     "Saved" : "Gordeta",
+    "Could not save" : "Ezin izan da gorde",
     "Provider" : "Hornitzailea",
     "Unknown error, please check the log file for more details." : "Errore ezezaguna, egiaztatu egunkari-fitxategia xehetasun gehiagorako.",
     "Direct log in" : "Saio-hasiera zuzena",
@@ -26,7 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Tresnak sinadura-prozesuan erabiliko duen algoritmoa.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Berreskuratu kontsulta-parametroak $ _SERVER-etik. SAML zerbitzari batzuek hori eskatzen dute SLO eskaeretan.",
     "Attribute to map the UID to." : "UIDa esleitzeko atributua.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Baimendu autentifikazioa beste atzeko sistema batean kontu bat baldin badago bakarrik. (adibidez, LDAP)",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Baimendu autentifikazioa beste atzeko sistema batean kontu bat baldin badago bakarrik (adibidez, LDAP).",
     "Attribute to map the displayname to." : "Atributua bistaratze-izena esleitzeko.",
     "Attribute to map the email address to." : "Atributua helbide elektronikoa esleitzeko.",
     "Attribute to map the quota to." : "Kuota esleitzeko atributua.",

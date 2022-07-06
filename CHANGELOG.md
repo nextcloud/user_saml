@@ -1,6 +1,39 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.0.2
+### Fixed
+- Fix setup with only one idp by using 1 as default value in routes
+- Fix executing meta data validation check after configuration change
+
+## 5.0.1
+### Fixed
+- Direct login silently fails under some circumstances
+- Mobile login shows regular web interfaces instead of Grant Access page
+- Global checkboxes always unticked in SAML settings
+
+## 5.0.0
+### Changed
+- store configurations in a separate database table, not appconfig
+
+### Added
+- occ commands for modifying SAML configurations
+
+### Removed
+- Ability to change SAML configuration with occ app-config, use the new occ commands instead
+
+### Fixed
+- Use effective uid for autoprovisioning new users
+- Handle mobile login flow with direct=1
+- Set proper relaystate url
+
+## 4.1.1
+
+### Added
+- Add logging for SLO errors
+- sanitize and test user id received from IdP, if original does not match
+- Allow setting of "retrieveParametersFromServer
+
 ## 4.1.0
 ### Added
 - Nextcloud 22 support

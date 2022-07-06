@@ -23,11 +23,9 @@ class FileLocator implements FileLocatorInterface
     protected $paths;
 
     /**
-     * Constructor.
-     *
-     * @param string|array $paths A path or an array of paths where to look for resources
+     * @param string|string[] $paths A path or an array of paths where to look for resources
      */
-    public function __construct($paths = array())
+    public function __construct($paths = [])
     {
         $this->paths = (array) $paths;
     }
@@ -35,15 +33,15 @@ class FileLocator implements FileLocatorInterface
     /**
      * {@inheritdoc}
      */
-    public function locate($name, $currentPath = null, $first = true)
+    public function locate(string $name, string $currentPath = null, bool $first = true)
     {
-        if ('' == $name) {
+        if ('' === $name) {
             throw new \InvalidArgumentException('An empty file name is not valid to be located.');
         }
 
         if ($this->isAbsolutePath($name)) {
             if (!file_exists($name)) {
-                throw new FileLocatorFileNotFoundException(sprintf('The file "%s" does not exist.', $name));
+                throw new FileLocatorFileNotFoundException(sprintf('The file "%s" does not exist.', $name), 0, null, [$name]);
             }
 
             return $name;
@@ -56,19 +54,21 @@ class FileLocator implements FileLocatorInterface
         }
 
         $paths = array_unique($paths);
-        $filepaths = array();
+        $filepaths = $notfound = [];
 
         foreach ($paths as $path) {
-            if (@file_exists($file = $path.DIRECTORY_SEPARATOR.$name)) {
+            if (@file_exists($file = $path.\DIRECTORY_SEPARATOR.$name)) {
                 if (true === $first) {
                     return $file;
                 }
                 $filepaths[] = $file;
+            } else {
+                $notfound[] = $file;
             }
         }
 
         if (!$filepaths) {
-            throw new FileLocatorFileNotFoundException(sprintf('The file "%s" does not exist (in: %s).', $name, implode(', ', $paths)));
+            throw new FileLocatorFileNotFoundException(sprintf('The file "%s" does not exist (in: "%s").', $name, implode('", "', $paths)), 0, null, $notfound);
         }
 
         return $filepaths;
@@ -76,19 +76,15 @@ class FileLocator implements FileLocatorInterface
 
     /**
      * Returns whether the file path is an absolute path.
-     *
-     * @param string $file A file path
-     *
-     * @return bool
      */
-    private function isAbsolutePath($file)
+    private function isAbsolutePath(string $file): bool
     {
-        if ($file[0] === '/' || $file[0] === '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
-                && $file[1] === ':'
-                && ($file[2] === '\\' || $file[2] === '/')
+        if ('/' === $file[0] || '\\' === $file[0]
+            || (\strlen($file) > 3 && ctype_alpha($file[0])
+                && ':' === $file[1]
+                && ('\\' === $file[2] || '/' === $file[2])
             )
-            || null !== parse_url($file, PHP_URL_SCHEME)
+            || null !== parse_url($file, \PHP_URL_SCHEME)
         ) {
             return true;
         }

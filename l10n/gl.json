@@ -23,7 +23,6 @@
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Cifra datos SAML en minúsculas, e, por omisión, o conxunto de ferramentas usa maiúsculas. Active ADFS para a compatibilidade na sinatura de verificación.",
     "Algorithm that the toolkit will use on signing process." : "Algoritmo que o conxnto de ferramentas empregará no proceso de sinatura.",
     "Attribute to map the UID to." : "Atributo para asignar o UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Permitir soamente se existe unha conta noutro sistema. (p. ex. LDAP)",
     "Attribute to map the displayname to." : "Atributo para asignar o nome que amosar.",
     "Attribute to map the email address to." : "Atributo para asignar o enderezo de correo que amosar.",
     "Attribute to map the quota to." : "Atributo para asignar a cota.",

@@ -23,12 +23,13 @@ namespace OCA\User_SAML\AppInfo;
 
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
 use OCP\SabrePluginEvent;
 
 class Application extends App {
-	public function __construct(array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('user_saml', $urlParams);
 		$container = $this->getContainer();
 
@@ -48,7 +49,8 @@ class Application extends App {
 			return new DavPlugin(
 				$server->getSession(),
 				$server->getConfig(),
-				$_SERVER
+				$_SERVER,
+				$server->get(SAMLSettings::class)
 			);
 		});
 
@@ -57,7 +59,6 @@ class Application extends App {
 	}
 
 	public function registerDavAuth() {
-
 		$container = $this->getContainer();
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
@@ -74,7 +75,7 @@ class Application extends App {
 		$config = $container->getServer()->getConfig();
 
 		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function() use ($session, $config, $userSession) {
+		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
 			}
@@ -83,6 +84,7 @@ class Application extends App {
 			$timezoneDB = $config->getUserValue($user->getUID(), 'core', 'timezone', '');
 
 			if ($timezoneDB === '' || !$session->exists('timezone')) {
+				\OCP\Util::addScript('user_saml', 'vendor/jstz.min');
 				\OCP\Util::addScript('user_saml', 'timezone');
 			}
 		});

@@ -42,7 +42,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use OCP\Security\ICrypto;
 use Test\TestCase;
 
-class SAMLControllerTest extends TestCase  {
+class SAMLControllerTest extends TestCase {
 	/** @var UserResolver|\PHPUnit\Framework\MockObject\MockObject */
 	protected $userResolver;
 	/** @var UserData|\PHPUnit\Framework\MockObject\MockObject */
@@ -87,15 +87,15 @@ class SAMLControllerTest extends TestCase  {
 		$this->crypto = $this->createMock(ICrypto::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
-			function($param) {
+			function ($param) {
 				return $param;
 			}
 		);
 
 		$this->config->expects($this->any())->method('getSystemValue')
-			->willReturnCallback(function($key, $default) {
-			return $default;
-		});
+			->willReturnCallback(function ($key, $default) {
+				return $default;
+			});
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -112,7 +112,6 @@ class SAMLControllerTest extends TestCase  {
 			$this->userData,
 			$this->crypto
 		);
-
 	}
 
 	public function testLoginWithInvalidAppValue() {
@@ -217,11 +216,11 @@ class SAMLControllerTest extends TestCase  {
 		$this->config->expects($this->any())
 			->method('getAppValue')
 			->willReturnCallback(function (string $app, string $key) {
-				if($app === 'user_saml') {
-					if($key === 'type') {
+				if ($app === 'user_saml') {
+					if ($key === 'type') {
 						return 'environment-variable';
 					}
-					if($key === 'general-uid_mapping') {
+					if ($key === 'general-uid_mapping') {
 						return 'uid';
 					}
 				}
@@ -252,10 +251,16 @@ class SAMLControllerTest extends TestCase  {
 			->willReturn('MyUid');
 		$this->userData
 			->expects($this->any())
+			->method('testEncodedObjectGUID')
+			->willReturnCallback(function ($uid) {
+				return $uid;
+			});
+		$this->userData
+			->expects($this->any())
 			->method('getEffectiveUid')
 			->willReturn($userState > 0 ? 'MyUid' : '');
 
-		if(strpos($redirect, 'notProvisioned') !== false) {
+		if (strpos($redirect, 'notProvisioned') !== false) {
 			$this->urlGenerator
 				->expects($this->once())
 				->method('linkToRouteAbsolute')
@@ -274,14 +279,14 @@ class SAMLControllerTest extends TestCase  {
 			->with('MyUid')
 			->willReturn($userState === 1);
 
-		if(isset($samlUserData['uid']) && !($userState === 0 && $autoProvision === 0)) {
+		if (isset($samlUserData['uid']) && !($userState === 0 && $autoProvision === 0)) {
 			/** @var IUser|MockObject $user */
 			$user = $this->createMock(IUser::class);
 			$im = $this->userResolver
 				->expects($this->once())
 				->method('findExistingUser')
 				->with('MyUid');
-			if($autoProvision < 2) {
+			if ($autoProvision < 2) {
 				$im->willReturn($user);
 			} else {
 				$im->willThrowException(new NoUserFoundException());
@@ -291,13 +296,13 @@ class SAMLControllerTest extends TestCase  {
 				->expects($this->exactly((int)($autoProvision < 2)))
 				->method('updateLastLoginTimestamp');
 
-			if($userState === 0) {
+			if ($userState === 0) {
 				$this->userResolver
 					->expects($this->any())
 					->method('findExistingUserId')
 					->with('MyUid', true)
 					->willThrowException(new NoUserFoundException());
-			} else if($userState === 2) {
+			} elseif ($userState === 2) {
 				$this->userResolver
 					->expects($this->any())
 					->method('findExistingUserId')

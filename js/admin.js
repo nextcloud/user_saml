@@ -8,20 +8,30 @@
 		currentConfig: '1',
 		providerIds: '1',
 
-		_getAppConfig: function (key) {
-			return $.ajax({
-				type: 'GET',
-				url: OC.linkToOCS('apps/provisioning_api/api/v1', 2) + 'config/apps' + '/user_saml/' + key + '?format=json'
-			});
-		},
 		init: function(callback) {
-			this._getAppConfig('providerIds').done(function (data){
-				if (data.ocs.data.data !== '') {
-					OCA.User_SAML.Admin.providerIds = data.ocs.data.data;
-					OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',').sort()[0];
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', OC.generateUrl('/apps/user_saml/settings/providers'));
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('requesttoken', OC.requestToken);
+
+			xhr.onload = function () {
+				var response = JSON.parse(xhr.response);
+				if (xhr.status >= 200 && xhr.status < 300) {
+					if (response.providerIds !== "") {
+						OCA.User_SAML.Admin.providerIds += ',' + response.providerIds;
+						OCA.User_SAML.Admin.currentConfig = OCA.User_SAML.Admin.providerIds.split(',')[0];
+					}
+					callback();
+				} else {
+					console.error("Could not fetch new provider ID");
 				}
-				callback();
-			});
+			};
+			xhr.onerror = function () {
+				console.error("Could not fetch new provider ID");
+			}
+
+
+			xhr.send();
 		},
 		chooseEnv: function() {
 			if (OC.PasswordConfirmation.requiresPasswordConfirmation()) {
@@ -60,23 +70,49 @@
 
 		/**
 		 * Add a new provider
-		 * @returns {number} id of the provider
 		 */
-		addProvider: function(callback) {
-			var providerIds = OCA.User_SAML.Admin.providerIds.split(',');
-			var nextId = 1;
-			if (providerIds.indexOf('1') >= 0) {
-				nextId = 2;
-				while ($.inArray('' + nextId, providerIds) >= 0) {
-					nextId++;
+		addProvider: function (callback) {
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', OC.generateUrl('/apps/user_saml/settings/providerSettings'));
+			xhr.setRequestHeader('Content-Type', 'application/json')
+			xhr.setRequestHeader('requesttoken', OC.requestToken)
+
+			xhr.onload = function () {
+				var response = JSON.parse(xhr.response)
+				if (xhr.status >= 200 && xhr.status < 300) {
+					OCA.User_SAML.Admin.providerIds += ',' + response.id;
+					callback(response.id)
+				} else {
+					console.error("Could not fetch new provider ID")
 				}
-			}
-			OCP.AppConfig.setValue('user_saml', 'providerIds', OCA.User_SAML.Admin.providerIds + ',' + nextId, {
-				success: function () {
-					OCA.User_SAML.Admin.providerIds += ',' + nextId;
-					callback(nextId)
+			};
+			xhr.onerror = function () {
+				console.error("Could not fetch new provider ID");
+			};
+
+			xhr.send();
+		},
+
+		updateProvider: function (configKey, configValue, successCb, errorCb) {
+			var xhr = new XMLHttpRequest();
+			xhr.open('PUT', OC.generateUrl('/apps/user_saml/settings/providerSettings/' + this.currentConfig));
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('requesttoken', OC.requestToken);
+
+			xhr.onload = function () {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					successCb();
+				} else {
+					console.error("Could not update config");
+					errorCb();
 				}
-			});
+			};
+			xhr.onerror = function () {
+				console.error("Could not update config");
+				errorCb();
+			};
+
+			xhr.send(JSON.stringify({configKey: configKey, configValue: configValue.trim()}));
 		},
 
 		removeProvider: function(callback) {
@@ -86,18 +122,26 @@
 				if (index > -1) {
 					providerIds.splice(index, 1);
 				}
-				var config = this.currentConfig;
 				$.ajax({ url: OC.generateUrl('/apps/user_saml/settings/providerSettings/' + this.currentConfig), type: 'DELETE'})
-					.done(function(data) {
-						OCP.AppConfig.setValue('user_saml', 'providerIds', providerIds.join(','), {
-							success: function () {
-								OCA.User_SAML.Admin.providerIds = providerIds.join(',');
-								callback(config);
-							}
-						});
-					});
-
+					.done(callback(this.currentConfig));
 			}
+		},
+
+		testMetaData: function() {
+			// Checks on each request whether the settings make sense or not
+			$.ajax({
+				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
+				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
+				type: 'GET'
+			}).fail(function (e) {
+				if (e.status === 500) {
+					$('#user-saml-settings-complete').addClass('hidden');
+					$('#user-saml-settings-incomplete').removeClass('hidden');
+				}
+			}).success(function () {
+				$('#user-saml-settings-complete').removeClass('hidden');
+				$('#user-saml-settings-incomplete').addClass('hidden');
+			});
 		},
 
 		setSamlConfigValue: function(category, setting, value, global) {
@@ -105,14 +149,23 @@
 				OC.PasswordConfirmation.requirePasswordConfirmation(_.bind(this.setSamlConfigValue, this, category, setting, value));
 				return;
 			}
-			// store global config flags without idp prefix
-			var configIdentifier = this.getConfigIdentifier();
-			if (global === true) {
-				configIdentifier = '';
-			}
 			OC.msg.startSaving('#user-saml-save-indicator');
-			OCP.AppConfig.setValue('user_saml', configIdentifier + category + '-' + setting, value.trim());
-			OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
+
+			var callbacks = {
+				success: function () {
+					OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'success', data: {message: t('user_saml', 'Saved')}});
+					OCA.User_SAML.Admin.testMetaData();
+				},
+				error: function() {
+					OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'error', data: {message: t('user_saml', 'Could not save')}});
+				}
+			};
+
+			if (global) {
+				OCP.AppConfig.setValue('user_saml', category + '-' + setting, value, callbacks);
+				return;
+			}
+			this.updateProvider(category + '-' + setting, value, callbacks.success, callbacks.error);
 		}
 	}
 })(OCA);
@@ -175,35 +228,48 @@ $(function() {
 		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
 		OCA.User_SAML.Admin.currentConfig = '' + providerId;
 		$.get(OC.generateUrl('/apps/user_saml/settings/providerSettings/' + providerId)).done(function(data) {
-			Object.keys(data).forEach(function(category, index){
+			document.querySelectorAll('#user-saml-settings input[type="text"], #user-saml-settings textarea').forEach(function (inputNode) {
+				inputNode.value = '';
+			});
+			document.querySelectorAll('#user-saml-settings input[type="checkbox"]').forEach(function (inputNode) {
+				inputNode.checked = false;
+				inputNode.setAttribute('value', '0');
+			});
+			document.querySelectorAll('#user-saml-settings select option').forEach(function (inputNode) {
+				inputNode.selected = false;
+			});
+
+			Object.keys(data).forEach(function(category){
 				var entries = data[category];
 				Object.keys(entries).forEach(function (configKey) {
-					var element = $('#user-saml-settings *[data-key="' + configKey + '"]');
-					if ($('#user-saml-settings #user-saml-' + category + ' #user-saml-' + configKey).length) {
-						element = $('#user-saml-' + category + ' #user-saml-' + configKey);
+					var htmlElement = document.querySelector('#user-saml-settings *[data-key="' + configKey + '"]')
+						|| document.querySelector('#user-saml-' + category + ' #user-saml-' + configKey)
+						|| document.querySelector('#user-saml-' + category + ' [name="' + configKey + '"]');
+
+					if (!htmlElement) {
+						console.log("could not find element for " + configKey);
+						return;
 					}
-					if ($('#user-saml-settings #user-saml-' + category + ' [name="' + configKey + '"]').length) {
-						element = $('#user-saml-' + category + ' [name="' + configKey + '"]');
-					}
-					if(element.is('input') && element.prop('type') === 'text') {
-						element.val(entries[configKey])
-					}
-					else if(element.is('textarea')) {
-						element.val(entries[configKey]);
-					}
-					else if(element.prop('type') === 'checkbox') {
-						var value = entries[configKey] === '1' ? '1' : '0';
-						element.val(value);
+
+					if ((htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'text')
+						 || htmlElement.tagName === 'TEXTAREA'
+					) {
+						htmlElement.nodeValue = entries[configKey];
+						htmlElement.value = entries[configKey];
+					} else if (htmlElement.tagName === 'INPUT' && htmlElement.getAttribute('type') === 'checkbox') {
+						htmlElement.checked = entries[configKey] === '1';
+						htmlElement.value = entries[configKey] === '1' ? '1' : '0';
+					} else if (htmlElement.tagName === 'SELECT') {
+						htmlElement.querySelector('[value="' + entries[configKey] + '"]').selected = true;
 					} else {
-						console.log('unable to find element for ' + configKey);
+						console.error("Could not handle " + configKey + " Tag is " + htmlElement.tagName + " and type is " + htmlElement.getAttribute("type"));
 					}
 				});
 			});
-			$('input:checkbox[value="1"]').attr('checked', true);
-			$('input:checkbox[value="0"]').attr('checked', false);
-			var xmlDownloadButton = $('#get-metadata');
-			var url = xmlDownloadButton.data('base') + '?idp=' + providerId;
-			xmlDownloadButton.attr('href', url);
+
+			var xmlDownloadButton = document.getElementById('get-metadata');
+			var url = xmlDownloadButton.dataset.base + '?idp=' + providerId;
+			xmlDownloadButton.setAttribute('href', url);
 		});
 	};
 
@@ -343,25 +409,6 @@ $(function() {
 		if (e.keyCode === 13) {
 			var key = $(this).attr('name');
 			OCA.User_SAML.Admin.setSamlConfigValue('saml-attribute-mapping', key, $(this).val());
-		}
-	});
-
-	$('#user-saml').change(function() {
-		if(type === 'saml') {
-			// Checks on each request whether the settings make sense or not
-			$.ajax({
-				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
-				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
-				type: 'GET'
-			}).fail(function (e) {
-				if (e.status === 500) {
-					$('#user-saml-settings-complete').addClass('hidden');
-					$('#user-saml-settings-incomplete').removeClass('hidden');
-				}
-			}).success(function (e) {
-				$('#user-saml-settings-complete').removeClass('hidden');
-				$('#user-saml-settings-incomplete').addClass('hidden');
-			})
 		}
 	});
 

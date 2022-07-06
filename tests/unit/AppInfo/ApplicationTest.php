@@ -25,10 +25,9 @@
 namespace OCA\User_SAML\Tests\AppInfo;
 
 use OCA\User_SAML\AppInfo\Application;
-use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 
-class ApplicationTest extends \Test\TestCase  {
+class ApplicationTest extends \Test\TestCase {
 	/** @var Application */
 	protected $app;
 	/** @var \OCP\AppFramework\IAppContainer */
@@ -49,7 +48,6 @@ class ApplicationTest extends \Test\TestCase  {
 		return [
 			['OnlyLoggedInMiddleware', OnlyLoggedInMiddleware::class],
 		];
-
 	}
 
 	/**

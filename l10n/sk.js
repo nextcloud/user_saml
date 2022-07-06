@@ -26,7 +26,6 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algoritmus, ktorý sa použije v procese podpisovania.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Načítavať parametre dotazu z $ _SERVER. Niektoré servery SAML to vyžadujú pri požiadavkách SLO.",
     "Attribute to map the UID to." : "Atribút na priradenie UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Overenie totožnosti povoľte iba v prípade, že účet existuje na nejakom inom serveri. (napr. LDAP)",
     "Attribute to map the displayname to." : "Atribút na priradenie zobrazovaného mena.",
     "Attribute to map the email address to." : "Atribút na priradenie e-mailovej adresy.",
     "Attribute to map the quota to." : "Atribút na priradenie kvóty.",

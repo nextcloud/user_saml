@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 /**
- * ParameterBagInterface.
+ * ParameterBagInterface is the interface implemented by objects that manage service container parameters.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -31,8 +31,6 @@ interface ParameterBagInterface
     /**
      * Adds parameters to the service container parameters.
      *
-     * @param array $parameters An array of parameters
-     *
      * @throws LogicException if the parameter can not be added
      */
     public function add(array $parameters);
@@ -47,39 +45,32 @@ interface ParameterBagInterface
     /**
      * Gets a service container parameter.
      *
-     * @param string $name The parameter name
-     *
-     * @return mixed The parameter value
+     * @return array|bool|string|int|float|null
      *
      * @throws ParameterNotFoundException if the parameter is not defined
      */
-    public function get($name);
+    public function get(string $name);
 
     /**
      * Removes a parameter.
-     *
-     * @param string $name The parameter name
      */
-    public function remove($name);
+    public function remove(string $name);
 
     /**
      * Sets a service container parameter.
      *
-     * @param string $name  The parameter name
-     * @param mixed  $value The parameter value
+     * @param array|bool|string|int|float|null $value The parameter value
      *
      * @throws LogicException if the parameter can not be set
      */
-    public function set($name, $value);
+    public function set(string $name, $value);
 
     /**
      * Returns true if a parameter name is defined.
      *
-     * @param string $name The parameter name
-     *
      * @return bool true if the parameter name is defined, false otherwise
      */
-    public function has($name);
+    public function has(string $name);
 
     /**
      * Replaces parameter placeholders (%name%) by their values for all parameters.

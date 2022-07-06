@@ -19,11 +19,11 @@
     "Indicates if the SP will validate all received XML." : "Indica si el SP validará todos el XML recibido. ",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-Codifica los datos SAML como minúsculas, y el juego de herramientas usa mayúsculas por defecto. Habilita para tener compatibilidad con ADFS en la verificación de la firma.",
     "Attribute to map the UID to." : "Atributo a mapear al UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Sólo permitir la autenticación si la cuenta exite en algún otro backend. (p. ej. LDAP)",
     "Attribute to map the displayname to." : "Atributo a mapear a displayname. ",
     "Attribute to map the email address to." : "Atributo a mapear a email address.",
     "Attribute to map the quota to." : "Atributo al cual mapear la cuota. ",
     "Attribute to map the users groups to." : "Atributo de correspondiencia de grupos de usuarios.",
+    "Email address" : "Dirección de correo electrónico",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Por favor usa autenticación SAML para los %s clientes de escritorio (se requiere volver a autenticar)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nombre a desplegar opcional de la identidad del proveedor (valor por omisión: \"Inicio de sesión SSO & SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir el uso de múltiples sistemas de back-end de usuario (p. ej. LDAP)",
@@ -57,5 +57,5 @@
     "Error" : "Error",
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
     "Your account is not provisioned, access to this service is thus not possible." : "Tu cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "
-},"pluralForm" :"nplurals=2; plural=(n != 1);"
+},"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

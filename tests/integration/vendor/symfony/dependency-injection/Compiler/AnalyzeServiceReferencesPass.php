@@ -11,9 +11,12 @@
 
 namespace Symfony\Component\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Run this pass before passes that need to know more about the relation of
@@ -23,124 +26,166 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * retrieve the graph in other passes from the compiler.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ * @author Nicolas Grekas <p@tchwork.com>
  */
-class AnalyzeServiceReferencesPass implements RepeatablePassInterface
+class AnalyzeServiceReferencesPass extends AbstractRecursivePass
 {
     private $graph;
-    private $container;
-    private $currentId;
     private $currentDefinition;
-    private $repeatedPass;
     private $onlyConstructorArguments;
+    private $hasProxyDumper;
+    private $lazy;
+    private $byConstructor;
+    private $byFactory;
+    private $definitions;
+    private $aliases;
 
     /**
      * @param bool $onlyConstructorArguments Sets this Service Reference pass to ignore method calls
      */
-    public function __construct($onlyConstructorArguments = false)
+    public function __construct(bool $onlyConstructorArguments = false, bool $hasProxyDumper = true)
     {
-        $this->onlyConstructorArguments = (bool) $onlyConstructorArguments;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRepeatedPass(RepeatedPass $repeatedPass)
-    {
-        $this->repeatedPass = $repeatedPass;
+        $this->onlyConstructorArguments = $onlyConstructorArguments;
+        $this->hasProxyDumper = $hasProxyDumper;
+        $this->enableExpressionProcessing();
     }
 
     /**
      * Processes a ContainerBuilder object to populate the service reference graph.
-     *
-     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
         $this->container = $container;
         $this->graph = $container->getCompiler()->getServiceReferenceGraph();
         $this->graph->clear();
+        $this->lazy = false;
+        $this->byConstructor = false;
+        $this->byFactory = false;
+        $this->definitions = $container->getDefinitions();
+        $this->aliases = $container->getAliases();
 
-        foreach ($container->getDefinitions() as $id => $definition) {
-            if ($definition->isSynthetic() || $definition->isAbstract()) {
-                continue;
-            }
-
-            $this->currentId = $id;
-            $this->currentDefinition = $definition;
-
-            $this->processArguments($definition->getArguments());
-            if (is_array($definition->getFactory())) {
-                $this->processArguments($definition->getFactory());
-            }
-
-            if (!$this->onlyConstructorArguments) {
-                $this->processArguments($definition->getMethodCalls());
-                $this->processArguments($definition->getProperties());
-                if ($definition->getConfigurator()) {
-                    $this->processArguments(array($definition->getConfigurator()));
-                }
-            }
+        foreach ($this->aliases as $id => $alias) {
+            $targetId = $this->getDefinitionId((string) $alias);
+            $this->graph->connect($id, $alias, $targetId, null !== $targetId ? $this->container->getDefinition($targetId) : null, null);
         }
 
-        foreach ($container->getAliases() as $id => $alias) {
-            $this->graph->connect($id, $alias, (string) $alias, $this->getDefinition((string) $alias), null);
+        try {
+            parent::process($container);
+        } finally {
+            $this->aliases = $this->definitions = [];
         }
     }
 
-    /**
-     * Processes service definitions for arguments to find relationships for the service graph.
-     *
-     * @param array $arguments An array of Reference or Definition objects relating to service definitions
-     */
-    private function processArguments(array $arguments)
+    protected function processValue($value, bool $isRoot = false)
     {
-        foreach ($arguments as $argument) {
-            if (is_array($argument)) {
-                $this->processArguments($argument);
-            } elseif ($argument instanceof Reference) {
+        $lazy = $this->lazy;
+        $inExpression = $this->inExpression();
+
+        if ($value instanceof ArgumentInterface) {
+            $this->lazy = !$this->byFactory || !$value instanceof IteratorArgument;
+            parent::processValue($value->getValues());
+            $this->lazy = $lazy;
+
+            return $value;
+        }
+        if ($value instanceof Reference) {
+            $targetId = $this->getDefinitionId((string) $value);
+            $targetDefinition = null !== $targetId ? $this->container->getDefinition($targetId) : null;
+
+            $this->graph->connect(
+                $this->currentId,
+                $this->currentDefinition,
+                $targetId,
+                $targetDefinition,
+                $value,
+                $this->lazy || ($this->hasProxyDumper && $targetDefinition && $targetDefinition->isLazy()),
+                ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(),
+                $this->byConstructor
+            );
+
+            if ($inExpression) {
                 $this->graph->connect(
-                    $this->currentId,
-                    $this->currentDefinition,
-                    $this->getDefinitionId((string) $argument),
-                    $this->getDefinition((string) $argument),
-                    $argument
-                );
-            } elseif ($argument instanceof Definition) {
-                $this->processArguments($argument->getArguments());
-                $this->processArguments($argument->getMethodCalls());
-                $this->processArguments($argument->getProperties());
+                    '.internal.reference_in_expression',
+                    null,
+                    $targetId,
+                    $targetDefinition,
+                    $value,
+                    $this->lazy || ($targetDefinition && $targetDefinition->isLazy()),
+                    true
+               );
+            }
 
-                if (is_array($argument->getFactory())) {
-                    $this->processArguments($argument->getFactory());
-                }
+            return $value;
+        }
+        if (!$value instanceof Definition) {
+            return parent::processValue($value, $isRoot);
+        }
+        if ($isRoot) {
+            if ($value->isSynthetic() || $value->isAbstract()) {
+                return $value;
+            }
+            $this->currentDefinition = $value;
+        } elseif ($this->currentDefinition === $value) {
+            return $value;
+        }
+        $this->lazy = false;
+
+        $byConstructor = $this->byConstructor;
+        $this->byConstructor = $isRoot || $byConstructor;
+
+        $byFactory = $this->byFactory;
+        $this->byFactory = true;
+        $this->processValue($value->getFactory());
+        $this->byFactory = $byFactory;
+        $this->processValue($value->getArguments());
+
+        $properties = $value->getProperties();
+        $setters = $value->getMethodCalls();
+
+        // Any references before a "wither" are part of the constructor-instantiation graph
+        $lastWitherIndex = null;
+        foreach ($setters as $k => $call) {
+            if ($call[2] ?? false) {
+                $lastWitherIndex = $k;
             }
         }
-    }
 
-    /**
-     * Returns a service definition given the full name or an alias.
-     *
-     * @param string $id A full id or alias for a service definition
-     *
-     * @return Definition|null The definition related to the supplied id
-     */
-    private function getDefinition($id)
-    {
-        $id = $this->getDefinitionId($id);
+        if (null !== $lastWitherIndex) {
+            $this->processValue($properties);
+            $setters = $properties = [];
 
-        return null === $id ? null : $this->container->getDefinition($id);
-    }
+            foreach ($value->getMethodCalls() as $k => $call) {
+                if (null === $lastWitherIndex) {
+                    $setters[] = $call;
+                    continue;
+                }
 
-    private function getDefinitionId($id)
-    {
-        while ($this->container->hasAlias($id)) {
-            $id = (string) $this->container->getAlias($id);
+                if ($lastWitherIndex === $k) {
+                    $lastWitherIndex = null;
+                }
+
+                $this->processValue($call);
+            }
         }
 
-        if (!$this->container->hasDefinition($id)) {
-            return;
+        $this->byConstructor = $byConstructor;
+
+        if (!$this->onlyConstructorArguments) {
+            $this->processValue($properties);
+            $this->processValue($setters);
+            $this->processValue($value->getConfigurator());
+        }
+        $this->lazy = $lazy;
+
+        return $value;
+    }
+
+    private function getDefinitionId(string $id): ?string
+    {
+        while (isset($this->aliases[$id])) {
+            $id = (string) $this->aliases[$id];
         }
 
-        return $id;
+        return isset($this->definitions[$id]) ? $id : null;
     }
 }

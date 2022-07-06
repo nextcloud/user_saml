@@ -11,13 +11,13 @@
 
 namespace Symfony\Component\DependencyInjection\Extension;
 
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
  * Provides useful features shared by many extensions.
@@ -26,6 +26,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 abstract class Extension implements ExtensionInterface, ConfigurationExtensionInterface
 {
+    private $processedConfigs = [];
+
     /**
      * {@inheritdoc}
      */
@@ -64,8 +66,8 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
      */
     public function getAlias()
     {
-        $className = get_class($this);
-        if (substr($className, -9) != 'Extension') {
+        $className = static::class;
+        if (!str_ends_with($className, 'Extension')) {
             throw new BadMethodCallException('This extension does not follow the naming convention; you must overwrite the getAlias() method.');
         }
         $classBaseName = substr(strrchr($className, '\\'), 1, -9);
@@ -78,38 +80,57 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        $reflected = new \ReflectionClass($this);
-        $namespace = $reflected->getNamespaceName();
+        $class = static::class;
 
-        $class = $namespace.'\\Configuration';
-        if (class_exists($class)) {
-            $r = new \ReflectionClass($class);
-            $container->addResource(new FileResource($r->getFileName()));
-
-            if (!method_exists($class, '__construct')) {
-                return new $class();
-            }
+        if (str_contains($class, "\0")) {
+            return null; // ignore anonymous classes
         }
+
+        $class = substr_replace($class, '\Configuration', strrpos($class, '\\'));
+        $class = $container->getReflectionClass($class);
+
+        if (!$class) {
+            return null;
+        }
+
+        if (!$class->implementsInterface(ConfigurationInterface::class)) {
+            throw new LogicException(sprintf('The extension configuration class "%s" must implement "%s".', $class->getName(), ConfigurationInterface::class));
+        }
+
+        if (!($constructor = $class->getConstructor()) || !$constructor->getNumberOfRequiredParameters()) {
+            return $class->newInstance();
+        }
+
+        return null;
     }
 
-    final protected function processConfiguration(ConfigurationInterface $configuration, array $configs)
+    final protected function processConfiguration(ConfigurationInterface $configuration, array $configs): array
     {
         $processor = new Processor();
 
-        return $processor->processConfiguration($configuration, $configs);
+        return $this->processedConfigs[] = $processor->processConfiguration($configuration, $configs);
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     *
+     * @internal
+     */
+    final public function getProcessedConfigs(): array
+    {
+        try {
+            return $this->processedConfigs;
+        } finally {
+            $this->processedConfigs = [];
+        }
+    }
+
+    /**
      * @return bool Whether the configuration is enabled
      *
      * @throws InvalidArgumentException When the config is not enableable
      */
     protected function isConfigEnabled(ContainerBuilder $container, array $config)
     {
-        if (!array_key_exists('enabled', $config)) {
+        if (!\array_key_exists('enabled', $config)) {
             throw new InvalidArgumentException("The config array has no 'enabled' key.");
         }
 

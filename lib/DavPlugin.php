@@ -24,11 +24,8 @@ namespace OCA\User_SAML;
 use OCA\DAV\Connector\Sabre\Auth;
 use OCP\IConfig;
 use OCP\ISession;
-use Sabre\DAV\CorePlugin;
-use Sabre\DAV\FS\Directory;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
-use Sabre\DAV\Tree;
 use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
 
@@ -38,11 +35,14 @@ class DavPlugin extends ServerPlugin {
 	private $auth;
 	/** @var Server */
 	private $server;
+	/** @var SAMLSettings */
+	private $samlSettings;
 
-	public function __construct(ISession $session, IConfig $config, array $auth) {
+	public function __construct(ISession $session, IConfig $config, array $auth, SAMLSettings $samlSettings) {
 		$this->session = $session;
 		$this->config = $config;
 		$this->auth = $auth;
+		$this->samlSettings = $samlSettings;
 	}
 
 
@@ -57,7 +57,7 @@ class DavPlugin extends ServerPlugin {
 			$this->config->getAppValue('user_saml', 'type') === 'environment-variable' &&
 			!$this->session->exists('user_saml.samlUserData')
 		) {
-			$uidMapping = $this->config->getAppValue('user_saml', 'general-uid_mapping');
+			$uidMapping = $this->samlSettings->get(1)['general-uid_mapping'];
 			if (isset($this->auth[$uidMapping])) {
 				$this->session->set(Auth::DAV_AUTHENTICATED, $this->auth[$uidMapping]);
 				$this->session->set('user_saml.samlUserData', $this->auth);

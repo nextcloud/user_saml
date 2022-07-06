@@ -28,7 +28,7 @@ final class AutoloaderExtension implements Extension
     /*
      * Available services
      */
-    const CLASS_LOADER_ID = 'class_loader';
+    public const CLASS_LOADER_ID = 'class_loader';
 
     /**
      * @var array
@@ -108,7 +108,7 @@ final class AutoloaderExtension implements Extension
      */
     private function loadAutoloader(ContainerBuilder $container)
     {
-        $definition = new Definition('Symfony\Component\ClassLoader\ClassLoader');
+        $definition = new Definition('Composer\Autoload\ClassLoader');
         $container->setDefinition(self::CLASS_LOADER_ID, $definition);
     }
 
@@ -146,6 +146,10 @@ final class AutoloaderExtension implements Extension
     private function processLoaderPrefixes(ContainerBuilder $container)
     {
         $loaderDefinition = $container->getDefinition(self::CLASS_LOADER_ID);
-        $loaderDefinition->addMethodCall('addPrefixes', array($container->getParameter('class_loader.prefixes')));
+        $prefixes = $container->getParameter('class_loader.prefixes');
+
+        foreach ($prefixes as $prefix => $path) {
+            $loaderDefinition->addMethodCall('add', array($prefix, $path));
+        }
     }
 }

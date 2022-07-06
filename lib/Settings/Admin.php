@@ -23,6 +23,7 @@
 
 namespace OCA\User_SAML\Settings;
 
+use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IConfig;
@@ -37,34 +38,37 @@ class Admin implements ISettings {
 	private $defaults;
 	/** @var IConfig */
 	private $config;
+	/** @var SAMLSettings */
+	private $samlSettings;
 
 	/**
 	 * @param IL10N $l10n
 	 * @param Defaults $defaults
 	 * @param IConfig $config
 	 */
-	public function __construct(IL10N $l10n,
-								Defaults $defaults,
-								IConfig $config) {
+	public function __construct(
+		IL10N        $l10n,
+		Defaults     $defaults,
+		IConfig      $config,
+		SAMLSettings $samlSettings
+	) {
 		$this->l10n = $l10n;
 		$this->defaults = $defaults;
 		$this->config = $config;
+		$this->samlSettings = $samlSettings;
 	}
 
 	/**
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
-		$providerIds = explode(',', $this->config->getAppValue('user_saml', 'providerIds', '1'));
-		natsort($providerIds);
+		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
-		foreach ($providerIds as $id) {
-			$prefix = $id === '1' ? '' : $id .'-';
-			$name = $this->config->getAppValue('user_saml', $prefix . 'general-idp0_display_name', '');
+		foreach ($providerIds as $id => $name) {
 			$providers[] = [
 				'id' => $id,
 				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
-				];
+			];
 		}
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
@@ -86,7 +90,7 @@ class Admin implements ISettings {
 			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XML.'),
 		];
 		$securityGeneral = [
-			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
+			'lowercaseUrlencoding' => $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
 			'signatureAlgorithm' => [
 				'type' => 'line',
 				'text' => $this->l10n->t('Algorithm that the toolkit will use on signing process.')
@@ -100,7 +104,7 @@ class Admin implements ISettings {
 				'required' => true,
 			],
 			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend. (e.g. LDAP)'),
+				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
 				'type' => 'checkbox',
 				'global' => true,
 			]
@@ -139,52 +143,65 @@ class Admin implements ISettings {
 
 		];
 
-		$selectedNameIdFormat = $this->config->getAppValue('user_saml', 'sp-name-id-format', Constants::NAMEID_UNSPECIFIED);
+		$firstIdPConfig = isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null;
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
 				'label' => $this->l10n->t('Email address'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_EMAIL_ADDRESS,
+				'selected' => false,
 			],
 			Constants::NAMEID_ENCRYPTED => [
 				'label' => $this->l10n->t('Encrypted'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENCRYPTED,
+				'selected' => false,
 			],
 			Constants::NAMEID_ENTITY => [
 				'label' => $this->l10n->t('Entity'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_ENTITY,
+				'selected' => false,
 			],
 			Constants::NAMEID_KERBEROS => [
 				'label' => $this->l10n->t('Kerberos'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_KERBEROS,
+				'selected' => false,
 			],
 			Constants::NAMEID_PERSISTENT => [
 				'label' => $this->l10n->t('Persistent'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_PERSISTENT,
+				'selected' => false,
 			],
 			Constants::NAMEID_TRANSIENT => [
 				'label' => $this->l10n->t('Transient'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_TRANSIENT,
+				'selected' => false,
 			],
 			Constants::NAMEID_UNSPECIFIED => [
 				'label' => $this->l10n->t('Unspecified'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_UNSPECIFIED,
+				'selected' => false,
 			],
 			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
 				'label' => $this->l10n->t('Windows domain qualified name'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME,
+				'selected' => false,
 			],
 			Constants::NAMEID_X509_SUBJECT_NAME => [
 				'label' => $this->l10n->t('X509 subject name'),
-				'selected' => $selectedNameIdFormat === Constants::NAMEID_X509_SUBJECT_NAME,
+				'selected' => false,
 			],
 		];
+		$chosenFormat = $firstIdPConfig['sp-name-id-format'] ?? '';
+		if ($firstIdPConfig !== null && isset($nameIdFormats[$chosenFormat])) {
+			$nameIdFormats[$chosenFormat]['selected'] = true;
+		} else {
+			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
+		}
 
 		$type = $this->config->getAppValue('user_saml', 'type');
-		if($type === 'saml') {
+		if ($type === 'saml') {
+			$generalSettings['require_provisioned_account'] = [
+				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
+				'type' => 'checkbox',
+				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', 0)
+			];
 			$generalSettings['use_saml_auth_for_desktop'] = [
 				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', 0)
 			];
 			$generalSettings['idp0_display_name'] = [
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
@@ -196,6 +213,7 @@ class Admin implements ISettings {
 				'type' => 'checkbox',
 				'hideForEnv' => true,
 				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends')
 			];
 		}
 
@@ -208,7 +226,8 @@ class Admin implements ISettings {
 			'attribute-mapping' => $attributeMappingSettings,
 			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
-			'providers' => $providers
+			'providers' => $providers,
+			'config' => $firstIdPConfig,
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);
@@ -231,5 +250,4 @@ class Admin implements ISettings {
 	public function getPriority() {
 		return 0;
 	}
-
 }

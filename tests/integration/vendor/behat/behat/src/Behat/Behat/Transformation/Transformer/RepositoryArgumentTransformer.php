@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation\Transformer;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\RegexGenerator;
@@ -19,7 +20,6 @@ use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Testwork\Call\CallCenter;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Argument transformer based on transformations repository.
@@ -115,11 +115,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
         usort($transformations, function (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) {
-            if ($t1->getPriority() == $t2->getPriority()) {
-                return 0;
-            }
-
-            return ($t1->getPriority() > $t2->getPriority()) ? -1 : 1;
+            return $t2->getPriority() <=> $t1->getPriority();
         });
 
         $newValue = $value;

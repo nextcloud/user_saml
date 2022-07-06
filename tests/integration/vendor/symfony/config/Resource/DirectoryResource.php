@@ -15,21 +15,21 @@ namespace Symfony\Component\Config\Resource;
  * DirectoryResource represents a resources stored in a subdirectory tree.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ *
+ * @final
  */
-class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
+class DirectoryResource implements SelfCheckingResourceInterface
 {
     private $resource;
     private $pattern;
 
     /**
-     * Constructor.
-     *
      * @param string      $resource The file path to the resource
      * @param string|null $pattern  A pattern to restrict monitored files
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($resource, $pattern = null)
+    public function __construct(string $resource, string $pattern = null)
     {
         $this->resource = realpath($resource) ?: (file_exists($resource) ? $resource : false);
         $this->pattern = $pattern;
@@ -39,28 +39,17 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return md5(serialize(array($this->resource, $this->pattern)));
+        return md5(serialize([$this->resource, $this->pattern]));
     }
 
-    /**
-     * @return string The file path to the resource
-     */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->resource;
     }
 
-    /**
-     * Returns the pattern to restrict monitored files.
-     *
-     * @return string|null
-     */
-    public function getPattern()
+    public function getPattern(): ?string
     {
         return $this->pattern;
     }
@@ -68,13 +57,16 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function isFresh($timestamp)
+    public function isFresh(int $timestamp): bool
     {
         if (!is_dir($this->resource)) {
             return false;
         }
 
-        $newestMTime = filemtime($this->resource);
+        if ($timestamp < filemtime($this->resource)) {
+            return false;
+        }
+
         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->resource), \RecursiveIteratorIterator::SELF_FIRST) as $file) {
             // if regex filtering is enabled only check matching files
             if ($this->pattern && $file->isFile() && !preg_match($this->pattern, $file->getBasename())) {
@@ -83,23 +75,23 @@ class DirectoryResource implements SelfCheckingResourceInterface, \Serializable
 
             // always monitor directories for changes, except the .. entries
             // (otherwise deleted files wouldn't get detected)
-            if ($file->isDir() && '/..' === substr($file, -3)) {
+            if ($file->isDir() && str_ends_with($file, '/..')) {
                 continue;
             }
 
-            $newestMTime = max($file->getMTime(), $newestMTime);
+            // for broken links
+            try {
+                $fileMTime = $file->getMTime();
+            } catch (\RuntimeException $e) {
+                continue;
+            }
+
+            // early return if a file's mtime exceeds the passed timestamp
+            if ($timestamp < $fileMTime) {
+                return false;
+            }
         }
 
-        return $newestMTime < $timestamp;
-    }
-
-    public function serialize()
-    {
-        return serialize(array($this->resource, $this->pattern));
-    }
-
-    public function unserialize($serialized)
-    {
-        list($this->resource, $this->pattern) = unserialize($serialized);
+        return true;
     }
 }

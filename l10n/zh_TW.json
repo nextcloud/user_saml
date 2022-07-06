@@ -8,6 +8,8 @@
     "Provider " : "提供者",
     "X.509 certificate of the Service Provider" : "服務提供者 (SP) 的 X.509 憑證",
     "Private key of the Service Provider" : "服務提供者 (SP) 的私鑰",
+    "Email address" : "電子郵件地址",
+    "Encrypted" : "已加密",
     "Open documentation" : "開啟說明文件",
     "General" : "一般",
     "Service Provider Data" : "服務提供者 (Service Provider) 資料",

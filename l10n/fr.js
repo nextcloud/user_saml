@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Ce compte utilisateur est désactivé, veuillez contacter votre administrateur.",
     "Saved" : "Sauvegardé",
+    "Could not save" : "Impossible de sauvegarder",
     "Provider" : "Fournisseur",
     "Unknown error, please check the log file for more details." : "Erreur inconnue, veuillez vérifier le fichier journal pour plus de détails.",
     "Direct log in" : "Connexion directe",
@@ -26,7 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algorithme que la boîte à outils utilisera lors du processus de signature.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Récupération des paramètres de requête depuis $_SERVER. Certains serveurs SAML le demande pour les requêtes SLO.",
     "Attribute to map the UID to." : "Attribut pour relier l'UID.",
-    "Only allow authentication if an account exists on some other backend. (e.g. LDAP)" : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Ne permettre l'authentification d'un compte que s'il existe sur un autre système d'authentification. (ex : LDAP)",
     "Attribute to map the displayname to." : "Attribut pour relier le nom d'utilisateur.",
     "Attribute to map the email address to." : "Attribut pour relier l'adresse mail.",
     "Attribute to map the quota to." : "Attribut pour relier le quota.",
@@ -71,7 +72,7 @@ OC.L10N.register(
     "Public X.509 certificate of the IdP" : "Certificat public X.509 de l'IdP",
     "Attribute mapping" : "Mappage des attributs",
     "If you want to optionally map attributes to the user you can configure these here." : "Si vous préférez relier les attributs à l'utilisateur, vous pouvez les configurer ici.",
-    "Show attribute mapping settings…" : "Montrer les paramètres du mappage des attributs...",
+    "Show attribute mapping settings…" : "Afficher les paramètres de mappage des attributs...",
     "Security settings" : "Paramètres de sécurité",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Pour augmenter la sécurité nous recommandons d'activer les paramètres suivants s'ils sont supportés par votre environnement.",
     "Show security settings…" : "Afficher les paramètres de sécurité...",
@@ -87,4 +88,4 @@ OC.L10N.register(
     "Login options:" : "Options de connexion :",
     "Choose a authentication provider" : "Choisir un fournisseur d'authentification"
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
