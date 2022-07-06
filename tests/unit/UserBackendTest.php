@@ -94,7 +94,7 @@ class UserBackendTest extends TestCase {
 					$this->SAMLSettings,
 					$this->logger,
 					$this->userData,
-					$this->eventDispatcher
+					$this->eventDispatcher,
 					$this->avatarManager,
 				])
 				->setMethods($mockedFunctions)

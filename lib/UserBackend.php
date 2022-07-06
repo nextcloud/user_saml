@@ -40,7 +40,6 @@ use OCP\ISession;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\User\Events\UserChangedEvent;
-use function base64_decode;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -724,7 +723,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 					if ($this->setAvatarFromSamlProvider($uid, $image)) {
 						// save checksum only after successful setting
 						$this->config->setUserValue($uid, 'user_saml', 'lastAvatarChecksum', $checksum);
-						var_dump('Avatar changed'); die();
 					}
 				}
 			}

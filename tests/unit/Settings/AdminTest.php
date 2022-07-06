@@ -147,11 +147,11 @@ class AdminTest extends \Test\TestCase {
 				'type' => 'line',
 				'required' => true,
 			],
-            'avatar_mapping' => [
-                'text' => $this->l10n->t('Attribute to map the users avatar to.'),
-                'type' => 'line',
-                'required' => true,
-            ],
+			'avatar_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users avatar to.'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$nameIdFormats = [
