@@ -19,6 +19,16 @@
  *
  */
 
+use OCA\User_SAML\GroupDuplicateChecker;
+use OCA\User_SAML\GroupManager;
+use OCP\BackgroundJob\IJobList;
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\IUserManager;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
 // If we run in CLI mode do not setup the app as it can fail the OCC execution
@@ -39,16 +49,16 @@ try {
 	return;
 }
 
-\OC::$server->registerService(OCA\User_SAML\GroupDuplicateChecker::class, function() use($config) {
-    return new OCA\User_SAML\GroupDuplicateChecker(
+\OC::$server->registerService(GroupDuplicateChecker::class, function(ContainerInterface $c) use($config) {
+    return new GroupDuplicateChecker(
         $config,
-        \OC::$server->getGroupManager(),
-        \OC::$server->getLogger()
+        $c->get(IGroupManager::class),
+        $c->get(LoggerInterface::class)
     );
 });
 
 $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
-\OC::$server->getGroupManager()->addBackend($groupBackend);
+\OC::$server->get(IGroupManager::class)->addBackend($groupBackend);
 
 $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$urlGenerator,
@@ -57,15 +67,15 @@ $samlSettings = new \OCA\User_SAML\SAMLSettings(
 	$session
 );
 
-\OC::$server->registerService(OCA\User_SAML\GroupManager::class, function(\OCA\User_SAML\GroupBackend $groupBackend, $samlSettings) {
-    return new OCA\User_SAML\GroupManager(
-        \OC::$server->getDatabaseConnection(),
-        \OC::$server->query('SAMLGroupDuplicateChecker'),
-		\OC::$server->getGroupManager(),
-		\OC::$server->getUserManager(),
+\OC::$server->registerService(GroupManager::class, function(ContainerInterface $c) use($groupBackend, $samlSettings) {
+    return new GroupManager(
+        $c->get(IDBConnection::class),
+        $c->get(SAMLGroupDuplicateChecker::class),
+		$c->get(IGroupManager::class),
+		$c->get(IUserManager::class),
 		$groupBackend,
-		\OC::$server->getConfig(),
-		\OC::$server->getJobList(),
+		$c->get(IConfig::class),
+		$c->get(IJobList::class),
 		$samlSettings,
     );
 });
