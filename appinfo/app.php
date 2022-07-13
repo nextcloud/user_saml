@@ -60,12 +60,7 @@ try {
 $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
 \OC::$server->get(IGroupManager::class)->addBackend($groupBackend);
 
-$samlSettings = new \OCA\User_SAML\SAMLSettings(
-	$urlGenerator,
-	$config,
-	$request,
-	$session
-);
+$samlSettings = \OC::$server->query(\OCA\User_SAML\SAMLSettings::class);
 
 \OC::$server->registerService(GroupManager::class, function(ContainerInterface $c) use($groupBackend, $samlSettings) {
     return new GroupManager(
