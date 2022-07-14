@@ -165,8 +165,10 @@ class GroupManager
 				$group = $this->createGroupInBackend($gid);
 			} else if($e->getCode() === 2) {
 				//FIXME: probably need config flag. Previous to 17, gid was used as displayname
-				$idpPrefix = $this->settings->getPrefix('saml-attribute-mapping-group_mapping_prefix');
-				$groupPrefix = $this->config->getAppValue('user_saml', $idpPrefix . 'saml-attribute-mapping-group_mapping_prefix', 'SAML_');
+				$providerId = $this->settings->getProviderId();
+				$settings = $this->settings->get($providerId);
+				$groupPrefix = isset($settings['saml-attribute-mapping-group_mapping_prefix'])
+					? $settings['saml-attribute-mapping-group_mapping_prefix'] : 'SAML_';
 				$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
 			} else {
 				throw $e;

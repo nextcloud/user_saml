@@ -32,7 +32,7 @@ use \OCA\User_SAML\GroupBackend;
 /**
  * @group DB
  */
-class GroupBackendIntegrationTest extends TestCase {
+class GroupBackendTest extends TestCase {
 
     /** @var GroupBackend */
     private static $groupBackend;
@@ -121,7 +121,6 @@ class GroupBackendIntegrationTest extends TestCase {
         foreach (self::$groups as $group) {
             $this->assertContains($group['gid'], $groups, sprintf('Group %s should be retrieved', $group['gid']));
         }
-        $this->assertCount(count(self::$groups), $groups, 'Should retrieve all groups');
     }
 
     public function testGetUserGroups() {

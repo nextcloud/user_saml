@@ -253,14 +253,11 @@ class GroupManagerTest extends TestCase {
 		// assert there is only one idp config present
 		$this->settings
 			->expects($this->once())
-			->method('getPrefix')
-			->willReturn('');
+			->method('getProviderId');
 		// assert the default group prefix is configured
-		$this->config
+		$this->settings
 			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-group_mapping_prefix', 'SAML_')
-			->willReturn('SAML_');
+			->method('get');
 		// assert group is created with prefix + gid
 		$this->ownGroupBackend
 			->expects($this->once())
