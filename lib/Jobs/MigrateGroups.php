@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 Arthur Schiwon <blizzz@arthur-schiwon.de>
@@ -79,11 +80,11 @@ class MigrateGroups extends QueuedJob {
 
 	protected function updateCandidatePool($migrateGroups) {
 		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, null);
-		if($candidateInfo === null) {
+		if ($candidateInfo === null) {
 			return;
 		}
 		$candidateInfo = \json_decode($candidateInfo, true);
-		if(!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups'])) {
+		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups'])) {
 			return;
 		}
 		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migrateGroups);
@@ -108,11 +109,11 @@ class MigrateGroups extends QueuedJob {
 			$affected = $qb->delete('groups')
 				->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
 				->execute();
-			if($affected === 0) {
+			if ($affected === 0) {
 				throw new \RuntimeException('Could not delete group from local backend');
 			}
 
-			if(!$this->ownGroupBackend->createGroup($gid)) {
+			if (!$this->ownGroupBackend->createGroup($gid)) {
 				throw new \RuntimeException('Could not create group in SAML backend');
 			}
 
@@ -129,12 +130,12 @@ class MigrateGroups extends QueuedJob {
 
 	protected function getGroupsToMigrate(array $samlGroups, array $pool): array {
 		return array_filter($samlGroups, function (string $gid) use ($pool) {
-			if(!in_array($gid, $pool)) {
+			if (!in_array($gid, $pool)) {
 				return false;
 			}
 
 			$group = $this->groupManager->get($gid);
-			if($group === null) {
+			if ($group === null) {
 				return false;
 			}
 			$reflected = new \ReflectionClass($group);
@@ -142,7 +143,7 @@ class MigrateGroups extends QueuedJob {
 			$backendsProperty->setAccessible(true);
 			$backends = $backendsProperty->getValue($group);
 			foreach ($backends as $backend) {
-				if($backend instanceof Database) {
+				if ($backend instanceof Database) {
 					return true;
 				}
 			}
@@ -152,17 +153,15 @@ class MigrateGroups extends QueuedJob {
 
 	protected function getMigratableGroups(): array {
 		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, null);
-		if($candidateInfo === null) {
+		if ($candidateInfo === null) {
 			throw new \RuntimeException('No migration of groups to SAML backend anymore');
 		}
 		$candidateInfo = \json_decode($candidateInfo, true);
-		if(!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups']) || $candidateInfo['dropAfter'] < time()) {
+		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups']) || $candidateInfo['dropAfter'] < time()) {
 			$this->config->deleteAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
 			throw new \RuntimeException('Period for migration groups is over');
 		}
 
 		return $candidateInfo['groups'];
 	}
-
-
 }

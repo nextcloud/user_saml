@@ -43,8 +43,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/** @var array  */
 	private $groupCache = [];
 
-	const TABLE_GROUPS = 'user_saml_groups';
-	const TABLE_MEMBERS = 'user_saml_group_members';
+	public const TABLE_GROUPS = 'user_saml_groups';
+	public const TABLE_MEMBERS = 'user_saml_group_members';
 
 	public function __construct(IDBConnection $dbc) {
 		$this->dbc = $dbc;
@@ -75,7 +75,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			->execute();
 
 		$groups = [];
-		while( $row = $cursor->fetch()) {
+		while ($row = $cursor->fetch()) {
 			$groups[] = $row['gid'];
 			$this->groupCache[$row['gid']] = $row['gid'];
 		}
@@ -195,7 +195,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 				->setValue('displayname', $builder->createNamedParameter($displayName))
 				->setValue('saml_gid', $builder->createNamedParameter($samlGid))
 				->execute();
-		} catch(UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException $e) {
 			$result = 0;
 		}
 

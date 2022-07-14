@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2021 Giuliano Mele <giuliano.mele@verdigado.com>
- * 
+ *
  * @author Giuliano Mele <giuliano.mele@verdigado.com>
  *
  * @license GNU AGPL version 3 or any later version
@@ -276,5 +276,4 @@ class GroupManagerTest extends TestCase {
 
 		$this->ownGroupManager->addGroups($user, ['groupC']);
 	}
-
 }

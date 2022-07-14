@@ -32,8 +32,7 @@ use OCP\IConfig;
 use OCP\IGroupManager;
 use Psr\Log\LoggerInterface;
 
-class GroupDuplicateChecker
-{
+class GroupDuplicateChecker {
 	/**
 	 * @var IConfig
 	 */

@@ -29,7 +29,6 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCA\User_SAML\GroupManager;
 use OCP\UserInterface;
 use OCP\IUserBackend;
 use OCP\IConfig;

@@ -27,7 +27,6 @@ use OCA\User_SAML\UserData;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroup;
 use OCA\User_SAML\GroupManager;
 use OCP\ILogger;
 use OCP\ISession;

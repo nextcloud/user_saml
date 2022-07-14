@@ -49,12 +49,12 @@ try {
 	return;
 }
 
-\OC::$server->registerService(GroupDuplicateChecker::class, function(ContainerInterface $c) use($config) {
-    return new GroupDuplicateChecker(
-        $config,
-        $c->get(IGroupManager::class),
-        $c->get(LoggerInterface::class)
-    );
+\OC::$server->registerService(GroupDuplicateChecker::class, function (ContainerInterface $c) use ($config) {
+	return new GroupDuplicateChecker(
+		$config,
+		$c->get(IGroupManager::class),
+		$c->get(LoggerInterface::class)
+	);
 });
 
 $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
@@ -62,17 +62,17 @@ $groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnect
 
 $samlSettings = \OC::$server->get(\OCA\User_SAML\SAMLSettings::class);
 
-\OC::$server->registerService(GroupManager::class, function(ContainerInterface $c) use($groupBackend, $samlSettings) {
-    return new GroupManager(
-        $c->get(IDBConnection::class),
-        $c->get(SAMLGroupDuplicateChecker::class),
+\OC::$server->registerService(GroupManager::class, function (ContainerInterface $c) use ($groupBackend, $samlSettings) {
+	return new GroupManager(
+		$c->get(IDBConnection::class),
+		$c->get(SAMLGroupDuplicateChecker::class),
 		$c->get(IGroupManager::class),
 		$c->get(IUserManager::class),
 		$groupBackend,
 		$c->get(IConfig::class),
 		$c->get(IJobList::class),
 		$samlSettings,
-    );
+	);
 });
 
 $userData = new \OCA\User_SAML\UserData(

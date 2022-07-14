@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2019 Arthur Schiwon <blizzz@arthur-schiwon.de>
@@ -86,7 +87,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 	protected function findGroupIds(Database $backend): array {
 		$groupIds = $backend->getGroups();
 		$adminGroupIndex = array_search('admin', $groupIds, true);
-		if($adminGroupIndex !== false) {
+		if ($adminGroupIndex !== false) {
 			unset($groupIds[$adminGroupIndex]);
 		}
 		return $groupIds;
@@ -95,7 +96,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 	protected function findBackend(): Database {
 		$groupBackends = $this->groupManager->getBackends();
 		foreach ($groupBackends as $backend) {
-			if($backend instanceof Database) {
+			if ($backend instanceof Database) {
 				return $backend;
 				break;
 			}
