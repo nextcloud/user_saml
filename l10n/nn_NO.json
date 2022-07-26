@@ -1,0 +1,8 @@
+{ "translations": {
+    "Saved" : "Lagra",
+    "Encrypted" : "Kryptert",
+    "Open documentation" : "Opne dokumentasjon",
+    "General" : "Generelt",
+    "Error" : "Feil"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}
