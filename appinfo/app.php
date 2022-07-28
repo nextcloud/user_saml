@@ -156,7 +156,7 @@ if ($useSamlForDesktopClients === '1') {
 
 $multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
 $configuredIdps = $samlSettings->getListOfIdps();
-$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
+$showLoginOptions = ($multipleUserBackEnds || count($configuredIdps) > 1) && $type === 'saml';
 
 if ($redirectSituation === true && $showLoginOptions) {
 	try {
