@@ -22,6 +22,7 @@ steps:
       - php /var/www/html/occ app:enable user_saml
       - chown -R apache:apache /var/www/html/
       - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+      - cat /var/www/html/data/nextcloud.log
 
 trigger:
   branch:
