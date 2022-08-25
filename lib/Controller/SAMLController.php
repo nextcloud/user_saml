@@ -167,7 +167,7 @@ class SAMLController extends Controller {
 	 * @return Http\RedirectResponse
 	 * @throws \Exception
 	 */
-	public function login($idp) {
+	public function login(int $idp = 1) {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch ($type) {
 			case 'saml':
@@ -242,7 +242,7 @@ class SAMLController extends Controller {
 	 * @return Http\DataDownloadResponse
 	 * @throws Error
 	 */
-	public function getMetadata($idp) {
+	public function getMetadata(int $idp = 1) {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
 		$errors = $settings->validateMetadata($metadata);

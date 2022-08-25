@@ -27,9 +27,6 @@ return [
 			'name' => 'SAML#login',
 			'url' => '/saml/login',
 			'verb' => 'GET',
-			'defaults' => [
-				'idp' => 1
-			],
 		],
 		[
 			'name' => 'SAML#base',
@@ -40,17 +37,11 @@ return [
 			'name' => 'SAML#getMetadata',
 			'url' => '/saml/metadata',
 			'verb' => 'GET',
-			'defaults' => [
-				'idp' => 1
-			],
 		],
 		[
 			'name' => 'SAML#assertionConsumerService',
 			'url' => '/saml/acs',
 			'verb' => 'POST',
-			'defaults' => [
-				'idp' => 1
-			],
 		],
 		[
 			'name' => 'SAML#singleLogoutService',
