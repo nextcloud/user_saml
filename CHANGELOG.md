@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.0.3
+### Fixed
+- Fix signining in with multiple IdPs
+- Do not show config chooser when operating in env mode
+### Changed
+- Various dependency updates
+
 ## 5.0.2
 ### Fixed
 - Fix setup with only one idp by using 1 as default value in routes
