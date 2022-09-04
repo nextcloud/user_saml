@@ -21,7 +21,7 @@ style('user_saml', 'admin');
 		if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 			print_unescaped(
 				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you enabled "%s" or you go directly to the URL %s.',
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you enabled "%s" or you go directly to the URL %s.',
 					[
 						\OCP\Util::sanitizeHTML($theme->getEntity()),
 						\OCP\Util::sanitizeHTML($_['general']['allow_multiple_user_back_ends']['text']),
