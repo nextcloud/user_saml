@@ -32,7 +32,7 @@ style('user_saml', 'admin');
 		} else {
 			print_unescaped(
 				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account won\'t be possible anymore, unless you go directly to the URL %s.',
+					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you go directly to the URL %s.',
 					[
 						\OCP\Util::sanitizeHTML($theme->getEntity()),
 						$url,
