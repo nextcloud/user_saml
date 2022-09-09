@@ -17,6 +17,7 @@ OC.L10N.register(
     "Attribute to map the UID to." : "Атрибут для зіставлення UID.",
     "Email address" : "Адреса ел.пошти",
     "Encrypted" : "Зашифровано",
+    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Використовуйте автентифікацію SAML для %s настільних клієнтів (потрібна повторна автентифікація користувача)",
     "Open documentation" : "Відкрити документацію",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you enabled \"%s\" or you go directly to the URL %s." : "Обов’язково налаштуйте адміністратора, який може отримати доступ до екземпляра через систему єдиного входу. Увійти за допомогою звичайного облікового запису %s більше не буде можливо, якщо ви не ввімкнули \"%s\" або не перейдете безпосередньо за URL-адресою %s.",
     "Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you go directly to the URL %s." : "Обов’язково налаштуйте адміністратора, який може отримати доступ до екземпляра через систему єдиного входу. Увійти за допомогою звичайного облікового запису %s більше не буде можливо, якщо ви не перейдете безпосередньо за URL-адресою %s.",
