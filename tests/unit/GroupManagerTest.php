@@ -34,27 +34,28 @@ use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class GroupManagerTest extends TestCase {
 
-	/** @var IDBConnection|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IDBConnection|MockObject */
 	private $db;
-	/** @var GroupDuplicateChecker|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var GroupDuplicateChecker|MockObject */
 	private $duplicateChecker;
-	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IGroupManager|MockObject */
 	private $groupManager;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|MockObject */
 	private $userManager;
-	/** @var GroupBackend|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var GroupBackend|MockObject */
 	private $ownGroupBackend;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IConfig|MockObject */
 	private $config;
-	/** @var JobList|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var JobList|MockObject */
 	private $jobList;
-	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var SAMLSettings|MockObject */
 	private $settings;
-	/** @var GroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var GroupManager|MockObject */
 	private $ownGroupManager;
 
 	protected function setUp(): void {
@@ -141,7 +142,7 @@ class GroupManagerTest extends TestCase {
 			->expects($this->once())
 			->method('addGroups')
 			->with($user, ['groupC']);
-		
+
 		// assert SAML provides user groups groupB and groupC
 		$this->ownGroupManager->replaceGroups('ExistingUser', ['groupB', 'groupC']);
 	}
@@ -200,7 +201,7 @@ class GroupManagerTest extends TestCase {
 		$this->ownGroupManager
 			->expects($this->never())
 			->method('createGroupInBackend');
-		
+
 		$this->ownGroupManager->addGroups($user, ['groupA']);
 	}
 
@@ -208,7 +209,7 @@ class GroupManagerTest extends TestCase {
 		$this->getGroupManager();
 		$user = $this->createMock(IUser::class);
 		$groupB = $this->createMock(IGroup::class);
-		
+
 		// assert group does not exist
 		$this->groupManager
 			->expects($this->at(0))

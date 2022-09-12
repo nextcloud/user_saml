@@ -50,7 +50,7 @@ class UserBackendTest extends TestCase {
 	private $db;
 	/** @var IUserManager|MockObject */
 	private $userManager;
-	/** @var GroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var GroupManager|MockObject */
 	private $groupManager;
 	/** @var UserBackend|MockObject */
 	private $userBackend;

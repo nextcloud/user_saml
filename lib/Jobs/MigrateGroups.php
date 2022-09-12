@@ -32,13 +32,13 @@ use OCA\User_SAML\GroupManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MigrateGroups
  *
  * @package OCA\User_SAML\Jobs
- * @todo: remove this, when dropping Nextcloud 18 support
+ * @todo: remove this, when dropping Nextcloud 23 support
  */
 class MigrateGroups extends QueuedJob {
 
@@ -122,7 +122,7 @@ class MigrateGroups extends QueuedJob {
 			return true;
 		} catch (\Exception $e) {
 			$this->dbc->rollBack();
-			$this->logger->logException($e, ['app' => 'user_saml', 'level' => ILogger::WARN]);
+			$this->logger->warning($e->getMessage(), ['app' => 'user_saml', 'exception' => $e]);
 		}
 
 		return false;

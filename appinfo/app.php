@@ -19,8 +19,10 @@
  *
  */
 
+use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupDuplicateChecker;
 use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\SAMLSettings;
 use OCP\BackgroundJob\IJobList;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -31,7 +33,7 @@ use Psr\Log\LoggerInterface;
 
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
-// If we run in CLI mode do not setup the app as it can fail the OCC execution
+// If we run in CLI mode do not set up the app as it can fail the OCC execution
 // since the URLGenerator isn't accessible.
 $cli = false;
 if (OC::$CLI) {
@@ -45,27 +47,21 @@ try {
 	$userSession = \OC::$server->getUserSession();
 	$session = \OC::$server->getSession();
 } catch (Throwable $e) {
-	\OC::$server->getLogger()->logException($e);
+	/** @var LoggerInterface $logger */
+	$logger = \OC::$server->get(LoggerInterface::class);
+	$logger->critical($e->getMessage(), ['app' => 'user_saml', 'exception' => $e]);
 	return;
 }
 
-\OC::$server->registerService(GroupDuplicateChecker::class, function (ContainerInterface $c) use ($config) {
-	return new GroupDuplicateChecker(
-		$config,
-		$c->get(IGroupManager::class),
-		$c->get(LoggerInterface::class)
-	);
-});
-
-$groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
+$groupBackend = \OC::$server->get(GroupBackend::class);
 \OC::$server->get(IGroupManager::class)->addBackend($groupBackend);
 
-$samlSettings = \OC::$server->get(\OCA\User_SAML\SAMLSettings::class);
+$samlSettings = \OC::$server->get(SAMLSettings::class);
 
 \OC::$server->registerService(GroupManager::class, function (ContainerInterface $c) use ($groupBackend, $samlSettings) {
 	return new GroupManager(
 		$c->get(IDBConnection::class),
-		$c->get(SAMLGroupDuplicateChecker::class),
+		$c->get(GroupDuplicateChecker::class),
 		$c->get(IGroupManager::class),
 		$c->get(IUserManager::class),
 		$groupBackend,

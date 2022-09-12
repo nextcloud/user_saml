@@ -34,9 +34,13 @@ use OCA\User_SAML\Exceptions\AddUserToGroupException;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\ICountUsersBackend;
+use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\Group\Backend\IDeleteGroupBackend;
+use OCP\Group\Backend\INamedBackend;
+use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IRemoveFromGroupBackend, INamedBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -50,7 +54,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		$this->dbc = $dbc;
 	}
 
-	public function inGroup($uid, $gid) {
+	public function inGroup($uid, $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
 		$stmt = $qb->select('gid')
 			->from(self::TABLE_MEMBERS)
@@ -67,7 +71,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @return string[] Group names
 	 */
-	public function getUserGroups($uid) {
+	public function getUserGroups($uid): array {
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
 			->from(self::TABLE_MEMBERS)
@@ -87,7 +91,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @return string[] Group names
 	 */
-	public function getGroups($search = '', $limit = null, $offset = null) {
+	public function getGroups($search = '', $limit = null, $offset = null): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('gid')
 			->from(self::TABLE_GROUPS)
@@ -113,9 +117,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	/**
+	 * @param string $gid
 	 * @return bool
 	 */
-	public function groupExists($gid) {
+	public function groupExists($gid): bool {
 		if (isset($this->groupCache[$gid])) {
 			return true;
 		}
@@ -135,12 +140,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return false;
 	}
 
-	public function groupExistsWithDifferentGid($samlGid): ?string {
+	public function groupExistsWithDifferentGid(string $samlGid): ?string {
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
 			->from(self::TABLE_GROUPS)
 			->where($qb->expr()->eq('saml_gid', $qb->createNamedParameter($samlGid)))
-			->execute();
+			->executeQuery();
 		$result = $cursor->fetch(FetchMode::NUMERIC);
 		$cursor->closeCursor();
 
@@ -151,9 +156,13 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	/**
+	 * @param string $gid
+	 * @param string $search
+	 * @param int $limit
+	 * @param int $offset
 	 * @return string[] User ids
 	 */
-	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0) {
+	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('uid')
 			->from(self::TABLE_MEMBERS)
@@ -220,12 +229,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	public function removeFromGroup(string $uid, string $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
-		$qb->delete(self::TABLE_MEMBERS)
+		$rows = $qb->delete(self::TABLE_MEMBERS)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->andWhere($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
-			->execute();
+			->executeStatement();
 
-		return true;
+		return $rows > 0;
 	}
 
 	public function countUsersInGroup(string $gid, string $search = ''): int {
@@ -236,11 +245,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 		if ($search !== '') {
 			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
-				'%' . $this->dbConn->escapeLikeParameter($search) . '%'
+				'%' . $this->dbc->escapeLikeParameter($search) . '%'
 			)));
 		}
 
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$count = $result->fetchOne();
 		$result->closeCursor();
 
@@ -255,18 +264,31 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	public function deleteGroup(string $gid): bool {
 		$query = $this->dbc->getQueryBuilder();
-		// delete the group
-		$query->delete(self::TABLE_GROUPS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->execute();
 
-		// delete group user relation
-		$query->delete(self::TABLE_MEMBERS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->execute();
+		try {
+			$this->dbc->beginTransaction();
 
-		// remove from cache
-		unset($this->groupCache[$gid]);
+			// delete the group
+			$query->delete(self::TABLE_GROUPS)
+				->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+				->executeStatement();
+
+			// delete group user relation
+			$query->delete(self::TABLE_MEMBERS)
+				->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+				->executeStatement();
+
+			$this->dbc->commit();
+			unset($this->groupCache[$gid]);
+		} catch (\Throwable $t) {
+			$this->dbc->rollBack();
+			throw $t;
+		}
+
 		return true;
+	}
+
+	public function getBackendName(): string {
+		return 'user_saml';
 	}
 }

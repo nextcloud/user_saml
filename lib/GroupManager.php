@@ -164,8 +164,7 @@ class GroupManager {
 				//FIXME: probably need config flag. Previous to 17, gid was used as displayname
 				$providerId = $this->settings->getProviderId();
 				$settings = $this->settings->get($providerId);
-				$groupPrefix = isset($settings['saml-attribute-mapping-group_mapping_prefix'])
-					? $settings['saml-attribute-mapping-group_mapping_prefix'] : 'SAML_';
+				$groupPrefix = $settings['saml-attribute-mapping-group_mapping_prefix'] ?? 'SAML_';
 				$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
 			} else {
 				throw $e;
@@ -228,18 +227,7 @@ class GroupManager {
 	}
 
 	protected function hasSamlBackend(IGroup $group): bool {
-		$reflected = new \ReflectionObject($group);
-		$backendsProperty = $reflected->getProperty('backends');
-		$backendsProperty->setAccessible(true);
-		$backends = $backendsProperty->getValue($group);
-		// available at nextcloud 22
-		// $backends = $group->getBackendNames();
-		foreach ($backends as $backend) {
-			if ($backend instanceof GroupBackend) {
-				return true;
-			}
-		}
-		return false;
+		return in_array('user_saml', $group->getBackendNames());
 	}
 
 	public function evaluateGroupMigrations(array $groups): void {

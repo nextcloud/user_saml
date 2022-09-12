@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.0.0 (unreleased)
+
+### Added
+- Group backend
+
+### Changed
+- drop support for Nextcloud 21 and 22
+
 ## 5.0.3
 ### Fixed
 - Fix signining in with multiple IdPs

@@ -659,20 +659,15 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setQuota($newQuota);
 			}
 
-			if ($newGroups === null) {
-				$newGroups = [];
-			}
 			try {
-				$this->groupManager->replaceGroups($user->getUID(), $newGroups);
+				$this->groupManager->replaceGroups($user->getUID(), $newGroups ?? []);
 			} catch (AddUserToGroupException $e) {
 				$this->logger->error('Failed to add user to group: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
 			}
-			// TODO: drop following line with dropping NC 18 support
+			// TODO: drop following line with dropping NC 23 support
 			$this->groupManager->evaluateGroupMigrations($newGroups);
 		}
 	}
-
-
 
 	public function countUsers() {
 		$query = $this->db->getQueryBuilder();
