@@ -35,6 +35,42 @@ type: docker
 
 ---
 kind: pipeline
+name: integration-tests-stable25
+
+clone:
+  depth: 1
+
+steps:
+  - name: integration-tests-stable25
+    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php8.0:latest
+    environment:
+      CORE_BRANCH: stable25
+    commands:
+      - /start.sh
+      - /wait-for-services.sh
+      - rm -rf /var/www/html
+      - cd /var/www/
+      - git clone --depth 1 -b $CORE_BRANCH https://github.com/nextcloud/server html
+      - cd /var/www/html && git submodule update --init
+      # use local clone
+      - cp -r /drone/src /var/www/html/apps/user_saml
+      - php /var/www/html/occ maintenance:install --database sqlite --admin-pass password
+      - php /var/www/html/occ app:enable user_saml
+      - chown -R apache:apache /var/www/html/
+      - cd /var/www/html/apps/user_saml/tests/integration && vendor/bin/behat
+
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
+type: docker
+
+---
+kind: pipeline
 name: integration-tests-stable24
 
 clone:
