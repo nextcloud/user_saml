@@ -60,14 +60,6 @@
 			OCP.AppConfig.setValue('user_saml', 'type', '', {success: function() {location.reload();}});
 		},
 
-
-		getConfigIdentifier: function() {
-			if (this.currentConfig === '1') {
-				return '';
-			}
-			return this.currentConfig + '-';
-		},
-
 		/**
 		 * Add a new provider
 		 */
@@ -131,7 +123,7 @@
 			// Checks on each request whether the settings make sense or not
 			$.ajax({
 				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
-				data: { idp: OCA.User_SAML.Admin.getConfigIdentifier() },
+				data: { idp: this.currentConfig },
 				type: 'GET'
 			}).fail(function (e) {
 				if (e.status === 500) {
