@@ -223,6 +223,99 @@ $(function() {
 		OCA.User_SAML.Admin.resetSettings();
 	});
 
+	function isGroupMappingValid() {
+		if (!$('#user-saml-group-mapping-field-name').val()) {
+			return false;
+		}
+		var allMappingsDeclared = $('#saml-mapping-items')
+			.children('p')
+			.children('input')
+			.map(function () { return $(this).val(); })
+			.get()
+			.every(function (x) { return x; });
+		if (!allMappingsDeclared) {
+			return false;
+		}
+		return true;
+	}
+
+	function updateGroupMappings() {
+		OCA.User_SAML.Admin.setSamlConfigValue(
+			'group-mapping',
+			'field-mappings',
+			JSON.stringify(
+				$('#saml-mapping-items').children('p').map(function () {
+					return [$(this).children('.required').map(function () { return $(this).val() }).get()];
+				}).get()
+			)
+		);
+	}
+
+	$(document).on('change', '#saml-mapping-items input', function () {
+		if (isGroupMappingValid()) {
+			$('#user-saml-settings-group-mapping-incomplete').addClass('hidden');
+			OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'enable', '1');
+			updateGroupMappings();
+		} else {
+			$('#user-saml-settings-group-mapping-incomplete').removeClass('hidden');
+		}
+	});
+
+	$('#saml-add-mapping').click(function(e) {
+		e.preventDefault();
+		$('#saml-mapping-items').append("\
+			<p class=\"saml-group-mapping\">\
+				<input type=\"text\" placeholder=\"SAML group\" class=\"required\" />\
+				<input type=\"text\" placeholder=\"Nextcloud pendant\" class=\"required\" />\
+				<button class=\"user-saml-remove-mapping\">Remove mapping</button>\
+			</p>");
+		$('#saml-group-initial').clone().appendTo('#saml-mapping-items');
+		$('#user-saml-settings-group-mapping-incomplete').removeClass('hidden');
+	});
+
+	$(document).on('click', '.user-saml-remove-mapping', function(e) {
+		e.preventDefault();
+		$(this).closest('.saml-group-mapping').remove();
+		if (isGroupMappingValid()) {
+			$('#user-saml-settings-group-mapping-incomplete').addClass('hidden');
+			OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'enable', '1');
+			updateGroupMappings();
+		}
+	});
+
+	$('#user-saml-group-mapping-check').change(function() {
+		$(this).val($(this).val() === '0' ? '1' : '0');
+		if ($(this).val() == '1') {
+			if (!isGroupMappingValid()) {
+				$('#user-saml-settings-group-mapping-incomplete').removeClass('hidden');
+			} else {
+				OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'enable', '1');
+			}
+			$('#user-saml-group-mapping-field-name').removeAttr('disabled');
+			$('#saml-add-mapping').removeAttr('disabled');
+			$('#saml-mapping-items').children('p').children('input, button').removeAttr('disabled');
+		} else {
+			OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'enable', '0');
+			$('#user-saml-group-mapping-field-name').attr('disabled', 'disabled');
+			$('#saml-add-mapping').attr('disabled', 'disabled');
+			$('#user-saml-settings-group-mapping-incomplete').addClass('hidden');
+			$('#saml-mapping-items').children('p').children('input, button').attr('disabled', 'disabled');
+		}
+	});
+
+	$('#user-saml-group-mapping-field-name').change(function() {
+		var value = $(this).val();
+		if (value) {
+			if (isGroupMappingValid()) {
+				$('#user-saml-settings-group-mapping-incomplete').addClass('hidden');
+			}
+			OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'enable', '1');
+			OCA.User_SAML.Admin.setSamlConfigValue('group-mapping', 'saml-field', value);
+		} else {
+			$('#user-saml-settings-group-mapping-incomplete').removeClass('hidden');
+		}
+	});
+
 	var switchProvider = function(providerId) {
 		$('.account-list li').removeClass('active');
 		$('.account-list li[data-id="' + providerId + '"]').addClass('active');
@@ -444,6 +537,13 @@ $(function() {
 					text = 'Hide attribute mapping settings ...';
 				} else {
 					text = 'Show attribute mapping settings ...';
+				}
+				break;
+			case 'user-saml-group-mapping':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide group mapping settings ...';
+				} else {
+					text = 'Show group mapping settings ...';
 				}
 				break;
 		}

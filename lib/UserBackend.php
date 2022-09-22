@@ -659,24 +659,52 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$user->setQuota($newQuota);
 			}
 
-			if ($newGroups !== null) {
-				$groupManager = $this->groupManager;
-				$oldGroups = $groupManager->getUserGroupIds($user);
-
-				$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
-				$groupsToRemove = array_diff($oldGroups, $newGroups);
-
-				foreach ($groupsToAdd as $group) {
-					if (!($groupManager->groupExists($group))) {
-						$groupManager->createGroup($group);
+			if ($this->getGroupMappingSetting('enable') === '1') {
+				$fieldName = $this->getGroupMappingSetting('saml-field');
+				$groupMappings = json_decode($this->getGroupMappingSetting('field-mappings'), true);
+				$newMappedGroups = [];
+				$samlGroups = $attributes[$fieldName] ?? [];
+				foreach ($samlGroups as $samlGroup) {
+					foreach ($groupMappings as $mapping) {
+						list($saml, $nextcloud) = $mapping;
+						if ($saml === $samlGroup) {
+							$newMappedGroups[] = $nextcloud;
+						}
 					}
-					$groupManager->get($group)->addUser($user);
 				}
-
-				foreach ($groupsToRemove as $group) {
-					$groupManager->get($group)->removeUser($user);
+				if ($newMappedGroups !== []) {
+					$this->updateGroups($newMappedGroups, $user);
 				}
 			}
+
+			if ($newGroups !== null) {
+				$this->updateGroups($newGroups, $user);
+			}
+		}
+	}
+
+	private function getGroupMappingSetting($key) {
+		$id = $this->settings->getProviderId();
+		$settings = $this->settings->get($id);
+		return $settings['group-mapping-' . $key] ?? null;
+	}
+
+	private function updateGroups(array $newGroups, $user) {
+		$groupManager = $this->groupManager;
+		$oldGroups = $groupManager->getUserGroupIds($user);
+
+		$groupsToAdd = array_unique(array_diff($newGroups, $oldGroups));
+		$groupsToRemove = array_diff($oldGroups, $newGroups);
+
+		foreach ($groupsToAdd as $group) {
+			if (!($groupManager->groupExists($group))) {
+				$groupManager->createGroup($group);
+			}
+			$groupManager->get($group)->addUser($user);
+		}
+
+		foreach ($groupsToRemove as $group) {
+			$groupManager->get($group)->removeUser($user);
 		}
 	}
 

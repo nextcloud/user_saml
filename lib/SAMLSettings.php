@@ -68,6 +68,9 @@ class SAMLSettings {
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',
+		'group-mapping-enable',
+		'group-mapping-saml-field',
+		'group-mapping-field-mappings',
 	];
 
 	/** @var IURLGenerator */

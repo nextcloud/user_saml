@@ -198,6 +198,36 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 
+		<div id="user-saml-group-mapping">
+			<h3><?php p($l->t('Group mapping')) ?></h3>
+			<p>
+				<?php p($l->t('Map groups from a specified SAML attribute to existing Nextcloud groups')) ?>
+				<span class="toggle"><?php p($l->t('Show group mapping settings ...')) ?></span>
+			</p>
+			<div class="ident hidden">
+				<p>
+					<input type="checkbox" id="user-saml-group-mapping-check" name="user-saml-group-mapping-check" value="<?php p($_['config']['group-mapping-enable'] ?? '0') ?>" />
+					<label for="user-saml-group-mapping-check"><?php p($l->t('Whether to enable group mapping')) ?></label>
+				</p>
+				<p>
+				<input <?php if ('0' === $_['config']['group-mapping-enable'] ?? '0'): ?>disabled="disabled"<?php endif; ?> id="user-saml-group-mapping-field-name" type="text" placeholder="<?php p($l->t('SAML group attribute name')) ?>" class="required" value="<?php p($_['config']['group-mapping-saml-field'] ?? '') ?>" />
+				</p>
+				<div>
+					<h4>Mappings</h4>
+					<div id="saml-mapping-items">
+						<?php foreach (json_decode($_['config']['group-mapping-field-mappings'] ?? '') as $mapping): ?>
+							<p class="saml-group-mapping">
+								<input type="text" placeholder="SAML group" class="required" value="<?php p($mapping[0]) ?>" />
+								<input type="text" placeholder="Nextcloud pendant" class="required" value="<?php p($mapping[1]) ?>" />
+								<button class="user-saml-remove-mapping">Remove mapping</button>
+							</p>
+						<?php endforeach; ?>
+					</div>
+					<button id="saml-add-mapping" <?php if ('0' === $_['config']['group-mapping-enable'] ?? '0'): ?>disabled="disabled"<?php endif; ?>>Add Mapping</button>
+				</div>
+			</div>
+		</div>
+
 		<a id="get-metadata" data-base="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')); ?>"
 		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
 			<?php p($l->t('Download metadata XML')) ?>
@@ -207,6 +237,7 @@ style('user_saml', 'admin');
 
 
 		<span class="warning hidden" id="user-saml-settings-incomplete"><?php p($l->t('Metadata invalid')) ?></span>
+		<span class="warning hidden" id="user-saml-settings-group-mapping-incomplete"><?php p($l->t('Group mapping invalid')) ?></span>
 		<span class="success hidden" id="user-saml-settings-complete"><?php p($l->t('Metadata valid')) ?></span>
 	</div>
 </form>
