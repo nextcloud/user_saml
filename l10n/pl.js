@@ -83,8 +83,8 @@ OC.L10N.register(
     "Metadata invalid" : "Nieprawidłowe metadane",
     "Metadata valid" : "Prawidłowe metadane",
     "Error" : "Błąd",
-    "Account not provisioned." : "Konto nieobsługiwane.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Twoje konto nie jest świadczone, dostęp do usługi jest po prostu niemożliwy.",
+    "Account not provisioned." : "Brak konta.",
+    "Your account is not provisioned, access to this service is thus not possible." : "Nie posiadasz konta, stąd dostęp do tej usługi jest niemożliwy.",
     "Login options:" : "Opcje logowania:",
     "Choose a authentication provider" : "Wybierz dostawcę uwierzytelniania"
 },
