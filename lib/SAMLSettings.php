@@ -65,6 +65,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-group_mapping',
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
+		'saml-attribute-mapping-mfa_mapping',
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',
