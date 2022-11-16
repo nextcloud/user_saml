@@ -65,6 +65,8 @@ class SAMLSettings {
 		'saml-attribute-mapping-group_mapping',
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
+		'saml-user-filter-reject_groups',
+		'saml-user-filter-require_groups',
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',

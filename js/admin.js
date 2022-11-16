@@ -192,8 +192,10 @@ $(function() {
 
 		if($('#user-saml-general-require_provisioned_account').val() === '0' && type !== '') {
 			$('#user-saml-attribute-mapping').removeClass('hidden');
+			$('#user-saml-filtering').removeClass('hidden');
 		} else {
 			$('#user-saml-attribute-mapping').addClass('hidden');
+			$('#user-saml-filtering').addClass('hidden');
 		}
 	});
 
@@ -349,6 +351,7 @@ $(function() {
 			}
 			if(key === 'require_provisioned_account') {
 				$('#user-saml-attribute-mapping').toggleClass('hidden');
+				$('#user-saml-filtering').toggleClass('hidden');
 			}
 			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val(), true);
 		});
@@ -404,6 +407,18 @@ $(function() {
 		}
 	});
 
+	$('#user-saml-filtering input[type="text"]').change(function(e) {
+		var el = $(this);
+		$.when(el.focusout()).then(function() {
+			var key = $(this).attr('name');
+			OCA.User_SAML.Admin.setSamlConfigValue('saml-user-filter', key, $(this).val());
+		});
+		if (e.keyCode === 13) {
+			var key = $(this).attr('name');
+			OCA.User_SAML.Admin.setSamlConfigValue('saml-user-filter', key, $(this).val());
+		}
+	});
+
 	$('#user-saml-settings .toggle').on('click', function() {
 		var el = $(this),
 			nextSibling = el.parent().next(),
@@ -436,6 +451,13 @@ $(function() {
 					text = 'Hide attribute mapping settings ...';
 				} else {
 					text = 'Show attribute mapping settings ...';
+				}
+				break;
+			case 'user-saml-filtering':
+				if (nextSibling.hasClass('hidden')) {
+					text = 'Hide user filter settings ...';
+				} else {
+					text = 'Show user filter settings ...';
 				}
 				break;
 		}

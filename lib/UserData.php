@@ -82,6 +82,18 @@ class UserData {
 		return $uid;
 	}
 
+	public function getGroups(): array {
+		$this->assertIsInitialized();
+		$mapping = $this->getProviderSettings()['saml-attribute-mapping-group_mapping'] ?? null;
+		if ($mapping === null || !isset($this->attributes[$mapping])) {
+			return [];
+		}
+
+		return is_array($this->attributes[$mapping])
+			? $this->attributes[$mapping]
+			: array_map('trim', explode(',', $this->attributes[$mapping]));
+	}
+
 	protected function extractSamlUserId(): string {
 		$uidMapping = $this->getUidMappingAttribute();
 		if ($uidMapping !== null && isset($this->attributes[$uidMapping])) {

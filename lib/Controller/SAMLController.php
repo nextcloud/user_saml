@@ -26,6 +26,7 @@ use Firebase\JWT\JWT;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
+use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -114,6 +115,7 @@ class SAMLController extends Controller {
 
 	/**
 	 * @throws NoUserFoundException
+	 * @throws UserFilterViolationException
 	 */
 	private function autoprovisionIfPossible() {
 		$auth = $this->userData->getAttributes();
@@ -121,6 +123,8 @@ class SAMLController extends Controller {
 		if (!$this->userData->hasUidMappingAttribute()) {
 			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth)));
 		}
+
+		$this->assertGroupMemberships();
 
 		if ($this->userData->getOriginalUid() === '') {
 			$this->logger->error('Uid is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
@@ -154,6 +158,27 @@ class SAMLController extends Controller {
 			$this->userBackend->createUserIfNotExists($uid, $auth);
 			$this->userBackend->updateAttributes($uid, $auth);
 			return;
+		}
+	}
+
+	/**
+	 * @throws UserFilterViolationException
+	 */
+	protected function assertGroupMemberships(): void {
+		$groups = $this->userData->getGroups();
+		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp'));
+
+		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
+		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
+
+		if (!empty(array_intersect($groups, $rejectGroups))) {
+			throw new UserFilterViolationException('User is member of a rejection group.');
+		}
+
+		$requireGroupsString = trim($settings['saml-user-filter-require_groups'] ?? '');
+		$requireGroups = array_map('trim', explode(',', $requireGroupsString));
+		if (!empty($requireGroupsString) && empty(array_intersect($groups, $requireGroups))) {
+			throw new UserFilterViolationException('User is not member of a required group.');
 		}
 	}
 
@@ -336,6 +361,11 @@ class SAMLController extends Controller {
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
+		} catch (UserFilterViolationException $e) {
+			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
+			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
+			$response->invalidateCookie('saml_data');
+			return $response;
 		}
 
 		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
@@ -465,6 +495,14 @@ class SAMLController extends Controller {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
 	}
 
+	/**
+	 * @PublicPage
+	 * @NoCSRFRequired
+	 * @OnlyUnauthenticatedUsers
+	 */
+	public function notPermitted() {
+		return new Http\TemplateResponse($this->appName, 'notPermitted', [], 'guest');
+	}
 
 	/**
 	 * @PublicPage

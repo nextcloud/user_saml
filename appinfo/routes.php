@@ -55,6 +55,11 @@ return [
 			'postfix' => 'slspost',
 		],
 		[
+			'name' => 'SAML#notPermitted',
+			'url' => '/saml/notPermitted',
+			'verb' => 'GET',
+		],
+		[
 			'name' => 'SAML#notProvisioned',
 			'url' => '/saml/notProvisioned',
 			'verb' => 'GET',
