@@ -166,7 +166,7 @@ class SAMLController extends Controller {
 	 */
 	protected function assertGroupMemberships(): void {
 		$groups = $this->userData->getGroups();
-		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp'));
+		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp') ?? 1);
 
 		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
 		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
@@ -245,8 +245,20 @@ class SAMLController extends Controller {
 						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
 					}
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+				} catch (UserFilterViolationException $e) {
+					$this->logger->info(
+						'SAML filter constraints not met: {msg}',
+						[
+							'app' => 'user_saml',
+							'msg' => $e->getMessage(),
+						]
+					);
+					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted');
 				}
 				$response = new Http\RedirectResponse($ssoUrl);
+				if (isset($e)) {
+					$this->session->clear();
+				}
 				break;
 			default:
 				throw new \Exception(
@@ -442,7 +454,7 @@ class SAMLController extends Controller {
 
 		if ($pass) {
 			$idp = $this->session->get('user_saml.Idp');
-			$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
+			$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp ?? 1));
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
 			if ($isFromIDP) {
 				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
