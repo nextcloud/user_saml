@@ -324,7 +324,7 @@ class SAMLControllerTest extends TestCase {
 			->method('getCurrentUserId')
 			->willReturn(isset($samlUserData['uid']) ? 'MyUid' : '');
 		$this->userBackend
-			->expects($autoProvision > 0 ? $this->once() : $this->any())
+			->expects($this->any())
 			->method('autoprovisionAllowed')
 			->willReturn($autoProvision > 0);
 		$this->userBackend
@@ -436,10 +436,28 @@ class SAMLControllerTest extends TestCase {
 			->with(1)
 			->willReturn($settings);
 
+		$this->userBackend->expects($this->any())
+			->method('autoprovisionAllowed')
+			->willReturn(true);
+
 		if ($isException) {
 			$this->expectException(UserFilterViolationException::class);
 			$this->expectExceptionMessage($message);
 		}
+
+		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
+	}
+
+	public function testUserFilterNotApplicable(): void {
+		$this->userData->expects($this->never())
+			->method('getGroups');
+
+		$this->session->expects($this->never())
+			->method('get');
+
+		$this->userBackend->expects($this->any())
+			->method('autoprovisionAllowed')
+			->willReturn(false);
 
 		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
 	}

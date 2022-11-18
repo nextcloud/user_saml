@@ -165,6 +165,13 @@ class SAMLController extends Controller {
 	 * @throws UserFilterViolationException
 	 */
 	protected function assertGroupMemberships(): void {
+		if (!$this->userBackend->autoprovisionAllowed()) {
+			// return early, when users are provided by a different backend
+			// - mappings are not available/configurable in that case
+			// - control is solely based on presence and enabled-state of the user
+			return;
+		}
+
 		$groups = $this->userData->getGroups();
 		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp') ?? 1);
 
