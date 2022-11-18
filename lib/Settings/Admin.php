@@ -138,6 +138,21 @@ class Admin implements ISettings {
 
 		];
 
+		$userFilterSettings = [
+			'reject_groups' => [
+				'text' => $this->l10n->t('Reject members of these groups. This setting has precedence over required memberships.'),
+				'placeholder' => $this->l10n->t('Group A, Group B, …'),
+				'type' => 'line',
+				'required' => true,
+			],
+			'require_groups' => [
+				'text' => $this->l10n->t('Require membership in these groups, if any.'),
+				'placeholder' => $this->l10n->t('Group A, Group B, …'),
+				'type' => 'line',
+				'required' => true,
+			],
+		];
+
 		$firstIdPConfig = isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null;
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
@@ -219,6 +234,7 @@ class Admin implements ISettings {
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
 			'attribute-mapping' => $attributeMappingSettings,
+			'user-filter' => $userFilterSettings,
 			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
 			'providers' => $providers,
