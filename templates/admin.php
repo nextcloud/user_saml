@@ -202,7 +202,7 @@ style('user_saml', 'admin');
 			<h3><?php p($l->t('User filtering')) ?></h3>
 			<p>
 				<?php print_unescaped($l->t('If you want to optionally restrict user login depending on user data, configure it here.')) ?>
-				<span class="toggle"><?php p($l->t('Show user filtering settings…')) ?></span>
+				<span class="toggle"><?php p($l->t('Show user filtering settings …')) ?></span>
 			</p>
 
 			<div class="hidden">
