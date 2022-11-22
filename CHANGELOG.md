@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.0
+
+### Added
+- User filtering by group memberships
+
+### Fixed
+- fetching metadata with IdP id 1
+- Spelling consolidation
+
 ## 5.0.3
 ### Fixed
 - Fix signining in with multiple IdPs
