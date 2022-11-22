@@ -81,7 +81,6 @@
     "Signatures and encryption required" : "Gereken imza ve şifreleme",
     "User filtering" : "Kullanıcı süzme",
     "If you want to optionally restrict user login depending on user data, configure it here." : "Kullanıcı oturumu açmayı, kullanıcı verilerine bağlı olarak isteğe göre kısıtlamak istiyorsanız, bu bölümden yapılandırabilirsiniz.",
-    "Show user filtering settings…" : "Kullanıcı süzme ayarlarını görüntüle…",
     "Download metadata XML" : "Üst veri XML dosyasını indir",
     "Reset settings" : "Ayarları sıfırla",
     "Metadata invalid" : "Üst veri geçersiz",

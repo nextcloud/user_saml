@@ -83,7 +83,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "Podpisy a šifrování vyžadováno",
     "User filtering" : "Filtrování uživatelů",
     "If you want to optionally restrict user login depending on user data, configure it here." : "Pokud chcete volitelně omezit přihlašování uživatelů v závislosti na údajích uživatele, nastavte to zde.",
-    "Show user filtering settings…" : "Zobrazit nastavení filtrování uživatelů",
     "Download metadata XML" : "Stahovat metadata XML",
     "Reset settings" : "Resetovat nastavení",
     "Metadata invalid" : "Metadata neplatná",

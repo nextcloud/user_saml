@@ -83,7 +83,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "需要簽名和加密",
     "User filtering" : "用戶過濾",
     "If you want to optionally restrict user login depending on user data, configure it here." : "如果您想根據用戶數據選擇性地限制用戶登錄，請在此處進行配置。",
-    "Show user filtering settings…" : "顯示用戶過濾設置...",
     "Download metadata XML" : "下載元數據 XML",
     "Reset settings" : "重置設置",
     "Metadata invalid" : "元數據無效",
