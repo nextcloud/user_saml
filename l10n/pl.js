@@ -83,6 +83,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Podpisy i szyfrowanie są wymagane",
     "User filtering" : "Filtrowanie użytkowników",
     "If you want to optionally restrict user login depending on user data, configure it here." : "Jeśli chcesz opcjonalnie ograniczyć logowanie użytkownika w zależności od danych użytkownika, skonfiguruj to tutaj.",
+    "Show user filtering settings …" : "Pokaż ustawienia filtrowania użytkowników…",
     "Download metadata XML" : "Ściągnij metadane XML",
     "Reset settings" : "Zresetuj ustawienia",
     "Metadata invalid" : "Nieprawidłowe metadane",
