@@ -429,6 +429,7 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @UseSession
 	 *
 	 * @return Http\RedirectResponse
 	 * @throws Error
