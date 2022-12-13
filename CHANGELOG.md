@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.1
+
+### Fixed
+- Use session locking to be compatible with Nextcloud 25 during logout
+
 ## 5.1.0
 
 ### Added
