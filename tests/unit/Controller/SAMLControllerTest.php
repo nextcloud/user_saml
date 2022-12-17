@@ -24,6 +24,7 @@ namespace OCA\User_SAML\Tests\Controller;
 use Exception;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
+use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -228,10 +229,18 @@ class SAMLControllerTest extends TestCase {
 			});
 
 		$this->session
-			->expects($this->once())
+			->expects($this->any())
 			->method('get')
-			->with('user_saml.samlUserData')
-			->willReturn($samlUserData);
+			->willReturnCallback(function (string $key) use ($samlUserData) {
+				switch ($key) {
+					case 'user_saml.samlUserData':
+						return $samlUserData;
+					case 'user_saml.Idp':
+						return 1;
+					default:
+						return null;
+				}
+			});
 
 		$this->userData
 			->expects($this->once())
@@ -315,7 +324,7 @@ class SAMLControllerTest extends TestCase {
 			->method('getCurrentUserId')
 			->willReturn(isset($samlUserData['uid']) ? 'MyUid' : '');
 		$this->userBackend
-			->expects($autoProvision > 0 ? $this->once() : $this->any())
+			->expects($this->any())
 			->method('autoprovisionAllowed')
 			->willReturn($autoProvision > 0);
 		$this->userBackend
@@ -323,10 +332,14 @@ class SAMLControllerTest extends TestCase {
 			->method('createUserIfNotExists')
 			->with('MyUid');
 
-
 		$expected = new RedirectResponse($redirect);
 		$result = $this->samlController->login(1);
 		$this->assertEquals($expected, $result);
+	}
+
+	public function testNotPermitted() {
+		$expected = new TemplateResponse('user_saml', 'notPermitted', [], 'guest');
+		$this->assertEquals($expected, $this->samlController->notPermitted());
 	}
 
 	public function testNotProvisioned() {
@@ -369,5 +382,83 @@ class SAMLControllerTest extends TestCase {
 			['My identity provider', 'My identity provider'],
 			['', 'SSO & SAML log in']
 		];
+	}
+
+	protected function userFilterDataProvider(): array {
+		return [
+			[ // 0 - test rejection by membership
+				'Group C',
+				'Group A, Group B',
+				true,
+				'User is member of a rejection group.',
+			],
+			[ // 1 - test rejection by required membership
+				'Group D',
+				'Group B',
+				true,
+				'User is not member of a required group.',
+			],
+			[ // 2 - test satisfy all requirements
+				'Group D',
+				'Group A',
+				false,
+			],
+			[ // 3 - test no filtering
+				null,
+				null,
+				false,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider userFilterDataProvider
+	 */
+	public function testUserFilter(?string $rejectGroups, ?string $requireGroups, bool $isException, string $message = ''): void {
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn(['Group A', 'Group C']);
+
+		$this->session->expects($this->any())
+			->method('get')
+			->with('user_saml.Idp')
+			->willReturn(1);
+
+		$settings = [];
+		if ($rejectGroups !== null && $requireGroups !== null) {
+			$settings = [
+				'saml-user-filter-reject_groups' => $rejectGroups,
+				'saml-user-filter-require_groups' => $requireGroups,
+			];
+		}
+		$this->samlSettings->expects($this->any())
+			->method('get')
+			->with(1)
+			->willReturn($settings);
+
+		$this->userBackend->expects($this->any())
+			->method('autoprovisionAllowed')
+			->willReturn(true);
+
+		if ($isException) {
+			$this->expectException(UserFilterViolationException::class);
+			$this->expectExceptionMessage($message);
+		}
+
+		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
+	}
+
+	public function testUserFilterNotApplicable(): void {
+		$this->userData->expects($this->never())
+			->method('getGroups');
+
+		$this->session->expects($this->never())
+			->method('get');
+
+		$this->userBackend->expects($this->any())
+			->method('autoprovisionAllowed')
+			->willReturn(false);
+
+		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
 	}
 }

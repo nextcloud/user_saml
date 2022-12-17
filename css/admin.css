@@ -20,6 +20,11 @@
 	margin: 12px 0;
 }
 
+#user-saml .group {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 #user-saml-settings > div {
 	margin-bottom: 10px;
 }

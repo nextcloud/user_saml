@@ -198,6 +198,26 @@ style('user_saml', 'admin');
 			</div>
 		</div>
 
+		<div id="user-saml-filtering" class="hidden">
+			<h3><?php p($l->t('User filtering')) ?></h3>
+			<p>
+				<?php print_unescaped($l->t('If you want to optionally restrict user login depending on user data, configure it here.')) ?>
+				<span class="toggle"><?php p($l->t('Show user filtering settings …')) ?></span>
+			</p>
+
+			<div class="hidden">
+				<?php foreach ($_['user-filter'] as $key => $attribute): ?>
+					<?php
+					if ($attribute['type'] === 'line'): ?>
+						<p class="group">
+							<span><?php p($attribute['text']) ?></span><br/>
+							<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>
+						</p>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 		<a id="get-metadata" data-base="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')); ?>"
 		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
 			<?php p($l->t('Download metadata XML')) ?>

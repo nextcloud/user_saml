@@ -35,6 +35,7 @@ OC.L10N.register(
     "General" : "General",
     "Configure your IdP settings here." : "Indstil IdP her.",
     "Security settings" : "Sikkerhedsindstillinger",
+    "Show security settings…" : "Vis sikkerhedsindstillinger...",
     "Download metadata XML" : "Download metadata XML",
     "Reset settings" : "Nulstil indstillinger",
     "Metadata invalid" : "Ugyldig metadata",

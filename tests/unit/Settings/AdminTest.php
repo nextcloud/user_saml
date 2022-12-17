@@ -154,6 +154,21 @@ class AdminTest extends \Test\TestCase {
 			],
 		];
 
+		$userFilterSettings = [
+			'reject_groups' => [
+				'text' => 'Reject members of these groups. This setting has precedence over required memberships.',
+				'placeholder' => 'Group A, Group B, …',
+				'type' => 'line',
+				'required' => true,
+			],
+			'require_groups' => [
+				'text' => 'Require membership in these groups, if any.',
+				'placeholder' => 'Group A, Group B, …',
+				'type' => 'line',
+				'required' => true,
+			],
+		];
+
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
 				'label' => 'Email address',
@@ -200,6 +215,7 @@ class AdminTest extends \Test\TestCase {
 			'security-general' => $securityGeneral,
 			'general' => $generalSettings,
 			'attribute-mapping' => $attributeMappingSettings,
+			'user-filter' => $userFilterSettings,
 			'providers' => [
 				['id' => 1, 'name' => 'Provider 1'],
 				['id' => 2, 'name' => 'Provider 2']

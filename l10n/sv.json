@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Detta användarkontot är avstängt, kontakta din administratör.",
     "Saved" : "Sparad",
+    "Could not save" : "Kunde inte spara",
     "Provider" : "Leverantör",
     "Unknown error, please check the log file for more details." : "Okänt fel, vänligen kontrollera loggfilen för mer detaljer.",
     "Direct log in" : "Direkt inloggning",
@@ -75,6 +76,8 @@
     "Metadata invalid" : "Metadata ogiltig",
     "Metadata valid" : "Metadata giltig",
     "Error" : "Fel",
+    "Access denied." : "Åtkomst nekad.",
+    "Your account is denied, access to this service is thus not possible." : "Ditt konto nekas, tillgång till denna tjänst är därför inte möjlig.",
     "Account not provisioned." : "Konto inte förberett",
     "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto tillhandahålls inte, åtkomst till den här tjänsten är därför inte möjligt.",
     "Login options:" : "Inloggningsalternativ:",
