@@ -462,27 +462,23 @@ class SAMLController extends Controller {
 
 		if ($pass) {
 			$idp = $this->session->get('user_saml.Idp');
-			$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp ?? 1));
-			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
+			$stay = true; // $auth will return the redirect URL but won't perform the redirect himself
 			if ($isFromIDP) {
-				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
-				$targetUrl = $auth->processSLO(
-					$keepLocalSession,
-					null,
-					$this->samlSettings->usesSloWebServerDecode($idp),
-					null,
-					$stay
-				);
-
-				$errors = $auth->getErrors();
-				if (!empty($errors)) {
-					foreach ($errors as $error) {
-						$this->logger->error($error, ['app' => $this->appName]);
+				[$targetUrl, $auth] = $this->tryProcessSLOResponse($idp);
+				if ($auth !== null) {
+					$errors = $auth->getErrors();
+					if (!empty($errors)) {
+						foreach ($errors as $error) {
+							$this->logger->error($error, ['app' => $this->appName]);
+						}
+						$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
 					}
-					$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
+				} else {
+					$this->logger->error('Error while handling SLO request: missing session data, and request is not satisfied by any configuration');
 				}
 			} else {
 				// If request is not from IDP, we send the logout request to the IDP
+				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp ?? 1));
 				$nameId = $this->session->get('user_saml.samlNameId');
 				$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
 				$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');
@@ -504,6 +500,31 @@ class SAMLController extends Controller {
 		}
 
 		return new Http\RedirectResponse($targetUrl);
+	}
+
+	/**
+	 * @returns [?string, ?Auth]
+	 */
+	private function tryProcessSLOResponse(?int $idp): array {
+		$idps = ($idp !== null) ? [$idp] : array_keys($this->samlSettings->getListOfIdps());
+		foreach ($idps as $idp) {
+			try {
+				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
+				$targetUrl = $auth->processSLO(
+					true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
+					null,
+					$this->samlSettings->usesSloWebServerDecode($idp),
+					null,
+					true
+				);
+				if ($auth->getLastErrorReason() === null) {
+					return [$targetUrl, $auth];
+				}
+			} catch (Error $e) {
+				continue;
+			}
+		}
+		return [null, null];
 	}
 
 	/**
