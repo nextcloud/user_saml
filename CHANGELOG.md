@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.2
+
+### Fixed
+- gently handle incoming SAML Logout Request when the session is missing
+
 ## 5.1.1
 
 ### Fixed
