@@ -24,6 +24,8 @@ OC.L10N.register(
     "Service Provider Data" : "服務提供者 (Service Provider) 資料",
     "If your Service Provider should use certificates you can optionally specify them here." : "如果您的服務提供者需要憑證，請在這邊指定",
     "Identity Provider Data" : "身份提供者 (IdP) 資料",
+    "Configure your IdP settings here." : "在這邊設置您的 IdP 設定",
+    "Security settings" : "安全性設定",
     "Show security settings…" : "顯示安全性設定",
     "Download metadata XML" : "下載元數據XML",
     "Metadata valid" : "元數據有效",
