@@ -135,6 +135,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'mfa_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users mfa login status'),
+				'type' => 'line',
+				'required' => false,
+			],
 
 		];
 

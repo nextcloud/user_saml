@@ -479,6 +479,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			$result['formatted']['groups'] = null;
 		}
 
+		try {
+			$result['formatted']['mfaVerified'] = $this->getAttributeValue('saml-attribute-mapping-mfa_mapping', $attributes);
+		} catch (\InvalidArgumentException $e) {
+			$result['formatted']['mfaVerified'] = null;
+		}
+
 		$result['formatted']['uid'] = $this->userData->getEffectiveUid();
 
 		return $result;
