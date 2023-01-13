@@ -194,12 +194,6 @@ class Admin implements ISettings {
 				'global' => true,
 				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', 0)
 			];
-			$generalSettings['use_saml_auth_for_desktop'] = [
-				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
-				'type' => 'checkbox',
-				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', 0)
-			];
 			$generalSettings['idp0_display_name'] = [
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
 				'type' => 'line',

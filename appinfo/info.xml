@@ -43,6 +43,9 @@ While theoretically any other authentication provider implementing either one of
 		<post-migration>
 			<step>OCA\User_SAML\Migration\RememberLocalGroupsForPotentialMigrations</step>
 		</post-migration>
+		<live-migration>
+			<step>OCA\User_SAML\Migration\CleanupRemovedConfig</step>
+		</live-migration>
 	</repair-steps>
 	<commands>
 		<command>OCA\User_SAML\Command\ConfigCreate</command>

@@ -20,7 +20,7 @@ class SAMLSettings {
 	private const LOADED_ALL = 2;
 
 	// list of global settings which are valid for every idp:
-	// 'general-require_provisioned_account', 'general-allow_multiple_user_back_ends', 'general-use_saml_auth_for_desktop'
+	// 'general-require_provisioned_account', 'general-allow_multiple_user_back_ends'
 
 	// IdP-specific keys
 	public const IDP_CONFIG_KEYS = [

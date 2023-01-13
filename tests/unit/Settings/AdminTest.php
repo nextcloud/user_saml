@@ -47,9 +47,9 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->will($this->returnCallback(function ($text, $parameters = []) {
+			->willReturnCallback(function ($text, $parameters = []) {
 				return vsprintf($text, $parameters);
-			}));
+			});
 
 		$serviceProviderFields = [
 			'x509cert' => 'X.509 certificate of the Service Provider',
@@ -91,11 +91,6 @@ class AdminTest extends \Test\TestCase {
 			],
 			'require_provisioned_account' => [
 				'text' => 'Only allow authentication if an account exists on some other backend (e.g. LDAP).',
-				'type' => 'checkbox',
-				'global' => true,
-			],
-			'use_saml_auth_for_desktop' => [
-				'text' => 'Use SAML auth for the Nextcloud desktop clients (requires user re-authentication)',
 				'type' => 'checkbox',
 				'global' => true,
 			],
@@ -231,7 +226,6 @@ class AdminTest extends \Test\TestCase {
 			->willReturn('');
 
 		$params = $this->formDataProvider();
-		unset($params['general']['use_saml_auth_for_desktop']);
 		unset($params['general']['idp0_display_name']);
 		unset($params['general']['allow_multiple_user_back_ends']);
 		$params['type'] = '';
@@ -253,7 +247,6 @@ class AdminTest extends \Test\TestCase {
 			->withConsecutive(
 				['user_saml', 'type'],
 				['user_saml', 'general-require_provisioned_account'],
-				['user_saml', 'general-use_saml_auth_for_desktop'],
 				['user_saml', 'general-allow_multiple_user_back_ends'],
 			)
 			->willReturnOnConsecutiveCalls('saml', 0, 0, '');
@@ -265,7 +258,6 @@ class AdminTest extends \Test\TestCase {
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
 		$params['general']['require_provisioned_account']['value'] = 0;
-		$params['general']['use_saml_auth_for_desktop']['value'] = 0;
 		$params['general']['allow_multiple_user_back_ends']['value'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);

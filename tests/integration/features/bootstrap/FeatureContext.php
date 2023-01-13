@@ -111,7 +111,6 @@ class FeatureContext implements Context {
 			'type',
 			'general-require_provisioned_account',
 			'general-allow_multiple_user_back_ends',
-			'general-use_saml_auth_for_desktop',
 			'localGroupsCheckForMigration',
 		])) {
 			$this->changedSettings[] = $settingName;
