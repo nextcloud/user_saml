@@ -83,6 +83,7 @@ OC.L10N.register(
     "Metadata invalid" : "Baliogabeko metadatuak",
     "Metadata valid" : "Baliozko metadatuak",
     "Error" : "Errorea",
+    "Access denied." : "Sarbidea ukatua.",
     "Account not provisioned." : "Ez da kontua eman.",
     "Your account is not provisioned, access to this service is thus not possible." : "Zure kontua ez dago hornituta. Zerbitzu honetara sarbidea, ondorioz, ez da posiblea.",
     "Login options:" : "Saio-hasiera aukerak:",
