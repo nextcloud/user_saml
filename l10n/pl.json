@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "Atrybut do mapowania przydziału.",
     "Attribute to map the users groups to." : "Atrybut do mapowania grup użytkowników.",
     "Attribute to map the users home to." : "Atrybut do mapowania katalogów domowych użytkowników.",
+    "Attribute to map the users mfa login status" : "Atrybut do mapowania statusu logowania użytkowników MFA",
     "Reject members of these groups. This setting has precedence over required memberships." : "Odrzuć członków tych grup. To ustawienie ma pierwszeństwo przed wymaganymi członkostwami.",
     "Group A, Group B, …" : "Grupa A, Grupa B,…",
     "Require membership in these groups, if any." : "Wymagaj członkostwa w tych grupach, jeśli takie istnieją.",
