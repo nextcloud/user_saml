@@ -384,7 +384,7 @@ class SAMLControllerTest extends TestCase {
 		];
 	}
 
-	protected function userFilterDataProvider(): array {
+	public function userFilterDataProvider(): array {
 		return [
 			[ // 0 - test rejection by membership
 				'Group C',
@@ -446,6 +446,10 @@ class SAMLControllerTest extends TestCase {
 		}
 
 		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
+
+		if (!$isException) {
+			$this->assertTrue(true);
+		}
 	}
 
 	public function testUserFilterNotApplicable(): void {

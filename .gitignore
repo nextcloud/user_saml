@@ -11,5 +11,5 @@ build
 .php_cs.cache
 
 !/tests/integration/
-
+tests/unit/.phpunit.result.cache
 .ackrc
