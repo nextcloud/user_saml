@@ -33,7 +33,6 @@ OC.L10N.register(
     "Attribute to map the quota to." : "Atrybut do mapowania przydziału.",
     "Attribute to map the users groups to." : "Atrybut do mapowania grup użytkowników.",
     "Attribute to map the users home to." : "Atrybut do mapowania katalogów domowych użytkowników.",
-    "Attribute to map the users mfa login status" : "Atrybut do mapowania statusu logowania użytkowników MFA",
     "Reject members of these groups. This setting has precedence over required memberships." : "Odrzuć członków tych grup. To ustawienie ma pierwszeństwo przed wymaganymi członkostwami.",
     "Group A, Group B, …" : "Grupa A, Grupa B,…",
     "Require membership in these groups, if any." : "Wymagaj członkostwa w tych grupach, jeśli takie istnieją.",
@@ -95,6 +94,7 @@ OC.L10N.register(
     "Account not provisioned." : "Brak konta.",
     "Your account is not provisioned, access to this service is thus not possible." : "Nie posiadasz konta, stąd dostęp do tej usługi jest niemożliwy.",
     "Login options:" : "Opcje logowania:",
-    "Choose a authentication provider" : "Wybierz dostawcę uwierzytelniania"
+    "Choose a authentication provider" : "Wybierz dostawcę uwierzytelniania",
+    "Attribute to map the users mfa login status" : "Atrybut do mapowania statusu logowania użytkowników MFA"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

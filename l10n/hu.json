@@ -31,7 +31,6 @@
     "Attribute to map the quota to." : "Az attribútum, amelyhez a kvóta hozzá lesz rendelve.",
     "Attribute to map the users groups to." : "Az attribútum, amelyhez a felhasználói csoportjai hozzá lesznek rendelve.",
     "Attribute to map the users home to." : "Az attribútum, amelyhez a felhasználók saját mappái hozzá lesznek rendelve.",
-    "Attribute to map the users mfa login status" : "Az attribútum, amelyhez a felhasználók kétfaktoros bejelentkezési állapota hozzá lesz rendelve.",
     "Reject members of these groups. This setting has precedence over required memberships." : "Ezen csoportok tagjainak elutasítása. Ez a beállítás elsőbbséget élvez a kötelező tagságokkal szemben",
     "Group A, Group B, …" : "Csoport A, Csoport B,…",
     "Require membership in these groups, if any." : "Tagság megkövetelése ezekben a csoportokban, ha meg vannak adva.",
@@ -93,6 +92,7 @@
     "Account not provisioned." : "A fiók nem felügyelt.",
     "Your account is not provisioned, access to this service is thus not possible." : "A fiókja nem felügyelt, így ehhez a szolgáltatáshoz nem férhet hozzá.",
     "Login options:" : "Bejelentkezési lehetőségek:",
-    "Choose a authentication provider" : "Válasszon hitelesítésszolgáltatót"
+    "Choose a authentication provider" : "Válasszon hitelesítésszolgáltatót",
+    "Attribute to map the users mfa login status" : "Az attribútum, amelyhez a felhasználók kétfaktoros bejelentkezési állapota hozzá lesz rendelve."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

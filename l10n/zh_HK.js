@@ -33,7 +33,6 @@ OC.L10N.register(
     "Attribute to map the quota to." : "要將配額映射到的屬性。",
     "Attribute to map the users groups to." : "要映射到用戶分組的屬性。",
     "Attribute to map the users home to." : "要映射到用戶家目錄的屬性。",
-    "Attribute to map the users mfa login status" : "映射用戶 mfa 登錄狀態的屬性",
     "Reject members of these groups. This setting has precedence over required memberships." : "拒絕這些組的成員。 此設置優先於所需的成員資格。",
     "Group A, Group B, …" : "群組 A, 群組 B, …",
     "Require membership in these groups, if any." : "要求成為這些群組的成員（如有）。",
@@ -95,6 +94,7 @@ OC.L10N.register(
     "Account not provisioned." : "帳號尚未配置",
     "Your account is not provisioned, access to this service is thus not possible." : "您的賬號未配置，因此無法訪問此服務。",
     "Login options:" : "登入選項：",
-    "Choose a authentication provider" : "選擇驗證提供者"
+    "Choose a authentication provider" : "選擇驗證提供者",
+    "Attribute to map the users mfa login status" : "映射用戶 mfa 登錄狀態的屬性"
 },
 "nplurals=1; plural=0;");
