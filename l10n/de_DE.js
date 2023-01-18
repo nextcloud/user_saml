@@ -33,6 +33,7 @@ OC.L10N.register(
     "Attribute to map the quota to." : "Attribut, dem das Speicherkontingent zugeordnet werden soll.",
     "Attribute to map the users groups to." : "Attribut, dem die Gruppen des Benutzers zugeordnet werden sollen.",
     "Attribute to map the users home to." : "Attribut dem das zu Hause des Benutzers zugeordnet werden soll.",
+    "Attribute to map the users MFA login status" : "Attribut zur Zuordnung des MFA-Anmeldestatus des Benutzers",
     "Reject members of these groups. This setting has precedence over required memberships." : "Mitglieder dieser Gruppen ablehnen. Diese Einstellung hat Vorrang vor erforderlichen Mitgliedschaften.",
     "Group A, Group B, …" : "Gruppe A, Gruppe B, …",
     "Require membership in these groups, if any." : "Erfordert die Mitgliedschaft in diesen Gruppen, falls vorhanden.",

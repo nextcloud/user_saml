@@ -33,6 +33,7 @@ OC.L10N.register(
     "Attribute to map the quota to." : "Atributo ao qual mapear a cota.",
     "Attribute to map the users groups to." : "Atributo ao qual mapear os grupos de usuários.",
     "Attribute to map the users home to." : "Atributo ao qual mapear a localidade do usuários.",
+    "Attribute to map the users MFA login status" : "Atributo para mapear o status de login do MFA dos usuários",
     "Reject members of these groups. This setting has precedence over required memberships." : "Rejeitar membros desses grupos. Essa configuração tem precedência sobre as associações obrigatórias.",
     "Group A, Group B, …" : "Grupo A, Grupo B,…",
     "Require membership in these groups, if any." : "Exigir associação a esses grupos, se houver.",

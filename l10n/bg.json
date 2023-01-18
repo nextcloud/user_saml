@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "Атрибут за съпоставяне на квотата.",
     "Attribute to map the users groups to." : "Атрибут за съпоставяне на групите потребители.",
     "Attribute to map the users home to." : "Атрибут за съпоставяне на потребителска директория.",
+    "Attribute to map the users MFA login status" : "Атрибут за съпоставяне на статуса на влизане на потребителите в MFA",
     "Reject members of these groups. This setting has precedence over required memberships." : "Отхвърляне на членовете на тези групи. Тази настройка има предимство пред изискваното членство.",
     "Group A, Group B, …" : "Група A, Група B, ...",
     "Require membership in these groups, if any." : "Изисква се членство в тези групи, ако има такива.",
@@ -92,6 +93,7 @@
     "Account not provisioned." : "Неосигурен профил.",
     "Your account is not provisioned, access to this service is thus not possible." : "Вашият профил не е осигурен, поради което не е възможен достъп до тази услуга.",
     "Login options:" : "Опции за влизане:",
-    "Choose a authentication provider" : "Избор на доставчик на удостоверяване "
+    "Choose a authentication provider" : "Избор на доставчик на удостоверяване ",
+    "Attribute to map the users mfa login status" : "Атрибут за съпоставяне на статуса на влизане на потребителите в mfa"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
