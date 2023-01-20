@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "Attribut, dem das Kontingent zugeordnet werden soll.",
     "Attribute to map the users groups to." : "Attribut, dem die Gruppen des Benutzers zugeordnet werden sollen.",
     "Attribute to map the users home to." : "Attribut dem das zu Hause des Benutzers zugeordnet werden soll.",
+    "Attribute to map the users MFA login status" : "Attribut zur Zuordnung des MFA-Anmeldestatus des Benutzers",
     "Email address" : "E-Mail-Adresse",
     "Encrypted" : "Verschlüsselt",
     "Entity" : "Einheit",
@@ -86,6 +87,7 @@
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
     "Login options:" : "Anmeldeoptionen:",
-    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen"
+    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen",
+    "Attribute to map the users mfa login status" : "Attribut zur Zuordnung des MFA-Anmeldestatus des Benutzers"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

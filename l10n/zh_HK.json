@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "要將配額映射到的屬性。",
     "Attribute to map the users groups to." : "要映射到用戶分組的屬性。",
     "Attribute to map the users home to." : "要映射到用戶家目錄的屬性。",
+    "Attribute to map the users MFA login status" : "映射用戶 MFA 登錄狀態的屬性",
     "Reject members of these groups. This setting has precedence over required memberships." : "拒絕這些組的成員。 此設置優先於所需的成員資格。",
     "Group A, Group B, …" : "群組 A, 群組 B, …",
     "Require membership in these groups, if any." : "要求成為這些群組的成員（如有）。",
