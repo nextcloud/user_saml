@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "Az attribútum, amelyhez a kvóta hozzá lesz rendelve.",
     "Attribute to map the users groups to." : "Az attribútum, amelyhez a felhasználói csoportjai hozzá lesznek rendelve.",
     "Attribute to map the users home to." : "Az attribútum, amelyhez a felhasználók saját mappái hozzá lesznek rendelve.",
+    "Attribute to map the users MFA login status" : "Attribútum a felhasználók több-faktoros bejelentkezési státuszának leképezéséhez",
     "Reject members of these groups. This setting has precedence over required memberships." : "Ezen csoportok tagjainak elutasítása. Ez a beállítás elsőbbséget élvez a kötelező tagságokkal szemben",
     "Group A, Group B, …" : "Csoport A, Csoport B,…",
     "Require membership in these groups, if any." : "Tagság megkövetelése ezekben a csoportokban, ha meg vannak adva.",
