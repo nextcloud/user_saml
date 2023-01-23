@@ -5,7 +5,7 @@ OC.L10N.register(
     "Saved" : "บันทึกแล้ว",
     "Provider" : "ผู้ให้บริการ",
     "Email address" : "ที่อยู่อีเมล",
-    "Open documentation" : "เปิดเอกสาร",
+    "Open documentation" : "เปิดเอกสารประกอบ",
     "General" : "ทั่วไป",
     "Error" : "ข้อผิดพลาด"
 },
