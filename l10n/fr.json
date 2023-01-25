@@ -31,6 +31,7 @@
     "Attribute to map the quota to." : "Attribut pour relier le quota.",
     "Attribute to map the users groups to." : "Attribut pour relier les groupes d'utilisateurs.",
     "Attribute to map the users home to." : "Attribut pour relier le domicile des utilisateurs.",
+    "Attribute to map the users MFA login status" : "Attribut pour relier l'état de connexion AMF",
     "Reject members of these groups. This setting has precedence over required memberships." : "Rejeter les membres de ces groupes. Ce paramètre prévaut sur les appartenances requises.",
     "Group A, Group B, …" : "Groupe A, Groupe B, ...",
     "Require membership in these groups, if any." : "Exiger l'appartenance à ce·s groupe·s, si défini·s.",
@@ -92,6 +93,7 @@
     "Account not provisioned." : "Compte non approvisionné.",
     "Your account is not provisioned, access to this service is thus not possible." : "Votre compte n'est pas approvisionné, l'accès à ce service n'est donc pas possible.",
     "Login options:" : "Options de connexion :",
-    "Choose a authentication provider" : "Choisir un fournisseur d'authentification"
+    "Choose a authentication provider" : "Choisir un fournisseur d'authentification",
+    "Attribute to map the users mfa login status" : "Attribut pour relier l'état de connexion AMF"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
