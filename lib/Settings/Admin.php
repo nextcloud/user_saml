@@ -160,6 +160,11 @@ class Admin implements IDelegatedSettings {
 				'type' => 'line',
 				'required' => false,
 			],
+			'user_secret_mapping' => [
+				'text' => $this->l10n->t('Attribute to use as user secret e.g. for the encryption app.'),
+				'type' => 'line',
+				'required' => false,
+			],
 		];
 
 		if (version_compare($this->config->getSystemValueString('version', '0.0.0'), '34.0.0', '<')) {
