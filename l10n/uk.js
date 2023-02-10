@@ -13,7 +13,7 @@ OC.L10N.register(
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be signed. [Metadata of the SP will offer this info]" : "Вказує на вимогу, щоб <saml:Assertion> елементи, отримані цим SP, були підписані. [Метадані SP нададуть цю інформацію]",
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Вказує на вимогу, щоб елементи, отримані цим <saml:Assertion> SP, були зашифровані.",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Вказує на вимогу до елемента NameID у SAMLResponse, отриманому цим SP.",
-    "Indicates a requirement for the NameID received by this SP to be encrypted." : "Вказує на вимогу, щоб NameID, отриманий цим SP, був зашифрований.",
+    "Indicates a requirement for the NameID received by this SP to be encrypted." : "Вказує на вимогу шифрування NameID, який було отримано цим SP.",
     "Attribute to map the UID to." : "Атрибут для зіставлення UID.",
     "Email address" : "Адреса ел.пошти",
     "Encrypted" : "Зашифровано",
