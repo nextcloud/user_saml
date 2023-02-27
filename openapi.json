@@ -1,0 +1,339 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "user_saml",
+        "description": "Authenticate using single sign-on",
+        "license": {
+            "name": "agpl"
+        },
+        "version": "5.1.2"
+    },
+    "paths": {
+        "/index.php/apps/user_saml/saml/login": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Login the user",
+                "operationId": "saml-login",
+                "parameters": [
+                    {
+                        "name": "idp",
+                        "in": "query",
+                        "description": "id of the idp",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "303": {
+                        "description": "Redirect to login URL",
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Should not be visited directly",
+                "operationId": "saml-base",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/metadata": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Get the metadata",
+                "operationId": "saml-get-metadata",
+                "parameters": [
+                    {
+                        "name": "idp",
+                        "in": "query",
+                        "description": "IDP identifier",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Metadata returned",
+                        "content": {
+                            "text/xml": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/acs": {
+            "post": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "ACS URL validator",
+                "operationId": "saml-assertion-consumer-service",
+                "responses": {
+                    "303": {
+                        "description": "Redirect to further processing",
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/sls": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Logout",
+                "operationId": "saml-single-logout-service",
+                "responses": {
+                    "303": {
+                        "description": "Redirect to logout URL",
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Logout",
+                "operationId": "saml-single-logout-service-slspost",
+                "responses": {
+                    "303": {
+                        "description": "Redirect to logout URL",
+                        "headers": {
+                            "Location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/notPermitted": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Show not permitted error",
+                "operationId": "saml-not-permitted",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/notProvisioned": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Show not provisioned error",
+                "operationId": "saml-not-provisioned",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/error": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Show a generic error",
+                "operationId": "saml-generic-error",
+                "parameters": [
+                    {
+                        "name": "message",
+                        "in": "query",
+                        "description": "Error message",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/index.php/apps/user_saml/saml/selectUserBackEnd": {
+            "get": {
+                "tags": [
+                    "saml"
+                ],
+                "summary": "Show select backend page",
+                "operationId": "saml-select-user-back-end",
+                "parameters": [
+                    {
+                        "name": "redirectUrl",
+                        "in": "query",
+                        "description": "URL to redirect to",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {},
+        "securitySchemes": {
+            "basic_auth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "bearer_auth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        {
+            "basic_auth": []
+        },
+        {
+            "bearer_auth": []
+        }
+    ],
+    "tags": []
+}

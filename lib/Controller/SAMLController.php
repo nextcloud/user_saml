@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
  * @copyright Copyright (c) 2018 Jean-Baptiste Pin <jibet.pin@gmail.com>
  *
+ * @author Kate Döen <kate.doeen@nextcloud.com>
+ *
  * @license GNU AGPL version 3 or any later version
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,6 +35,9 @@ use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataDownloadResponse;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
@@ -195,9 +200,13 @@ class SAMLController extends Controller {
 	 * @OnlyUnauthenticatedUsers
 	 * @NoCSRFRequired
 	 *
+	 * Login the user
+	 *
 	 * @param int $idp id of the idp
-	 * @return Http\RedirectResponse
+	 * @return RedirectResponse
 	 * @throws \Exception
+	 *
+	 * 303: Redirect to login URL
 	 */
 	public function login(int $idp = 1) {
 		$type = $this->config->getAppValue($this->appName, 'type');
@@ -282,9 +291,14 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @NoCSRFRequired
-	 * @param int $idp
-	 * @return Http\DataDownloadResponse
+	 *
+	 * Get the metadata
+	 *
+	 * @param int $idp IDP identifier
+	 * @return DataDownloadResponse<'text/xml'>
 	 * @throws Error
+	 *
+	 * 200: Metadata returned
 	 */
 	public function getMetadata(int $idp = 1) {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
@@ -307,9 +321,13 @@ class SAMLController extends Controller {
 	 * @OnlyUnauthenticatedUsers
 	 * @NoSameSiteCookieRequired
 	 *
-	 * @return Http\RedirectResponse
+	 * ACS URL validator
+	 *
+	 * @return RedirectResponse
 	 * @throws Error
 	 * @throws ValidationError
+	 *
+	 * 303: Redirect to further processing
 	 */
 	public function assertionConsumerService(): Http\RedirectResponse {
 		// Fetch and decrypt the cookie
@@ -431,8 +449,12 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @UseSession
 	 *
-	 * @return Http\RedirectResponse
+	 * Logout
+	 *
+	 * @return RedirectResponse
 	 * @throws Error
+	 *
+	 * 303: Redirect to logout URL
 	 */
 	public function singleLogoutService() {
 		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
@@ -531,6 +553,10 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
+	 *
+	 * Show not provisioned error
+	 *
+	 * @return TemplateResponse<Http::STATUS_OK>
 	 */
 	public function notProvisioned() {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
@@ -540,6 +566,10 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
+	 *
+	 * Show not permitted error
+	 *
+	 * @return TemplateResponse<Http::STATUS_OK>
 	 */
 	public function notPermitted() {
 		return new Http\TemplateResponse($this->appName, 'notPermitted', [], 'guest');
@@ -549,8 +579,11 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
-	 * @param string $message
-	 * @return Http\TemplateResponse
+	 *
+	 * Show a generic error
+	 *
+	 * @param string $message Error message
+	 * @return TemplateResponse<Http::STATUS_OK>
 	 */
 	public function genericError($message) {
 		if (empty($message)) {
@@ -563,8 +596,11 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
-	 * @param string $redirectUrl
-	 * @return Http\TemplateResponse
+	 *
+	 * Show select backend page
+	 *
+	 * @param string $redirectUrl URL to redirect to
+	 * @return TemplateResponse<Http::STATUS_OK>
 	 */
 	public function selectUserBackEnd($redirectUrl) {
 		$attributes = ['loginUrls' => []];
@@ -679,7 +715,9 @@ class SAMLController extends Controller {
 	 * @PublicPage
 	 * @NoCSRFRequired
 	 *
-	 * @return Http\TemplateResponse
+	 * Should not be visited directly
+	 *
+	 * @return TemplateResponse<Http::STATUS_OK>
 	 */
 	public function base() {
 		$message = $this->l->t('This page should not be visited directly.');
