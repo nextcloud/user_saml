@@ -29,11 +29,6 @@ return [
 			'verb' => 'GET',
 		],
 		[
-			'name' => 'SAML#base',
-			'url' => '/saml',
-			'verb' => 'GET',
-		],
-		[
 			'name' => 'SAML#getMetadata',
 			'url' => '/saml/metadata',
 			'verb' => 'GET',
