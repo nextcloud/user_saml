@@ -23,6 +23,7 @@
 namespace OCA\User_SAML\Controller;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
@@ -664,10 +665,11 @@ class SAMLController extends Controller {
 		return $directUrl;
 	}
 
-	private function isValidJwt($jwt) {
+	
+	private function isValidJwt($jwt): bool {
 		try {
 			$key = $this->config->getSystemValue('gss.jwt.key', '');
-			JWT::decode($jwt, $key, ['HS256']);
+			JWT::decode($jwt, new Key($key, 'HS256'));
 		} catch (\Exception $e) {
 			return false;
 		}
