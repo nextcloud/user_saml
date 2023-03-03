@@ -19,7 +19,7 @@ jobs:
     - name: install dependencies
       uses: php-actions/composer@v5
       with:
-        php_version: 7.3
+        php_version: 7.4
         version: 1
         args: -d ./3rdparty/
 
