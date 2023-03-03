@@ -1,0 +1,138 @@
+name: Integration tests
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/integration.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'tests/**'
+      - 'composer.*'
+  push:
+    branches:
+      - main
+      - master
+      - stable*
+
+env:
+  APP_NAME: user_saml
+  LDAP_SUFFIX: dc=idptestbed
+  LDAP_CR_NAME: directory
+
+jobs:
+  integration:
+    runs-on: self-hosted
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ "8.0" ]
+        databases: [ "sqlite" ]
+        server-versions: [ "master" ]
+
+
+    name: Integration php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+
+    #container: ubuntu
+
+    services:
+      directory:
+        image: quay.io/389ds/dirsrv:latest
+        ports:
+          - 389:3389/tcp
+        env:
+          DS_DM_PASSWORD: admin
+          DS_SUFFIX_NAME: dc=idptestbed
+        options:
+          --name directory
+      sso:
+        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest
+        ports:
+          - 4443:8443/tcp
+          - 9090:8080/tcp
+
+    steps:
+      #- name: Install utilities
+        #run: |
+          #sudo apt update -y
+          #sudo apt install -y git docker.io curl
+
+      #- name: Test sso container
+        #run: curl 'https://localhost:4443/idp/profile/SAML2/Redirect/SSO?SAMLRequest=nZJbj9MwEIXf%2BytWeW%2BduOnNaiuVLZdKpa2awgMvq6kzoZYc23gcWP49TgK7gMQ%2BMJYseezzac6RlwS1dmLThJs545cGKQzuYj3W2pDoLldJ442wQIqEgRpJBCmKzfu94KNUOG%2BDlVYnf8leVgER%2BqCs6WW77So5Hl7vj293hwd%2BzasK8mwOc15Opnk5wSpf5LOx5ItJCrzKJsBheu2lH9FT5KySiE0GPY2owZ2hACbEfsrHw3QxzLJLNhV8Jvj4Uy%2FdRrPKQOjktxAcCcYyPhulcWUiz%2FMxU6Vj0WKlNLJ2es7OWCqPMrCiOPac088IXilTKvP5ZefX%2FhGJd5fLaXg6FpcesvmVyL011NToC%2FRflcQP530%2FXJxNWwn6ZimIeTpPWSTh48jdHAPniDUR8NBGz7oNJCXrDr1sz6JLxa%2F%2FB1VjgBICLNnvpGe2E4foc7c9Wa3k967f1hvrawj%2FjiOLIbcdVQ6r7qloDDmUqlJYJk%2BYjdb2271HCLhKgm8wuWPrQT%2FLnz93%2FQM%3D&RelayState=http%3A%2F%2Flocalhost%3A8080%2Findex.php%2Fapps%2Fuser_saml%2Fsaml%2Flogin&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=ZsTglbAjFrUgyBsUcm1cMOyHV7rzXTr9YM4E38fXiS1mXT5HNfy%2BR4ho6DCYXAuCmcYQwzJ8EiMAFYAHdUQZt8EkCHcV10qvL2hKhkMMxkvRL2%2FYPSdrvit8VfSpwgbOYrZOAu4re5JDU%2F5CWJ2tZpRYfokA0gldS%2BFuodqETGqRthZB9ge7oTmQUUbH7RxlmU8UCiwfWc0RtUNC4P%2FrsVwDS9bUgAzrqOqs7KOoCnrJPn08Fdz2RmoxJapdmBt9BAHxeDce5RPo%2BIoI5c8JDIPcUEuhImWJFXJnoQRIkJLYIIfgoqoj%2Bgtc6Np1%2BOeHJBSzlATZqiOWUIInfarjBg%3D%3D' || sleep 20
+
+      - name: Initialize LDAP Service
+        shell: bash
+        run: |
+          CONTAINER_NAME=directory
+          # Initialize LDAP Database. May wait until server is ready.
+          while : ; do
+            sleep 1
+            if docker exec ${{ env.LDAP_CR_NAME }} dsconf localhost backend create --suffix "${{ env.LDAP_SUFFIX }}" --be-name ci_root; then
+              break;
+            fi
+            if [ $(docker exec ${{ env.LDAP_CR_NAME }} dsconf localhost backend suffix list | grep "${{ env.LDAP_SUFFIX }}" | wc -l) -eq 1 ]; then
+              break
+            fi
+          done
+          # Add custom schema
+          docker cp apps/${{ env.APP_NAME }}/tests/integration/data/98nextcloud-schema.ldif ${{ env.LDAP_CR_NAME }}:/etc/dirsrv/slapd-localhost/schema/
+          docker exec ${{ env.LDAP_CR_NAME }} dsconf localhost schema reload
+          # Add test entries
+          docker cp apps/${{ env.APP_NAME }}/tests/integration/data/entries.ldif ${{ env.LDAP_CR_NAME }}:/var/opt/
+          docker exec ${{ env.LDAP_CR_NAME }} dsconf localhost backend import "${{ env.LDAP_SUFFIX }}" /var/opt/entries.ldif
+          date
+
+      - name: Checkout server
+        uses: actions/checkout@v3
+        with:
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+          submodules: true
+
+      - name: Checkout app
+        uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@72ae4ccbe57f82bbe08411e84e2130bd4ba1c10f # v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
+          coverage: none
+          ini-file: development
+          ini-values: disabled_functions=
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: DEBUG diagnose PHP modules
+        run: |
+          echo 'extension=pcntl.so' | sudo tee /etc/php/${{ matrix.php-versions }}/fpm/conf.d/10-pcntl.ini
+          php -m
+
+      - name: Set up dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i --no-dev
+
+      - name: Set up Nextcloud
+        run: |
+          if [ "${{ matrix.databases }}" = "mysql" ]; then
+            export DB_PORT=4444
+          elif [ "${{ matrix.databases }}" = "pgsql" ]; then
+            export DB_PORT=4445
+          fi
+          mkdir data
+          ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          PHP_CLI_SERVER_WORKERS=4 php -S localhost:8080 &
+
+      - name: Run behat
+        working-directory: apps/${{ env.APP_NAME }}/tests/integration
+        run: |
+          composer install
+          ./vendor/bin/behat --colors
+
+      - name: Dump nextcloud.log
+        if: always()
+        run: cat data/nextcloud.log

@@ -1,0 +1,64 @@
+
+dn: dc=idptestbed
+objectClass: top
+objectClass: domain
+dc: idptestbed
+description: dc=idptestbed
+
+dn: cn=admin,dc=idptestbed
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+userPassword: password
+description: LDAP administrator
+
+dn: ou=Groups,dc=idptestbed
+objectClass: top
+objectClass: organizationalunit
+ou: Groups
+
+dn: ou=People,dc=idptestbed
+objectClass: top
+objectClass: organizationalunit
+ou: People
+
+dn: uid=student1,ou=People,dc=idptestbed
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: nextcloudUser
+givenName: Stud
+uid: student1
+sn: Ent
+cn: Stud Ent
+mail: student1@idptestbed.edu
+userPassword: password
+nextcloudQuota: 200 MB
+
+dn: uid=student2,ou=People,dc=idptestbed
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: nextcloudUser
+givenName: Stud
+uid: student2
+sn: Ent2
+cn: Stud Ent2
+mail: student2@idptestbed.edu
+userPassword: password
+nextcloudQuota: 1 GB
+
+dn: uid=staff1,ou=People,dc=idptestbed
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: nextcloudUser
+givenName: St
+uid: staff1
+sn: aff
+cn: St aff
+mail: staff1@idptestbed.edu
+userPassword: password

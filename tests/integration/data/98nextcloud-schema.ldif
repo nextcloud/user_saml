@@ -1,0 +1,13 @@
+dn: cn=schema
+objectClass: top
+objectClass: ldapSubentry
+objectClass: subschema
+cn: schema
+aci: (target="ldap:///cn=schema")(targetattr !="aci")(version 3.0;acl "anonymous, no acis"; allow (read, search, compare) userdn = "ldap:///anyone";)
+modifiersName: cn=Directory Manager
+modifyTimestamp: 20230412120423Z
+objectClasses: ( 1.3.6.1.4.1.49213.1.2.1 NAME 'nextcloudUser' AUXILIARY MUST cn MAY (nextcloudEnabled $ nextcloudQuota ) X-ORIGIN 'user defined' )
+objectClasses: ( 1.3.6.1.4.1.49213.1.2.2 NAME 'nextcloudGroup' AUXILIARY MUST cn MAY nextcloudEnabled X-ORIGIN 'user defined' )
+attributeTypes: ( 1.3.6.1.4.1.49213.1.1.1 NAME 'nextcloudEnabled' DESC 'whether user or group should be available in Nextcloud' SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE X-ORIGIN 'user defined' )
+attributeTypes: ( 1.3.6.1.4.1.49213.1.1.2 NAME 'nextcloudQuota' DESC 'defines how much disk space is available for the user (e.g. 2 GB)' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'user defined' )
+nsSchemaCSN: 64369e47000000000000
