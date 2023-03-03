@@ -1,7 +1,10 @@
 {
     "config": {
         "optimize-autoloader": true,
-        "classmap-authoritative": true
+        "classmap-authoritative": true,
+		"platform": {
+			"php": "7.4"
+		}
     },
     "require": {
         "onelogin/php-saml": "^4.0",
