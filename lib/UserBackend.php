@@ -73,7 +73,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		ILogger $logger,
 		UserData $userData,
 		IEventDispatcher $eventDispatcher
-) {
+	) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -134,7 +134,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 					   && $home[1] === ':' && ('\\' === $home[2] || '/' === $home[2]))
 				) {
 					$home = $this->config->getSystemValue('datadirectory',
-							\OC::$SERVERROOT.'/data') . '/' . $home;
+						\OC::$SERVERROOT.'/data') . '/' . $home;
 				}
 
 				$values['home'] = $home;
@@ -613,7 +613,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	public function updateAttributes($uid,
-									 array $attributes) {
+		array $attributes) {
 		$user = $this->userManager->get($uid);
 		try {
 			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);

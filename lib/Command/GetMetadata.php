@@ -51,7 +51,7 @@ This command prints out the Nextcloud SAML Metadata for this provider.
 It may require setting overwrite.cli.url and htaccess.IgnoreFrontController to
 generate the correct URLs and entityID
 EOT
-		)
+			)
 
 			->addArgument(
 				'idp',

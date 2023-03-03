@@ -93,7 +93,7 @@ class FeatureContext implements Context {
 	 * @param string $value
 	 */
 	public function theSettingIsSetTo($settingName,
-									  $value) {
+		$value) {
 		if (in_array($settingName, [
 			'type',
 			'general-require_provisioned_account',
@@ -184,7 +184,7 @@ class FeatureContext implements Context {
 	 * @param TableNode $table
 	 */
 	public function iSendAPostRequestToWithTheFollowingData($url,
-															TableNode $table) {
+		TableNode $table) {
 		$postParams = $table->getColumnsHash()[0];
 		$this->response = $this->client->request(
 			'POST',

@@ -85,7 +85,7 @@ class SAMLController extends Controller {
 	 * @param IL10N $l
 	 */
 	public function __construct(
-					  $appName,
+		$appName,
 		IRequest      $request,
 		ISession      $session,
 		IUserSession  $userSession,
