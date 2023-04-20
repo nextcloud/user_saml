@@ -446,23 +446,30 @@ class SAMLController extends Controller {
 		}
 
 		$isFromIDP = !$isFromGS && !empty($_GET['SAMLRequest']);
-
+		$idp = null;
 		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
 			// (or raise Error if request is invalid)
 			$pass = true ;
 		} elseif ($isFromGS) {
 			// Request is from master GlobalScale
-			// Request validity is check via a JSON Web Token
 			$jwt = $this->request->getParam('jwt', '');
-			$pass = $this->isValidJwt($jwt);
+
+			try {
+				$key = $this->config->getSystemValue('gss.jwt.key', '');
+				$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
+
+				$idp = $decoded['idp'] ?? null;
+				$pass = true;
+			} catch (\Exception $e) {
+			}
 		} else {
 			// standard request : need read CRSF check
 			$pass = $this->request->passesCSRFCheck();
 		}
 
 		if ($pass) {
-			$idp = $this->session->get('user_saml.Idp');
+			$idp = ($idp !== null) ? (int)$idp : $this->session->get('user_saml.Idp');
 			$stay = true; // $auth will return the redirect URL but won't perform the redirect himself
 			if ($isFromIDP) {
 				[$targetUrl, $auth] = $this->tryProcessSLOResponse($idp);
@@ -663,18 +670,6 @@ class SAMLController extends Controller {
 			'redirect_url' => $redirectUrl,
 		]);
 		return $directUrl;
-	}
-
-	
-	private function isValidJwt($jwt): bool {
-		try {
-			$key = $this->config->getSystemValue('gss.jwt.key', '');
-			JWT::decode($jwt, new Key($key, 'HS256'));
-		} catch (\Exception $e) {
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
