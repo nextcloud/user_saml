@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Questo account utente è disabilitato, contatta il tuo amministratore.",
     "Saved" : "Salvato",
+    "Could not save" : "Impossibile salvare",
     "Provider" : "Fornitore",
     "Unknown error, please check the log file for more details." : "Errore sconosciuto, controlla il file di log per ulteriori dettagli.",
     "Direct log in" : "Accesso diretto",
@@ -26,6 +27,7 @@ OC.L10N.register(
     "Algorithm that the toolkit will use on signing process." : "Algoritmo che il toolkit utilizzerà per il processo di firma.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "Recupera i parametri della query da $_SERVER. Alcuni server SAML lo richiedono per le richieste SLO.",
     "Attribute to map the UID to." : "Attributo a cui associare l'UID.",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Consenti l'autenticazione solo se esiste un account su qualche altro backend (ad es. LDAP).",
     "Attribute to map the displayname to." : "Attributo a cui associare il nome visualizzato.",
     "Attribute to map the email address to." : "Attributo a cui associare l'indirizzo di posta elettronica.",
     "Attribute to map the quota to." : "Attributo a cui associare la quota.",
