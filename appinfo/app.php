@@ -101,6 +101,9 @@ $user = $userSession->getUser();
 if ($user !== null) {
 	$enabled = $user->isEnabled();
 	if ($enabled === false) {
+		if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
+			return;
+		}
 		$targetUrl = $urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.genericError',
 			[
