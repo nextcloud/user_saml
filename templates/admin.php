@@ -148,8 +148,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 
 			<div class="hidden">
 				<?php foreach ($_['attribute-mapping'] as $key => $attribute): ?>
-					<?php
-																																										if ($attribute['type'] === 'line'): ?>
+					<?php if ($attribute['type'] === 'line'): ?>
 					<p>
 						<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
@@ -207,8 +206,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 
 			<div class="hidden">
 				<?php foreach ($_['user-filter'] as $key => $attribute): ?>
-					<?php
-																																										if ($attribute['type'] === 'line'): ?>
+					<?php if ($attribute['type'] === 'line'): ?>
 						<p class="group">
 							<span><?php p($attribute['text']) ?></span><br/>
 							<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>

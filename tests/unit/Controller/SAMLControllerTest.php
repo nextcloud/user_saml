@@ -39,8 +39,8 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserSession;
-use PHPUnit\Framework\MockObject\MockObject;
 use OCP\Security\ICrypto;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class SAMLControllerTest extends TestCase {
