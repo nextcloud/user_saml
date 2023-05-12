@@ -116,9 +116,11 @@ class SAMLSettings {
 		$this->ensureConfigurationsLoaded();
 
 		$result = [];
-		foreach ($this->configurations as $configID => $config) {
-			// no fancy array_* method, because there might be thousands
-			$result[$configID] = $config['general-idp0_display_name'] ?? '';
+		if (!empty($this->configurations) && is_array($this->configurations)) {
+			foreach ($this->configurations as $configID => $config) {
+				// no fancy array_* method, because there might be thousands
+				$result[$configID] = $config['general-idp0_display_name'] ?? '';
+			}
 		}
 
 		return $result;
