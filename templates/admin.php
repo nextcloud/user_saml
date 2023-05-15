@@ -17,30 +17,30 @@ style('user_saml', 'admin');
 	<div class="warning hidden" id="user-saml-warning-admin-user">
 		<?php
 		$url = \OC::$server->getURLGenerator()->linkToRouteAbsolute('core.login.showLoginForm') . '?direct=1';
-		$url = '<a href="' . $url . '">' . \OCP\Util::sanitizeHTML($url) . '</a>';
-		if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
-			print_unescaped(
-				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you enabled "%s" or you go directly to the URL %s.',
-					[
-						\OCP\Util::sanitizeHTML($theme->getEntity()),
-						\OCP\Util::sanitizeHTML($_['general']['allow_multiple_user_back_ends']['text']),
-						$url,
-					]
-				)
-			);
-		} else {
-			print_unescaped(
-				$l->t(
-					'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you go directly to the URL %s.',
-					[
-						\OCP\Util::sanitizeHTML($theme->getEntity()),
-						$url,
-					]
-				)
-			);
-		}
-		?>
+$url = '<a href="' . $url . '">' . \OCP\Util::sanitizeHTML($url) . '</a>';
+if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
+	print_unescaped(
+		$l->t(
+			'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you enabled "%s" or you go directly to the URL %s.',
+			[
+				\OCP\Util::sanitizeHTML($theme->getEntity()),
+				\OCP\Util::sanitizeHTML($_['general']['allow_multiple_user_back_ends']['text']),
+				$url,
+			]
+		)
+	);
+} else {
+	print_unescaped(
+		$l->t(
+			'Make sure to configure an administrative user that can access the instance via SSO. Logging-in with your regular %s account will not be possible anymore, unless you go directly to the URL %s.',
+			[
+				\OCP\Util::sanitizeHTML($theme->getEntity()),
+				$url,
+			]
+		)
+	);
+}
+?>
 	</div>
 
 	<div id="user-saml-choose-type" class="hidden">
@@ -112,8 +112,8 @@ style('user_saml', 'admin');
 					<?php foreach ($_['name-id-formats'] as $key => $value): ?>
 					<option value="<?php p($key) ?>"
 						<?php if ($value['selected'] ?? false) {
-			p("selected");
-		} ?> ><?php p($value['label']) ?></option>
+							p("selected");
+						} ?> ><?php p($value['label']) ?></option>
 					<?php endforeach; ?>
 				</select>
 				<?php foreach ($_['sp'] as $key => $text): ?>
@@ -148,8 +148,7 @@ style('user_saml', 'admin');
 
 			<div class="hidden">
 				<?php foreach ($_['attribute-mapping'] as $key => $attribute): ?>
-					<?php
-					if ($attribute['type'] === 'line'): ?>
+					<?php if ($attribute['type'] === 'line'): ?>
 					<p>
 						<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
 					</p>
@@ -207,8 +206,7 @@ style('user_saml', 'admin');
 
 			<div class="hidden">
 				<?php foreach ($_['user-filter'] as $key => $attribute): ?>
-					<?php
-					if ($attribute['type'] === 'line'): ?>
+					<?php if ($attribute['type'] === 'line'): ?>
 						<p class="group">
 							<span><?php p($attribute['text']) ?></span><br/>
 							<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>

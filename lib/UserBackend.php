@@ -23,20 +23,20 @@ namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\Files\NotPermittedException;
-use OCP\IDBConnection;
-use OCP\ILogger;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IGroupManager;
-use OCP\UserInterface;
-use OCP\IUserBackend;
-use OCP\IConfig;
-use OCP\IURLGenerator;
-use OCP\ISession;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\NotPermittedException;
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\ILogger;
+use OCP\ISession;
+use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserBackend;
+use OCP\IUserManager;
 use OCP\User\Events\UserChangedEvent;
+use OCP\UserInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -73,7 +73,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		ILogger $logger,
 		UserData $userData,
 		IEventDispatcher $eventDispatcher
-) {
+	) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -134,7 +134,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 					   && $home[1] === ':' && ('\\' === $home[2] || '/' === $home[2]))
 				) {
 					$home = $this->config->getSystemValue('datadirectory',
-							\OC::$SERVERROOT.'/data') . '/' . $home;
+						\OC::$SERVERROOT.'/data') . '/' . $home;
 				}
 
 				$values['home'] = $home;
@@ -613,7 +613,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	public function updateAttributes($uid,
-									 array $attributes) {
+		array $attributes) {
 		$user = $this->userManager->get($uid);
 		try {
 			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);

@@ -21,13 +21,13 @@
 
 namespace OCA\User_SAML\Command;
 
+use OCA\User_SAML\SAMLSettings;
+use OneLogin\Saml2\Error;
+use OneLogin\Saml2\Settings;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use OCA\User_SAML\SAMLSettings;
-use OneLogin\Saml2\Error;
-use OneLogin\Saml2\Settings;
 
 class GetMetadata extends Command {
 
@@ -51,7 +51,7 @@ This command prints out the Nextcloud SAML Metadata for this provider.
 It may require setting overwrite.cli.url and htaccess.IgnoreFrontController to
 generate the correct URLs and entityID
 EOT
-		)
+			)
 
 			->addArgument(
 				'idp',
