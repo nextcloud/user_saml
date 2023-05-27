@@ -40,6 +40,7 @@
 
 #user-saml-settings .toggle {
 	clear: both;
+	display: block;
 	padding: 7px 0;
 	cursor: pointer;
 	opacity: .5;
