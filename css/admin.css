@@ -8,6 +8,11 @@
 	cursor: pointer;
 }
 
+#user-saml h3 {
+	font-weight: 700;
+	margin: 20px 0 5px;
+}
+
 #user-saml h3 .icon-delete {
 	display: inline-block;
 	padding: 5px;
@@ -35,6 +40,7 @@
 
 #user-saml-settings .toggle {
 	clear: both;
+	display: block;
 	padding: 7px 0;
 	cursor: pointer;
 	opacity: .5;
@@ -45,6 +51,7 @@
 	overflow:hidden;
 	padding: 10px 0 10px 0;
 }
+
 #user-saml .account-list li {
 	float: left;
 }
@@ -52,9 +59,11 @@
 #user-saml .account-list li a:not(.button) {
 	padding: 7px;
 }
+
 #user-saml .account-list li a.button {
 	margin-left: 20px;
 }
+
 #user-saml .account-list li.active a {
 	border-bottom: 1px solid #333;
 	font-weight: bold;
