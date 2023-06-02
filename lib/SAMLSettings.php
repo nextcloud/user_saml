@@ -82,7 +82,7 @@ class SAMLSettings {
 	/** @var array list of global settings which are valid for every idp */
 	private $globalSettings = ['general-require_provisioned_account', 'general-allow_multiple_user_back_ends', 'general-use_saml_auth_for_desktop'];
 	/** @var array<int, array<string, string>> */
-	private $configurations;
+	private $configurations = [];
 	/** @var int */
 	private $configurationsLoadedState = self::LOADED_NONE;
 	/** @var ConfigurationsMapper */
