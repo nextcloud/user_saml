@@ -15,7 +15,11 @@ OC.L10N.register(
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "نشان می دهد که آیا <samlp:AuthnRequest> پیام های ارسال شده توسط این SP امضا خواهد شد. [ابرداده SP این اطلاعات را ارائه می دهد]",
     "Email address" : "آدرس ایمیل",
     "Open documentation" : "مستندات باز",
+    "Global settings" : "تنظیمات عمومی",
     "General" : "عمومی",
+    "Security settings" : "تنظیمات امنیتی",
+    "Show security settings…" : "نمایش تنظیمات امنیتی...",
+    "Reset settings" : "بازنشانی تنظیمات",
     "Error" : "خطا"
 },
 "nplurals=2; plural=(n > 1);");
