@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.3
+
+### Added
+
+- MFA verification flag
+
+### Fixed
+
+- Avoid infinite redirection for disabled user
+
 ## 5.1.2
 
 ### Fixed
