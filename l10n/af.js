@@ -5,6 +5,7 @@ OC.L10N.register(
     "Provider" : "Verskaffer",
     "Provider " : "Verskaffer",
     "Private key of the Service Provider" : "Privaatsleutel van die Diensverskaffer",
+    "Email address" : "E-posadres",
     "Open documentation" : "Open dokumentasie",
     "Remove identity provider" : "Verwyder identiteitsverskaffer",
     "Add identity provider" : "Voeg identiteitsverskaffer toe",
