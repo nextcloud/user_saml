@@ -140,6 +140,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			],
+			'avatar_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users avatar to.'),
+				'type' => 'line',
+				'required' => true,
+			],
 
 		];
 
