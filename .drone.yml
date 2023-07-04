@@ -78,7 +78,7 @@ clone:
 
 steps:
   - name: integration-tests-stable26
-    image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-php8.0:latest
+    image: registry.hub.docker.com/xact64/saml:latest
     environment:
       CORE_BRANCH: stable26
     commands:
