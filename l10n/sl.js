@@ -79,7 +79,7 @@ OC.L10N.register(
     "Metadata valid" : "Veljavni metapodatki",
     "Error" : "Napaka",
     "Account not provisioned." : "Račun ni pripravljen.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Naveden račun ni pripravljen, zato dostop do te storitve mogoč.",
+    "Your account is not provisioned, access to this service is thus not possible." : "Naveden račun ni pripravljen, zato dostop do te storitve ni mogoč.",
     "Login options:" : "Možnosti prijave:",
     "Choose a authentication provider" : "Izbor ponudnika overitve"
 },
