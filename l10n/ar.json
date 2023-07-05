@@ -5,6 +5,7 @@
     "Unknown error, please check the log file for more details." : "خطأ غير معروف، يرجى التحقق من ملف السجل لمزيد من التفاصيل.",
     "Direct log in" : "تسجيل الدخول المباشر",
     "SSO & SAML log in" : "تسجيل الدخول عبر تسجيل الدخول الأحادي \"SSO \"ومصادقة لغة توصيف تأكيد الأمان \"SAML\" ",
+    "This page should not be visited directly." : "لا ينبغي زيارة هذه الصفحة مباشرة.",
     "Provider " : "المزوّد",
     "X.509 certificate of the Service Provider" : "شهادة X.509 لمزود الخدمة",
     "Private key of the Service Provider" : "المفتاح الشخصي لموفر الخدمة",
@@ -25,6 +26,7 @@
     "Attribute to map the email address to." : "السمة لتعيين عنوان البريد الإلكتروني إلى.",
     "Attribute to map the quota to." : "السمة لتعيين الحصة إلى.",
     "Attribute to map the users groups to." : "السمة لتعيين مجموعات المستخدمين إلى.",
+    "Attribute to map the users home to." : "السمة لتعيين الصفحة الرئيسية للمستخدمين إلى.",
     "Email address" : "عنوان البريد الإلكتروني",
     "Encrypted" : "مشفّر",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "استخدام مصادقة لغة توصيف تأكيد الأمان \"SAML\" لـ%sعملاء سطح المكتب (تتطلب إعادة مصادقة المستخدم)",
@@ -38,6 +40,8 @@
     "Use built-in SAML authentication" : "استخدام مصادقة لغة توصيف تأكيد الأمان \"SAML\" المدمجة",
     "Use environment variable" : "استخدم متغير الوسط",
     "Global settings" : "الإعدادات العامة",
+    "Remove identity provider" : "إزالة مزود الهوية",
+    "Add identity provider" : "إضافة مزود الهوية",
     "General" : "العامة",
     "Service Provider Data" : "بيانات مزود الخدمة",
     "If your Service Provider should use certificates you can optionally specify them here." : "إذا كان يجب على مزود الخدمة الخاص بك استخدام الشهادات فيمكنك تحديدها اختياريًا هنا.",
@@ -58,10 +62,12 @@
     "Signatures and encryption offered" : "التوقيعات والتشفير معروض",
     "Signatures and encryption required" : "مطلوب التوقيعات والتشفير",
     "Download metadata XML" : "تنزيل البيانات الوصفية/ التعريفية بتسيق لغة توصيف النص القابلة للتوسعة \"XML\"",
+    "Reset settings" : "اعادة ضبط الإعدادات",
     "Metadata invalid" : "البيانات الوصفية/التعريفية غير صحيحة/صالحة",
     "Metadata valid" : "البيانات الوصفية/التعريفية صحيحة",
     "Error" : "خطأ",
     "Account not provisioned." : "الحساب غير مزود بالخدمة.",
-    "Your account is not provisioned, access to this service is thus not possible." : "حسابك غير مزود بالخدمة، وبالتالي لا يمكنك الوصول إلى هذه الخدمة."
+    "Your account is not provisioned, access to this service is thus not possible." : "حسابك غير مزود بالخدمة، وبالتالي لا يمكنك الوصول إلى هذه الخدمة.",
+    "Choose a authentication provider" : "اختر مزود المصادقة"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }
