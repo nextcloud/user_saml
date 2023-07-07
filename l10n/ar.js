@@ -23,6 +23,7 @@ OC.L10N.register(
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "تعذر العثور على أي قسم في المستند",
     "Indicates if the SP will validate all received XML." : "يشير إلى ما إذا كان مزود الخدمة سوف يتحقق من صحة كل بيانات وصفية بتنسيق لغة توصيف النص القابلة للتوسعة \"XML\" يتم استلامها.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "عنوان محدد موقع الموارد المُوحّد لخدمات جهات الاتصال الخارجية للدليل النشط \" ADFS URL\" - تشفر بشكل افتراضي بيانات لغة توصيف تأكيد الأمان كأحرف صغيرة، ومجموعة الأدوات كأحرف كبيرة. يجب التمكين من أجل توافق خدمات جهات الاتصال الخارجية للدليل النشط \"ADFS\" عند التحقق من التوقيع.",
+    "Algorithm that the toolkit will use on signing process." : "الخوارزمية التي تستخدمها مجموعة الأدوات في عملية التوقيع.",
     "Attribute to map the UID to." : "خاصية تعيين معرف فريد \"UID \" إلى.",
     "Attribute to map the displayname to." : "السمة لتعيين اسم العرض إلى.",
     "Attribute to map the email address to." : "السمة لتعيين عنوان البريد الإلكتروني إلى.",
@@ -78,6 +79,7 @@ OC.L10N.register(
     "Error" : "خطأ",
     "Account not provisioned." : "الحساب غير مزود بالخدمة.",
     "Your account is not provisioned, access to this service is thus not possible." : "حسابك غير مزود بالخدمة، وبالتالي لا يمكنك الوصول إلى هذه الخدمة.",
+    "Login options:" : "خيارات تسجيل الدخول:",
     "Choose a authentication provider" : "اختر مزود المصادقة"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
