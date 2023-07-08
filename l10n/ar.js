@@ -63,6 +63,7 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "يستهدف مزود الهوية \"IdP\" عنوان محدد موقع الموارد المُوحّد \"URL\"حيث يقوم مزود الخدمة بإرسال رسالة طلب المصادقة",
     "Show optional Identity Provider settings…" : "عرض الإعدادات الاختيارية لمزود الهوية ...",
     "URL Location of the IdP where the SP will send the SLO Request" : "عنوان محدد موقع الموارد المُوحّد لمزود الهوية حيث يرسل مزود الخدمة طلب تسجيل الخروج الفردي \"SLO\"",
+    "URL Location of the IDP's SLO Response" : "موقع عنوان URL لاستجابة مزد الهوية \"IDP\" لتسجيل الخروج الفردي\"SLO \"",
     "Public X.509 certificate of the IdP" : "شهادة X.509 العامة لمزود الهوية \"IdP\" ",
     "Attribute mapping" : "تعيين السمة",
     "If you want to optionally map attributes to the user you can configure these here." : "إذا كنت تريد تعيين السمات اختياريًا للمستخدم ، فيمكنك تكوينها هنا.",
