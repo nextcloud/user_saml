@@ -24,6 +24,7 @@ OC.L10N.register(
     "Indicates if the SP will validate all received XML." : "يشير إلى ما إذا كان مزود الخدمة سوف يتحقق من صحة كل بيانات وصفية بتنسيق لغة توصيف النص القابلة للتوسعة \"XML\" يتم استلامها.",
     "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "عنوان محدد موقع الموارد المُوحّد لخدمات جهات الاتصال الخارجية للدليل النشط \" ADFS URL\" - تشفر بشكل افتراضي بيانات لغة توصيف تأكيد الأمان كأحرف صغيرة، ومجموعة الأدوات كأحرف كبيرة. يجب التمكين من أجل توافق خدمات جهات الاتصال الخارجية للدليل النشط \"ADFS\" عند التحقق من التوقيع.",
     "Algorithm that the toolkit will use on signing process." : "الخوارزمية التي تستخدمها مجموعة الأدوات في عملية التوقيع.",
+    "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "استرداد معلمات الاستعلام من $ _SERVER. تتطلب بعض خوادم SAML هذا في طلبات تسجيل الخروج الفردي.",
     "Attribute to map the UID to." : "خاصية تعيين معرف فريد \"UID \" إلى.",
     "Attribute to map the displayname to." : "السمة لتعيين اسم العرض إلى.",
     "Attribute to map the email address to." : "السمة لتعيين عنوان البريد الإلكتروني إلى.",
