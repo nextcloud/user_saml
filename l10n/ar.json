@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "تم تعطيل حساب هذا المستخدم، يرجى الاتصال بالمسؤول.",
     "Saved" : "تم الإحتفاظ به",
+    "Could not save" : "تعذر الحفظ",
     "Provider" : "المزوّد",
     "Unknown error, please check the log file for more details." : "خطأ غير معروف، يرجى التحقق من ملف السجل لمزيد من التفاصيل.",
     "Direct log in" : "تسجيل الدخول المباشر",
@@ -24,6 +25,7 @@
     "Algorithm that the toolkit will use on signing process." : "الخوارزمية التي تستخدمها مجموعة الأدوات في عملية التوقيع.",
     "Retrieve query parameters from $_SERVER. Some SAML servers require this on SLO requests." : "استرداد معلمات الاستعلام من $ _SERVER. تتطلب بعض خوادم SAML هذا في طلبات تسجيل الخروج الفردي.",
     "Attribute to map the UID to." : "خاصية تعيين معرف فريد \"UID \" إلى.",
+    "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "السماح بالمصادقة فقط إذا كان الحساب موجودًا على بعض الواجهات الخلفية الأخرى (مثل LDAP).",
     "Attribute to map the displayname to." : "السمة لتعيين اسم العرض إلى.",
     "Attribute to map the email address to." : "السمة لتعيين عنوان البريد الإلكتروني إلى.",
     "Attribute to map the quota to." : "السمة لتعيين الحصة إلى.",
