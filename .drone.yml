@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: integration-tests-stable24
 
@@ -137,3 +138,6 @@ trigger:
     - push
 
 type: docker
+---
+kind: signature
+hmac: a52d842da41e201e20d05b1f9b79289f29d38347a02a0455e03223dc244856d5
