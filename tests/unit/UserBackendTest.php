@@ -120,6 +120,11 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
+		$this->config->method('getAppValue')
+			->willReturnCallback(function ($appId, $key, $default) {
+				return $default;
+			});
+
 		$this->userManager
 			->expects($this->once())
 			->method('get')
@@ -149,6 +154,12 @@ class UserBackendTest extends TestCase {
 
 	public function testUpdateAttributesWithoutValidUser() {
 		$this->getMockedBuilder();
+
+		$this->config->method('getAppValue')
+			->willReturnCallback(function ($appId, $key, $default) {
+				return $default;
+			});
+
 		$this->userManager
 			->expects($this->once())
 			->method('get')
@@ -267,21 +278,19 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
-			->willReturn('email');
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
-			->willReturn('displayname');
-		$this->config
-			->expects($this->at(2))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
-			->willReturn('quota');
+
+		$this->config->method('getAppValue')
+			->willReturnCallback(function ($appId, $key, $default) {
+				switch ($key) {
+					case 'saml-attribute-mapping-email_mapping':
+						return 'email';
+					case 'saml-attribute-mapping-displayName_mapping':
+						return 'displayname';
+					case 'saml-attribute-mapping-quota_mapping':
+						return 'quota';
+				}
+				return $default;
+			});
 
 		$this->userManager
 			->expects($this->once())
