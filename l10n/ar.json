@@ -31,6 +31,10 @@
     "Attribute to map the quota to." : "السمة لتعيين الحصة إلى.",
     "Attribute to map the users groups to." : "السمة لتعيين مجموعات المستخدمين إلى.",
     "Attribute to map the users home to." : "السمة لتعيين الصفحة الرئيسية للمستخدمين إلى.",
+    "Attribute to map the users MFA login status" : "السمة لتعيين حالة تسجيل دخول مستخدمي المصادقة ثنائية العوامل",
+    "Reject members of these groups. This setting has precedence over required memberships." : "رفض أعضاء هذه المجموعات. هذا الإعداد له الأسبقية على العضويات المطلوبة.",
+    "Group A, Group B, …" : "المجموعة أ ، المجموعة ب ، ...",
+    "Require membership in these groups, if any." : "يتطلب العضوية في هذه المجموعات، إن وجدت.",
     "Email address" : "عنوان البريد الإلكتروني",
     "Encrypted" : "مشفّر",
     "Entity" : "الكيان",
@@ -76,14 +80,20 @@
     "Show security settings…" : "إظهار إعدادات الأمان …",
     "Signatures and encryption offered" : "التوقيعات والتشفير معروض",
     "Signatures and encryption required" : "مطلوب التوقيعات والتشفير",
+    "User filtering" : "فلترة المستخدمين",
+    "If you want to optionally restrict user login depending on user data, configure it here." : "إذا كنت ترغب في تقييد تسجيل دخول المستخدم اختياريًا اعتمادًا على بيانات المستخدم ، فقم بتهيئة ذلك هنا.",
+    "Show user filtering settings …" : "عرض إعدادات فلترة المستخدمين ...",
     "Download metadata XML" : "تنزيل البيانات الوصفية/ التعريفية بتسيق لغة توصيف النص القابلة للتوسعة \"XML\"",
     "Reset settings" : "اعادة ضبط الإعدادات",
     "Metadata invalid" : "البيانات الوصفية/التعريفية غير صحيحة/صالحة",
     "Metadata valid" : "البيانات الوصفية/التعريفية صحيحة",
     "Error" : "خطأ",
+    "Access denied." : "تم رفض الوصول.",
+    "Your account is denied, access to this service is thus not possible." : "تم رفض حسابك، وبالتالي لا يمكن الوصول إلى هذه الخدمة.",
     "Account not provisioned." : "الحساب غير مزود بالخدمة.",
     "Your account is not provisioned, access to this service is thus not possible." : "حسابك غير مزود بالخدمة، وبالتالي لا يمكنك الوصول إلى هذه الخدمة.",
     "Login options:" : "خيارات تسجيل الدخول:",
-    "Choose a authentication provider" : "اختر مزود المصادقة"
+    "Choose a authentication provider" : "اختر مزود المصادقة",
+    "Attribute to map the users mfa login status" : "السمة لتعيين حالة تسجيل دخول مستخدمي المصادقة ثنائية العوامل "
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }
