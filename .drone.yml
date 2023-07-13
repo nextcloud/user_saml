@@ -1,3 +1,4 @@
+---
 kind: pipeline
 name: integration-tests-master
 
@@ -141,3 +142,6 @@ trigger:
     - push
 
 type: docker
+---
+kind: signature
+hmac: dfe8bed25880588c11b4a668b657c7aed55331d566ea755803ad6766cffd088c
