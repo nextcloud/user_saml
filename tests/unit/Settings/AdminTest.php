@@ -148,7 +148,7 @@ class AdminTest extends \Test\TestCase {
 				'required' => true,
 			],
 			'mfa_mapping' => [
-				'text' => $this->l10n->t('Attribute to map the users mfa login status'),
+				'text' => $this->l10n->t('Attribute to map the users MFA login status'),
 				'type' => 'line',
 				'required' => false,
 			],
