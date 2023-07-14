@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.1
+
+### Fixed
+- Avoid infinite redirection for disabled user (user_saml#717)
+- Better distinguish admin sections (user_saml#730)
+- Ensure $configurations is an array (user_saml#734)
+
+### Changed
+- Dependency updates
+
+## 5.2.0
+
+### Added
+- MFA verification flag (user_saml#668)
+
+### Changed
+- L10n: Change to uppercase (user_saml#691)
+- Bump to v5.2 and require at least NC 25 (user_saml#705)
+- Extract idp from jwt in globalscale (user_saml#714)
+- Dependency updates
+
 ## 5.1.2
 
 ### Fixed
