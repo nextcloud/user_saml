@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "尚未設定帳號。",
     "Your account is not provisioned, access to this service is thus not possible." : "尚未設定您的帳號，因此無法存取此服務。",
     "Login options:" : "登入選項：",
-    "Choose a authentication provider" : "選擇驗證提供者",
-    "Attribute to map the users mfa login status" : "對映至使用者 MFA 登入狀態的屬性。"
+    "Choose a authentication provider" : "選擇驗證提供者"
 },
 "nplurals=1; plural=0;");

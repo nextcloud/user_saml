@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Account not provisioned.",
     "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible.",
     "Login options:" : "Login options:",
-    "Choose a authentication provider" : "Choose a authentication provider",
-    "Attribute to map the users mfa login status" : "Attribute to map the users mfa login status"
+    "Choose a authentication provider" : "Choose a authentication provider"
 },
 "nplurals=2; plural=(n != 1);");

@@ -93,7 +93,6 @@
     "Account not provisioned." : "Conta non aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "A súa conta non esta aprovisionada, polo que non é posíbel o acceso a este servizo.",
     "Login options:" : "Opcións de acceso",
-    "Choose a authentication provider" : "Escolla un provedor de autenticación",
-    "Attribute to map the users mfa login status" : "Atributo para asignar o estado do acceso MFA dos usuarios"
+    "Choose a authentication provider" : "Escolla un provedor de autenticación"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
