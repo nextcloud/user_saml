@@ -25,6 +25,8 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Atributo a mapear a email address.",
     "Attribute to map the quota to." : "Atributo al cual mapear la cuota. ",
     "Attribute to map the users groups to." : "Atributo de correspondiencia de grupos de usuarios.",
+    "Email address" : "Dirección de correo electrónico",
+    "Encrypted" : "Cifrado",
     "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Por favor usa autenticación SAML para los %s clientes de escritorio (se requiere volver a autenticar)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nombre a desplegar opcional de la identidad del proveedor (valor por omisión: \"Inicio de sesión SSO & SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir el uso de múltiples sistemas de back-end de usuario (p. ej. LDAP)",
