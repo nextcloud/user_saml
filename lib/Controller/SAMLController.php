@@ -193,6 +193,7 @@ class SAMLController extends Controller {
 	/**
 	 * @PublicPage
 	 * @UseSession
+	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 * @NoCSRFRequired
 	 *
