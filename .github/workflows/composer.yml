@@ -1,0 +1,27 @@
+name: composer check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - stable*
+
+jobs:
+  composer:
+    runs-on: ubuntu-latest
+
+    name: composer install check
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install dependencies
+      uses: php-actions/composer@v5
+      with:
+        php_version: 7.3
+        version: 1
+        args: -d ./3rdparty/
+
+    - name: ensure no changes
+      run: git diff-index HEAD
