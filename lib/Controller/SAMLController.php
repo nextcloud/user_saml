@@ -26,6 +26,7 @@ use Firebase\JWT\JWT;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
+use OCA\User_SAML\Helper\TXmlHelper;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -48,6 +49,8 @@ use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
 
 class SAMLController extends Controller {
+	use TXmlHelper;
+
 	/** @var ISession */
 	private $session;
 	/** @var IUserSession */
@@ -246,7 +249,9 @@ class SAMLController extends Controller {
 	public function getMetadata($idp) {
 		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
-		$errors = $settings->validateMetadata($metadata);
+		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
+			return $settings->validateMetadata($metadata);
+		});
 		if (empty($errors)) {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
@@ -308,7 +313,10 @@ class SAMLController extends Controller {
 		}
 
 		$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
-		$auth->processResponse($AuthNRequestID);
+		// validator (called with processResponse()) needs an XML entity loader
+		$this->callWithXmlEntityLoader(function () use ($auth, $AuthNRequestID): void {
+			$auth->processResponse($AuthNRequestID);
+		});
 
 		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
 
@@ -417,14 +425,16 @@ class SAMLController extends Controller {
 			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
 			if($isFromIDP){
-				$keepLocalSession = true ; // do not let processSLO to delete the entire session. Let userSession->logout do the job
-				$targetUrl = $auth->processSLO(
-					$keepLocalSession,
-					null,
-					$this->SAMLSettings->usesSloWebServerDecode(),
-					null,
-					$stay
-				);
+				// validator (called with processSLO()) needs an XML entity loader
+				$targetUrl = $this->callWithXmlEntityLoader(function () use ($auth, $idp): string {
+					return $auth->processSLO(
+						true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
+						null,
+						$this->samlSettings->usesSloWebServerDecode($idp),
+						null,
+						true
+					);
+				});
 			} else {
 				// If request is not from IDP, we must send him the logout request
 				$parameters = array();
