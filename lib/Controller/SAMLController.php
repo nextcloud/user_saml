@@ -28,6 +28,7 @@ use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
+use OCA\User_SAML\Helper\TXmlHelper;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -48,6 +49,8 @@ use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
 
 class SAMLController extends Controller {
+	use TXmlHelper;
+
 	/** @var ISession */
 	private $session;
 	/** @var IUserSession */
@@ -290,7 +293,9 @@ class SAMLController extends Controller {
 	public function getMetadata(int $idp = 1) {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
-		$errors = $settings->validateMetadata($metadata);
+		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
+			return $settings->validateMetadata($metadata);
+		});
 		if (empty($errors)) {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
@@ -351,7 +356,10 @@ class SAMLController extends Controller {
 		}
 
 		$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
-		$auth->processResponse($AuthNRequestID);
+		// validator (called with processResponse()) needs an XML entity loader
+		$this->callWithXmlEntityLoader(function () use ($auth, $AuthNRequestID): void {
+			$auth->processResponse($AuthNRequestID);
+		});
 
 		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
 
@@ -518,13 +526,16 @@ class SAMLController extends Controller {
 		foreach ($idps as $idp) {
 			try {
 				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
-				$targetUrl = $auth->processSLO(
-					true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
-					null,
-					$this->samlSettings->usesSloWebServerDecode($idp),
-					null,
-					true
-				);
+				// validator (called with processSLO()) needs an XML entity loader
+				$targetUrl = $this->callWithXmlEntityLoader(function () use ($auth, $idp): string {
+					return $auth->processSLO(
+						true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
+						null,
+						$this->samlSettings->usesSloWebServerDecode($idp),
+						null,
+						true
+					);
+				});
 				if ($auth->getLastErrorReason() === null) {
 					return [$targetUrl, $auth];
 				}
