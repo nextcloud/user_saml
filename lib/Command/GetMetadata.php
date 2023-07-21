@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\Command;
 
+use OCA\User_SAML\Helper\TXmlHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +31,7 @@ use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 
 class GetMetadata extends Command {
+	use TXmlHelper;
 
 	/** @var SAMLSettings */
 	private $SAMLSettings;
@@ -71,7 +73,9 @@ EOT
 		$idp = (int)$input->getArgument('idp');
 		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
-		$errors = $settings->validateMetadata($metadata);
+		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
+			return $settings->validateMetadata($metadata);
+		});
 		if (empty($errors)) {
 			$output->writeln($metadata);
 		} else {
