@@ -24,7 +24,7 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
-class SectionTest extends \Test\TestCase  {
+class SectionTest extends \Test\TestCase {
 	/** @var \OCA\User_SAML\Settings\Section */
 	private $section;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */

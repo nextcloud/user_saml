@@ -39,8 +39,6 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OneLogin\Saml2\Auth;
@@ -123,7 +121,7 @@ class SAMLController extends Controller {
 	private function autoprovisionIfPossible() {
 		$auth = $this->userData->getAttributes();
 
-		if(!$this->userData->hasUidMappingAttribute()) {
+		if (!$this->userData->hasUidMappingAttribute()) {
 			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth)));
 		}
 
@@ -145,17 +143,17 @@ class SAMLController extends Controller {
 			return;
 		}
 		$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
-		if($userExists) {
-			if($autoProvisioningAllowed) {
+		if ($userExists) {
+			if ($autoProvisioningAllowed) {
 				$this->userBackend->updateAttributes($uid, $auth);
 			}
 			return;
 		}
 
 		$uid = $this->userData->getOriginalUid();
-		if(!$userExists && !$autoProvisioningAllowed) {
+		if (!$userExists && !$autoProvisioningAllowed) {
 			throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
-		} elseif(!$userExists && $autoProvisioningAllowed) {
+		} elseif (!$userExists && $autoProvisioningAllowed) {
 			$this->userBackend->createUserIfNotExists($uid, $auth);
 			$this->userBackend->updateAttributes($uid, $auth);
 			return;
@@ -174,7 +172,7 @@ class SAMLController extends Controller {
 	 */
 	public function login($idp) {
 		$type = $this->config->getAppValue($this->appName, 'type');
-		switch($type) {
+		switch ($type) {
 			case 'saml':
 				$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 				$ssoUrl = $auth->login(null, [], false, false, true);
@@ -185,7 +183,7 @@ class SAMLController extends Controller {
 
 				if ($this->session->get(ClientFlowLoginController::STATE_NAME) !== null) {
 					$flowData['cf1'] = $this->session->get(ClientFlowLoginController::STATE_NAME);
-				} else if ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
+				} elseif ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
 					$flowData['cf2'] = [
 						'token' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
 						'state' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
@@ -296,18 +294,17 @@ class SAMLController extends Controller {
 		if (isset($data['flow'])) {
 			if (isset($data['flow']['cf1'])) {
 				$this->session->set(ClientFlowLoginController::STATE_NAME, $data['flow']['cf1']);
-			} else if (isset($data['flow']['cf2'])) {
+			} elseif (isset($data['flow']['cf2'])) {
 				$this->session->set(ClientFlowLoginV2Controller::TOKEN_NAME, $data['flow']['cf2']['token']);
 				$this->session->set(ClientFlowLoginV2Controller::STATE_NAME, $data['flow']['cf2']['state']);
 			}
-
 		}
 
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
 		// need to keep the IdP config ID during session lifetime (SAMLSettings::getPrefix)
 		$this->session->set('user_saml.Idp', $idp);
-		if(is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
+		if (is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
 			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
@@ -323,7 +320,7 @@ class SAMLController extends Controller {
 		$errors = $auth->getErrors();
 
 		if (!empty($errors)) {
-			foreach($errors as $error) {
+			foreach ($errors as $error) {
 				$this->logger->error($error, ['app' => $this->appName]);
 			}
 			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
@@ -371,14 +368,14 @@ class SAMLController extends Controller {
 		}
 
 		$originalUrl = $data['OriginalUrl'];
-		if($originalUrl !== null && $originalUrl !== '') {
+		if ($originalUrl !== null && $originalUrl !== '') {
 			$response = new Http\RedirectResponse($originalUrl);
 		} else {
 			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
 		}
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
 		// to be there.
-		if($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
+		if ($this->request->isUserAgent(['/^.*(mirall|csyncoC)\/.*$/'])) {
 			$response->addCookie('_shibsession_', 'authenticated');
 		}
 
@@ -400,17 +397,17 @@ class SAMLController extends Controller {
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
-		if(!empty($_POST['SAMLRequest'])) {
+		if (!empty($_POST['SAMLRequest'])) {
 			$_GET['SAMLRequest'] = $_POST['SAMLRequest'];
 		}
 
 		$isFromIDP = !$isFromGS && !empty($_GET['SAMLRequest']);
 
-		if($isFromIDP) {
+		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
 			// (or raise Error if request is invalid)
-			$pass = True ;
-		} elseif($isFromGS) {
+			$pass = true;
+		} elseif ($isFromGS) {
 			// Request is from master GlobalScale
 			// Request validity is check via a JSON Web Token
 			$jwt = $this->request->getParam('jwt', '');
@@ -420,11 +417,11 @@ class SAMLController extends Controller {
 			$pass = $this->request->passesCSRFCheck();
 		}
 
-		if($pass) {
+		if ($pass) {
 			$idp = $this->session->get('user_saml.Idp');
 			$auth = new Auth($this->SAMLSettings->getOneLoginSettingsArray($idp));
 			$stay = true ; // $auth will return the redirect URL but won't perform the redirect himself
-			if($isFromIDP){
+			if ($isFromIDP) {
 				// validator (called with processSLO()) needs an XML entity loader
 				$targetUrl = $this->callWithXmlEntityLoader(function () use ($auth, $idp): string {
 					return $auth->processSLO(
@@ -437,7 +434,7 @@ class SAMLController extends Controller {
 				});
 			} else {
 				// If request is not from IDP, we must send him the logout request
-				$parameters = array();
+				$parameters = [];
 				$nameId = $this->session->get('user_saml.samlNameId');
 				$nameIdFormat = $this->session->get('user_saml.samlNameIdFormat');
 				$nameIdNameQualifier = $this->session->get('user_saml.samlNameIdNameQualifier');
@@ -450,11 +447,11 @@ class SAMLController extends Controller {
 					$this->userSession->logout();
 				}
 			}
-			if(!empty($targetUrl) && !$auth->getLastErrorReason()){
+			if (!empty($targetUrl) && !$auth->getLastErrorReason()) {
 				$this->userSession->logout();
 			}
 		}
-		if(empty($targetUrl)){
+		if (empty($targetUrl)) {
 			$targetUrl = $this->urlGenerator->getAbsoluteURL('/');
 		}
 
@@ -493,7 +490,6 @@ class SAMLController extends Controller {
 	 * @return Http\TemplateResponse
 	 */
 	public function selectUserBackEnd($redirectUrl) {
-
 		$attributes = ['loginUrls' => []];
 
 		if ($this->SAMLSettings->allowMultipleUserBackEnds()) {
@@ -545,9 +541,8 @@ class SAMLController extends Controller {
 	 * @return string
 	 */
 	private function getSSOUrl($redirectUrl, $idp) {
-
 		$originalUrl = '';
-		if(!empty($redirectUrl)) {
+		if (!empty($redirectUrl)) {
 			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
 		}
 
@@ -563,7 +558,6 @@ class SAMLController extends Controller {
 		);
 
 		return $ssoUrl;
-
 	}
 
 	/**
@@ -614,5 +608,4 @@ class SAMLController extends Controller {
 		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
-
 }

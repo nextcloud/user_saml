@@ -35,7 +35,6 @@ use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\ISession;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use function base64_decode;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
@@ -108,8 +107,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @param string $uid
 	 * @param array $attributes
 	 */
-	public function createUserIfNotExists($uid, array $attributes = array()) {
-		if(!$this->userExistsInDatabase($uid)) {
+	public function createUserIfNotExists($uid, array $attributes = []) {
+		if (!$this->userExistsInDatabase($uid)) {
 			$values = [
 				'uid' => $uid,
 			];
@@ -124,12 +123,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			if ($home !== '') {
 				//if attribute's value is an absolute path take this, otherwise append it to data dir
 				//check for / at the beginning or pattern c:\ resp. c:/
-				if(   '/' !== $home[0]
+				if ('/' !== $home[0]
 				   && !(3 < strlen($home) && ctype_alpha($home[0])
 					   && $home[1] === ':' && ('\\' === $home[2] || '/' === $home[2]))
 				) {
 					$home = $this->config->getSystemValue('datadirectory',
-							\OC::$SERVERROOT.'/data' ) . '/' . $home;
+							\OC::$SERVERROOT.'/data') . '/' . $home;
 				}
 
 				$values['home'] = $home;
@@ -138,13 +137,12 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
 			$qb->insert('user_saml_users');
-			foreach($values as $column => $value) {
+			foreach ($values as $column => $value) {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
 			$qb->execute();
 
 			$this->initializeHomeDir($uid);
-
 		}
 	}
 
@@ -204,8 +202,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$data = $result->fetchAll();
 		$result->closeCursor();
 
-		foreach($data as $passwords) {
-			if(password_verify($password, $passwords['token'])) {
+		foreach ($data as $passwords) {
+			if (password_verify($password, $passwords['token'])) {
 				return $uid;
 			}
 		}
@@ -220,7 +218,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function deleteUser($uid) {
-		if($this->userExistsInDatabase($uid)) {
+		if ($this->userExistsInDatabase($uid)) {
 			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
 			$qb->delete('user_saml_users')
@@ -238,7 +236,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return string
 	 */
 	public function getHome($uid) {
-		if($this->userExistsInDatabase($uid)) {
+		if ($this->userExistsInDatabase($uid)) {
 			$qb = $this->db->getQueryBuilder();
 			$qb->select('home')
 				->from('user_saml_users')
@@ -278,7 +276,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function userExists($uid) {
-		if($backend = $this->getActualUserBackend($uid)) {
+		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->userExists($uid);
 		} else {
 			return $this->userExistsInDatabase($uid);
@@ -286,7 +284,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	}
 
 	public function setDisplayName($uid, $displayName) {
-		if($backend = $this->getActualUserBackend($uid)) {
+		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->setDisplayName($uid, $displayName);
 		}
 
@@ -310,10 +308,10 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function getDisplayName($uid) {
-		if($backend = $this->getActualUserBackend($uid)) {
+		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->getDisplayName($uid);
 		} else {
-			if($this->userExistsInDatabase($uid)) {
+			if ($this->userExistsInDatabase($uid)) {
 				$qb = $this->db->getQueryBuilder();
 				$qb->select('displayname')
 					->from('user_saml_users')
@@ -375,7 +373,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 4.5.0
 	 */
 	public function hasUserListings() {
-		if($this->autoprovisionAllowed()) {
+		if ($this->autoprovisionAllowed()) {
 			return true;
 		}
 
@@ -398,7 +396,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function getLogoutUrl() {
 		$prefix = $this->settings->getPrefix();
 		$slo = $this->config->getAppValue('user_saml', $prefix . 'idp-singleLogoutService.url', '');
-		if($slo === '') {
+		if ($slo === '') {
 			return '';
 		}
 
@@ -486,14 +484,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	public function getCurrentUserId() {
 		$user = \OC::$server->getUserSession()->getUser();
 
-		if($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
+		if ($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
 			$uid = $user->getUID();
 		} else {
 			$this->userData->setAttributes($this->session->get('user_saml.samlUserData') ?? []);
 			$uid = $this->userData->getEffectiveUid();
 		}
 
-		if($uid !== '' && $this->userExists($uid)) {
+		if ($uid !== '' && $this->userExists($uid)) {
 			$uid = $this->userData->testEncodedObjectGUID($uid);
 
 			$this->session->set('last-password-confirm', strtotime('+4 year', time()));
@@ -528,8 +526,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return null|UserInterface
 	 */
 	public function getActualUserBackend($uid) {
-		foreach(self::$backends as $backend) {
-			if($backend->userExists($uid)) {
+		foreach (self::$backends as $backend) {
+			if ($backend->userExists($uid)) {
 				return $backend;
 			}
 		}
@@ -547,8 +545,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		self::$backends = $backends;
 	}
 
-	private function getAttributeKeys($name)
-	{
+	private function getAttributeKeys($name) {
 		$prefix = $this->settings->getPrefix($name);
 		$keys = explode(' ', $this->config->getAppValue('user_saml', $prefix . $name, ''));
 
@@ -562,17 +559,17 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		$keys = $this->getAttributeKeys($name);
 
 		$value = '';
-		foreach($keys as $key) {
+		foreach ($keys as $key) {
 			if (isset($attributes[$key])) {
 				if (is_array($attributes[$key])) {
 					foreach ($attributes[$key] as $attribute_part_value) {
-						if($value !== '') {
+						if ($value !== '') {
 							$value .= ' ';
 						}
 						$value .= $attribute_part_value;
 					}
 				} else {
-					if($value !== '') {
+					if ($value !== '') {
 						$value .= ' ';
 					}
 					$value .= $attributes[$key];
@@ -586,8 +583,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	private function getAttributeArrayValue($name, array $attributes) {
 		$keys = $this->getAttributeKeys($name);
 
-		$value = array();
-		foreach($keys as $key) {
+		$value = [];
+		foreach ($keys as $key) {
 			if (isset($attributes[$key])) {
 				if (is_array($attributes[$key])) {
 					$value = array_merge($value, array_values($attributes[$key]));
