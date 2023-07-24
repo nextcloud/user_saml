@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.4
+
+### Fixed
+- Fix validating SAML XML schemas (user_saml#756)
+
 ## 5.1.3
 
 ### Added
