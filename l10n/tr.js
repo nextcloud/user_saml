@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
     "Login options:" : "Oturum açma seçenekleri:",
-    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
-    "Attribute to map the users mfa login status" : "Kullanıcıların çok adımlı doğrulama oturum açma durumu değerinin eşleştirileceği öznitelik."
+    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin"
 },
 "nplurals=2; plural=(n > 1);");

@@ -18,12 +18,12 @@ jobs:
             Hello there,
             Thank you so much for taking the time and effort to create a pull request to our Nextcloud project. 
 
-            We hope that the reviewing process is going smooth and is helpful for you. We want to ensure your pull request is reviewed to your satisfaction. If you have a moment, our community management team would very much appreciate your feedback on your experience with this PR reviewing process.
+            We hope that the review process is going smooth and is helpful for you. We want to ensure your pull request is reviewed to your satisfaction. If you have a moment, our community management team would very much appreciate your feedback on your experience with this PR review process.
 
             Your feedback is valuable to us as we continuously strive to improve our community developer experience. Please take a moment to complete our short survey by clicking on the following link: https://cloud.nextcloud.com/apps/forms/s/i9Ago4EQRZ7TWxjfmeEpPkf6
 
             Thank you for contributing to Nextcloud and we hope to hear from you soon!
           days-before-feedback: 14
           start-date: "2023-07-10"
-          exempt-authors: "${{ steps.scrape.outputs.users }}"
+          exempt-authors: "${{ steps.scrape.outputs.users }},nextcloud-command"
           exempt-bots: true

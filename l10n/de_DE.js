@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ihr Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
     "Login options:" : "Anmeldeoptionen:",
-    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen",
-    "Attribute to map the users mfa login status" : "Attribut zur Zuordnung des MFA-Anmeldestatus des Benutzers"
+    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen"
 },
 "nplurals=2; plural=(n != 1);");

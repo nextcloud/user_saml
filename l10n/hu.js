@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "A fiók nem felügyelt.",
     "Your account is not provisioned, access to this service is thus not possible." : "A fiókja nem felügyelt, így ehhez a szolgáltatáshoz nem férhet hozzá.",
     "Login options:" : "Bejelentkezési lehetőségek:",
-    "Choose a authentication provider" : "Válasszon hitelesítésszolgáltatót",
-    "Attribute to map the users mfa login status" : "Az attribútum, amelyhez a felhasználók kétfaktoros bejelentkezési állapota hozzá lesz rendelve."
+    "Choose a authentication provider" : "Válasszon hitelesítésszolgáltatót"
 },
 "nplurals=2; plural=(n != 1);");

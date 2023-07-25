@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Compte no subministrat.",
     "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no està proveït, per tant, l'accés a aquest servei no és possible.",
     "Login options:" : "Opcions d'inici de sessió:",
-    "Choose a authentication provider" : "Tria un proveïdor d'autenticació",
-    "Attribute to map the users mfa login status" : "Atribut per assignar l'estat d'inici de sessió mfa dels usuaris"
+    "Choose a authentication provider" : "Tria un proveïdor d'autenticació"
 },
 "nplurals=2; plural=(n != 1);");

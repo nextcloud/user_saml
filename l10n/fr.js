@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Compte non approvisionné.",
     "Your account is not provisioned, access to this service is thus not possible." : "Votre compte n'est pas approvisionné, l'accès à ce service n'est donc pas possible.",
     "Login options:" : "Options de connexion :",
-    "Choose a authentication provider" : "Choisir un fournisseur d'authentification",
-    "Attribute to map the users mfa login status" : "Attribut pour relier l'état de connexion AMF"
+    "Choose a authentication provider" : "Choisir un fournisseur d'authentification"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Неосигурен профил.",
     "Your account is not provisioned, access to this service is thus not possible." : "Вашият профил не е осигурен, поради което не е възможен достъп до тази услуга.",
     "Login options:" : "Опции за влизане:",
-    "Choose a authentication provider" : "Избор на доставчик на удостоверяване ",
-    "Attribute to map the users mfa login status" : "Атрибут за съпоставяне на статуса на влизане на потребителите в mfa"
+    "Choose a authentication provider" : "Избор на доставчик на удостоверяване "
 },
 "nplurals=2; plural=(n != 1);");

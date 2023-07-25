@@ -10,10 +10,14 @@
 	"scripts": {
 		"cs:fix": "php-cs-fixer fix",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
-		"lint": "find . -name \\*.php -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l"
+		"psalm": "psalm.phar",
+		"lint": "find . -name \\*.php -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",
+		"test:unit": "phpunit -c tests/unit/phpunit.xml"
 	},
 	"require-dev": {
-		"nextcloud/coding-standard": "^1.0.0",
-		"phpunit/phpunit": "^9"
+		"nextcloud/coding-standard": "^1.1",
+		"phpunit/phpunit": "^9",
+		"psalm/phar": "^5.13",
+		"nextcloud/ocp": "^27.0"
 	}
 }
