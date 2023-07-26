@@ -10,21 +10,21 @@ script('user_saml', 'selectUserBackEnd');
 
 <h1><?php p($l->t('Login options:')); ?></h1>
 
-	<?php if($_['useCombobox']) { ?>
+	<?php if ($_['useCombobox']) { ?>
 
 		<select class="login-chose-saml-idp" id="av_mode" name="avMode">
 			<option value=""><?php p($l->t('Choose a authentication provider')); ?></option>
 			<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
 				<option value="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></option>
 			<?php } ?>
-			<?php if(isset($_['loginUrls']['directLogin'])) : ?>
+			<?php if (isset($_['loginUrls']['directLogin'])) : ?>
 				<option value="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></option>
 			<?php endif; ?>
 		</select>
 
 	<?php } else { ?>
 
-		<?php if(isset($_['loginUrls']['directLogin'])) : ?>
+		<?php if (isset($_['loginUrls']['directLogin'])) : ?>
 			<div class="login-option">
 				<a href="<?php p($_['loginUrls']['directLogin']['url']); ?>"><?php p($_['loginUrls']['directLogin']['display-name']); ?></a>
 			</div>

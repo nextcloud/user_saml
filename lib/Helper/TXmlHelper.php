@@ -1,6 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
+ * @copyright Copyright (c) 2023 Arthur Schiwon <blizzz@arthur-schiwon.de>
+ *
+ * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -15,17 +20,25 @@
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
-if (!defined('PHPUNIT_RUN')) {
-	define('PHPUNIT_RUN', 1);
+namespace OCA\User_SAML\Helper;
+
+trait TXmlHelper {
+
+	/**
+	 * @returns mixed returns the result of the callable parameter
+	 */
+	public function callWithXmlEntityLoader(callable $func) {
+		libxml_set_external_entity_loader(static function ($public, $system) {
+			return $system;
+		});
+		$result = $func();
+		libxml_set_external_entity_loader(static function () {
+			return null;
+		});
+		return $result;
+	}
 }
-require_once __DIR__.'/../../../../lib/base.php';
-\OC::$loader->addValidRoot(\OC::$SERVERROOT . '/tests');
-\OC_App::loadApp('user_saml');
-if (!class_exists('\PHPUnit\Framework\TestCase')) {
-	require_once('PHPUnit/Autoload.php');
-}
-OC_Hook::clear();

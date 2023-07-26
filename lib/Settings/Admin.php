@@ -64,7 +64,7 @@ class Admin implements ISettings {
 			$providers[] = [
 				'id' => $id,
 				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
-				];
+			];
 		}
 		$serviceProviderFields = [
 			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
@@ -86,7 +86,7 @@ class Admin implements ISettings {
 			'wantXMLValidation' => $this->l10n->t('Indicates if the SP will validate all received XML.'),
 		];
 		$securityGeneral = [
-			'lowercaseUrlencoding' =>  $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
+			'lowercaseUrlencoding' => $this->l10n->t('ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification.'),
 			'signatureAlgorithm' => [
 				'type' => 'line',
 				'text' => $this->l10n->t('Algorithm that the toolkit will use on signing process.')
@@ -175,7 +175,7 @@ class Admin implements ISettings {
 		];
 
 		$type = $this->config->getAppValue('user_saml', 'type');
-		if($type === 'saml') {
+		if ($type === 'saml') {
 			$generalSettings['use_saml_auth_for_desktop'] = [
 				'text' => $this->l10n->t('Use SAML auth for the %s desktop clients (requires user re-authentication)', [$this->defaults->getName()]),
 				'type' => 'checkbox',
@@ -226,5 +226,4 @@ class Admin implements ISettings {
 	public function getPriority() {
 		return 0;
 	}
-
 }

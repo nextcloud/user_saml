@@ -21,7 +21,6 @@
 
 namespace OCA\User_SAML\Middleware;
 
-use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
@@ -61,8 +60,8 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @param string $methodName
 	 * @throws \Exception
 	 */
-	public function beforeController($controller, $methodName){
-		if($this->reflector->hasAnnotation('OnlyUnauthenticatedUsers') && $this->userSession->isLoggedIn()) {
+	public function beforeController($controller, $methodName) {
+		if ($this->reflector->hasAnnotation('OnlyUnauthenticatedUsers') && $this->userSession->isLoggedIn()) {
 			throw new \Exception('User is already logged-in');
 		}
 	}
@@ -75,7 +74,7 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @throws \Exception
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
-		if($exception->getMessage() === 'User is already logged-in') {
+		if ($exception->getMessage() === 'User is already logged-in') {
 			return new RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 

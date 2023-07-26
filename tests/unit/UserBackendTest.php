@@ -35,7 +35,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use Test\TestCase;
 
-class UserBackendTest extends TestCase   {
+class UserBackendTest extends TestCase {
 	/** @var UserData|\PHPUnit\Framework\MockObject\MockObject */
 	private $userData;
 	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
@@ -72,7 +72,7 @@ class UserBackendTest extends TestCase   {
 	}
 
 	public function getMockedBuilder(array $mockedFunctions = []) {
-		if($mockedFunctions !== []) {
+		if ($mockedFunctions !== []) {
 			$this->userBackend = $this->getMockBuilder(UserBackend::class)
 				->setConstructorArgs([
 					$this->config,
@@ -286,5 +286,4 @@ class UserBackendTest extends TestCase   {
 			->with('ExistingUser', 'New Displayname');
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
 	}
-
 }

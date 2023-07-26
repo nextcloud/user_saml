@@ -116,5 +116,4 @@ class SettingsController extends Controller {
 		}
 		return new Response();
 	}
-
 }
