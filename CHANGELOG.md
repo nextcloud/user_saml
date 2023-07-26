@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.3.6
+### Fixed
+- enable xml entity loader where necessary
+
+## 3.3.5
+### Changed
+- sanitize and test user id received from IdP, if original does not match
+- slo web server decode
+
 ## 3.3.4
 ### Fixed
 - Logins with UIDs resembling base64
