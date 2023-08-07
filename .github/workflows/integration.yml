@@ -101,7 +101,7 @@ jobs:
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
           coverage: none
-          ini-file: development
+          ini-file: production
           ini-values: disabled_functions=
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
