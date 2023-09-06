@@ -10,7 +10,7 @@ on:
     types: [published]
 
 env:
-  PHP_VERSION: 7.4
+  PHP_VERSION: 8.0
 
 jobs:
   build_and_publish:
@@ -32,7 +32,7 @@ jobs:
           echo "APP_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           path: ${{ env.APP_NAME }}
 
@@ -50,13 +50,13 @@ jobs:
         continue-on-error: true
         with:
           path: ${{ env.APP_NAME }}
-          fallbackNode: "^12"
-          fallbackNpm: "^6"
+          fallbackNode: '^20'
+          fallbackNpm: '^9'
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         # Skip if no package.json
         if: ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@e33196f7422957bea03ed53f6fbb155025ffc7b8 # v3
+        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -88,6 +88,8 @@ jobs:
       - name: Build ${{ env.APP_NAME }}
         # Skip if no package.json
         if: ${{ steps.versions.outputs.nodeVersion }}
+        env:
+          CYPRESS_INSTALL_BINARY: 0
         run: |
           cd ${{ env.APP_NAME }}
           npm ci
@@ -126,7 +128,7 @@ jobs:
           unzip latest-$NCVERSION.zip
 
       - name: Checkout server master fallback
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         if: ${{ steps.server-checkout.outcome != 'success' }}
         with:
           submodules: true
@@ -149,7 +151,7 @@ jobs:
           tar -zcvf ${{ env.APP_NAME }}.tar.gz ${{ env.APP_NAME }}
 
       - name: Attach tarball to github release
-        uses: svenstaro/upload-release-action@2b9d2847a97b04d02ad5c3df2d3a27baa97ce689 # v2
+        uses: svenstaro/upload-release-action@1beeb572c19a9242f4361f4cee78f8e0d9aec5df # v2
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
