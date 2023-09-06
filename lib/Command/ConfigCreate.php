@@ -32,16 +32,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigCreate extends Base {
-
-	/** @var SAMLSettings */
-	private $samlSettings;
+	private SAMLSettings $samlSettings;
 
 	public function __construct(SAMLSettings $samlSettings) {
 		parent::__construct();
 		$this->samlSettings = $samlSettings;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this->setName('saml:config:create');
 		$this->setDescription('Creates a new config and prints the new provider ID');
 	}

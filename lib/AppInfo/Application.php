@@ -25,8 +25,16 @@ use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\App;
-use OCP\AppFramework\IAppContainer;
+use OCP\AppFramework\Utility\IControllerMethodReflector;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
+use OCP\ISession;
+use OCP\IURLGenerator;
+use OCP\IUserSession;
 use OCP\SabrePluginEvent;
+use OCP\Server;
+use OCP\Util;
+use Psr\Container\ContainerInterface;
 
 class Application extends App {
 	public function __construct(array $urlParams = []) {
@@ -36,21 +44,20 @@ class Application extends App {
 		/**
 		 * Middleware
 		 */
-		$container->registerService('OnlyLoggedInMiddleware', function (IAppContainer $c) {
+		$container->registerService('OnlyLoggedInMiddleware', function (ContainerInterface $c) {
 			return new OnlyLoggedInMiddleware(
-				$c->query('ControllerMethodReflector'),
-				$c->query('ServerContainer')->getUserSession(),
-				$c->query('ServerContainer')->getUrlGenerator()
+				$c->get(IControllerMethodReflector::class),
+				$c->get(IUserSession::class),
+				$c->get(IURLGenerator::class)
 			);
 		});
 
-		$container->registerService(DavPlugin::class, function (IAppContainer $c) {
-			$server = $c->getServer();
+		$container->registerService(DavPlugin::class, function (ContainerInterface $c) {
 			return new DavPlugin(
-				$server->getSession(),
-				$server->getConfig(),
+				$c->get(ISession::class),
+				$c->get(IConfig::class),
 				$_SERVER,
-				$server->get(SAMLSettings::class)
+				$c->get(SAMLSettings::class)
 			);
 		});
 
@@ -58,23 +65,19 @@ class Application extends App {
 		$this->timezoneHandling();
 	}
 
-	public function registerDavAuth() {
-		$container = $this->getContainer();
-
-		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) use ($container) {
-			$event->getServer()->addPlugin($container->query(DavPlugin::class));
+	public function registerDavAuth(): void {
+		$dispatcher = Server::get(IEventDispatcher::class);
+		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) {
+			$event->getServer()->addPlugin(Server::get(DavPlugin::class));
 		});
 	}
 
-	private function timezoneHandling() {
-		$container = $this->getContainer();
+	private function timezoneHandling(): void {
+		$userSession = Server::get(IUserSession::class);
+		$session = Server::get(ISession::class);
+		$config = Server::get(IConfig::class);
 
-		$userSession = $container->getServer()->getUserSession();
-		$session = $container->getServer()->getSession();
-		$config = $container->getServer()->getConfig();
-
-		$dispatcher = $container->getServer()->getEventDispatcher();
+		$dispatcher = Server::get(IEventDispatcher::class);
 		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
@@ -84,8 +87,8 @@ class Application extends App {
 			$timezoneDB = $config->getUserValue($user->getUID(), 'core', 'timezone', '');
 
 			if ($timezoneDB === '' || !$session->exists('timezone')) {
-				\OCP\Util::addScript('user_saml', 'vendor/jstz.min');
-				\OCP\Util::addScript('user_saml', 'timezone');
+				Util::addScript('user_saml', 'vendor/jstz.min');
+				Util::addScript('user_saml', 'timezone');
 			}
 		});
 	}

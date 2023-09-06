@@ -22,7 +22,6 @@
 namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
@@ -34,6 +33,8 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\IUserManager;
+use OCP\IUserSession;
+use OCP\Server;
 use OCP\User\Events\UserChangedEvent;
 use OCP\UserInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -93,7 +94,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @return bool
 	 */
 	protected function userExistsInDatabase($uid) {
-		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
 			->from('user_saml_users')
@@ -140,7 +140,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				$values['home'] = $home;
 			}
 
-			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
 			$qb->insert('user_saml_users');
 			foreach ($values as $column => $value) {
@@ -168,7 +167,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 		}
 		// trigger any other initialization
 		$user = $this->userManager->get($uid);
-		\OC::$server->getEventDispatcher()->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
+		$this->eventDispatcher->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
 	}
 
 	/**
@@ -198,7 +197,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * returns the user id or false
 	 */
 	public function checkPassword($uid, $password) {
-		/* @var $qb IQueryBuilder */
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('token')
 			->from('user_saml_auth_token')
@@ -225,7 +223,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 */
 	public function deleteUser($uid) {
 		if ($this->userExistsInDatabase($uid)) {
-			/* @var $qb IQueryBuilder */
 			$qb = $this->db->getQueryBuilder();
 			$qb->delete('user_saml_users')
 				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
@@ -427,16 +424,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 
 	/**
 	 * return user data from the idp
-	 *
-	 * @return mixed
 	 */
-	public function getUserData() {
+	public function getUserData(): array {
 		$userData = $this->session->get('user_saml.samlUserData');
 		$userData = $this->formatUserData($userData);
 
 		// make sure that a valid UID is given
 		if (empty($userData['formatted']['uid'])) {
-			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => $this->appName, 'uid' => $userData['uid']]);
+			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => 'user_saml', 'uid' => $userData['uid']]);
 			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['uid']);
 		}
 
@@ -496,7 +491,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 * @since 6.0.0
 	 */
 	public function getCurrentUserId() {
-		$user = \OC::$server->getUserSession()->getUser();
+		$user = Server::get(IUserSession::class)->getUser();
 
 		if ($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
 			$uid = $user->getUID();
