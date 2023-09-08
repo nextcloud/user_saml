@@ -33,8 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GetMetadata extends Command {
 	use TXmlHelper;
 
-	/** @var SAMLSettings */
-	private $SAMLSettings;
+	private SAMLSettings $SAMLSettings;
 
 	public function __construct(
 		SAMLSettings $SAMLSettings
@@ -43,7 +42,7 @@ class GetMetadata extends Command {
 		$this->SAMLSettings = $SAMLSettings;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this
 			->setName('saml:metadata')
 			->setDescription('Get SAML Metadata')
@@ -64,12 +63,7 @@ EOT
 		;
 	}
 
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return void
-	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$idp = (int)$input->getArgument('idp');
 		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
@@ -84,5 +78,6 @@ EOT
 				Error::METADATA_SP_INVALID
 			);
 		}
+		return 0;
 	}
 }
