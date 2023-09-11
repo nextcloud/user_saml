@@ -22,6 +22,7 @@
 namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
+use OCP\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
@@ -37,7 +38,6 @@ use OCP\IUserSession;
 use OCP\Server;
 use OCP\User\Events\UserChangedEvent;
 use OCP\UserInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	/** @var IConfig */
