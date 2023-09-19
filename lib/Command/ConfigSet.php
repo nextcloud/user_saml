@@ -35,16 +35,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigSet extends Base {
-
-	/** @var SAMLSettings */
-	private $samlSettings;
+	private SAMLSettings $samlSettings;
 
 	public function __construct(SAMLSettings $samlSettings) {
 		parent::__construct();
 		$this->samlSettings = $samlSettings;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this->setName('saml:config:set');
 
 		$this->addArgument(
@@ -75,7 +73,7 @@ class ConfigSet extends Base {
 		try {
 			$settings = $this->samlSettings->get($pId);
 		} catch (Exception $e) {
-			$output->writeln('<error>Provider with id: ' . $providerId . ' does not exist.</error>');
+			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
 			return 1;
 		}
 

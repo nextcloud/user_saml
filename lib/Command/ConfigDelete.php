@@ -34,15 +34,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigDelete extends Base {
-	/** @var SAMLSettings */
-	private $samlSettings;
+	private SAMLSettings $samlSettings;
 
 	public function __construct(SAMLSettings $samlSettings) {
 		parent::__construct();
 		$this->samlSettings = $samlSettings;
 	}
 
-	protected function configure() {
+	protected function configure(): void {
 		$this->setName('saml:config:delete');
 
 		$this->addArgument(

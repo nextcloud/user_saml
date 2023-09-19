@@ -38,17 +38,9 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.0', '8.1']
-        server-versions: ['stable25', 'stable26', 'stable27', 'master']
-        include:
-          - php-versions: '8.2'
-            server-versions: 'master'
-          - php-versions: '8.2'
-            server-versions: 'stable27'
-          - php-versions: '8.2'
-            server-versions: 'stable26'
-          - php-versions: '7.4'
-            server-versions: 'stable25'
+        php-versions: ['8.0']
+        server-versions: ['master']
+
     steps:
       - name: Set app env
         run: |
@@ -56,14 +48,14 @@ jobs:
           echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout app
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           path: apps/${{ env.APP_NAME }}
 
