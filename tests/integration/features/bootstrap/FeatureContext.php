@@ -41,6 +41,7 @@ class FeatureContext implements Context {
 	public function before() {
 		$jar = new \GuzzleHttp\Cookie\FileCookieJar('/tmp/cookies_' . md5(openssl_random_pseudo_bytes(12)));
 		$this->client = new \GuzzleHttp\Client([
+			'version' => 2.0,
 			'cookies' => $jar,
 			'verify' => false,
 			'allow_redirects' => [
