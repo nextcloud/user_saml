@@ -59,7 +59,7 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Utiliser l'authentification SAML intégrée",
     "Use environment variable" : "Utiliser une variable d’environnement",
     "Global settings" : "Paramètres généraux",
-    "Remove identity provider" : "Supprimer le fournisseur d'identité",
+    "Remove identity provider" : "Retirer le fournisseur d'identité",
     "Add identity provider" : "Ajouter le fournisseur d'identité",
     "General" : "Général",
     "Service Provider Data" : "Service du Fournisseur de Données",
