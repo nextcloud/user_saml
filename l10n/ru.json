@@ -33,6 +33,7 @@
     "Attribute to map the users home to." : "Атрибут для привязки домашней директории пользователей.",
     "Attribute to map the users MFA login status" : "Атрибут для сопоставления статуса входа пользователей в MFA",
     "Reject members of these groups. This setting has precedence over required memberships." : "Отклоняйте членов этих групп. Этот параметр имеет приоритет над обязательным членством.",
+    "Group A, Group B, …" : "Группа А, Группа Б, …",
     "Require membership in these groups, if any." : "Требуется членство в этих группах, если таковые имеются.",
     "Email address" : "Адрес электронной почты",
     "Encrypted" : "Зашифровано",
