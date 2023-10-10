@@ -15,8 +15,6 @@ use Psr\Http\Message\RequestInterface;
  * associative array of curl option constants mapping to values in the
  * **curl** key of the provided request options.
  *
- * @property resource|\CurlMultiHandle $_mh Internal use only. Lazy loaded multi-handle.
- *
  * @final
  */
 class CurlMultiHandler
@@ -32,9 +30,9 @@ class CurlMultiHandler
     private $selectTimeout;
 
     /**
-     * @var resource|\CurlMultiHandle|null the currently executing resource in `curl_multi_exec`.
+     * @var int Will be higher than 0 when `curl_multi_exec` is still running.
      */
-    private $active;
+    private $active = 0;
 
     /**
      * @var array Request entry handles, indexed by handle id in `addRequest`.
@@ -54,6 +52,9 @@ class CurlMultiHandler
      * @var array<mixed> An associative array of CURLMOPT_* options and corresponding values for curl_multi_setopt()
      */
     private $options = [];
+
+    /** @var resource|\CurlMultiHandle */
+    private $_mh;
 
     /**
      * This handler accepts the following options:
@@ -78,6 +79,10 @@ class CurlMultiHandler
         }
 
         $this->options = $options['options'] ?? [];
+
+        // unsetting the property forces the first access to go through
+        // __get().
+        unset($this->_mh);
     }
 
     /**
@@ -163,7 +168,8 @@ class CurlMultiHandler
             \usleep(250);
         }
 
-        while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM);
+        while (\curl_multi_exec($this->_mh, $this->active) === \CURLM_CALL_MULTI_PERFORM) {
+        }
 
         $this->processMessages();
     }

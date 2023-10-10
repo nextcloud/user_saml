@@ -30,6 +30,9 @@ class FeatureContext implements Context {
 	/** @var array */
 	private $changedSettings = [];
 
+	private const ENV_CONFIG_FILE = __DIR__ . '/../../../../../../config/env.config.php';
+	private const MAIN_CONFIG_FILE = __DIR__ . '/../../../../../../config/config.php';
+
 	public function __construct() {
 		date_default_timezone_set('Europe/Berlin');
 	}
@@ -38,6 +41,7 @@ class FeatureContext implements Context {
 	public function before() {
 		$jar = new \GuzzleHttp\Cookie\FileCookieJar('/tmp/cookies_' . md5(openssl_random_pseudo_bytes(12)));
 		$this->client = new \GuzzleHttp\Client([
+			'version' => 2.0,
 			'cookies' => $jar,
 			'verify' => false,
 			'allow_redirects' => [
@@ -56,18 +60,21 @@ class FeatureContext implements Context {
 		foreach ($users as $user) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache %s %s user:delete %s',
+					'%s %s user:delete %s',
 					PHP_BINARY,
 					__DIR__ . '/../../../../../../occ',
 					$user
 				)
 			);
+			if (file_exists(self::ENV_CONFIG_FILE)) {
+				unlink(self::ENV_CONFIG_FILE);
+			}
 		}
 
 		foreach ($this->changedSettings as $setting) {
 			shell_exec(
 				sprintf(
-					'sudo -u apache %s %s config:app:delete user_saml %s',
+					'%s %s config:app:delete user_saml %s',
 					PHP_BINARY,
 					__DIR__ . '/../../../../../../occ',
 					$setting
@@ -77,7 +84,7 @@ class FeatureContext implements Context {
 
 		shell_exec(
 			sprintf(
-				'sudo -u apache %s %s saml:config:delete 1',
+				'%s %s saml:config:delete 1',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 			)
@@ -103,7 +110,7 @@ class FeatureContext implements Context {
 			$this->changedSettings[] = $settingName;
 			shell_exec(
 				sprintf(
-					'sudo -u apache %s %s config:app:set --value="%s" user_saml %s',
+					'%s %s config:app:set --value="%s" user_saml %s',
 					PHP_BINARY,
 					__DIR__ . '/../../../../../../occ',
 					$value,
@@ -115,7 +122,7 @@ class FeatureContext implements Context {
 
 		shell_exec(
 			sprintf(
-				'sudo -u apache %s %s saml:config:set --"%s"="%s" %d',
+				'%s %s saml:config:set --"%s"="%s" %d',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$settingName,
@@ -214,7 +221,7 @@ class FeatureContext implements Context {
 
 		$this->response = $this->client->request(
 			'POST',
-			'http://localhost/index.php/apps/user_saml/saml/acs',
+			'http://localhost:8080/index.php/apps/user_saml/saml/acs',
 			[
 				'form_params' => $postData,
 			]
@@ -231,7 +238,7 @@ class FeatureContext implements Context {
 	public function thUserValueShouldBe($key, $value) {
 		$this->response = $this->client->request(
 			'GET',
-			'http://localhost/ocs/v1.php/cloud/user',
+			'http://localhost:8080/ocs/v1.php/cloud/user',
 			[
 				'headers' => [
 					'OCS-APIRequest' => 'true',
@@ -266,7 +273,7 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
@@ -283,7 +290,7 @@ class FeatureContext implements Context {
 	public function theLastLoginTimestampOfShouldNotBeEmpty($uid) {
 		$response = shell_exec(
 			sprintf(
-				'sudo -u apache OC_PASS=password %s %s user:lastseen %s',
+				'OC_PASS=password %s %s user:lastseen %s',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
@@ -301,6 +308,14 @@ class FeatureContext implements Context {
 	 * @Given The environment variable :key is set to :value
 	 */
 	public function theEnvironmentVariableIsSetTo($key, $value) {
-		file_put_contents(__DIR__ . '/../../../../../../.htaccess', "\nSetEnv $key $value\n", FILE_APPEND);
+		// Attention, this works currently for one value only. It generates an
+		// extra config file that injects the value to $_SERVER (as used in
+		// `SAMLController::login()`), so that it stays across requests in PHPs
+		// built-in server.
+		$envConfigPhp = <<<EOF
+<?php
+\$_SERVER["$key"] = "$value";
+EOF;
+		file_put_contents(self::ENV_CONFIG_FILE, $envConfigPhp);
 	}
 }
