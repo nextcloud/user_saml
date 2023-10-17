@@ -11,13 +11,13 @@ Feature: Shibboleth
     And The setting "sp-x509cert" is set to "-----BEGIN CERTIFICATE-----MIIC+zCCAeOgAwIBAgIJAIgZuvWDBIrdMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDAeFw0xNzAxMDQxMTM5MjFaFw0yNzAxMDIxMTM5MjFaMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN3ESWaDH1JiJTy9yRJQV7kahPOxgBkIH2xwcYDL1k9deKNhSKLx7aGfxE244+HBcC6WLHKVUnOm0ld2qxQ4bMYiJXzZuqL67r07L5wxGAssv12lO92qohGmlHy3+VzRYUBmovu6upqOv3R2F8HBbo7Jc7Hvt7hOEJn/jPuFuF/fHit3mqU8l6IkrIZjpaW8T9fIWOXRq98U4+hkgWpqEZWsqlfE8BxAs9DeIMZab0GxO9stHLp+GYKx10uE4ezFcaDS8W+g2C8enCTt1HXGvcnj4o5zkC1lITGvcFTsiFqfIWyXeSufcxdc0W7HoG6J3ks0WJyK38sfFn0t2Ao6kX0CAwEAAaNQME4wHQYDVR0OBBYEFAoJzX6TVYAwC1GSPe6nObBG54zaMB8GA1UdIwQYMBaAFAoJzX6TVYAwC1GSPe6nObBG54zaMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAJia9R70uXdUZtgujUPjLas4+sVajzlBFmqhBqpLAo934vljf9HISsHrPtdBcbS0d0rucqXwabDf0MlR18ksnT/NYpsTwMbMx76CrXi4zYEEW5lISKEO65aIkzVTcqKWSuhjtSnRdB6iOLsFiKmNMWXaIKMR5T0+AbR9wdQgn08W+3EEeHGvafVQfE3STVsSgNb1ft7DvcSUnfPXGU7KzvmTpZa0Hfmc7uY4vpdEEhLAdRhgLReS7USZskov7ooiPSoD+JRFi2gM4klBxTemHdNUa9oFnHMXuYKOkLbkgFvHxyy+QlLq2ELQTga5e7I83ZyOfGctyf8Ul6vGw10vbQ=-----END CERTIFICATE-----"
     And The setting "sp-privateKey" is set to "-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEA3cRJZoMfUmIlPL3JElBXuRqE87GAGQgfbHBxgMvWT114o2FIovHtoZ/ETbjj4cFwLpYscpVSc6bSV3arFDhsxiIlfNm6ovruvTsvnDEYCyy/XaU73aqiEaaUfLf5XNFhQGai+7q6mo6/dHYXwcFujslzse+3uE4Qmf+M+4W4X98eK3eapTyXoiSshmOlpbxP18hY5dGr3xTj6GSBamoRlayqV8TwHECz0N4gxlpvQbE72y0cun4ZgrHXS4Th7MVxoNLxb6DYLx6cJO3Udca9yePijnOQLWUhMa9wVOyIWp8hbJd5K59zF1zRbsegboneSzRYnIrfyx8WfS3YCjqRfQIDAQABAoIBAQC5CQAdcqZ9vLpJNilBCJxJLCFmm+HAAREHD8MErg9A5UK1P4S1wJp/0qieGPi68wXBOTgY2xKSwMycgb04/+NyZidVRu388takOW/+KNBg8pMxdZ6/05GqnI0kivSbR3CXpYuz8hekwhpo9+fWmKjApsHL47ItK6WaeKmPbAFsq1YJGzfp/DXg7LIvh9GA3C1LWWGV7SuCGOyX/2Moi8xRa7qBtH4hDo/0NRhTx7zjYjlBgNEr330pJUopc3+AtHE40R+xMr2zkGvq9RsCZxYxD2VWbLwQW0yNjWmQ2OTuMgJJvk2+N73QLHcB+tea82ZTszsNzRS9DLtc6qbsKEPZAoGBAO78U3vEuRyY56f/1hpo0xuCDwOkWGzgBQWkjJl6dlyVz/zKkhXBHpEYImyt8XRN0W3iGZYpZ2hCFJGTcDp32R6UiEyGLz0Uc8R/tva/TiRVW1FdNczzSHcB24b9OMK4vE9JLs8mA8Rp8YBgtLr5DDuMfYt/a/rZJbg/HIfIN98nAoGBAO2OInCX93t2I6zzRPIqKtI6q6FYNp64VIQjvw9Y8l0x3IdJZRP9H5C8ZhCeYPsgEqTXcXa4j5hL4rQzoUtxfxflBUUH60bcnd4LGaTCMYLS14G011E3GZlIP0sJi5OjEhy8fq3zt6jVzS9V/lPHB8i+w1D7CbPrMpW7B3k32vC7AoGAX/HvdkYhZyjAAEOG6m1hK68IZhbp5TP+8CgCxm9S65K9wKh3A8LXibrdvzIKOP4w8WOPkCipOkMlTNibeu24vj01hztr5aK7Y40+oEtnjNCz67N3MQQO+LBHOSeaTRqrh01DPKjvZECAU2D/zfzEe3fIw2Nxr3DUYub7hkvMmosCgYAzxbVVypjiLGYsDDyrdmsstCKxoDMPNmcdAVljc+QmUXaZeXJw/8qAVb78wjeqo1vM1zNgR2rsKyW2VkZB1fN39q7GU6qAIBa7zLmDAduegmr7VrlSduq6UFeS9/qWa4TIBICrUqFlR2tXdKtgANF+e6y/mmaL8qdsoH1JetXZfwKBgQC1vscRpdAXivjOOZAh+mzJWzS4BUl4CTJLYYIuOEXikmN5g0EdV2fhUEdkewmyKnXHsd0x83167bYgpTDNs71jUxDHy5NXlg2qIjLkf09X9wr19gBzDApfWzfh3vUqttyMZuQMLVNepGCWM2vjlY9KGl5OvZqY6d+7yO0mLV9GmQ==-----END RSA PRIVATE KEY-----"
     And The setting "security-wantAssertionsSigned" is set to "1"
-    When I send a GET request to "http://localhost/index.php/login"
+    When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
      |j_username|j_password|_eventId_proceed|
      |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
+    And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
     And The user value "id" should be "student1"
     And The last login timestamp of "student1" should not be empty
 
@@ -33,13 +33,13 @@ Feature: Shibboleth
     And The setting "sp-x509cert" is set to "-----BEGIN CERTIFICATE-----MIIC+zCCAeOgAwIBAgIJAIgZuvWDBIrdMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDAeFw0xNzAxMDQxMTM5MjFaFw0yNzAxMDIxMTM5MjFaMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN3ESWaDH1JiJTy9yRJQV7kahPOxgBkIH2xwcYDL1k9deKNhSKLx7aGfxE244+HBcC6WLHKVUnOm0ld2qxQ4bMYiJXzZuqL67r07L5wxGAssv12lO92qohGmlHy3+VzRYUBmovu6upqOv3R2F8HBbo7Jc7Hvt7hOEJn/jPuFuF/fHit3mqU8l6IkrIZjpaW8T9fIWOXRq98U4+hkgWpqEZWsqlfE8BxAs9DeIMZab0GxO9stHLp+GYKx10uE4ezFcaDS8W+g2C8enCTt1HXGvcnj4o5zkC1lITGvcFTsiFqfIWyXeSufcxdc0W7HoG6J3ks0WJyK38sfFn0t2Ao6kX0CAwEAAaNQME4wHQYDVR0OBBYEFAoJzX6TVYAwC1GSPe6nObBG54zaMB8GA1UdIwQYMBaAFAoJzX6TVYAwC1GSPe6nObBG54zaMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAJia9R70uXdUZtgujUPjLas4+sVajzlBFmqhBqpLAo934vljf9HISsHrPtdBcbS0d0rucqXwabDf0MlR18ksnT/NYpsTwMbMx76CrXi4zYEEW5lISKEO65aIkzVTcqKWSuhjtSnRdB6iOLsFiKmNMWXaIKMR5T0+AbR9wdQgn08W+3EEeHGvafVQfE3STVsSgNb1ft7DvcSUnfPXGU7KzvmTpZa0Hfmc7uY4vpdEEhLAdRhgLReS7USZskov7ooiPSoD+JRFi2gM4klBxTemHdNUa9oFnHMXuYKOkLbkgFvHxyy+QlLq2ELQTga5e7I83ZyOfGctyf8Ul6vGw10vbQ=-----END CERTIFICATE-----"
     And The setting "sp-privateKey" is set to "-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEA3cRJZoMfUmIlPL3JElBXuRqE87GAGQgfbHBxgMvWT114o2FIovHtoZ/ETbjj4cFwLpYscpVSc6bSV3arFDhsxiIlfNm6ovruvTsvnDEYCyy/XaU73aqiEaaUfLf5XNFhQGai+7q6mo6/dHYXwcFujslzse+3uE4Qmf+M+4W4X98eK3eapTyXoiSshmOlpbxP18hY5dGr3xTj6GSBamoRlayqV8TwHECz0N4gxlpvQbE72y0cun4ZgrHXS4Th7MVxoNLxb6DYLx6cJO3Udca9yePijnOQLWUhMa9wVOyIWp8hbJd5K59zF1zRbsegboneSzRYnIrfyx8WfS3YCjqRfQIDAQABAoIBAQC5CQAdcqZ9vLpJNilBCJxJLCFmm+HAAREHD8MErg9A5UK1P4S1wJp/0qieGPi68wXBOTgY2xKSwMycgb04/+NyZidVRu388takOW/+KNBg8pMxdZ6/05GqnI0kivSbR3CXpYuz8hekwhpo9+fWmKjApsHL47ItK6WaeKmPbAFsq1YJGzfp/DXg7LIvh9GA3C1LWWGV7SuCGOyX/2Moi8xRa7qBtH4hDo/0NRhTx7zjYjlBgNEr330pJUopc3+AtHE40R+xMr2zkGvq9RsCZxYxD2VWbLwQW0yNjWmQ2OTuMgJJvk2+N73QLHcB+tea82ZTszsNzRS9DLtc6qbsKEPZAoGBAO78U3vEuRyY56f/1hpo0xuCDwOkWGzgBQWkjJl6dlyVz/zKkhXBHpEYImyt8XRN0W3iGZYpZ2hCFJGTcDp32R6UiEyGLz0Uc8R/tva/TiRVW1FdNczzSHcB24b9OMK4vE9JLs8mA8Rp8YBgtLr5DDuMfYt/a/rZJbg/HIfIN98nAoGBAO2OInCX93t2I6zzRPIqKtI6q6FYNp64VIQjvw9Y8l0x3IdJZRP9H5C8ZhCeYPsgEqTXcXa4j5hL4rQzoUtxfxflBUUH60bcnd4LGaTCMYLS14G011E3GZlIP0sJi5OjEhy8fq3zt6jVzS9V/lPHB8i+w1D7CbPrMpW7B3k32vC7AoGAX/HvdkYhZyjAAEOG6m1hK68IZhbp5TP+8CgCxm9S65K9wKh3A8LXibrdvzIKOP4w8WOPkCipOkMlTNibeu24vj01hztr5aK7Y40+oEtnjNCz67N3MQQO+LBHOSeaTRqrh01DPKjvZECAU2D/zfzEe3fIw2Nxr3DUYub7hkvMmosCgYAzxbVVypjiLGYsDDyrdmsstCKxoDMPNmcdAVljc+QmUXaZeXJw/8qAVb78wjeqo1vM1zNgR2rsKyW2VkZB1fN39q7GU6qAIBa7zLmDAduegmr7VrlSduq6UFeS9/qWa4TIBICrUqFlR2tXdKtgANF+e6y/mmaL8qdsoH1JetXZfwKBgQC1vscRpdAXivjOOZAh+mzJWzS4BUl4CTJLYYIuOEXikmN5g0EdV2fhUEdkewmyKnXHsd0x83167bYgpTDNs71jUxDHy5NXlg2qIjLkf09X9wr19gBzDApfWzfh3vUqttyMZuQMLVNepGCWM2vjlY9KGl5OvZqY6d+7yO0mLV9GmQ==-----END RSA PRIVATE KEY-----"
     And The setting "security-wantAssertionsSigned" is set to "1"
-    When I send a GET request to "http://localhost/index.php/login"
+    When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/user_saml/saml/notProvisioned"
+    And I should be redirected to "http://localhost:8080/index.php/apps/user_saml/saml/notProvisioned"
 
   Scenario: Authenticating using Shibboleth with SAML and check if user exists on backend and existing user
     Given A local user with uid "student1" exists
@@ -55,13 +55,13 @@ Feature: Shibboleth
     And The setting "sp-x509cert" is set to "-----BEGIN CERTIFICATE-----MIIC+zCCAeOgAwIBAgIJAIgZuvWDBIrdMA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDAeFw0xNzAxMDQxMTM5MjFaFw0yNzAxMDIxMTM5MjFaMBQxEjAQBgNVBAMMCWxvY2FsaG9zdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN3ESWaDH1JiJTy9yRJQV7kahPOxgBkIH2xwcYDL1k9deKNhSKLx7aGfxE244+HBcC6WLHKVUnOm0ld2qxQ4bMYiJXzZuqL67r07L5wxGAssv12lO92qohGmlHy3+VzRYUBmovu6upqOv3R2F8HBbo7Jc7Hvt7hOEJn/jPuFuF/fHit3mqU8l6IkrIZjpaW8T9fIWOXRq98U4+hkgWpqEZWsqlfE8BxAs9DeIMZab0GxO9stHLp+GYKx10uE4ezFcaDS8W+g2C8enCTt1HXGvcnj4o5zkC1lITGvcFTsiFqfIWyXeSufcxdc0W7HoG6J3ks0WJyK38sfFn0t2Ao6kX0CAwEAAaNQME4wHQYDVR0OBBYEFAoJzX6TVYAwC1GSPe6nObBG54zaMB8GA1UdIwQYMBaAFAoJzX6TVYAwC1GSPe6nObBG54zaMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAJia9R70uXdUZtgujUPjLas4+sVajzlBFmqhBqpLAo934vljf9HISsHrPtdBcbS0d0rucqXwabDf0MlR18ksnT/NYpsTwMbMx76CrXi4zYEEW5lISKEO65aIkzVTcqKWSuhjtSnRdB6iOLsFiKmNMWXaIKMR5T0+AbR9wdQgn08W+3EEeHGvafVQfE3STVsSgNb1ft7DvcSUnfPXGU7KzvmTpZa0Hfmc7uY4vpdEEhLAdRhgLReS7USZskov7ooiPSoD+JRFi2gM4klBxTemHdNUa9oFnHMXuYKOkLbkgFvHxyy+QlLq2ELQTga5e7I83ZyOfGctyf8Ul6vGw10vbQ=-----END CERTIFICATE-----"
     And The setting "sp-privateKey" is set to "-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEA3cRJZoMfUmIlPL3JElBXuRqE87GAGQgfbHBxgMvWT114o2FIovHtoZ/ETbjj4cFwLpYscpVSc6bSV3arFDhsxiIlfNm6ovruvTsvnDEYCyy/XaU73aqiEaaUfLf5XNFhQGai+7q6mo6/dHYXwcFujslzse+3uE4Qmf+M+4W4X98eK3eapTyXoiSshmOlpbxP18hY5dGr3xTj6GSBamoRlayqV8TwHECz0N4gxlpvQbE72y0cun4ZgrHXS4Th7MVxoNLxb6DYLx6cJO3Udca9yePijnOQLWUhMa9wVOyIWp8hbJd5K59zF1zRbsegboneSzRYnIrfyx8WfS3YCjqRfQIDAQABAoIBAQC5CQAdcqZ9vLpJNilBCJxJLCFmm+HAAREHD8MErg9A5UK1P4S1wJp/0qieGPi68wXBOTgY2xKSwMycgb04/+NyZidVRu388takOW/+KNBg8pMxdZ6/05GqnI0kivSbR3CXpYuz8hekwhpo9+fWmKjApsHL47ItK6WaeKmPbAFsq1YJGzfp/DXg7LIvh9GA3C1LWWGV7SuCGOyX/2Moi8xRa7qBtH4hDo/0NRhTx7zjYjlBgNEr330pJUopc3+AtHE40R+xMr2zkGvq9RsCZxYxD2VWbLwQW0yNjWmQ2OTuMgJJvk2+N73QLHcB+tea82ZTszsNzRS9DLtc6qbsKEPZAoGBAO78U3vEuRyY56f/1hpo0xuCDwOkWGzgBQWkjJl6dlyVz/zKkhXBHpEYImyt8XRN0W3iGZYpZ2hCFJGTcDp32R6UiEyGLz0Uc8R/tva/TiRVW1FdNczzSHcB24b9OMK4vE9JLs8mA8Rp8YBgtLr5DDuMfYt/a/rZJbg/HIfIN98nAoGBAO2OInCX93t2I6zzRPIqKtI6q6FYNp64VIQjvw9Y8l0x3IdJZRP9H5C8ZhCeYPsgEqTXcXa4j5hL4rQzoUtxfxflBUUH60bcnd4LGaTCMYLS14G011E3GZlIP0sJi5OjEhy8fq3zt6jVzS9V/lPHB8i+w1D7CbPrMpW7B3k32vC7AoGAX/HvdkYhZyjAAEOG6m1hK68IZhbp5TP+8CgCxm9S65K9wKh3A8LXibrdvzIKOP4w8WOPkCipOkMlTNibeu24vj01hztr5aK7Y40+oEtnjNCz67N3MQQO+LBHOSeaTRqrh01DPKjvZECAU2D/zfzEe3fIw2Nxr3DUYub7hkvMmosCgYAzxbVVypjiLGYsDDyrdmsstCKxoDMPNmcdAVljc+QmUXaZeXJw/8qAVb78wjeqo1vM1zNgR2rsKyW2VkZB1fN39q7GU6qAIBa7zLmDAduegmr7VrlSduq6UFeS9/qWa4TIBICrUqFlR2tXdKtgANF+e6y/mmaL8qdsoH1JetXZfwKBgQC1vscRpdAXivjOOZAh+mzJWzS4BUl4CTJLYYIuOEXikmN5g0EdV2fhUEdkewmyKnXHsd0x83167bYgpTDNs71jUxDHy5NXlg2qIjLkf09X9wr19gBzDApfWzfh3vUqttyMZuQMLVNepGCWM2vjlY9KGl5OvZqY6d+7yO0mLV9GmQ==-----END RSA PRIVATE KEY-----"
     And The setting "security-wantAssertionsSigned" is set to "1"
-    When I send a GET request to "http://localhost/index.php/login"
+    When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
+    And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
     Then The user value "id" should be "student1"
     Then The user value "email" should be ""
     And The user value "display-name" should be "Default displayname of student1"
@@ -80,13 +80,13 @@ Feature: Shibboleth
     And The setting "security-wantAssertionsSigned" is set to "1"
     And The setting "saml-attribute-mapping-email_mapping" is set to "urn:oid:0.9.2342.19200300.100.1.3"
     And The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"
-    When I send a GET request to "http://localhost/index.php/login"
+    When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/apps/dashboard/"
+    And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "display-name" should be "Stud Ent"
@@ -105,13 +105,13 @@ Feature: Shibboleth
     And The setting "security-wantAssertionsSigned" is set to "1"
     And The setting "saml-attribute-mapping-email_mapping" is set to "urn:oid:0.9.2342.19200300.100.1.3"
     And The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"
-    When I send a GET request to "http://localhost/index.php/settings/help"
+    When I send a GET request to "http://localhost:8080/index.php/settings/help"
     Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
       |j_username|j_password|_eventId_proceed|
       |student1  |password  |                |
     And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost/index.php/settings/help"
+    And I should be redirected to "http://localhost:8080/index.php/settings/help"
     And The user value "id" should be "student1"
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "display-name" should be "Stud Ent"
