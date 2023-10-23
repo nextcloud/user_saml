@@ -34,10 +34,11 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\IUserManager;
+use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\UserInterface;
 
-class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
+class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDisplayNameBackend {
 	/** @var IConfig */
 	private $config;
 	/** @var IURLGenerator */
@@ -310,9 +311,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 	 *
 	 * @param string $uid user ID of the user
 	 * @return string display name
-	 * @since 4.5.0
+	 * @since 14.0.0
 	 */
-	public function getDisplayName($uid) {
+	public function getDisplayName($uid): string {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->getDisplayName($uid);
 		} else {
@@ -330,7 +331,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 			}
 		}
 
-		return false;
+		return $uid;
 	}
 
 	/**
@@ -653,7 +654,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend {
 				&& $currentEmail !== $newEmail) {
 				$user->setEMailAddress($newEmail);
 			}
-			$currentDisplayname = (string)$this->getDisplayName($uid);
+			$currentDisplayname = $this->getDisplayName($uid);
 			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
 				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
