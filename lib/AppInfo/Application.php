@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Lukas Reschke <lukas@statuscode.ch>
  *
@@ -21,7 +24,6 @@
 
 namespace OCA\User_SAML\AppInfo;
 
-use OC;
 use OC\Security\CSRF\CsrfTokenManager;
 use OC_User;
 use OCA\User_SAML\DavPlugin;
@@ -47,8 +49,6 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
-use OCP\SabrePluginEvent;
-use OCP\Server;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -59,14 +59,6 @@ class Application extends App implements IBootstrap {
 	public function __construct(array $urlParams = []) {
 		parent::__construct('user_saml', $urlParams);
 	}
-
-	public function registerDavAuth(): void {
-		$dispatcher = Server::get(IEventDispatcher::class);
-		$dispatcher->addListener('OCA\DAV\Connector\Sabre::addPlugin', function (SabrePluginEvent $event) {
-			$event->getServer()->addPlugin(Server::get(DavPlugin::class));
-		});
-	}
-
 
 	public function register(IRegistrationContext $context): void {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
@@ -190,7 +182,7 @@ class Application extends App implements IBootstrap {
 				// SAML at the moment.
 				$useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
 				if ($useSamlForDesktopClients === '1') {
-					$currentUrl = substr(explode('?', $request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
+					$currentUrl = substr(explode('?', $request->getRequestUri(), 2)[0], strlen($urlGenerator->getWebroot()));
 					if (substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
 						if (!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
 							$redirectSituation = true;
