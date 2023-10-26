@@ -120,6 +120,12 @@
 		},
 
 		testMetaData: function() {
+			var type = $('#user-saml').data('type');
+
+			if (type === 'environment-variable') {
+				return
+			}
+
 			// Checks on each request whether the settings make sense or not
 			$.ajax({
 				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
