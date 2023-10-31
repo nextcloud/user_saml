@@ -29,13 +29,13 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
-use OCP\ILogger;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\User\Events\UserChangedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class UserBackendTest extends TestCase {
@@ -57,7 +57,7 @@ class UserBackendTest extends TestCase {
 	private $userBackend;
 	/** @var SAMLSettings|MockObject */
 	private $SAMLSettings;
-	/** @var ILogger|MockObject */
+	/** @var LoggerInterface|MockObject */
 	private $logger;
 	/** @var IEventDispatcher|MockObject */
 	private $eventDispatcher;
@@ -72,7 +72,7 @@ class UserBackendTest extends TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->SAMLSettings = $this->getMockBuilder(SAMLSettings::class)->disableOriginalConstructor()->getMock();
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->userData = $this->createMock(UserData::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 	}

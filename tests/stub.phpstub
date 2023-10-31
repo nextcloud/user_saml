@@ -5,3 +5,26 @@ namespace OCA\Files\Event {
 	class LoadAdditionalScriptsEvent extends Event {
 	}
 }
+
+namespace OC\Security\CSRF {
+	class CsrfToken {
+		public function getEncryptedValue(): string {
+			return 'token';
+		}
+	}
+}
+
+namespace OC\Security\CSRF {
+	class CsrfTokenManager {
+			abstract public function getToken(): CsrfToken;
+	}
+}
+
+class OC {
+	static $WEBROOT = '';
+}
+
+class OC_User {
+	static function useBackend($userBackend) {}
+	static function handleApacheAuth($userBackend) {}
+}
