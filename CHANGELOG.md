@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.3
+
+### Fixed
+
+- fix: Implement IGetDisplayNameBackend @juliushaertl [#773](https://github.com/nextcloud/user_saml/pull/773)
+- fix(login): do not hardcode IdP to 1 on redirect [#770](https://github.com/nextcloud/user_saml/pull/770)
+- fix: Do not try to validate metadata for environment variable config [#775](https://github.com/nextcloud/user_saml/pull/775)
+
+### Dependencies
+
+- Chore(deps): Bump firebase/php-jwt from 6.8.0 to 6.8.1 in /3rdparty @dependabot[bot] [#749](https://github.com/nextcloud/user_saml/pull/749)
+
+### Other
+
+- ci(tests): do not run against NC master anymore @blizzz [#768](https://github.com/nextcloud/user_saml/pull/768)
+- Splitting CI images into separate ones @blizzz [#772](https://github.com/nextcloud/user_saml/pull/772)
+
 ## 5.2.2
 
 ### Fixed
