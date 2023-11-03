@@ -140,7 +140,11 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			],
-
+			'user_secret_mapping' => [
+				'text' => $this->l10n->t('Attribute to use as user secret e.g. for the encryption app.'),
+				'type' => 'line',
+				'required' => false,
+			],
 		];
 
 		$userFilterSettings = [
