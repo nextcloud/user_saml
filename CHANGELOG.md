@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.4
+
+### Fixed
+
+- fix(firstLogin): use compatible GenericEvent [#778](https://github.com/nextcloud/user_saml/pull/778)
+
 ## 5.2.3
 
 ### Fixed
