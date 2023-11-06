@@ -35,7 +35,8 @@ try {
 	$userSession = \OC::$server->getUserSession();
 	$session = \OC::$server->getSession();
 } catch (Throwable $e) {
-	\OC::$server->getLogger()->logException($e);
+	$logger = \OCP\Server::get(\Psr\Log\LoggerInterface::class);
+	$logger->critical($e->getMessage(), ['exception' => $e, 'app' => 'user_saml']);
 	return;
 }
 
@@ -55,7 +56,7 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OC::$server->getUserManager(),
 	\OC::$server->getGroupManager(),
 	$samlSettings,
-	\OC::$server->getLogger(),
+	\OCP\Server::get(\Psr\Log\LoggerInterface::class),
 	$userData,
 	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
 );

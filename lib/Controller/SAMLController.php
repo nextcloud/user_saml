@@ -37,7 +37,6 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -47,6 +46,7 @@ use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
+use Psr\Log\LoggerInterface;
 
 class SAMLController extends Controller {
 	use TXmlHelper;
@@ -63,7 +63,7 @@ class SAMLController extends Controller {
 	private $config;
 	/** @var IURLGenerator */
 	private $urlGenerator;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	private $logger;
 	/** @var IL10N */
 	private $l;
@@ -78,18 +78,18 @@ class SAMLController extends Controller {
 
 	public function __construct(
 		string $appName,
-		IRequest      $request,
-		ISession      $session,
-		IUserSession  $userSession,
-		SAMLSettings  $samlSettings,
-		UserBackend   $userBackend,
-		IConfig       $config,
+		IRequest $request,
+		ISession $session,
+		IUserSession $userSession,
+		SAMLSettings $samlSettings,
+		UserBackend $userBackend,
+		IConfig $config,
 		IURLGenerator $urlGenerator,
-		ILogger       $logger,
-		IL10N         $l,
-		UserResolver  $userResolver,
-		UserData      $userData,
-		ICrypto       $crypto
+		LoggerInterface $logger,
+		IL10N $l,
+		UserResolver $userResolver,
+		UserData $userData,
+		ICrypto $crypto
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -396,7 +396,7 @@ class SAMLController extends Controller {
 		} catch (NoUserFoundException) {
 			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
 		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => $this->appName]);
+			$this->logger->critical($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -485,7 +485,7 @@ class SAMLController extends Controller {
 				try {
 					$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
 				} catch (Error $e) {
-					$this->logger->logException($e, ['level' => ILogger::WARN]);
+					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
 				}
 			}

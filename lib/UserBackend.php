@@ -22,13 +22,11 @@
 namespace OCA\User_SAML;
 
 use OCP\Authentication\IApacheBackend;
-use OCP\EventDispatcher\GenericEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
-use OCP\ILogger;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -38,7 +36,9 @@ use OCP\IUserSession;
 use OCP\Server;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
+use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\UserInterface;
+use Psr\Log\LoggerInterface;
 
 class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDisplayNameBackend {
 	/** @var IConfig */
@@ -57,7 +57,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	private static $backends = [];
 	/** @var SAMLSettings */
 	private $settings;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	private $logger;
 	/** @var UserData */
 	private $userData;
@@ -72,7 +72,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		SAMLSettings $settings,
-		ILogger $logger,
+		LoggerInterface $logger,
 		UserData $userData,
 		IEventDispatcher $eventDispatcher
 	) {
@@ -94,7 +94,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	 * @param string $uid
 	 * @return bool
 	 */
-	protected function userExistsInDatabase($uid) {
+	protected function userExistsInDatabase(string $uid): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
 			->from('user_saml_users')
@@ -168,7 +168,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		}
 		// trigger any other initialization
 		$user = $this->userManager->get($uid);
-		$this->eventDispatcher->dispatch(IUser::class . '::firstLogin', new GenericEvent($user));
+		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
 	}
 
 	/**
