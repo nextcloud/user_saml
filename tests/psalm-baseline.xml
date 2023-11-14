@@ -2,23 +2,6 @@
 <files psalm-version="5.13.1@086b94371304750d1c673315321a55d15fc59015">
   <file src="lib/AppInfo/Application.php">
     <DeprecatedMethod>
-      <code>getConfig</code>
-      <code>getConfig</code>
-      <code>getEventDispatcher</code>
-      <code>getEventDispatcher</code>
-      <code>getServer</code>
-      <code>getServer</code>
-      <code>getServer</code>
-      <code>getServer</code>
-      <code>getServer</code>
-      <code>getServer</code>
-      <code>getSession</code>
-      <code>getSession</code>
-      <code>getUserSession</code>
-      <code>query</code>
-      <code>query</code>
-      <code>query</code>
-      <code>query</code>
       <code>registerMiddleWare</code>
       <code>registerService</code>
       <code>registerService</code>
@@ -29,9 +12,6 @@
       <code>DavPlugin</code>
     </MissingDependency>
     <UndefinedDocblockClass>
-      <code><![CDATA[$container->getServer()->getEventDispatcher()]]></code>
-      <code>$dispatcher</code>
-      <code>$dispatcher</code>
       <code><![CDATA[$event->getServer()]]></code>
     </UndefinedDocblockClass>
   </file>
@@ -56,21 +36,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Controller/SAMLController.php">
-    <DeprecatedMethod>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>error</code>
-      <code>error</code>
-      <code>error</code>
-      <code>error</code>
-      <code>error</code>
-      <code>info</code>
-      <code>info</code>
-      <code>logException</code>
-      <code>warning</code>
-    </DeprecatedMethod>
     <RedundantCondition>
       <code>!$userExists</code>
       <code>!$userExists</code>
@@ -92,15 +57,16 @@
       <code>ClientFlowLoginV2Controller</code>
       <code>ClientFlowLoginV2Controller</code>
       <code>ClientFlowLoginV2Controller</code>
+      <code>CsrfTokenManager</code>
       <code>Error</code>
       <code>Error</code>
       <code>Error</code>
       <code>JWT</code>
       <code>Settings</code>
-      <code>\OC</code>
-      <code>\OC</code>
     </UndefinedClass>
     <UndefinedDocblockClass>
+      <code>$csrfTokenManager</code>
+      <code>$csrfTokenManager</code>
       <code>Error</code>
       <code>Error</code>
       <code>Error</code>
@@ -165,15 +131,6 @@
   </file>
   <file src="lib/UserBackend.php">
     <DeprecatedMethod>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>debug</code>
-      <code>error</code>
       <code>execute</code>
       <code>execute</code>
       <code>execute</code>
@@ -188,7 +145,6 @@
     </DeprecatedMethod>
     <FalsableReturnStatement>
       <code>false</code>
-      <code>false</code>
     </FalsableReturnStatement>
     <ImplementedParamTypeMismatch>
       <code>$limit</code>
@@ -201,8 +157,7 @@
       <code>$offset</code>
     </InvalidArgument>
     <UndefinedClass>
-      <code>\OC</code>
-      <code>\OC</code>
+      <code>CsrfTokenManager</code>
       <code>\OC</code>
       <code>\OC</code>
       <code>\OC\User\Backend</code>
@@ -213,8 +168,5 @@
     <UndefinedInterfaceMethod>
       <code>setDisplayName</code>
     </UndefinedInterfaceMethod>
-    <UndefinedThisPropertyFetch>
-      <code><![CDATA[$this->appName]]></code>
-    </UndefinedThisPropertyFetch>
   </file>
 </files>
