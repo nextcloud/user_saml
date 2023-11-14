@@ -11,6 +11,13 @@ All notable changes to this project will be documented in this file.
 
 - Dropped support for Nextcloud 25-27
 
+### Fixed
+
+- do not hardcode IdP to 1 on redirect (#769)
+- Implement IGetDisplayNameBackend (#771)
+- Do not try to validate metadata for environment variable config (#774)
+- remove deprecated event and class (#779)
+
 ## 5.2.2
 
 ### Fixed

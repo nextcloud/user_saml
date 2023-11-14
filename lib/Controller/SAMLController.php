@@ -26,6 +26,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
+use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
@@ -42,6 +43,7 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
+use OCP\Server;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -406,7 +408,7 @@ class SAMLController extends Controller {
 		if ($originalUrl !== null && $originalUrl !== '') {
 			$response = new Http\RedirectResponse($originalUrl);
 		} else {
-			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+			$response = new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
 		// to be there.
@@ -610,8 +612,9 @@ class SAMLController extends Controller {
 			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
 		}
 
-
-		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		/** @var CsrfTokenManager $csrfTokenManager */
+		$csrfTokenManager = Server::get(CsrfTokenManager::class);
+		$csrfToken = $csrfTokenManager->getToken();
 		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.login',
 			[

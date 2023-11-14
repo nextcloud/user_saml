@@ -60,10 +60,9 @@ class SettingsController extends Controller {
 	}
 
 	/**
-	 * @param $providerId
 	 * @return array of categories containing entries for each config parameter with their value
 	 */
-	public function getSamlProviderSettings(int $providerId) {
+	public function getSamlProviderSettings(int $providerId): array {
 		/**
 		 * This uses the list of available config parameters from the admin section
 		 * and extends it with fields that are not coming from \OCA\User_SAML\Settings\Admin
@@ -116,19 +115,19 @@ class SettingsController extends Controller {
 		return $settings;
 	}
 
-	public function deleteSamlProviderSettings($providerId) {
+	public function deleteSamlProviderSettings($providerId): Response {
 		$this->samlSettings->delete($providerId);
 		return new Response();
 	}
 
-	public function setProviderSetting(int $providerId, string $configKey, string $configValue) {
+	public function setProviderSetting(int $providerId, string $configKey, string $configValue): Response {
 		$configuration = $this->samlSettings->get($providerId);
 		$configuration[$configKey] = $configValue;
 		$this->samlSettings->set($providerId, $configuration);
 		return new Response();
 	}
 
-	public function newSamlProviderSettingsId() {
+	public function newSamlProviderSettingsId(): DataResponse {
 		return new DataResponse(['id' => $this->samlSettings->getNewProviderId()]);
 	}
 }
