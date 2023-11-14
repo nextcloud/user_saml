@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML;
 
+use OC\Security\CSRF\CsrfTokenManager;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
@@ -114,7 +115,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	 * @param string $uid
 	 * @param array $attributes
 	 */
-	public function createUserIfNotExists($uid, array $attributes = []) {
+	public function createUserIfNotExists(string $uid, array $attributes = []): void {
 		if (!$this->userExistsInDatabase($uid)) {
 			$values = [
 				'uid' => $uid,
@@ -123,7 +124,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 			// Try to get the mapped home directory of the user
 			try {
 				$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
-			} catch (\InvalidArgumentException $e) {
+			} catch (\InvalidArgumentException) {
 				$home = '';
 			}
 
@@ -153,17 +154,16 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	}
 
 	/**
-	 * @param string $uid
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function initializeHomeDir($uid) {
+	public function initializeHomeDir(string $uid): void {
 		### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
 		//trigger creation of user home and /files folder
 		$userFolder = \OC::$server->getUserFolder($uid);
 		try {
 			// copy skeleton
 			\OC_Util::copySkeleton($uid, $userFolder);
-		} catch (NotPermittedException $ex) {
+		} catch (NotPermittedException) {
 			// read only uses
 		}
 		// trigger any other initialization
@@ -239,7 +239,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	 * @param string $uid the username
 	 * @return string
 	 */
-	public function getHome($uid) {
+	public function getHome(string $uid) {
 		if ($this->userExistsInDatabase($uid)) {
 			$qb = $this->db->getQueryBuilder();
 			$qb->select('home')
@@ -406,21 +406,13 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 			return '';
 		}
 
+		$tokenManager = Server::get(CsrfTokenManager::class);
 		return $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.singleLogoutService',
 			[
-				'requesttoken' => \OC::$server->getCsrfTokenManager()->getToken()->getEncryptedValue(),
+				'requesttoken' => $tokenManager->getToken()->getEncryptedValue(),
 			]
 		);
-	}
-
-	/**
-	 * Logout attribute for Nextcloud < 12.0.3
-	 *
-	 * @return string
-	 */
-	public function getLogoutAttribute() {
-		return 'style="display:none;"';
 	}
 
 	/**
@@ -441,23 +433,20 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 
 	/**
 	 * format user data and map them to the configured attributes
-	 *
-	 * @param $attributes
-	 * @return array
 	 */
-	private function formatUserData($attributes) {
+	private function formatUserData($attributes): array {
 		$this->userData->setAttributes($attributes);
 
 		$result = ['formatted' => [], 'raw' => $attributes];
 
 		try {
 			$result['formatted']['email'] = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$result['formatted']['email'] = null;
 		}
 		try {
 			$result['formatted']['displayName'] = $this->getAttributeValue('saml-attribute-mapping-displayName_mapping', $attributes);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$result['formatted']['displayName'] = null;
 		}
 		try {
@@ -465,19 +454,19 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 			if ($result['formatted']['quota'] === '') {
 				$result['formatted']['quota'] = 'default';
 			}
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$result['formatted']['quota'] = null;
 		}
 
 		try {
 			$result['formatted']['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$result['formatted']['groups'] = null;
 		}
 
 		try {
 			$result['formatted']['mfaVerified'] = $this->getAttributeValue('saml-attribute-mapping-mfa_mapping', $attributes);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$result['formatted']['mfaVerified'] = null;
 		}
 
@@ -520,10 +509,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 
 	/**
 	 * Whether autoprovisioning is enabled or not
-	 *
-	 * @return bool
 	 */
-	public function autoprovisionAllowed() {
+	public function autoprovisionAllowed(): bool {
 		return $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0') === '0';
 	}
 
@@ -549,7 +536,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	 *
 	 * @param \OCP\UserInterface[] $backends
 	 */
-	public function registerBackends(array $backends) {
+	public function registerBackends(array $backends): void {
 		self::$backends = $backends;
 	}
 
@@ -608,8 +595,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		return $value;
 	}
 
-	public function updateAttributes($uid,
-		array $attributes) {
+	public function updateAttributes(string $uid, array $attributes): void {
 		$user = $this->userManager->get($uid);
 		try {
 			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);

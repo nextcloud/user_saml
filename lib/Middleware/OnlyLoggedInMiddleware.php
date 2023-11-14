@@ -41,10 +41,6 @@ class OnlyLoggedInMiddleware extends Middleware {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
-	/**
-	 * @param IControllerMethodReflector $reflector
-	 * @param IUserSession $userSession
-	 */
 	public function __construct(
 		IControllerMethodReflector $reflector,
 		IUserSession $userSession,

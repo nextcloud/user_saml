@@ -45,7 +45,6 @@ $samlSettings = \OC::$server->query(\OCA\User_SAML\SAMLSettings::class);
 $userData = new \OCA\User_SAML\UserData(
 	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
 	$samlSettings,
-	$config
 );
 
 $userBackend = new \OCA\User_SAML\UserBackend(
