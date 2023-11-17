@@ -26,6 +26,7 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
+use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
@@ -37,16 +38,17 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
+use OCP\Server;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
+use Psr\Log\LoggerInterface;
 
 class SAMLController extends Controller {
 	use TXmlHelper;
@@ -63,7 +65,7 @@ class SAMLController extends Controller {
 	private $config;
 	/** @var IURLGenerator */
 	private $urlGenerator;
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	private $logger;
 	/** @var IL10N */
 	private $l;
@@ -78,18 +80,18 @@ class SAMLController extends Controller {
 
 	public function __construct(
 		string $appName,
-		IRequest      $request,
-		ISession      $session,
-		IUserSession  $userSession,
-		SAMLSettings  $samlSettings,
-		UserBackend   $userBackend,
-		IConfig       $config,
+		IRequest $request,
+		ISession $session,
+		IUserSession $userSession,
+		SAMLSettings $samlSettings,
+		UserBackend $userBackend,
+		IConfig $config,
 		IURLGenerator $urlGenerator,
-		ILogger       $logger,
-		IL10N         $l,
-		UserResolver  $userResolver,
-		UserData      $userData,
-		ICrypto       $crypto
+		LoggerInterface $logger,
+		IL10N $l,
+		UserResolver $userResolver,
+		UserData $userData,
+		ICrypto $crypto
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -396,7 +398,7 @@ class SAMLController extends Controller {
 		} catch (NoUserFoundException) {
 			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
 		} catch (\Exception $e) {
-			$this->logger->logException($e, ['app' => $this->appName]);
+			$this->logger->critical($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -406,7 +408,7 @@ class SAMLController extends Controller {
 		if ($originalUrl !== null && $originalUrl !== '') {
 			$response = new Http\RedirectResponse($originalUrl);
 		} else {
-			$response = new Http\RedirectResponse(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+			$response = new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 		// The Nextcloud desktop client expects a cookie with the key of "_shibsession"
 		// to be there.
@@ -485,7 +487,7 @@ class SAMLController extends Controller {
 				try {
 					$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
 				} catch (Error $e) {
-					$this->logger->logException($e, ['level' => ILogger::WARN]);
+					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
 				}
 			}
@@ -610,8 +612,9 @@ class SAMLController extends Controller {
 			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
 		}
 
-
-		$csrfToken = \OC::$server->getCsrfTokenManager()->getToken();
+		/** @var CsrfTokenManager $csrfTokenManager */
+		$csrfTokenManager = Server::get(CsrfTokenManager::class);
+		$csrfToken = $csrfTokenManager->getToken();
 		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.login',
 			[

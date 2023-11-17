@@ -78,6 +78,7 @@ OC.L10N.register(
     "Show security settings…" : "Zobraziť nastavenia zabezpečenia...",
     "Signatures and encryption offered" : "Podpisy a šifrovanie ponúkané",
     "Signatures and encryption required" : "Podpisy a šifrovanie vyžadované",
+    "User filtering" : "Filtrovanie používateľov",
     "Download metadata XML" : "Sťahovať metadáta XML",
     "Reset settings" : "Resetovať nastavenia",
     "Metadata invalid" : "Neplatné metadáta",

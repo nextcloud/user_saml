@@ -33,7 +33,6 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -41,6 +40,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class SAMLControllerTest extends TestCase {
@@ -62,7 +62,7 @@ class SAMLControllerTest extends TestCase {
 	private $config;
 	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
 	private $urlGenerator;
-	/** @var ILogger|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
 	private $logger;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
 	private $l;
@@ -81,7 +81,7 @@ class SAMLControllerTest extends TestCase {
 		$this->userBackend = $this->createMock(UserBackend::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->l = $this->createMock(IL10N::class);
 		$this->userResolver = $this->createMock(UserResolver::class);
 		$this->userData = $this->createMock(UserData::class);

@@ -41,11 +41,6 @@ class Admin implements ISettings {
 	/** @var SAMLSettings */
 	private $samlSettings;
 
-	/**
-	 * @param IL10N $l10n
-	 * @param Defaults $defaults
-	 * @param IConfig $config
-	 */
 	public function __construct(
 		IL10N        $l10n,
 		Defaults     $defaults,

@@ -54,13 +54,9 @@ class TimezoneController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @UseSession
-	 *
-	 * @param string $timezone
-	 * @param int $timezoneOffset
-	 * @return JSONResponse
 	 * @throws \OCP\PreConditionNotMetException
 	 */
-	public function setTimezone($timezone, $timezoneOffset) {
+	public function setTimezone(string $timezone, int $timezoneOffset): JSONResponse {
 		$this->config->setUserValue($this->userId, 'core', 'timezone', $timezone);
 		$this->session->set('timezone', $timezoneOffset);
 
