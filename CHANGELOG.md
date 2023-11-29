@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.5
+
+### Changed
+
+- Dropped support for NC 25+26 (served by 5.2.x)
+- Dropped support for NC 21+22 
+- [[stable-5.1] refactor(Controller): read parameter only once (user_saml#791)](https://github.com/nextcloud/user_saml/pull/791)
+
 ## 5.1.4
 
 ### Fixed
