@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.4', '8.0']
-        server-versions: ['stable21', 'stable22', 'stable23', 'stable24']
+        server-versions: ['stable23', 'stable24']
         include:
           - php-versions: '8.1'
             server-versions: 'stable24'

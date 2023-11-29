@@ -42,6 +42,7 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
+use OCP\Security\ITrustedDomainHelper;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -74,6 +75,10 @@ class SAMLController extends Controller {
 	 * @var ICrypto
 	 */
 	private $crypto;
+	/**
+	 * @var ITrustedDomainHelper
+	 */
+	private $trustedDomainHelper;
 
 	/**
 	 * @param string $appName
@@ -100,7 +105,8 @@ class SAMLController extends Controller {
 		IL10N         $l,
 		UserResolver  $userResolver,
 		UserData      $userData,
-		ICrypto       $crypto
+		ICrypto       $crypto,
+		ITrustedDomainHelper $trustedDomainHelper
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -114,6 +120,7 @@ class SAMLController extends Controller {
 		$this->userResolver = $userResolver;
 		$this->userData = $userData;
 		$this->crypto = $crypto;
+		$this->trustedDomainHelper = $trustedDomainHelper;
 	}
 
 	/**
@@ -203,11 +210,17 @@ class SAMLController extends Controller {
 	 * @throws \Exception
 	 */
 	public function login(int $idp = 1) {
+		$originalUrl = (string)$this->request->getParam('originalUrl', '');
+		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
+			$originalUrl = '';
+		}
+
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch ($type) {
 			case 'saml':
 				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
-				$returnUrl = $this->request->getParam('originalUrl', $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login'));
+
+				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
 
@@ -226,7 +239,7 @@ class SAMLController extends Controller {
 				// Pack data as JSON so we can properly extract it later
 				$data = json_encode([
 					'AuthNRequestID' => $auth->getLastRequestID(),
-					'OriginalUrl' => $this->request->getParam('originalUrl', ''),
+					'OriginalUrl' => $originalUrl,
 					'Idp' => $idp,
 					'flow' => $flowData,
 				]);
@@ -240,7 +253,7 @@ class SAMLController extends Controller {
 				$response->addCookie('saml_data', $data, null, 'None');
 				break;
 			case 'environment-variable':
-				$ssoUrl = $this->request->getParam('originalUrl', '');
+				$ssoUrl = $originalUrl;
 				if (empty($ssoUrl)) {
 					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
 				}
