@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.0.1
+
+### Added 
+
+- [Feat(dep): NC 29 comaptibility (user_saml#787)](https://github.com/nextcloud/user_saml/pull/787)
+
+### Changed
+
+- tranlsation updates
+- [Refactor(Controller): read parameter only once (user_saml#788)](https://github.com/nextcloud/user_saml/pull/788)
+
 ## 6.0.0
 
 ### Added
