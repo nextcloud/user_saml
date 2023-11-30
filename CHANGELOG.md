@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.5
+
+### Changed
+
+- [[stable-5.2] refactor(Controller): read parameter only once (user_saml#790)](https://github.com/nextcloud/user_saml/pull/790)
+
 ## 5.2.4
 
 ### Fixed
