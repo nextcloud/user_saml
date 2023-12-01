@@ -193,6 +193,11 @@ class GroupManagerTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
+			->willReturnArgument(2);
+
 		// assert group already exists
 		$this->groupManager
 			->expects($this->once())
@@ -219,6 +224,11 @@ class GroupManagerTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 		$groupB = $this->createMock(IGroup::class);
 
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
+			->willReturnArgument(2);
+
 		// assert group does not exist
 		$this->groupManager
 			->method('get')
@@ -227,7 +237,7 @@ class GroupManagerTest extends TestCase {
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('createGroup')
-			->with('groupB', 'groupB')
+			->with('SAML_groupB', 'groupB')
 			->willReturn(true);
 		// assert user gets added to group
 		$groupB->expects($this->once())
@@ -241,6 +251,11 @@ class GroupManagerTest extends TestCase {
 		$this->getGroupManager(['hasSamlBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupC = $this->createMock(IGroup::class);
+
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
+			->willReturnArgument(2);
 
 		// assert group exists
 		$this->groupManager

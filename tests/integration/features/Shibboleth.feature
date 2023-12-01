@@ -93,7 +93,7 @@ Feature: Shibboleth
     And The user value "email" should be "student1@idptestbed.edu"
     And The user value "quota.total" should be "209715200"
     And The user value "display-name" should be "Stud Ent"
-    And The user value "groups" should be "Students, Astrophysics"
+    And The user value "groups" should be "SAML_Astrophysics,SAML_Students"
     And the group "SAML_Astrophysics" should exists
     And the group "SAML_Students" should exists
     And The last login timestamp of "student1" should not be empty

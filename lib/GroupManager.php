@@ -176,9 +176,7 @@ class GroupManager {
 	protected function assignUserToGroup(IUser $user, string $gid): void {
 		try {
 			$group = $this->findGroup($gid);
-		} catch (GroupNotFoundException $e) {
-			$group = $this->createGroupInBackend($gid);
-		} catch (NonMigratableGroupException $e) {
+		} catch (GroupNotFoundException|NonMigratableGroupException $e) {
 			$providerId = $this->settings->getProviderId();
 			$settings = $this->settings->get($providerId);
 			$groupPrefix = $settings['saml-attribute-mapping-group_mapping_prefix'] ?? SAMLSettings::DEFAULT_GROUP_PREFIX;
@@ -208,15 +206,19 @@ class GroupManager {
 	 * @throws GroupNotFoundException|NonMigratableGroupException
 	 */
 	protected function findGroup(string $gid): IGroup {
-		$migrationAllowList = $this->config->getAppValue(
+		$migrationAllowListRaw = $this->config->getAppValue(
 			'user_saml',
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
 			''
 		);
-		$strictBackendCheck = '' === $migrationAllowList;
-		if ($migrationAllowList !== '') {
-			$migrationAllowList = \json_decode($migrationAllowList, true);
+		$strictBackendCheck = '' === $migrationAllowListRaw;
+
+		$migrationAllowList = null;
+		if ($migrationAllowListRaw !== '') {
+			/** @var array{dropAfter: int, groups: string[]} $migrationAllowList */
+			$migrationAllowList = \json_decode($migrationAllowListRaw, true);
 		}
+
 		if (!$strictBackendCheck && in_array($gid, $migrationAllowList['groups'] ?? [], true)) {
 			$group = $this->groupManager->get($gid);
 			if ($group === null) {
