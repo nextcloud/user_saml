@@ -21,10 +21,13 @@
 
 namespace OCA\User_SAML;
 
+use OC\Files\Filesystem;
+use OC\User\Backend;
 use OC\Security\CSRF\CsrfTokenManager;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
+use OCP\IAvatarManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -64,6 +67,8 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	private $userData;
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
+	/** @var IAvatarManager */
+	private $avatarManager;
 
 	public function __construct(
 		IConfig $config,
@@ -75,8 +80,9 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		SAMLSettings $settings,
 		LoggerInterface $logger,
 		UserData $userData,
-		IEventDispatcher $eventDispatcher
-	) {
+		IEventDispatcher $eventDispatcher,
+		IAvatarManager $avatarManager
+) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
 		$this->session = $session;
@@ -87,6 +93,25 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		$this->logger = $logger;
 		$this->userData = $userData;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->avatarManager = $avatarManager;
+	}
+
+	/**
+	 * checks whether the user is allowed to change his avatar in Nextcloud
+	 *
+	 * @param string $uid the Nextcloud user name
+	 * @return boolean either the user can or cannot
+	 * @throws \Exception
+	 */
+	public function canChangeAvatar($uid) {
+		if (!$this->implementsActions(Backend::PROVIDE_AVATAR)) {
+			return true;
+		}
+		try {
+			return empty(trim($this->getAttributeKeys('saml-attribute-mapping-avatar_mapping')[0]));
+		} catch (\InvalidArgumentException $e) {
+			return true;
+		}
 	}
 
 	/**
@@ -185,6 +210,7 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
 		$availableActions |= \OC\User\Backend::GET_HOME;
 		$availableActions |= \OC\User\Backend::COUNT_USERS;
+		$availableActions |= \OC\User\Backend::PROVIDE_AVATAR;
 		return (bool)($availableActions & $actions);
 	}
 
@@ -630,6 +656,14 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 			$newGroups = null;
 		}
 
+		try {
+			$newAvatar = $this->getAttributeValue('saml-attribute-mapping-avatar_mapping', $attributes);
+			$this->logger->debug('Avatar attribute content: {avatar}', ['app' => 'user_saml', 'avatar' => $newAvatar]);
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch avatar attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
+			$newAvatar = null;
+		}
+
 		if ($user !== null) {
 			$currentEmail = (string)(method_exists($user, 'getSystemEMailAddress') ? $user->getSystemEMailAddress() : $user->getEMailAddress());
 			if ($newEmail !== null
@@ -665,7 +699,54 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 					$groupManager->get($group)->removeUser($user);
 				}
 			}
+
+			if ($newAvatar !== null) {
+				$image = new \OCP\Image();
+				$fileData = file_get_contents($newAvatar);
+				$image->loadFromData($fileData);
+
+				$checksum = md5($image->data());
+				if ($checksum !== $this->config->getUserValue($uid, 'user_saml', 'lastAvatarChecksum')) {
+					// use the checksum before modifications
+					if ($this->setAvatarFromSamlProvider($uid, $image)) {
+						// save checksum only after successful setting
+						$this->config->setUserValue($uid, 'user_saml', 'lastAvatarChecksum', $checksum);
+					}
+				}
+			}
 		}
+	}
+
+	private function setAvatarFromSamlProvider($uid, $image) {
+		if (!$image->valid()) {
+			$this->logger->debug('avatar image data from LDAP invalid for ' . $uid);
+			return false;
+		}
+
+
+		//make sure it is a square and not bigger than 128x128
+		$size = min([$image->width(), $image->height(), 128]);
+		if (!$image->centerCrop($size)) {
+			$this->logger->debug('croping image for avatar failed for ' . $uid);
+			return false;
+		}
+
+		if (!Filesystem::$loaded) {
+			\OC_Util::setupFS($uid);
+		}
+
+		try {
+			$avatar = $this->avatarManager->getAvatar($uid);
+			$avatar->set($image);
+			return true;
+		} catch (\Exception $e) {
+			$this->logger->logException($e, [
+				'message' => 'Could not set avatar for ' . $uid,
+				'level' => ILogger::INFO,
+				'app' => 'user_saml',
+			]);
+		}
+		return false;
 	}
 
 

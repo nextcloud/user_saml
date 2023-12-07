@@ -58,6 +58,7 @@ $userBackend = new \OCA\User_SAML\UserBackend(
 	\OCP\Server::get(\Psr\Log\LoggerInterface::class),
 	$userData,
 	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
+	\OC::$server->getAvatarManager(),
 );
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
