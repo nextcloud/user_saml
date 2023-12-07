@@ -1,0 +1,14 @@
+OC.L10N.register(
+    "user_saml",
+    {
+    "Saved" : "Salvat",
+    "Direct log in" : "Autentificare directă",
+    "SSO & SAML log in" : "Autentificare SSO & SAML",
+    "Email address" : "Email",
+    "Open documentation" : "Deschide documentația",
+    "General" : "General",
+    "If you want to optionally restrict user login depending on user data, configure it here." : "Dacă doriți să restricționați opțional autentificarea utilizatorilor în funcție de datele acestora, configurați aceasta aici. ",
+    "Error" : "Eroare",
+    "Login options:" : "Opțiuni de autentificare:"
+},
+"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
