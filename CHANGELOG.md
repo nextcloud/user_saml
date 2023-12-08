@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.1.0
+
+### Added
+
+- [Group backend and migration of original SAML groups created as local database groups (user_saml#622)](https://github.com/nextcloud/user_saml/pull/622)
+
 ## 6.0.1
 
 ### Added 
