@@ -65,7 +65,7 @@ OC.L10N.register(
     "Service Provider Data" : "Hizmet sağlayıcı verileri",
     "If your Service Provider should use certificates you can optionally specify them here." : "Hizmet sağlayıcınızın kullandığı sertifikalar varsa buradan isteğinize göre belirtebilirsiniz.",
     "Show Service Provider settings…" : "Hizmet sağlayıcı ayarlarını görüntüle …",
-    "Name ID format" : "Ad kodu biçimi",
+    "Name ID format" : "Ad kimliği biçimi",
     "Identity Provider Data" : "Kimlik hizmeti sağlayıcı verileri",
     "Configure your IdP settings here." : "Buradan kimlik hizmeti sağlayıcı ayarlarınızı yapılandırabilirsiniz.",
     "Identifier of the IdP entity (must be a URI)" : "Kimlik hizmeti sağlayıcı varlığının belirteci (bir adres olmalı)",
