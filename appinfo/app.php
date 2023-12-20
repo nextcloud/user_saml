@@ -20,13 +20,9 @@
  */
 
 use OCA\User_SAML\GroupBackend;
-use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
-use OCP\BackgroundJob\IJobList;
-use OCP\IConfig;
-use OCP\IDBConnection;
+use OCA\User_SAML\UserBackend;
 use OCP\IGroupManager;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
@@ -55,34 +51,7 @@ $groupBackend = \OC::$server->get(GroupBackend::class);
 
 $samlSettings = \OC::$server->get(SAMLSettings::class);
 
-\OC::$server->registerService(GroupManager::class, function (ContainerInterface $c) use ($groupBackend, $samlSettings) {
-	return new GroupManager(
-		$c->get(IDBConnection::class),
-		$c->get(IGroupManager::class),
-		$groupBackend,
-		$c->get(IConfig::class),
-		$c->get(IJobList::class),
-		$samlSettings,
-	);
-});
-
-$userData = new \OCA\User_SAML\UserData(
-	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
-	$samlSettings,
-);
-
-$userBackend = new \OCA\User_SAML\UserBackend(
-	$config,
-	$urlGenerator,
-	\OC::$server->getSession(),
-	\OC::$server->getDatabaseConnection(),
-	\OC::$server->getUserManager(),
-	\OC::$server->get(GroupManager::class),
-	$samlSettings,
-	\OCP\Server::get(LoggerInterface::class),
-	$userData,
-	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
-);
+$userBackend = \OCP\Server::get(UserBackend::class);
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 
