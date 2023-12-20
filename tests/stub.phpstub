@@ -5,3 +5,25 @@ namespace OCA\Files\Event {
 	class LoadAdditionalScriptsEvent extends Event {
 	}
 }
+
+namespace OC\Group {
+	abstract class Database extends \OCP\Group\Backend\ABackend implements
+		\OCP\Group\Backend\IAddToGroupBackend,
+		\OCP\Group\Backend\ICountDisabledInGroup,
+		\OCP\Group\Backend\ICountUsersBackend,
+		\OCP\Group\Backend\ICreateGroupBackend,
+		\OCP\Group\Backend\IDeleteGroupBackend,
+		\OCP\Group\Backend\IGetDisplayNameBackend,
+		\OCP\Group\Backend\IGroupDetailsBackend,
+		\OCP\Group\Backend\IRemoveFromGroupBackend,
+		\OCP\Group\Backend\ISetDisplayNameBackend,
+		\OCP\Group\Backend\ISearchableGroupBackend,
+		\OCP\Group\Backend\INamedBackend {
+	}
+}
+
+namespace OC\Hooks {
+	interface PublicEmitter {
+		public function emit($scope, $method, array $arguments = []);
+	}
+}

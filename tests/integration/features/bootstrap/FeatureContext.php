@@ -21,6 +21,7 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
+use GuzzleHttp\Cookie\CookieJar;
 
 class FeatureContext implements Context {
 	/** @var \GuzzleHttp\Message\Response */
@@ -32,6 +33,7 @@ class FeatureContext implements Context {
 
 	private const ENV_CONFIG_FILE = __DIR__ . '/../../../../../../config/env.config.php';
 	private const MAIN_CONFIG_FILE = __DIR__ . '/../../../../../../config/config.php';
+	private CookieJar $cookieJar;
 
 	public function __construct() {
 		date_default_timezone_set('Europe/Berlin');
@@ -39,10 +41,10 @@ class FeatureContext implements Context {
 
 	/** @BeforeScenario */
 	public function before() {
-		$jar = new \GuzzleHttp\Cookie\FileCookieJar('/tmp/cookies_' . md5(openssl_random_pseudo_bytes(12)));
+		$this->cookieJar = new CookieJar();
 		$this->client = new \GuzzleHttp\Client([
 			'version' => 2.0,
-			'cookies' => $jar,
+			'cookies' => $this->cookieJar,
 			'verify' => false,
 			'allow_redirects' => [
 				'referer' => true,
@@ -66,9 +68,28 @@ class FeatureContext implements Context {
 					$user
 				)
 			);
-			if (file_exists(self::ENV_CONFIG_FILE)) {
-				unlink(self::ENV_CONFIG_FILE);
-			}
+		}
+
+		$groups = [
+			'Astrophysics',
+			'SAML_Astrophysics',
+			'Students',
+			'SAML_Students'
+		];
+
+		foreach ($groups as $group) {
+			shell_exec(
+				sprintf(
+					'%s %s group:delete "%s"',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$group
+				)
+			);
+		}
+
+		if (file_exists(self::ENV_CONFIG_FILE)) {
+			unlink(self::ENV_CONFIG_FILE);
 		}
 
 		foreach ($this->changedSettings as $setting) {
@@ -105,7 +126,8 @@ class FeatureContext implements Context {
 			'type',
 			'general-require_provisioned_account',
 			'general-allow_multiple_user_back_ends',
-			'general-use_saml_auth_for_desktop'
+			'general-use_saml_auth_for_desktop',
+			'localGroupsCheckForMigration',
 		])) {
 			$this->changedSettings[] = $settingName;
 			shell_exec(
@@ -235,7 +257,7 @@ class FeatureContext implements Context {
 	 * @param string $value
 	 * @throws UnexpectedValueException
 	 */
-	public function thUserValueShouldBe($key, $value) {
+	public function theUserValueShouldBe(string $key, string $value): void {
 		$this->response = $this->client->request(
 			'GET',
 			'http://localhost:8080/ocs/v1.php/cloud/user',
@@ -243,17 +265,47 @@ class FeatureContext implements Context {
 				'headers' => [
 					'OCS-APIRequest' => 'true',
 				],
+				'query' => [
+					'format' => 'json',
+				]
 			]
 		);
 
-		$xml = simplexml_load_string($this->response->getBody());
-		/** @var array $responseArray */
-		$responseArray = json_decode(json_encode((array)$xml), true);
+		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
 
-		if (count((array)$responseArray['data'][$key]) === 0) {
+		if (!isset($responseArray['data'][$key]) || count((array)$responseArray['data'][$key]) === 0) {
+			if (strpos($key, '.') !== false) {
+				// support nested arrays, specify the key seperated by "."s, e.g. quota.total
+				$keys = explode('.', $key);
+				if (isset($responseArray['data'][$keys[0]])) {
+					$source = $responseArray['data'];
+					foreach ($keys as $subKey) {
+						if (isset($source[$subKey])) {
+							$source = $source[$subKey];
+							if (!is_array($source)) {
+								$actualValue = (string)$source;
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+
 			$responseArray['data'][$key] = '';
 		}
-		$actualValue = $responseArray['data'][$key];
+
+		$actualValue = $actualValue ?? $responseArray['data'][$key];
+		if (is_array($actualValue)) {
+			// transform array to string, ensuring values are in the same order
+			$value = explode(',', $value);
+			$value = array_map('trim', $value);
+			sort($value);
+			$value = implode(',', $value);
+
+			sort($actualValue);
+			$actualValue = implode(',', $actualValue);
+		}
 
 		if ($actualValue !== $value) {
 			throw new UnexpectedValueException(
@@ -317,5 +369,172 @@ class FeatureContext implements Context {
 \$_SERVER["$key"] = "$value";
 EOF;
 		file_put_contents(self::ENV_CONFIG_FILE, $envConfigPhp);
+	}
+
+	/**
+	 * @Given /^the group "([^"]*)" should exists$/
+	 */
+	public function theGroupShouldExists(string $gid): void {
+		$response = shell_exec(
+			sprintf(
+				'%s %s group:info --output=json "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$gid
+			)
+		);
+
+		$responseArray = json_decode($response, true);
+		if (!isset($responseArray['groupID']) || $responseArray['groupID'] !== $gid) {
+			throw new UnexpectedValueException('Group does not exist');
+		}
+	}
+
+	/**
+	 * @When /^I execute the background job for class "([^"]*)"$/
+	 */
+	public function iExecuteTheBackgroundJobForClass(string $className) {
+		$response = shell_exec(
+			sprintf(
+				'%s %s background-job:list --output=json --class %s',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$className
+			)
+		);
+
+		$responseArray = json_decode($response, true);
+		if (count($responseArray) === 0) {
+			throw new UnexpectedValueException('Background job was not enqueued');
+		}
+
+		foreach ($responseArray as $jobDetails) {
+			$jobID = (int)$jobDetails['id'];
+			$response = shell_exec(
+				sprintf(
+					'%s %s background-job:execute --force-execute %d',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$jobID
+				)
+			);
+		}
+	}
+
+	/**
+	 * @Then /^the group backend of "([^"]*)" should be "([^"]*)"$/
+	 */
+	public function theGroupBackendOfShouldBe(string $groupId, string $backendName) {
+		$response = shell_exec(
+			sprintf(
+				'%s %s group:info --output=json "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$groupId
+			)
+		);
+
+		$responseArray = json_decode($response, true);
+		if (!isset($responseArray['groupID']) || $responseArray['groupID'] !== $groupId) {
+			throw new UnexpectedValueException('Group does not exist');
+		}
+		if (!in_array($backendName, $responseArray['backends'], true)) {
+			throw new UnexpectedValueException('Group does not belong to this backend');
+		}
+	}
+
+	/**
+	 * @Given /^Then the group backend of "([^"]*)" must not be "([^"]*)"$/
+	 */
+	public function thenTheGroupBackendOfMustNotBe(string $groupId, string $backendName) {
+		try {
+			$this->theGroupBackendOfShouldBe($groupId, $backendName);
+			throw new UnexpectedValueException('Group does belong to this backend');
+		} catch (UnexpectedValueException $e) {
+			if ($e->getMessage() !== 'Group does not belong to this backend') {
+				throw $e;
+			}
+		}
+	}
+
+	/**
+	 * @Given /^the local group "([^"]*)" is created$/
+	 */
+	public function theLocalGroupIsCreated(string $groupName) {
+		shell_exec(
+			sprintf(
+				'%s %s group:add "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$groupName
+			)
+		);
+	}
+
+
+
+	/**
+	 * @Given /^I send a GET request with requesttoken to "([^"]*)"$/
+	 */
+	public function iSendAGETRequestWithRequesttokenTo($url) {
+		$requestToken = substr(
+			preg_replace(
+				'/(.*)data-requesttoken="(.*)">(.*)/sm',
+				'\2',
+				$this->response->getBody()->getContents()
+			),
+			0,
+			89
+		);
+		$this->response = $this->client->request(
+			'GET',
+			$url,
+			[
+				'query' => [
+					'requesttoken' => $requestToken
+				],
+			]
+		);
+	}
+
+	/**
+	 * @Given /^the cookies are cleared$/
+	 */
+	public function theCookiesAreCleared(): void {
+		$this->cookieJar->clear();
+	}
+
+	/**
+	 * @Given /^the user "([^"]*)" is added to the group "([^"]*)"$/
+	 */
+	public function theUserIsAddedToTheGroup(string $userId, string $groupId) {
+		shell_exec(
+			sprintf(
+				'%s %s group:adduser "%s" "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$groupId,
+				$userId
+			)
+		);
+	}
+
+	/**
+	 * @Given /^I expect no background job for class "([^"]*)"$/
+	 */
+	public function iExpectNoBackgroundJobForClassOCAUser_SAMLJobsMigrateGroups(string $className) {
+		$response = shell_exec(
+			sprintf(
+				'%s %s background-job:list --output=json --class %s',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$className
+			)
+		);
+
+		$responseArray = json_decode($response, true);
+		if (count($responseArray) > 0) {
+			throw new UnexpectedValueException('Background job axctuaslly was enqueued!');
+		}
 	}
 }

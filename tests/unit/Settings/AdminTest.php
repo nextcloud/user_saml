@@ -152,6 +152,11 @@ class AdminTest extends \Test\TestCase {
 				'type' => 'line',
 				'required' => false,
 			],
+			'group_mapping_prefix' => [
+				'text' => $this->l10n->t('Group Mapping Prefix, default: SAML_'),
+				'type' => 'line',
+				'required' => true,
+			],
 		];
 
 		$userFilterSettings = [

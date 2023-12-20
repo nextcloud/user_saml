@@ -19,9 +19,15 @@
  *
  */
 
+use OCA\User_SAML\GroupBackend;
+use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\UserBackend;
+use OCP\IGroupManager;
+use Psr\Log\LoggerInterface;
+
 require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
 
-// If we run in CLI mode do not setup the app as it can fail the OCC execution
+// If we run in CLI mode do not set up the app as it can fail the OCC execution
 // since the URLGenerator isn't accessible.
 $cli = false;
 if (OC::$CLI) {
@@ -35,30 +41,17 @@ try {
 	$userSession = \OC::$server->getUserSession();
 	$session = \OC::$server->getSession();
 } catch (Throwable $e) {
-	$logger = \OCP\Server::get(\Psr\Log\LoggerInterface::class);
+	$logger = \OCP\Server::get(LoggerInterface::class);
 	$logger->critical($e->getMessage(), ['exception' => $e, 'app' => 'user_saml']);
 	return;
 }
 
-$samlSettings = \OC::$server->query(\OCA\User_SAML\SAMLSettings::class);
+$groupBackend = \OC::$server->get(GroupBackend::class);
+\OC::$server->get(IGroupManager::class)->addBackend($groupBackend);
 
-$userData = new \OCA\User_SAML\UserData(
-	new \OCA\User_SAML\UserResolver(\OC::$server->getUserManager()),
-	$samlSettings,
-);
+$samlSettings = \OC::$server->get(SAMLSettings::class);
 
-$userBackend = new \OCA\User_SAML\UserBackend(
-	$config,
-	$urlGenerator,
-	\OC::$server->getSession(),
-	\OC::$server->getDatabaseConnection(),
-	\OC::$server->getUserManager(),
-	\OC::$server->getGroupManager(),
-	$samlSettings,
-	\OCP\Server::get(\Psr\Log\LoggerInterface::class),
-	$userData,
-	\OC::$server->query(\OCP\EventDispatcher\IEventDispatcher::class),
-);
+$userBackend = \OCP\Server::get(UserBackend::class);
 $userBackend->registerBackends(\OC::$server->getUserManager()->getBackends());
 OC_User::useBackend($userBackend);
 

@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCP\DB\Exception;
 use OCP\IConfig;
-use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OneLogin\Saml2\Constants;
@@ -35,6 +34,10 @@ class SAMLSettings {
 	private const LOADED_CHOSEN = 1;
 	private const LOADED_ALL = 2;
 
+	// list of global settings which are valid for every idp:
+	// 'general-require_provisioned_account', 'general-allow_multiple_user_back_ends', 'general-use_saml_auth_for_desktop'
+
+	// IdP-specific keys
 	public const IDP_CONFIG_KEYS = [
 		'general-idp0_display_name',
 		'general-uid_mapping',
@@ -66,12 +69,15 @@ class SAMLSettings {
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
 		'saml-attribute-mapping-mfa_mapping',
+		'saml-attribute-mapping-group_mapping_prefix',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',
 	];
+
+	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
@@ -86,12 +92,6 @@ class SAMLSettings {
 	/** @var ConfigurationsMapper */
 	private $mapper;
 
-	/**
-	 * @param IURLGenerator $urlGenerator
-	 * @param IConfig $config
-	 * @param IRequest $request
-	 * @param ISession $session
-	 */
 	public function __construct(
 		IURLGenerator $urlGenerator,
 		IConfig       $config,

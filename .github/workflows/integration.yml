@@ -100,6 +100,12 @@ jobs:
           mkdir data
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           ./occ app:enable --force ${{ env.APP_NAME }}
+          cat << EOF > config/debug.config.php
+          <?php
+          \$CONFIG = [
+            'log.condition' => ['apps' => ['user_saml']],
+          ];
+          EOF
           PHP_CLI_SERVER_WORKERS=4 php -S localhost:8080 &
 
       - name: Run behat

@@ -92,6 +92,11 @@
       <code>getConfigurationArray</code>
     </UndefinedMagicMethod>
   </file>
+  <file src="lib/GroupBackend.php">
+    <LessSpecificImplementedReturnType>
+      <code>string[]</code>
+    </LessSpecificImplementedReturnType>
+  </file>
   <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
     <DeprecatedMethod>
       <code>hasAnnotation</code>
