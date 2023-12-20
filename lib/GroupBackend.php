@@ -34,11 +34,12 @@ use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\ICountUsersBackend;
 use OCP\Group\Backend\ICreateGroupBackend;
 use OCP\Group\Backend\IDeleteGroupBackend;
+use OCP\Group\Backend\IGetDisplayNameBackend;
 use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IRemoveFromGroupBackend, INamedBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, INamedBackend {
 	/** @var IDBConnection */
 	private $dbc;
 
@@ -79,7 +80,6 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		$groups = [];
 		while ($row = $cursor->fetch()) {
 			$groups[] = $row['gid'];
-			$this->groupCache[$row['gid']] = $row['gid'];
 		}
 		$cursor->closeCursor();
 
@@ -91,7 +91,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	public function getGroups($search = '', $limit = null, $offset = null): array {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select('gid')
+		$query->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)
 			->orderBy('gid', 'ASC');
 
@@ -112,6 +112,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		$groups = [];
 		while ($row = $result->fetch()) {
 			$groups[] = $row['gid'];
+			$this->groupCache[$row['gid']] = $row['displayname'];
 		}
 		$result->closeCursor();
 
@@ -128,15 +129,16 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		$qb = $this->dbc->getQueryBuilder();
-		$cursor = $qb->select('gid')
+		$cursor = $qb->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)
 			->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+			->setMaxResults(1)
 			->executeQuery();
 		$result = $cursor->fetch();
 		$cursor->closeCursor();
 
 		if ($result !== false) {
-			$this->groupCache[$gid] = $gid;
+			$this->groupCache[$gid] = $result['displayname'];
 			return true;
 		}
 		return false;
@@ -212,7 +214,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		// Add to cache
-		$this->groupCache[$gid] = $gid;
+		$this->groupCache[$gid] = $samlGid;
 
 		return $result === 1;
 	}
@@ -296,5 +298,13 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	public function getBackendName(): string {
 		return 'user_saml';
+	}
+
+	public function getDisplayName(string $gid): string {
+		if (!isset($this->groupCache[$gid])) {
+			$this->getGroups($gid);
+		}
+
+		return $this->groupCache[$gid] ?? $gid;
 	}
 }
