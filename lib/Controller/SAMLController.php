@@ -248,7 +248,10 @@ class SAMLController extends Controller {
 					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
 					$this->autoprovisionIfPossible();
 					$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
-					$user->updateLastLoginTimestamp();
+					$firstLogin = $user->updateLastLoginTimestamp();
+					if ($firstLogin) {
+						$this->userBackend->initializeHomeDir($user->getUID());
+					}
 				} catch (NoUserFoundException $e) {
 					if ($e->getMessage()) {
 						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
