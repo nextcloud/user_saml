@@ -81,9 +81,9 @@ class Version6000Date20220912152700 extends SimpleMigrationStep {
 				'length' => 64,
 				'default' => '',
 			]);
-			$table->setPrimaryKey(['gid', 'uid'], 'idx_group_members');
-			$table->addIndex(['gid']);
-			$table->addIndex(['uid']);
+			$table->setPrimaryKey(['gid', 'uid'], 'pk_saml_group_members');
+			$table->addIndex(['gid'], 'saml_group_members_gid'); // prefix is added in callee
+			$table->addIndex(['uid'], 'saml_group_members_uid'); // prefix is added in callee
 		}
 		return $schema;
 	}
