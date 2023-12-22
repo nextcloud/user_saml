@@ -34,6 +34,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Attribute to map the users home to.",
     "Attribute to map the users groups to." : "Attribute to map the users groups to.",
     "Attribute to map the users MFA login status" : "Attribute to map the users MFA login status",
+    "Group Mapping Prefix, default: %s" : "Group Mapping Prefix, default: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Reject members of these groups. This setting has precedence over required memberships.",
     "Group A, Group B, …" : "Group A, Group B, …",
     "Require membership in these groups, if any." : "Require membership in these groups, if any.",
@@ -95,6 +96,7 @@ OC.L10N.register(
     "Account not provisioned." : "Account not provisioned.",
     "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible.",
     "Login options:" : "Login options:",
-    "Choose a authentication provider" : "Choose a authentication provider"
+    "Choose a authentication provider" : "Choose a authentication provider",
+    "Group Mapping Prefix, default: SAML_" : "Group Mapping Prefix, default: SAML_"
 },
 "nplurals=2; plural=(n != 1);");

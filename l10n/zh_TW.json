@@ -32,6 +32,7 @@
     "Attribute to map the users home to." : "對映至使用者家目錄的屬性。",
     "Attribute to map the users groups to." : "對映至使用者群組的屬性。",
     "Attribute to map the users MFA login status" : "對映至使用者 MFA 登入狀態的屬性。",
+    "Group Mapping Prefix, default: %s" : "群組對應前綴，預設值：%s",
     "Reject members of these groups. This setting has precedence over required memberships." : "拒絕這些群組的成員。此設定優先於所需的成員資格。",
     "Group A, Group B, …" : "群組 A, 群組 B……",
     "Require membership in these groups, if any." : "必須為這些群組的成員（若有）。",
@@ -93,6 +94,7 @@
     "Account not provisioned." : "尚未設定帳號。",
     "Your account is not provisioned, access to this service is thus not possible." : "尚未設定您的帳號，因此無法存取此服務。",
     "Login options:" : "登入選項：",
-    "Choose a authentication provider" : "選擇驗證提供者"
+    "Choose a authentication provider" : "選擇驗證提供者",
+    "Group Mapping Prefix, default: SAML_" : "群組對應前綴，預設值：SAML_"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
