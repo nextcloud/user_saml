@@ -32,6 +32,7 @@
     "Attribute to map the users home to." : "Атрибут на који да се мапира кориснички директоријум.",
     "Attribute to map the users groups to." : "Атрибут на који да се мапира корисничка група.",
     "Attribute to map the users MFA login status" : "Атрибут који мапира корисников MFA статус пријављивања",
+    "Group Mapping Prefix, default: %s" : "Префикс мапирања групе, подразумевано: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Одбиј чланове наведених група. Ово подешавање има предност у односу на захтевана чланства.",
     "Group A, Group B, …" : "Група А, Група Б, …",
     "Require membership in these groups, if any." : "Захтевај чланство у овим групама, ако постоји било која.",
@@ -93,6 +94,7 @@
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
     "Login options:" : "Опције пријаве:",
-    "Choose a authentication provider" : "Одаберите провајдера провере идентитета"
+    "Choose a authentication provider" : "Одаберите провајдера провере идентитета",
+    "Group Mapping Prefix, default: SAML_" : "Префикс мапирања групе, подразумевано: SAML_ "
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

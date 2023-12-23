@@ -34,6 +34,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Kullanıcıların ev değerinin eşleştirileceği öznitelik.",
     "Attribute to map the users groups to." : "Kulanıcı grupları değerinin eşleştirileceği öznitelik.",
     "Attribute to map the users MFA login status" : "Kullanıcıların çok adımlı doğrulama oturum ama durumu değerinin eşleştirileceği öznitelik.",
+    "Group Mapping Prefix, default: %s" : "Grup eşleştirme ön eki. Varsayılan: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Bu grupların üyeleri reddedilir. Bu ayar zorunlu üyeliklere göre önceliklidir.",
     "Group A, Group B, …" : "Grup A, Grup B, …",
     "Require membership in these groups, if any." : "Varsa bu gruplara üyelik zorunlu olsun.",
@@ -95,6 +96,7 @@ OC.L10N.register(
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
     "Login options:" : "Oturum açma seçenekleri:",
-    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin"
+    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
+    "Group Mapping Prefix, default: SAML_" : "Grup eşleştirme ön eki. Varsayılan: SAML_"
 },
 "nplurals=2; plural=(n > 1);");
