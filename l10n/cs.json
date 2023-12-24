@@ -32,6 +32,7 @@
     "Attribute to map the users home to." : "Atribut, na který namapovat uživatelovu domovskou složku.",
     "Attribute to map the users groups to." : "Atribut, na který namapovat uživatelovy skupiny.",
     "Attribute to map the users MFA login status" : "Atribut, na který namapovat stav uživatelova vícefaktorového přihlášení",
+    "Group Mapping Prefix, default: %s" : "Předpona mapování skupin – výchozí: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Odmítnout členy těchto skupin. Toto nastavení má přednost před vyžadovaným členstvím.",
     "Group A, Group B, …" : "Skupina A, skupina B, …",
     "Require membership in these groups, if any." : "Vyžadovat členství v těchto skupinách, pokud jsou.",
@@ -93,6 +94,7 @@
     "Account not provisioned." : "Účet není zprovozněn.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet ještě nebyl zprovozněn, přístup ke službě tedy ještě není možný.",
     "Login options:" : "Možnosti přihlašování:",
-    "Choose a authentication provider" : "Zvolte poskytovatele ověřování se"
+    "Choose a authentication provider" : "Zvolte poskytovatele ověřování se",
+    "Group Mapping Prefix, default: SAML_" : "Předpona mapování skupin – výchozí: SAML_"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }
