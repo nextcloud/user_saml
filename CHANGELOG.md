@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 
 - [Group backend and migration of original SAML groups created as local database groups (user_saml#622)](https://github.com/nextcloud/user_saml/pull/622)
 
+### Fixed
+
+- [Fix: Also create skeleton for users from environment based auth (user_saml#797)](https://github.com/nextcloud/user_saml/pull/797)
+
 ## 6.0.1
 
 ### Added 
