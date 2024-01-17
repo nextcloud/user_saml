@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.6
+
+### Fixed
+
+* [fix: Also create skeleton for users from environment based auth (user_saml#798)](https://github.com/nextcloud/user_saml/pull/798)
+
 ## 5.2.5
 
 ### Changed
