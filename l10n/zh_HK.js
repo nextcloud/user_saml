@@ -5,7 +5,7 @@ OC.L10N.register(
     "Saved" : "已儲存",
     "Could not save" : "無法保存",
     "Provider" : "提供者",
-    "Unknown error, please check the log file for more details." : "未知錯誤，請在日誌檔案檢查更多詳情。",
+    "Unknown error, please check the log file for more details." : "錯誤不詳，請在日誌檔案檢查更多詳情。",
     "Direct log in" : "直接登入",
     "SSO & SAML log in" : "SSO & SAML 登入",
     "This page should not be visited directly." : "不應直接訪問此頁面。",
