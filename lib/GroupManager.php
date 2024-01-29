@@ -115,12 +115,19 @@ class GroupManager {
 	}
 
 	public function handleIncomingGroups(IUser $user, array $samlGroupNames): void {
+		$id = $this->settings->getProviderId();
+		$groupMapping = $this->settings->get($id)['saml-attribute-mapping-group_mapping'] ?? null;
+		if ($groupMapping === null || $groupMapping === '') {
+			// When no group mapping is set up, it is not our business
+			return;
+		}
+
 		$this->updateUserGroups($user, $samlGroupNames);
 		// TODO: drop following line with dropping NC 28 support
 		$this->evaluateGroupMigrations($samlGroupNames);
 	}
 
-	public function updateUserGroups(IUser $user, array $samlGroupNames): void {
+	protected function updateUserGroups(IUser $user, array $samlGroupNames): void {
 		$this->translateGroupToIds($samlGroupNames);
 		$assignedGroups = $this->groupManager->getUserGroups($user);
 		$assignedGroupIds = array_map(function (IGroup $group) {
@@ -250,7 +257,7 @@ class GroupManager {
 		return in_array('user_saml', $group->getBackendNames());
 	}
 
-	public function evaluateGroupMigrations(array $groups): void {
+	protected function evaluateGroupMigrations(array $groups): void {
 		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
 		if ($candidateInfo === '') {
 			return;
