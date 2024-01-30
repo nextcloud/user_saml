@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.1.1
+
+### Fixed
+
+- [Fix: keep local groups when there is no group mapping set up (user_saml#806)](https://github.com/nextcloud/user_saml/pull/806)
+
 ## 6.1.0
 
 ### Added
