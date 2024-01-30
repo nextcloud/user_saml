@@ -152,7 +152,7 @@ class GroupManagerTest extends TestCase {
 			->with($user, ['groupC']);
 
 		// assert SAML provides user groups groupB and groupC
-		$this->ownGroupManager->updateUserGroups($user, ['groupB', 'groupC']);
+		$this->invokePrivate($this->ownGroupManager, 'updateUserGroups', [$user, ['groupB', 'groupC']]);
 	}
 
 	public function testUnassignUserFromGroups() {
