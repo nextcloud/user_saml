@@ -62,30 +62,6 @@ class Version3001Date20200630193443 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['uid']);
 		}
 
-		if (!$schema->hasTable('user_saml_auth_token')) {
-			$table = $schema->createTable('user_saml_auth_token');
-			$table->addColumn('id', Types::INTEGER, [
-				'autoincrement' => true,
-				'notnull' => true,
-				'length' => 4,
-				'unsigned' => true,
-			]);
-			$table->addColumn('uid', Types::STRING, [
-				'notnull' => true,
-				'length' => 64,
-				'default' => '',
-			]);
-			$table->addColumn('name', Types::TEXT, [
-				'notnull' => true,
-				'default' => '',
-			]);
-			$table->addColumn('token', Types::STRING, [
-				'notnull' => true,
-				'length' => 200,
-				'default' => '',
-			]);
-			$table->setPrimaryKey(['id']);
-		}
 		return $schema;
 	}
 }
