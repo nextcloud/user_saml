@@ -32,6 +32,7 @@
     "Attribute to map the users home to." : "Atributo ao qual mapear a localidade do usuários.",
     "Attribute to map the users groups to." : "Atributo ao qual mapear os grupos de usuários.",
     "Attribute to map the users MFA login status" : "Atributo para mapear o status de login do MFA dos usuários",
+    "Group Mapping Prefix, default: %s" : "Prefixo de mapeamento de grupo, padrão: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Rejeitar membros desses grupos. Essa configuração tem precedência sobre as associações obrigatórias.",
     "Group A, Group B, …" : "Grupo A, Grupo B,…",
     "Require membership in these groups, if any." : "Exigir associação a esses grupos, se houver.",
@@ -93,6 +94,7 @@
     "Account not provisioned." : "Conta não provisionada",
     "Your account is not provisioned, access to this service is thus not possible." : "Seu conta não é provisionada. O acesso a esse serviço não é possível",
     "Login options:" : "Opções de login:",
-    "Choose a authentication provider" : "Escolha um provedor de autenticação"
+    "Choose a authentication provider" : "Escolha um provedor de autenticação",
+    "Group Mapping Prefix, default: SAML_" : "Prefixo de mapeamento de grupo, padrão: SAML_"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
