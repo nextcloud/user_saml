@@ -25,6 +25,7 @@ class SAMLSettings {
 	// IdP-specific keys
 	public const IDP_CONFIG_KEYS = [
 		'general-idp0_display_name',
+		'general-custom_hosts',
 		'general-uid_mapping',
 		'idp-entityId',
 		'idp-singleLogoutService.responseUrl',
@@ -95,11 +96,20 @@ class SAMLSettings {
 	 * @return array<int, string>
 	 * @throws Exception
 	 */
-	public function getListOfIdps(): array {
+	public function getListOfIdps(?\OCP\IRequest $request = null): array {
+		$serverHost = !is_null($request) ? $request->getServerHost() : null;
+
 		$this->ensureConfigurationsLoaded();
 
 		$result = [];
 		foreach ($this->configurations as $configID => $config) {
+			// Filter configs which don't match the trusted host in the request
+			if (!empty($serverHost)) {
+				$customHosts = key_exists('general-custom_hosts', $config) ? array_map('trim', explode(',', $config['general-custom_hosts'])) : [];
+				if (!in_array($serverHost, $customHosts)) {
+					continue;
+				}
+			}
 			// no fancy array_* method, because there might be thousands
 			$result[$configID] = $config['general-idp0_display_name'] ?? '';
 		}
