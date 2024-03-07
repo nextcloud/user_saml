@@ -151,7 +151,7 @@ if ($useSamlForDesktopClients === '1') {
 }
 
 $multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
-$configuredIdps = $samlSettings->getListOfIdps();
+$configuredIdps = $samlSettings->getListOfIdps($request);
 $showLoginOptions = ($multipleUserBackEnds || count($configuredIdps) > 1) && $type === 'saml';
 
 if ($redirectSituation === true && $showLoginOptions) {
@@ -192,7 +192,7 @@ if ($redirectSituation === true) {
 		[
 			'requesttoken' => $csrfToken->getEncryptedValue(),
 			'originalUrl' => $originalUrl,
-			'idp' => array_keys($configuredIdps)[0] ?? '',
+			'idp' => array_key_first($configuredIdps) ?? '',
 		]
 	);
 	header('Location: '.$targetUrl);
