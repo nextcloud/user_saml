@@ -1,10 +1,8 @@
-$(window).load(function() {
-
-	$(".login-chose-saml-idp").change(function() {
-		var target = $(this).val();
+document.addEventListener("DOMContentLoaded", (event) => {
+	document.getElementsByClassName("login-chose-saml-idp")[0].addEventListener('change', function (event) {
+		var target = this.value;
 		if (target !== '') {
 			window.location.href = target;
 		}
 	});
-
 });
