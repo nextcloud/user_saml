@@ -1,6 +1,9 @@
 <?php
+
+use OCP\Util;
+
 style('user_saml', 'selectUserBackEnd');
-script('user_saml', 'selectUserBackEnd');
+Util::addScript('user_saml', 'selectUserBackEnd');
 
 /** @var array $_ */
 /** @var $l \OCP\IL10N */
