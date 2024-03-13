@@ -57,4 +57,4 @@ OC.L10N.register(
     "Your account is not provisioned, access to this service is thus not possible." : "החשבון שלך לא מנוהל, לכן הגישה לשירות הזה אינה אפשרות.",
     "Choose a authentication provider" : "נא לבחור ספק אימות"
 },
-"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
