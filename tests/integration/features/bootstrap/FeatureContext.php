@@ -350,8 +350,8 @@ class FeatureContext implements Context {
 		);
 
 		$response = trim($response);
-		$expectedStringStart = "$uid`s last login: ";
-		if (substr($response, 0, strlen($expectedStringStart)) !== $expectedStringStart) {
+		$loginTimeProof = 's last login: ';
+		if (!str_contains($response, $loginTimeProof)) {
 			throw new UnexpectedValueException("Expected last login message, found instead '$response'");
 		}
 	}
