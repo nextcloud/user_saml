@@ -21,12 +21,18 @@
 
 namespace OCA\User_SAML\AppInfo;
 
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\App;
 use OCP\AppFramework\IAppContainer;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
+use OCP\ISession;
+use OCP\IUserSession;
 use OCP\SabrePluginEvent;
+use OCP\Server;
 
 class Application extends App {
 	public function __construct(array $urlParams = []) {
@@ -68,14 +74,12 @@ class Application extends App {
 	}
 
 	private function timezoneHandling() {
-		$container = $this->getContainer();
+		$userSession = Server::get(IUserSession::class);
+		$session = Server::get(ISession::class);
+		$config = Server::get(IConfig::class);
+		$dispatcher = Server::get(IEventDispatcher::class);
 
-		$userSession = $container->getServer()->getUserSession();
-		$session = $container->getServer()->getSession();
-		$config = $container->getServer()->getConfig();
-
-		$dispatcher = $container->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
+		$dispatcher->addListener(LoadAdditionalScriptsEvent::class, function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
 			}
