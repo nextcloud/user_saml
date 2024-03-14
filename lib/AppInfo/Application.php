@@ -21,6 +21,7 @@
 
 namespace OCA\User_SAML\AppInfo;
 
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
@@ -78,7 +79,7 @@ class Application extends App {
 		$config = Server::get(IConfig::class);
 
 		$dispatcher = Server::get(IEventDispatcher::class);
-		$dispatcher->addListener('OCA\Files::loadAdditionalScripts', function () use ($session, $config, $userSession) {
+		$dispatcher->addListener(LoadAdditionalScriptsEvent::class, function () use ($session, $config, $userSession) {
 			if (!$userSession->isLoggedIn()) {
 				return;
 			}
