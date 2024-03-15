@@ -8,6 +8,11 @@
 	cursor: pointer;
 }
 
+.user-saml-standalone-label {
+	margin-top: 1.5ex;
+	display: inline-block;
+}
+
 #user-saml h3 {
 	font-weight: 700;
 	margin: 20px 0 5px;

@@ -90,7 +90,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					</p>
 				<?php elseif ($attribute['type'] === 'line' && !isset($attribute['global'])): ?>
 					<p>
-						<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
+						<input data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> />
 					</p>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -106,7 +107,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 			</p>
 
 			<div class="hidden">
-				<label for="user-saml-nameidformat"><?php p($l->t('Name ID format')) ?></label><br/>
+				<label for="user-saml-nameidformat" class="user-saml-standalone-label"><?php p($l->t('Name ID format')) ?></label><br/>
 				<select id="user-saml-nameidformat"
 						name="name-id-format">
 					<?php foreach ($_['name-id-formats'] as $key => $value): ?>
@@ -118,7 +119,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				</select>
 				<?php foreach ($_['sp'] as $key => $text): ?>
 					<p>
-						<textarea name="<?php p($key) ?>" placeholder="<?php p($text) ?>"><?php p($_['config']['sp-'.$key] ?? '') ?></textarea>
+						<label class="user-saml-standalone-label" for="user-saml-<?php p($key) ?>"><?php p($text) ?></label><br/>
+						<textarea id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>"><?php p($_['config']['sp-'.$key] ?? '') ?></textarea>
 					</p>
 				<?php endforeach; ?>
 			</div>
@@ -126,16 +128,27 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 		<div id="user-saml-idp">
 			<h3><?php p($l->t('Identity Provider Data')) ?></h3>
 			<p>
-				<?php print_unescaped($l->t('Configure your IdP settings here.')) ?>
-							</p>
-
-			<p><input data-key="idp-entityId" name="entityId" value="<?php p($_['config']['idp-entityId'] ?? '') ?>" type="text" class="required" placeholder="<?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?>"/></p>
-			<p><input name="singleSignOnService.url" value="<?php p($_['config']['idp-singleSignOnService.url'] ?? '') ?>"  type="text" class="required" placeholder="<?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?>"/></p>
+				<label class="user-saml-standalone-label" for="user-saml-entityId"><?php p($l->t('Identifier of the IdP entity (must be a URI)')) ?></label><br/>
+				<input id="user-saml-entityId" data-key="idp-entityId" name="entityId" value="<?php p($_['config']['idp-entityId'] ?? '') ?>" type="text" class="required" placeholder="https://example.com/auth/realms/default"/>
+			</p>
+			<p>
+				<label class="user-saml-standalone-label" for="user-saml-singleSignOnService.url"><?php p($l->t('URL Target of the IdP where the SP will send the Authentication Request Message')) ?></label><br/>
+				<input id="user-saml-singleSignOnService.url" name="singleSignOnService.url" value="<?php p($_['config']['idp-singleSignOnService.url'] ?? '') ?>"  type="text" class="required" placeholder="https://example.com/auth/realms/default/protocol/saml"/>
+			</p>
 			<p><span class="toggle"><?php p($l->t('Show optional Identity Provider settings…')) ?></span></p>
 			<div class="hidden">
-				<p><input name="singleLogoutService.url" value="<?php p($_['config']['idp-singleLogoutService.url'] ?? '') ?>" type="text" placeholder="<?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?>"/></p>
-				<p><input name="singleLogoutService.responseUrl" value="<?php p($_['config']['idp-singleLogoutService.responseUrl'] ?? '') ?>" type="text" placeholder="<?php p($l->t('URL Location of the IDP\'s SLO Response')) ?>"/></p>
-				<p><textarea name="x509cert" placeholder="<?php p($l->t('Public X.509 certificate of the IdP')) ?>"><?php p($_['config']['idp-x509cert'] ?? '') ?></textarea></p>
+				<p>
+					<label class="user-saml-standalone-label" for="user-saml-singleLogoutService.url"><?php p($l->t('URL Location of the IdP where the SP will send the SLO Request')) ?></label><br/>
+					<input id="user-saml-singleLogoutService.url" name="singleLogoutService.url" value="<?php p($_['config']['idp-singleLogoutService.url'] ?? '') ?>" type="text" placeholder="https://example.com/auth/realms/default/protocol/saml"/>
+				</p>
+				<p>
+					<label class="user-saml-standalone-label" for="user-saml-singleLogoutService.responseUrl"><?php p($l->t('URL Location of the IDP\'s SLO Response')) ?></label><br/>
+					<input id="user-saml-singleLogoutService.responseUrl" name="singleLogoutService.responseUrl" value="<?php p($_['config']['idp-singleLogoutService.responseUrl'] ?? '') ?>" type="text" placeholder="https://example.com/auth/realms/default/protocol/saml"/>
+				</p>
+				<p>
+					<label class="user-saml-standalone-label" for="user-saml-x509cert"><?php p($l->t('Public X.509 certificate of the IdP')) ?></label><br/>
+					<textarea id="user-saml-x509cert" name="x509cert"><?php p($_['config']['idp-x509cert'] ?? '') ?></textarea>
+				</p>
 			</div>
 		</div>
 
@@ -150,7 +163,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				<?php foreach ($_['attribute-mapping'] as $key => $attribute): ?>
 					<?php if ($attribute['type'] === 'line'): ?>
 					<p>
-						<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['text']) ?>"/>
+						<label class="user-saml-standalone-label" for="user-saml-<?php p($key) ?>"><?php p($attribute['text']) ?></label><br/>
+						<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?>/>
 					</p>
 					<?php endif; ?>
 				<?php endforeach; ?>
@@ -183,8 +197,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					<?php if (is_array($attribute) && $attribute['type'] === 'line') { ?>
 						<?php $text = $attribute['text'] ?>
 						<p>
-							<label><?php p($attribute['text']) ?></label><br />
-							<input data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['security-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+							<label for="user-saml-<?php p($key) ?>" class="user-saml-standalone-label"><?php p($attribute['text']) ?></label><br />
+							<input id="user-saml-<?php p($key) ?>" data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['security-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
 						</p>
 					<?php } else { ?>
 						<?php $text = $attribute ?>
@@ -208,8 +222,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				<?php foreach ($_['user-filter'] as $key => $attribute): ?>
 					<?php if ($attribute['type'] === 'line'): ?>
 						<p class="group">
-							<span><?php p($attribute['text']) ?></span><br/>
-							<input name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>
+							<label for="user-saml-<?php p($key) ?>" class="user-saml-standalone-label"><?php p($attribute['text']) ?></label><br/>
+							<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>
 						</p>
 					<?php endif; ?>
 				<?php endforeach; ?>
