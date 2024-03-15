@@ -2,8 +2,10 @@
 	color: var(--color-primary-text);
 }
 
-#saml-select-user-back-end #av_mode{
+#saml-select-user-back-end #av_mode {
 	height: auto;
+	background-color: var(--color-main-background);
+	color: var(--color-main-text);
 }
 
 #saml-select-user-back-end h1 {
@@ -12,7 +14,6 @@
 }
 
 .login-option {
-	background-color: var(--color-primary);
 	border: 1px solid var(--color-primary-text);
 	font-weight: 600;
 	height: 40px;
