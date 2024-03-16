@@ -20,7 +20,6 @@ OC.L10N.register(
     "If your Service Provider should use certificates you can optionally specify them here." : "Jeigu jūsų paslaugų teikėjas turėtų naudoti liudijimus, galite čia pasirinktinai juos nurodyti.",
     "Show Service Provider settings…" : "Rodyti paslaugų teikėjo nustatymus…",
     "Identity Provider Data" : "Tapatybės teikėjo duomenys",
-    "Configure your IdP settings here." : "Čia konfigūruokite savo IdP nustatymus.",
     "Identifier of the IdP entity (must be a URI)" : "IdP esybės identifikatorius (privalo būti URI)",
     "Security settings" : "Saugumo nustatymai",
     "Show security settings…" : "Rodyti saugumo nustatymus…",

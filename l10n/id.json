@@ -18,7 +18,6 @@
     "Service Provider Data" : "Data Penyedia Layanan",
     "If your Service Provider should use certificates you can optionally specify them here." : "Apabila Penyedia Layanan Anda harus menggunakan sertifikat Anda dapat menentukannya di sini secara opsional.",
     "Identity Provider Data" : "Identitas Penyedia Data",
-    "Configure your IdP settings here." : "Konfigurasi pengaturan IdP Anda di sini.",
     "Identifier of the IdP entity (must be a URI)" : "Pengidentifikasian entitas IdP (harus berupa URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Target URL IdP dimana SP akan mengirim Pesan Permintaan Otentikasi",
     "URL Location of the IdP where the SP will send the SLO Request" : "Lokasi URL IdP dimana SP akan mengirim Permintaan SLO",

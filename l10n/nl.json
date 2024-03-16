@@ -58,7 +58,6 @@
     "Show Service Provider settings…" : "Serviceverleners instellingen weergeven...",
     "Name ID format" : "Naam ID formaat",
     "Identity Provider Data" : "Identity Provider gegevens",
-    "Configure your IdP settings here." : "Configureer hier je IdP instellingen.",
     "Identifier of the IdP entity (must be a URI)" : "Identificatie van de IdP (moet een URI zijn)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL doel van de IdP waar de SP het Authentication Request Message naartoe zal versturen",
     "Show optional Identity Provider settings…" : "Optionele Identiteit serviceverleners instellingen weergeven...",

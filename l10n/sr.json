@@ -66,7 +66,6 @@
     "Show Service Provider settings…" : "Прикажи поставке провајдера услуга…",
     "Name ID format" : "Name ID формат",
     "Identity Provider Data" : "Подаци провајдера идентитета",
-    "Configure your IdP settings here." : "Подесите добављача идентитета овде.",
     "Identifier of the IdP entity (must be a URI)" : "Идентификација ентитета добављача идентитета (мора бити URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL одредиште добављача идентитета где ће добављач услуга слати Authentication Request Message",
     "Show optional Identity Provider settings…" : "Прикажи опционе поставке провајдера идентитета…",

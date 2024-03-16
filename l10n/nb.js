@@ -68,7 +68,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "Vis tjenesteleverandørinnstillinger…",
     "Name ID format" : "Navn ID format",
     "Identity Provider Data" : "Identitetstilbyder-data",
-    "Configure your IdP settings here." : "Konfigurer dine IdP innstillinger her.",
     "Identifier of the IdP entity (must be a URI)" : "Identifikator for IdP-enheten (må være en URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL-mål for IdP der SP vil sende autentiseringsforespørselsmeldingen",
     "Show optional Identity Provider settings…" : "Vis valgfrie identitetstilbyderinnstillinger…",

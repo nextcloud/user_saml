@@ -62,7 +62,6 @@
     "Show Service Provider settings…" : "Erakutsi zerbitzu-hornitzailearen ezarpenak...",
     "Name ID format" : "Izena ID formatua",
     "Identity Provider Data" : "Identitate-hornitzailearen datuak",
-    "Configure your IdP settings here." : "Konfiguratu zure IdParen ezarpenak hemen.",
     "Identifier of the IdP entity (must be a URI)" : "IdP-entitatearen identifikatzailea (URI bat izan behar du)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "IdParen URLaren helburua, SPk autentifikazio eskaera mezua bidaliko duenean",
     "Show optional Identity Provider settings…" : "Erakutsi identitate-hornitzailearen aukerako ezarpenak...",

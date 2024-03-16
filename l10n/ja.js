@@ -63,7 +63,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "サービスプロバイダーの設定を表示しています...",
     "Name ID format" : "名前IDの形式",
     "Identity Provider Data" : "Identity Providerデータ",
-    "Configure your IdP settings here." : "IdP をここで設定します。",
     "Identifier of the IdP entity (must be a URI)" : "IdPエンティティの識別子（URIでなければならない）",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "SPが認証要求メッセージを送信するIdPのURLターゲット",
     "Show optional Identity Provider settings…" : "オプションのIdentity Provider設定を表示する...",

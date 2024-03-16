@@ -67,7 +67,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "Zeige die Diensteanbieter-Einstellungen …",
     "Name ID format" : "Name-ID-Format",
     "Identity Provider Data" : "Daten des Autorisierungsdienstes",
-    "Configure your IdP settings here." : "Autorisierungsdiensteinstellungen hier konfigurieren.",
     "Identifier of the IdP entity (must be a URI)" : "Identifikationsmerkmal des Autorisierungsdienstes (muss URI sein)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL-Ziel des Autorisierungsdienstes an den der Dienstanbieter die Anmeldungsanfrage senden soll",
     "Show optional Identity Provider settings…" : "Zeige optionale Autorisierungsdienst-Einstellungen",

@@ -65,7 +65,6 @@
     "Show Service Provider settings…" : "Szolgáltató beállításainak megjelenítése…",
     "Name ID format" : "Névazonosító formátuma",
     "Identity Provider Data" : "Személyazonosság-szolgáltató adatai",
-    "Configure your IdP settings here." : "Itt állítsa be az IdP beállításait.",
     "Identifier of the IdP entity (must be a URI)" : "Az IdP bejegyzés azonosítója (URI-nak kell lennie)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Az IdP URL célja, ahová az SP a hitelesítéskérési üzeneteit küldi",
     "Show optional Identity Provider settings…" : "Nem kötelező személyazonosság-szolgáltatói beállításai…",

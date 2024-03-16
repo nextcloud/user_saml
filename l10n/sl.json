@@ -56,7 +56,6 @@
     "Show Service Provider settings…" : "Pokaži nastavitve ponudnika storitve ...",
     "Name ID format" : "Zapis določila ID imena",
     "Identity Provider Data" : "Podatki ponudnika istovetnosti",
-    "Configure your IdP settings here." : "Prilagoditev nastavitev IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Dololilo IdP (zapisano kot naslov URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Ciljni naslov URL za IdP, kamor bo ponudnik storitev poslal sporočilo o zahtevi overitve.",
     "Show optional Identity Provider settings…" : "Pokaži izbirne nastavitve IP (ponudnika istovetnosti) ...",

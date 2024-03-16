@@ -33,7 +33,6 @@ OC.L10N.register(
     "Use environment variable" : "Brug miljøvariabel",
     "Global settings" : "Globale indstillinger",
     "General" : "General",
-    "Configure your IdP settings here." : "Indstil IdP her.",
     "Security settings" : "Sikkerhedsindstillinger",
     "Show security settings…" : "Vis sikkerhedsindstillinger...",
     "Download metadata XML" : "Download metadata XML",

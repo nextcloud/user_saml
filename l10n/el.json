@@ -57,7 +57,6 @@
     "Show Service Provider settings…" : "Εμφάνιση ρυθμίσεων Υπηρεσίας Παρόχου ...",
     "Name ID format" : "Μορφή ταυτότητας ονόματος",
     "Identity Provider Data" : "Στοιχεία παροχέα ταυτότητας",
-    "Configure your IdP settings here." : "Ρυθμίστε το IdP εδώ.",
     "Identifier of the IdP entity (must be a URI)" : "Αναγνωριστικό οντότητας IdP (πρέπει να είναι URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Αποδέκτης URL του IdP όπου το SP θα στείλει μήνυμα Αίτησης Ελέγχου Ταυτότητας",
     "Show optional Identity Provider settings…" : "Εμφάνιση προαιρετικών ρυθμίσεων Παροχέα Ταυτότητας ...",

@@ -30,7 +30,6 @@ OC.L10N.register(
     "If your Service Provider should use certificates you can optionally specify them here." : "თუ თქვენი სერვის პროვაიდერი უნდა იყენებდეს სერტიფიკატებს, სურვილისამებრ შეგიძლიათ ისინი აქ ჩამოწეროთ.",
     "Show Service Provider settings…" : "სერვისის მომწოდებლის პარამეტრების ჩვენება...",
     "Identity Provider Data" : "იდენტობის მომწოდებლის მონაცემები",
-    "Configure your IdP settings here." : "დააყენეთ თქვენი IdP-ის პარამეტრები აქ.",
     "Identifier of the IdP entity (must be a URI)" : "IdP შენატანის იდენტიფიკატორი (უნდა იყოს URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "IdP-s URL მისამართი სადაც SP გააგზავნის აუტენტიფიკაციის მოთხოვნის წერილს",
     "Show optional Identity Provider settings…" : "არა-აუცილებელი იდენტობის პროვაიდერის პარამეტრების ჩვენება...",

@@ -66,7 +66,6 @@
     "Show Service Provider settings…" : "Zobrazit nastavení poskytovatele služeb…",
     "Name ID format" : "Formát identifikátoru názvu",
     "Identity Provider Data" : "Data poskytovatele identit",
-    "Configure your IdP settings here." : "Zde lze vytvořit nastavení pro poskytovatele přihlašovacích údajů.",
     "Identifier of the IdP entity (must be a URI)" : "Identifikátor entity z poskytovatele identit (je třeba, aby bylo URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Cíl URL IdP, kam SP odešle zprávu s požadavkem na ověření se",
     "Show optional Identity Provider settings…" : "Zobrazit nepovinná nastavení poskytovatele přihlašovacích údajů…",

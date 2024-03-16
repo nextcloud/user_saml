@@ -65,7 +65,6 @@
     "Show Service Provider settings…" : "Dades del proveïdor de serveis…",
     "Name ID format" : "Format del nom ID",
     "Identity Provider Data" : "Dades del proveïdor de serveis",
-    "Configure your IdP settings here." : "Configureu aquí la configuració d'IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Identificador de l'entitat IdP (ha de ser un URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Orientació URL de l'IdP on SP enviarà el missatge de sol·licitud d'autenticació",
     "Show optional Identity Provider settings…" : "Dades del proveïdor de serveis…",

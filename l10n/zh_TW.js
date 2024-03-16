@@ -68,7 +68,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "顯示服務提供者設定……",
     "Name ID format" : "名稱 ID 格式",
     "Identity Provider Data" : "身份提供者資料",
-    "Configure your IdP settings here." : "在此處設定您的 IdP 設定。",
     "Identifier of the IdP entity (must be a URI)" : "IdP 實體的識別字串（必須為 URI）",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "IdP 的 URL 目標，其中 SP 將會傳送驗證請求訊息",
     "Show optional Identity Provider settings…" : "顯示選擇性的身份提供者設定……",

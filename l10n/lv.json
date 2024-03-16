@@ -11,7 +11,6 @@
     "Service Provider Data" : "Pakalpojumu sniedzēja dati",
     "If your Service Provider should use certificates you can optionally specify them here." : "Ja jūsu pakalpojumu sniedzējs izmanto sertifikātus, varat norādiet tos šeit.",
     "Identity Provider Data" : "Identitātes nodrošinātāja dati",
-    "Configure your IdP settings here." : "Konfigurēt IdP iestatījumus šeit.",
     "Security settings" : "Drošības iestatījumi",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Lai paaugstinātu drošību, iesakām iespējot šos iestatījumus, ja to atbalsta jūsu vidē.",
     "Show security settings…" : "Rādīt drošības iestatījumus ...",

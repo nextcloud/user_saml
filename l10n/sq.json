@@ -29,7 +29,6 @@
     "If your Service Provider should use certificates you can optionally specify them here." : "Nëse Ofruesi i Shërbimit tuaj duhet të përdori çertifikata ju mund ti specifikoni ato këtu.",
     "Show Service Provider settings…" : "Trego konfigurimet e Ofruesit të Shërbimit",
     "Identity Provider Data" : "Identifiko Ofruesin e të Dhënave",
-    "Configure your IdP settings here." : "Konfiguroni  rregullimet e IdP tuaj këtu",
     "Identifier of the IdP entity (must be a URI)" : "Identifikues i ekzistencës së IdP(duhet të jetë një URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Targeti URL i IdP ku PS do të dërgojë Mesazhin e Kërkesës së Autentifikimit",
     "Show optional Identity Provider settings…" : "Trego konfigurimet opsionale të Dhënësit të Identitetit ...",

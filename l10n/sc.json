@@ -57,7 +57,6 @@
     "Show Service Provider settings…" : "Mustra sa cunfiguratzione de su frunidore de servìtzios...",
     "Name ID format" : "Formadu nùmene ID",
     "Identity Provider Data" : "Datos de su funidore de identidade",
-    "Configure your IdP settings here." : "Cunfigura inoghe is optziones IdP tuas.\\",
     "Identifier of the IdP entity (must be a URI)" : "Identificadore de s'entidade IdP (depet èssere un'URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Destinatzione de s'URL de s'IdP in ue su SP at a imbiare su messàgiu de dimanda de autenticatzione ",
     "Show optional Identity Provider settings…" : "Mustra cunfiguratzione optzionale de su frunidore de identidade...",

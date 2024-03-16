@@ -67,7 +67,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "Show Service Provider settings…",
     "Name ID format" : "Name ID format",
     "Identity Provider Data" : "Identity Provider Data",
-    "Configure your IdP settings here." : "Configure your IdP settings here.",
     "Identifier of the IdP entity (must be a URI)" : "Identifier of the IdP entity (must be a URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL Target of the IdP where the SP will send the Authentication Request Message",
     "Show optional Identity Provider settings…" : "Show optional Identity Provider settings…",

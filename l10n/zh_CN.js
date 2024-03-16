@@ -59,7 +59,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "显示服务器供应商设置...",
     "Name ID format" : "名称ID格式",
     "Identity Provider Data" : "身份提供者的数据",
-    "Configure your IdP settings here." : "在这里配置您的 ldP 设置。",
     "Identifier of the IdP entity (must be a URI)" : "IdP 实体的标识符（必须是URI）",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL 的目标，其中 SP 将发送验证请求消息",
     "Show optional Identity Provider settings…" : "显示可选的身份提供者设置...",

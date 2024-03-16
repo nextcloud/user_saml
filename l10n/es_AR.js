@@ -30,7 +30,6 @@ OC.L10N.register(
     "Service Provider Data" : "Datos del Proveedor de Servicio",
     "If your Service Provider should use certificates you can optionally specify them here." : "Si su Proveedor de Servicio debe usar certificados, usted puede especificarlos opcionalmente desde aquí.",
     "Identity Provider Data" : "Datos del Proveedor de Identidad",
-    "Configure your IdP settings here." : "Configure los configuraciones de IdP aquí. ",
     "Identifier of the IdP entity (must be a URI)" : "Identificador de la entidad IdP (debe ser un URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL Destino del IdP donde el SP enviará automaticamente el Mensaje de Solicitud de Autenticación",
     "URL Location of the IdP where the SP will send the SLO Request" : "Ubicación del URL del IdP donde el SP enviará la Solicitud SLO",

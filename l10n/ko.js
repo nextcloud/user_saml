@@ -55,7 +55,6 @@ OC.L10N.register(
     "Show Service Provider settings…" : "서비스 공급자 설정 표시…",
     "Name ID format" : "이름 ID 포맷",
     "Identity Provider Data" : "인증 공급자 데이터",
-    "Configure your IdP settings here." : "IdP를 여기에서 설정할 수 있습니다.",
     "Identifier of the IdP entity (must be a URI)" : "IdP 엔티티 식별자(URI여야 함)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "SP에서 인증 요청 메시지를 보낼 IdP 대상 URL",
     "Show optional Identity Provider settings…" : "추가 인증 공급자 설정 표시…",

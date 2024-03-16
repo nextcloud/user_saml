@@ -65,7 +65,6 @@
     "Show Service Provider settings…" : "Показать настройки поставщика услуг…",
     "Name ID format" : "Формат ID имени",
     "Identity Provider Data" : "Данные провайдера идентификации (IdP)",
-    "Configure your IdP settings here." : "Настройте тут параметры вашего IdP.",
     "Identifier of the IdP entity (must be a URI)" : "Идентификатор записи IdP (в формате URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL провайдера идентификации (IdP), на который поставщик услуг (SP) будет отправлять запрос подтверждения подлинности",
     "Show optional Identity Provider settings…" : "Показать дополнительные настройки провайдера идентификации",
