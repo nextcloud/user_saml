@@ -16,7 +16,7 @@ Util::addScript('user_saml', 'selectUserBackEnd');
 	<?php if ($_['useCombobox']) { ?>
 
 		<select class="login-chose-saml-idp" id="av_mode" name="avMode">
-			<option value=""><?php p($l->t('Choose a authentication provider')); ?></option>
+			<option value=""><?php p($l->t('Choose an authentication provider')); ?></option>
 			<?php foreach ($_['loginUrls']['ssoLogin'] as $idp) { ?>
 				<option value="<?php p($idp['url']); ?>"><?php p($idp['display-name']); ?></option>
 			<?php } ?>
