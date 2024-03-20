@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.1.2
+
+### Fixed
+
+* [Fix(UI): permanent labels for input elements (user_saml#816)](https://github.com/nextcloud/user_saml/pull/816)
+* [Fix(UI): auth provider picker did not react (user_saml#817)](https://github.com/nextcloud/user_saml/pull/817)
+* [Fix(User): load timezone handling related resources (user_saml#819)](https://github.com/nextcloud/user_saml/pull/819)
+* [Fix(UI): readable login dropdown chooser on dark mode (user_saml#820)](https://github.com/nextcloud/user_saml/pull/820)
+
 ## 6.1.1
 
 ### Fixed
