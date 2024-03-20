@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.7
+
+### Fixed
+
+* [fix(upgrade): exception when upgrading from 27 to 28 (user_saml#818)](https://github.com/nextcloud/user_saml/pull/818)
+
 ## 5.2.6
 
 ### Fixed
