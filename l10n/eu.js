@@ -87,7 +87,6 @@ OC.L10N.register(
     "Access denied." : "Sarbidea ukatua.",
     "Account not provisioned." : "Ez da kontua eman.",
     "Your account is not provisioned, access to this service is thus not possible." : "Zure kontua ez dago hornituta. Zerbitzu honetara sarbidea, ondorioz, ez da posiblea.",
-    "Login options:" : "Saio-hasiera aukerak:",
-    "Choose a authentication provider" : "Aukeratu autentifikazio-hornitzailea"
+    "Login options:" : "Saio-hasiera aukerak:"
 },
 "nplurals=2; plural=(n != 1);");

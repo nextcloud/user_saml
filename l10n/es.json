@@ -93,7 +93,6 @@
     "Account not provisioned." : "Cuenta de usuario no aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no esta aprovisionada, por lo tanto el acceso a este servicio no es posible.",
     "Login options:" : "Opciones de login:",
-    "Choose a authentication provider" : "Escoge un proveedor de autenticación",
     "Group Mapping Prefix, default: SAML_" : "Prefijo de mapeo de grupo, por defecto: SAML_"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

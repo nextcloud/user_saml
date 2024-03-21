@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "الحساب غير مزود بالخدمة.",
     "Your account is not provisioned, access to this service is thus not possible." : "حسابك غير مزود بالخدمة، وبالتالي لا يمكنك الوصول إلى هذه الخدمة.",
     "Login options:" : "خيارات تسجيل الدخول:",
-    "Choose a authentication provider" : "اختر مزود المصادقة",
     "Group Mapping Prefix, default: SAML_" : "بادئة تعيين المجموعة Group Mapping Prefix، التلقائية: SAML_"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

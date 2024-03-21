@@ -80,7 +80,6 @@ OC.L10N.register(
     "Error" : "Σφάλμα",
     "Account not provisioned." : "Ο λογαριασμός δεν προβλέφθηκε.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ο λογαριασμός σας δεν προβλέπεται, επομένως δεν είναι δυνατή η πρόσβαση σε αυτήν την υπηρεσία.",
-    "Login options:" : "Επιλογές σύνδεσης:",
-    "Choose a authentication provider" : "Επιλογή παρόχου πιστοποίησης"
+    "Login options:" : "Επιλογές σύνδεσης:"
 },
 "nplurals=2; plural=(n != 1);");

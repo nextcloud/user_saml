@@ -78,7 +78,6 @@
     "Your account is denied, access to this service is thus not possible." : "계정이 거부되었습니다. 이 서비스에 접근할 수 없습니다.",
     "Account not provisioned." : "계정이 프로비전되지 않았습니다.",
     "Your account is not provisioned, access to this service is thus not possible." : "계정이 프로비전되지 않아서 이 서비스에 접근할 수 없습니다.",
-    "Login options:" : "로그인 옵션",
-    "Choose a authentication provider" : "인증 공급자 선택"
+    "Login options:" : "로그인 옵션"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

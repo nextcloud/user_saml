@@ -91,7 +91,6 @@
     "Your account is denied, access to this service is thus not possible." : "Вашият профил е отказан, следователно не е възможен достъп до тази услуга.",
     "Account not provisioned." : "Неосигурен профил.",
     "Your account is not provisioned, access to this service is thus not possible." : "Вашият профил не е осигурен, поради което не е възможен достъп до тази услуга.",
-    "Login options:" : "Опции за влизане:",
-    "Choose a authentication provider" : "Избор на доставчик на удостоверяване "
+    "Login options:" : "Опции за влизане:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

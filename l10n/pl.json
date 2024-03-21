@@ -91,7 +91,6 @@
     "Your account is denied, access to this service is thus not possible." : "Twoje konto zostało zablokowane, dostęp do tej usługi jest niemożliwe.",
     "Account not provisioned." : "Brak konta.",
     "Your account is not provisioned, access to this service is thus not possible." : "Nie posiadasz konta, stąd dostęp do tej usługi jest niemożliwy.",
-    "Login options:" : "Opcje logowania:",
-    "Choose a authentication provider" : "Wybierz dostawcę uwierzytelniania"
+    "Login options:" : "Opcje logowania:"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

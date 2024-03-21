@@ -93,7 +93,6 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "Dein Konto ist gesperrt, der Zugriff auf diesen Dienst ist somit nicht möglich.",
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Dein Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
-    "Login options:" : "Anmeldeoptionen:",
-    "Choose a authentication provider" : "Einen Authentifizierungsanbieter auswählen"
+    "Login options:" : "Anmeldeoptionen:"
 },
 "nplurals=2; plural=(n != 1);");

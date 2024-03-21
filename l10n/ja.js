@@ -84,7 +84,6 @@ OC.L10N.register(
     "Error" : "エラー",
     "Account not provisioned." : "アカウントがプロビジョニングされていない",
     "Your account is not provisioned, access to this service is thus not possible." : "アカウントにプロビジョニングされていないため、このサービスへのアクセスはできません。",
-    "Login options:" : "ログインオプション: ",
-    "Choose a authentication provider" : "認証プロバイダーを選択する"
+    "Login options:" : "ログインオプション: "
 },
 "nplurals=1; plural=0;");

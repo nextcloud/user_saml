@@ -93,7 +93,6 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "Your account is denied, access to this service is thus not possible.",
     "Account not provisioned." : "Account not provisioned.",
     "Your account is not provisioned, access to this service is thus not possible." : "Your account is not provisioned, access to this service is thus not possible.",
-    "Login options:" : "Login options:",
-    "Choose a authentication provider" : "Choose a authentication provider"
+    "Login options:" : "Login options:"
 },
 "nplurals=2; plural=(n > 1);");

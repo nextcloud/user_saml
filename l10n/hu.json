@@ -91,7 +91,6 @@
     "Your account is denied, access to this service is thus not possible." : "A fiókja hozzáférése megtagadva, így ehhez a szolgáltatáshoz nem férhet hozzá.",
     "Account not provisioned." : "A fiók nem felügyelt.",
     "Your account is not provisioned, access to this service is thus not possible." : "A fiókja nem felügyelt, így ehhez a szolgáltatáshoz nem férhet hozzá.",
-    "Login options:" : "Bejelentkezési lehetőségek:",
-    "Choose a authentication provider" : "Válasszon hitelesítésszolgáltatót"
+    "Login options:" : "Bejelentkezési lehetőségek:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

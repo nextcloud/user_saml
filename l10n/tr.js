@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Hesabınız hazır değil.",
     "Your account is not provisioned, access to this service is thus not possible." : "Hesabınız hazır olmadığından bu hizmeti kullanamazsınız.",
     "Login options:" : "Oturum açma seçenekleri:",
-    "Choose a authentication provider" : "Bir kimlik doğrulama hizmeti sağlayıcısı seçin",
     "Group Mapping Prefix, default: SAML_" : "Grup eşleştirme ön eki. Varsayılan: SAML_"
 },
 "nplurals=2; plural=(n > 1);");

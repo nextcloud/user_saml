@@ -87,7 +87,6 @@ OC.L10N.register(
     "Access denied." : "Accesso negato.",
     "Account not provisioned." : "Account non generato.",
     "Your account is not provisioned, access to this service is thus not possible." : "Il tuo account non è stato generato, l'accesso a questo servizio è perciò impossibile",
-    "Login options:" : "Opzioni di accesso:",
-    "Choose a authentication provider" : "Scegli un fornitore di autenticazione"
+    "Login options:" : "Opzioni di accesso:"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -95,7 +95,6 @@ OC.L10N.register(
     "Account not provisioned." : "Účet není zprovozněn.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet ještě nebyl zprovozněn, přístup ke službě tedy ještě není možný.",
     "Login options:" : "Možnosti přihlašování:",
-    "Choose a authentication provider" : "Zvolte poskytovatele ověřování se",
     "Group Mapping Prefix, default: SAML_" : "Předpona mapování skupin – výchozí: SAML_"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

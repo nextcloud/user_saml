@@ -81,7 +81,6 @@ OC.L10N.register(
     "Error" : "Fout",
     "Account not provisioned." : "Account niet verstrekt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Je account is niet verstrekt, toegang tot deze dienst is dus niet mogelijk.",
-    "Login options:" : "Inlogopties:",
-    "Choose a authentication provider" : "Kies een authenticatieprovider"
+    "Login options:" : "Inlogopties:"
 },
 "nplurals=2; plural=(n != 1);");

@@ -53,7 +53,6 @@ OC.L10N.register(
     "Metadata valid" : "נתוני העל תקינים",
     "Error" : "שגיאה",
     "Account not provisioned." : "החשבון לא מנוהל.",
-    "Your account is not provisioned, access to this service is thus not possible." : "החשבון שלך לא מנוהל, לכן הגישה לשירות הזה אינה אפשרות.",
-    "Choose a authentication provider" : "נא לבחור ספק אימות"
+    "Your account is not provisioned, access to this service is thus not possible." : "החשבון שלך לא מנוהל, לכן הגישה לשירות הזה אינה אפשרות."
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

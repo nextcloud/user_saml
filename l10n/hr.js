@@ -80,7 +80,6 @@ OC.L10N.register(
     "Error" : "Pogreška",
     "Account not provisioned." : "Račun nije uspostavljen.",
     "Your account is not provisioned, access to this service is thus not possible." : "Vaš račun nije uspostavljen, pristup ovoj usluzi nije moguć.",
-    "Login options:" : "Mogućnosti prijave:",
-    "Choose a authentication provider" : "Odaberi davatelja usluge autentifikacije"
+    "Login options:" : "Mogućnosti prijave:"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

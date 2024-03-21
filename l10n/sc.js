@@ -80,7 +80,6 @@ OC.L10N.register(
     "Error" : "Errore",
     "Account not provisioned." : "Contu non generadu.",
     "Your account is not provisioned, access to this service is thus not possible." : "Su contu tuo no est istadu generadu, s'intrada a custu servìtziu no est possìbile.",
-    "Login options:" : "Sèberos pro s'intrada:",
-    "Choose a authentication provider" : "Sèbera unu frunidore de autenticatzione"
+    "Login options:" : "Sèberos pro s'intrada:"
 },
 "nplurals=2; plural=(n != 1);");

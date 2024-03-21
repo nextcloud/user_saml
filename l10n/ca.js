@@ -93,7 +93,6 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "El vostre compte està denegat, per tant l'accés a aquest servei no és possible.",
     "Account not provisioned." : "Compte no subministrat.",
     "Your account is not provisioned, access to this service is thus not possible." : "El vostre compte no està proveït, per tant, l'accés a aquest servei no és possible.",
-    "Login options:" : "Opcions d'inici de sessió:",
-    "Choose a authentication provider" : "Tria un proveïdor d'autenticació"
+    "Login options:" : "Opcions d'inici de sessió:"
 },
 "nplurals=2; plural=(n != 1);");

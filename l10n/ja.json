@@ -82,7 +82,6 @@
     "Error" : "エラー",
     "Account not provisioned." : "アカウントがプロビジョニングされていない",
     "Your account is not provisioned, access to this service is thus not possible." : "アカウントにプロビジョニングされていないため、このサービスへのアクセスはできません。",
-    "Login options:" : "ログインオプション: ",
-    "Choose a authentication provider" : "認証プロバイダーを選択する"
+    "Login options:" : "ログインオプション: "
 },"pluralForm" :"nplurals=1; plural=0;"
 }

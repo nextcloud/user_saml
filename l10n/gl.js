@@ -93,7 +93,6 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "A súa conta está denegada, polo que non é posíbel o acceso a este servizo.",
     "Account not provisioned." : "Conta non aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "A súa conta non esta aprovisionada, polo que non é posíbel o acceso a este servizo.",
-    "Login options:" : "Opcións de acceso",
-    "Choose a authentication provider" : "Escoller un provedor de autenticación"
+    "Login options:" : "Opcións de acceso"
 },
 "nplurals=2; plural=(n != 1);");

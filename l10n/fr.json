@@ -91,7 +91,6 @@
     "Your account is denied, access to this service is thus not possible." : "Votre compte est rejeté, accéder à ce service n'est donc pas possible.",
     "Account not provisioned." : "Compte non approvisionné.",
     "Your account is not provisioned, access to this service is thus not possible." : "Votre compte n'est pas approvisionné, l'accès à ce service n'est donc pas possible.",
-    "Login options:" : "Options de connexion :",
-    "Choose a authentication provider" : "Choisir un fournisseur d'authentification"
+    "Login options:" : "Options de connexion :"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

@@ -81,7 +81,6 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "Ditt konto nekas, tillgång till denna tjänst är därför inte möjlig.",
     "Account not provisioned." : "Konto inte förberett",
     "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto tillhandahålls inte, åtkomst till den här tjänsten är därför inte möjligt.",
-    "Login options:" : "Inloggningsalternativ:",
-    "Choose a authentication provider" : "Välj en autentiseringsleverantör"
+    "Login options:" : "Inloggningsalternativ:"
 },
 "nplurals=2; plural=(n != 1);");

@@ -80,7 +80,6 @@ OC.L10N.register(
     "Error" : "错误",
     "Account not provisioned." : "账号未配置。",
     "Your account is not provisioned, access to this service is thus not possible." : "您的账号未配置，因此无法访问此服务。",
-    "Login options:" : "登录选项：",
-    "Choose a authentication provider" : "选择一个认证提供者"
+    "Login options:" : "登录选项："
 },
 "nplurals=1; plural=0;");

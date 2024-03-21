@@ -93,7 +93,6 @@
     "Account not provisioned." : "尚未設定帳號。",
     "Your account is not provisioned, access to this service is thus not possible." : "尚未設定您的帳號，因此無法存取此服務。",
     "Login options:" : "登入選項：",
-    "Choose a authentication provider" : "選擇驗證提供者",
     "Group Mapping Prefix, default: SAML_" : "群組對應前綴，預設值：SAML_"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
