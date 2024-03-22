@@ -95,6 +95,7 @@ OC.L10N.register(
     "Account not provisioned." : "Налог није добављен.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваш налог није добављен. Због тога није могућ приступ овом сервису.",
     "Login options:" : "Опције пријаве:",
+    "Choose an authentication provider" : "Изаберите пружаоца услуге провере идентитета",
     "Group Mapping Prefix, default: SAML_" : "Префикс мапирања групе, подразумевано: SAML_ "
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

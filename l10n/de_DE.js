@@ -95,6 +95,7 @@ OC.L10N.register(
     "Account not provisioned." : "Konto nicht bereitgestellt.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ihr Konto wird nicht bereitgestellt. Der Zugriff ist daher nicht möglich.",
     "Login options:" : "Anmeldeoptionen:",
+    "Choose an authentication provider" : "Authentifizierungsanbieter wählen",
     "Group Mapping Prefix, default: SAML_" : "Präfix Gruppenzuordnung, Standard: SAML_"
 },
 "nplurals=2; plural=(n != 1);");

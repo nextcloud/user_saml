@@ -95,6 +95,7 @@ OC.L10N.register(
     "Account not provisioned." : "Kontoen er ikke klargjort",
     "Your account is not provisioned, access to this service is thus not possible." : "Din konto er ikke klargjort, tilgang til denne tjenesten er ikke mulig akkurat nå.",
     "Login options:" : "Innloggingsinstillinger:",
+    "Choose an authentication provider" : "Velg en autentiseringstilbyder",
     "Group Mapping Prefix, default: SAML_" : "Prefiks for gruppetilordning, standard: SAML_"
 },
 "nplurals=2; plural=(n != 1);");
