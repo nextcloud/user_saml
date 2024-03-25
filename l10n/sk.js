@@ -95,6 +95,7 @@ OC.L10N.register(
     "Account not provisioned." : "Účet nebol poskytnutý.",
     "Your account is not provisioned, access to this service is thus not possible." : "Váš účet nie je poskytnutý, prístup k tejto službe preto nie je možný.",
     "Login options:" : "Možnosti prihlásenia:",
+    "Choose an authentication provider" : "Vyberte poskytovateľa overovania",
     "Group Mapping Prefix, default: SAML_" : "Skupinový Mapovací Prefix, predvolené: SAML_"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
