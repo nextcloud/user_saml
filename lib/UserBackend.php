@@ -34,13 +34,16 @@ use OCP\IUserBackend;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Server;
+use OCP\User\Backend\ABackend;
+use OCP\User\Backend\ICountUsersBackend;
 use OCP\User\Backend\IGetDisplayNameBackend;
+use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\UserInterface;
 use Psr\Log\LoggerInterface;
 
-class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDisplayNameBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend {
 	/** @var IConfig */
 	private $config;
 	/** @var IURLGenerator */
@@ -168,23 +171,6 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 		// trigger any other initialization
 		$user = $this->userManager->get($uid);
 		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
-	}
-
-	/**
-	 * Check if backend implements actions
-	 * @param int $actions bitwise-or'ed actions
-	 * @return boolean
-	 *
-	 * Returns the supported actions as int to be
-	 * compared with \OC\User\Backend::CREATE_USER etc.
-	 * @since 4.5.0
-	 */
-	public function implementsActions($actions) {
-		$availableActions = \OC\User\Backend::CHECK_PASSWORD;
-		$availableActions |= \OC\User\Backend::GET_DISPLAYNAME;
-		$availableActions |= \OC\User\Backend::GET_HOME;
-		$availableActions |= \OC\User\Backend::COUNT_USERS;
-		return (bool)($availableActions & $actions);
 	}
 
 	/**
