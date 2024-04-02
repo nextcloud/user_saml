@@ -188,6 +188,34 @@ class UserBackend implements IApacheBackend, UserInterface, IUserBackend, IGetDi
 	}
 
 	/**
+	 * Check if the provided token is correct
+	 * @param string $uid The username
+	 * @param string $password The password
+	 * @return string
+	 *
+	 * Check if the password is correct without logging in the user
+	 * returns the user id or false
+	 */
+	public function checkPassword($uid, $password) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('token')
+			->from('user_saml_auth_token')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1000);
+		$result = $qb->execute();
+		$data = $result->fetchAll();
+		$result->closeCursor();
+
+		foreach ($data as $passwords) {
+			if (password_verify($password, $passwords['token'])) {
+				return $uid;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * delete a user
 	 * @param string $uid The username of the user to delete
 	 * @return bool
