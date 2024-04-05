@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.1.3
+
+### Fixed
+
+* [Fix(Login): do not advertise CHECK_PASSWORD capability (user_saml#829)](https://github.com/nextcloud/user_saml/pull/829)
+
 ## 6.1.2
 
 ### Fixed
