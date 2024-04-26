@@ -180,35 +180,32 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 4.5.0
 	 */
 	public function deleteUser($uid) {
-		if ($this->userExistsInDatabase($uid)) {
-			$qb = $this->db->getQueryBuilder();
-			$qb->delete('user_saml_users')
-				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-				->execute();
-			return true;
-		}
-		return false;
+		$qb = $this->db->getQueryBuilder();
+		$affected = $qb->delete('user_saml_users')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->executeStatement();
+		return $affected > 0;
 	}
 
 	/**
 	 * Returns the user's home directory, if home directory mapping is set up.
 	 *
 	 * @param string $uid the username
-	 * @return string
+	 * @return string|bool
 	 */
 	public function getHome(string $uid) {
-		if ($this->userExistsInDatabase($uid)) {
-			$qb = $this->db->getQueryBuilder();
-			$qb->select('home')
-				->from('user_saml_users')
-				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-				->setMaxResults(1);
-			$result = $qb->execute();
-			$users = $result->fetchAll();
-			if (isset($users[0]['home'])) {
-				return $users[0]['home'];
-			}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('home')
+			->from('user_saml_users')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1);
+		$result = $qb->executeQuery();
+		$users = $result->fetchAll();
+		$result->closeCursor();
+		if (isset($users[0]['home'])) {
+			return $users[0]['home'];
 		}
+		return false;
 	}
 
 	/**
@@ -249,16 +246,12 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			return $backend->setDisplayName($uid, $displayName);
 		}
 
-		if ($this->userExistsInDatabase($uid)) {
-			$qb = $this->db->getQueryBuilder();
-			$qb->update('user_saml_users')
-				->set('displayname', $qb->createNamedParameter($displayName))
-				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-				->execute();
-			return true;
-		}
-
-		return false;
+		$qb = $this->db->getQueryBuilder();
+		$affected = $qb->update('user_saml_users')
+			->set('displayname', $qb->createNamedParameter($displayName))
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->executeStatement();
+		return $affected > 0;
 	}
 
 	/**
@@ -271,21 +264,19 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	public function getDisplayName($uid): string {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->getDisplayName($uid);
-		} else {
-			if ($this->userExistsInDatabase($uid)) {
-				$qb = $this->db->getQueryBuilder();
-				$qb->select('displayname')
-					->from('user_saml_users')
-					->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
-					->setMaxResults(1);
-				$result = $qb->execute();
-				$users = $result->fetchAll();
-				if (isset($users[0]['displayname'])) {
-					return $users[0]['displayname'];
-				}
-			}
 		}
 
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('displayname')
+			->from('user_saml_users')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->setMaxResults(1);
+		$result = $qb->executeQuery();
+		$users = $result->fetchAll();
+		$result->closeCursor();
+		if (isset($users[0]['displayname'])) {
+			return $users[0]['displayname'];
+		}
 		return $uid;
 	}
 
