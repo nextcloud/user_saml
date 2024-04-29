@@ -1,18 +1,6 @@
 name: Integration tests
 
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/integration.yml'
-      - 'appinfo/**'
-      - 'lib/**'
-      - 'tests/**'
-      - 'composer.*'
-  push:
-    branches:
-      - main
-      - master
-      - stable*
+on: pull_request
 
 env:
   APP_NAME: user_saml
@@ -20,6 +8,29 @@ env:
   LDAP_CR_NAME: directory
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest-low
+
+    outputs:
+      src: ${{ steps.changes.outputs.src}}
+
+    steps:
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        id: changes
+        continue-on-error: true
+        with:
+          filters: |
+            src:
+              - '.github/workflows/integration.yml'
+              - 'appinfo/**'
+              - 'lib/**'
+              - 'templates/**'
+              - 'tests/**'
+              - 'vendor/**'
+              - '3rdparty/**'
+              - 'composer.json'
+              - 'composer.lock'
+
   integration:
     runs-on: ubuntu-22.04
 
@@ -74,14 +85,6 @@ jobs:
           - 9090:8080/tcp
 
     steps:
-      #- name: Install utilities
-        #run: |
-          #sudo apt update -y
-          #sudo apt install -y git docker.io curl
-
-      #- name: Test sso container
-        #run: curl 'https://localhost:4443/idp/profile/SAML2/Redirect/SSO?SAMLRequest=nZJbj9MwEIXf%2BytWeW%2BduOnNaiuVLZdKpa2awgMvq6kzoZYc23gcWP49TgK7gMQ%2BMJYseezzac6RlwS1dmLThJs545cGKQzuYj3W2pDoLldJ442wQIqEgRpJBCmKzfu94KNUOG%2BDlVYnf8leVgER%2BqCs6WW77So5Hl7vj293hwd%2BzasK8mwOc15Opnk5wSpf5LOx5ItJCrzKJsBheu2lH9FT5KySiE0GPY2owZ2hACbEfsrHw3QxzLJLNhV8Jvj4Uy%2FdRrPKQOjktxAcCcYyPhulcWUiz%2FMxU6Vj0WKlNLJ2es7OWCqPMrCiOPac088IXilTKvP5ZefX%2FhGJd5fLaXg6FpcesvmVyL011NToC%2FRflcQP530%2FXJxNWwn6ZimIeTpPWSTh48jdHAPniDUR8NBGz7oNJCXrDr1sz6JLxa%2F%2FB1VjgBICLNnvpGe2E4foc7c9Wa3k967f1hvrawj%2FjiOLIbcdVQ6r7qloDDmUqlJYJk%2BYjdb2271HCLhKgm8wuWPrQT%2FLnz93%2FQM%3D&RelayState=http%3A%2F%2Flocalhost%3A8080%2Findex.php%2Fapps%2Fuser_saml%2Fsaml%2Flogin&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=ZsTglbAjFrUgyBsUcm1cMOyHV7rzXTr9YM4E38fXiS1mXT5HNfy%2BR4ho6DCYXAuCmcYQwzJ8EiMAFYAHdUQZt8EkCHcV10qvL2hKhkMMxkvRL2%2FYPSdrvit8VfSpwgbOYrZOAu4re5JDU%2F5CWJ2tZpRYfokA0gldS%2BFuodqETGqRthZB9ge7oTmQUUbH7RxlmU8UCiwfWc0RtUNC4P%2FrsVwDS9bUgAzrqOqs7KOoCnrJPn08Fdz2RmoxJapdmBt9BAHxeDce5RPo%2BIoI5c8JDIPcUEuhImWJFXJnoQRIkJLYIIfgoqoj%2Bgtc6Np1%2BOeHJBSzlATZqiOWUIInfarjBg%3D%3D' || sleep 20
-
       - name: Checkout server
         uses: actions/checkout@v3
         with:
@@ -95,7 +98,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@72ae4ccbe57f82bbe08411e84e2130bd4ba1c10f # v2
+        uses: shivammathur/setup-php@c665c7a15b5295c2488ac8a87af9cb806cd72198 # v2
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
@@ -142,3 +145,17 @@ jobs:
       - name: Dump nextcloud.log
         if: always()
         run: cat data/nextcloud.log
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest-low
+    needs: [changes, integration]
+
+    if: always()
+
+    name: integration-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.changes.outputs.src != 'false' && needs.integration.result != 'success' }}; then exit 1; fi
