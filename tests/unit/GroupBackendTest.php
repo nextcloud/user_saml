@@ -27,6 +27,8 @@
  */
 
 use \OCA\User_SAML\GroupBackend;
+use OCP\IDBConnection;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 /**
@@ -35,8 +37,8 @@ use Test\TestCase;
 class GroupBackendTest extends TestCase {
 
 	/** @var GroupBackend */
-	private static $groupBackend;
-	private static $users = [
+	private $groupBackend;
+	private $users = [
 		[
 			'uid' => 'user_saml_integration_test_uid1',
 			'groups' => [
@@ -51,7 +53,7 @@ class GroupBackendTest extends TestCase {
 			]
 		]
 	];
-	private static $groups = [
+	private $groups = [
 		[
 			'gid' => 'user_saml_integration_test_gid1',
 			'saml_gid' => 'user_saml_integration_test_gid1',
@@ -77,36 +79,36 @@ class GroupBackendTest extends TestCase {
 		],
 	];
 
-	public static function setUpBeforeClass(): void {
-		parent::setUpBeforeClass();
-		self::$groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
-		foreach (self::$groups as $group) {
-			self::$groupBackend->createGroup($group['gid'], $group['saml_gid']);
+	public function setUp(): void {
+		parent::setUp();
+		$this->groupBackend = new GroupBackend(\OC::$server->get(IDBConnection::class), $this->createMock(LoggerInterface::class));
+		foreach ($this->groups as $group) {
+			$this->groupBackend->createGroup($group['gid'], $group['saml_gid']);
 		}
-		foreach (self::$users as $user) {
+		foreach ($this->users as $user) {
 			foreach ($user['groups'] as $group) {
-				self::$groupBackend->addToGroup($user['uid'], $group);
+				$this->groupBackend->addToGroup($user['uid'], $group);
 			}
 		}
 	}
 
-	public static function tearDownAfterClass(): void {
-		parent::tearDownAfterClass();
-		self::$groupBackend = new \OCA\User_SAML\GroupBackend(\OC::$server->getDatabaseConnection());
-		foreach (self::$users as $user) {
+	public function tearDown(): void {
+		parent::tearDown();
+		$this->groupBackend = new GroupBackend(\OC::$server->get(IDBConnection::class), $this->createMock(LoggerInterface::class));
+		foreach ($this->users as $user) {
 			foreach ($user['groups'] as $group) {
-				self::$groupBackend->removeFromGroup($user['uid'], $group);
+				$this->groupBackend->removeFromGroup($user['uid'], $group);
 			}
 		}
-		foreach (self::$groups as $group) {
-			self::$groupBackend->deleteGroup($group['gid']);
+		foreach ($this->groups as $group) {
+			$this->groupBackend->deleteGroup($group['gid']);
 		}
 	}
 
 	public function testInGroup() {
-		foreach (self::$groups as $group) {
-			foreach (self::$users as $user) {
-				$result = self::$groupBackend->inGroup($user['uid'], $group['gid']);
+		foreach ($this->groups as $group) {
+			foreach ($this->users as $user) {
+				$result = $this->groupBackend->inGroup($user['uid'], $group['gid']);
 				if (in_array($group['gid'], $user['groups'])) {
 					$this->assertTrue($result, sprintf("User %s should be member of group %s", $user['uid'], $group['gid']));
 				} else {
@@ -117,15 +119,15 @@ class GroupBackendTest extends TestCase {
 	}
 
 	public function testGetGroups() {
-		$groups = self::$groupBackend->getGroups();
-		foreach (self::$groups as $group) {
+		$groups = $this->groupBackend->getGroups();
+		foreach ($this->groups as $group) {
 			$this->assertContains($group['gid'], $groups, sprintf('Group %s should be retrieved', $group['gid']));
 		}
 	}
 
 	public function testGetUserGroups() {
-		foreach (self::$users as $user) {
-			$userGroups = self::$groupBackend->getUserGroups($user['uid']);
+		foreach ($this->users as $user) {
+			$userGroups = $this->groupBackend->getUserGroups($user['uid']);
 			$this->assertCount(count($user['groups']), $userGroups, 'Should retrieve all user groups');
 			foreach ($userGroups as $userGroup) {
 				$this->assertContains($userGroup, $user['groups'], sprintf('Users %s should be member of groups %s', $user['uid'], $userGroup));
@@ -134,15 +136,15 @@ class GroupBackendTest extends TestCase {
 	}
 
 	public function testGroupExists() {
-		foreach (self::$groups as $group) {
-			$result = self::$groupBackend->groupExists($group['saml_gid']);
+		foreach ($this->groups as $group) {
+			$result = $this->groupBackend->groupExists($group['saml_gid']);
 			$this->assertSame($group['saml_gid_exists'], $result, sprintf('Group %s should exist', $group['saml_gid']));
 		}
 	}
 
 	public function testUsersInGroups() {
-		foreach (self::$groups as $group) {
-			$users = self::$groupBackend->usersInGroup($group['gid']);
+		foreach ($this->groups as $group) {
+			$users = $this->groupBackend->usersInGroup($group['gid']);
 			$this->assertCount(count($group['members']), $users, 'Should retrieve all group members');
 			foreach ($users as $user) {
 				$this->assertContains($user, $group['members'], sprintf('User %s should be member of group %s', $user, $group['gid']));
