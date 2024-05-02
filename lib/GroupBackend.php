@@ -38,10 +38,9 @@ use OCP\Group\Backend\IGetDisplayNameBackend;
 use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\IDBConnection;
+use Psr\Log\LoggerInterface;
 
 class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, INamedBackend {
-	/** @var IDBConnection */
-	private $dbc;
 
 	/** @var array  */
 	private $groupCache = [];
@@ -49,8 +48,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	public const TABLE_GROUPS = 'user_saml_groups';
 	public const TABLE_MEMBERS = 'user_saml_group_members';
 
-	public function __construct(IDBConnection $dbc) {
-		$this->dbc = $dbc;
+	public function __construct(
+		protected IDBConnection $dbc,
+		protected LoggerInterface $logger
+	) {
 	}
 
 	public function inGroup($uid, $gid): bool {
@@ -208,8 +209,14 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 				->setValue('saml_gid', $builder->createNamedParameter($samlGid))
 				->executeStatement();
 		} catch (Exception $e) {
-			if ($e->getReason() === \OCP\DB\Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				$result = 0;
+			} else {
+				$this->logger->warning('Failed to create group: ' . $e->getMessage(), [
+					'app' => 'user_saml',
+					'exception' => $e,
+				]);
+				$result = -1;
 			}
 		}
 
