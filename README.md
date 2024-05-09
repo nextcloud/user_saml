@@ -3,6 +3,9 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 # Nextcloud SSO & SAML Authentication
+
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/user_saml)](https://api.reuse.software/info/github.com/nextcloud/user_saml)
+
 :lock: App for authenticating Nextcloud users using SAML
 
 Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)
