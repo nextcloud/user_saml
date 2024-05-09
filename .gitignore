@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 3rdparty/vendor/onelogin/php-saml/certs/
 3rdparty/vendor/onelogin/php-saml/demo1/
 3rdparty/vendor/onelogin/php-saml/demo2/

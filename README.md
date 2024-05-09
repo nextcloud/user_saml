@@ -1,3 +1,7 @@
+<!--
+ - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Nextcloud SSO & SAML Authentication
 :lock: App for authenticating Nextcloud users using SAML
 
