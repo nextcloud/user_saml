@@ -425,6 +425,8 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
+		$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
+
 		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
 					 $this->config->getSystemValue('gss.mode', '') === 'master');
 
@@ -486,10 +488,13 @@ class SAMLController extends Controller {
 				} catch (Error $e) {
 					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
+					$this->eventDispatcher->dispatchTyped(new UserLoggedOutEvent($user));
 				}
 			}
+
 			if (!empty($targetUrl) && !$auth->getLastErrorReason()) {
 				$this->userSession->logout();
+				$this->eventDispatcher->dispatchTyped(new UserLoggedOutEvent($user));
 			}
 		}
 		if (empty($targetUrl)) {
