@@ -45,6 +45,8 @@ use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Server;
+use OCP\User\Events\UserLoggedInEvent;
+use OCP\User\Events\UserLoggedOutEvent;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -94,7 +96,8 @@ class SAMLController extends Controller {
 		UserResolver $userResolver,
 		UserData $userData,
 		ICrypto $crypto,
-		ITrustedDomainHelper $trustedDomainHelper
+		ITrustedDomainHelper $trustedDomainHelper,
+		IEventDispatcher $eventDispatcher
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -109,6 +112,7 @@ class SAMLController extends Controller {
 		$this->userData = $userData;
 		$this->crypto = $crypto;
 		$this->trustedDomainHelper = $trustedDomainHelper;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
