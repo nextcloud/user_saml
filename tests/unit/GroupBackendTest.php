@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-use \OCA\User_SAML\GroupBackend;
+use OCA\User_SAML\GroupBackend;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;

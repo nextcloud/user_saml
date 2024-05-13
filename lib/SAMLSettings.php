@@ -221,8 +221,8 @@ class SAMLSettings {
 	 * @throws Exception
 	 */
 	protected function ensureConfigurationsLoaded(int $idp = -1): void {
-		if (self::LOADED_ALL === $this->configurationsLoadedState
-			|| (self::LOADED_CHOSEN === $this->configurationsLoadedState
+		if ($this->configurationsLoadedState === self::LOADED_ALL
+			|| ($this->configurationsLoadedState === self::LOADED_CHOSEN
 				&& isset($this->configurations[$idp])
 			)
 		) {
