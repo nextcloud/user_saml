@@ -40,6 +40,8 @@ use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
+use OCP\User\Events\UserCreatedEvent;
+use OCP\User\Events\UserDeletedEvent;
 use OCP\UserInterface;
 use Psr\Log\LoggerInterface;
 
@@ -184,6 +186,10 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$affected = $qb->delete('user_saml_users')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->executeStatement();
+
+		$user = $this->userManager->get($uid);
+		$this->eventDispatcher->dispatchTyped(new UserDeletedEvent($user));
+
 		return $affected > 0;
 	}
 
