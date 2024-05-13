@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 app_name=user_saml
 
 project_dir=$(CURDIR)/../$(app_name)
