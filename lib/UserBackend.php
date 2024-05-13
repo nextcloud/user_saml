@@ -103,41 +103,41 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @param array $attributes
 	 */
 	public function createUserIfNotExists(string $uid, array $attributes = []): void {
-		if (!$this->userExistsInDatabase($uid)) {
-			$values = [
-				'uid' => $uid,
-			];
+		if ($this->userExistsInDatabase($uid)) return;
 
-			// Try to get the mapped home directory of the user
-			try {
-				$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
-			} catch (\InvalidArgumentException) {
-				$home = '';
-			}
+		$values = [
+			'uid' => $uid,
+		];
 
-			if ($home !== '') {
-				//if attribute's value is an absolute path take this, otherwise append it to data dir
-				//check for / at the beginning or pattern c:\ resp. c:/
+		// Try to get the mapped home directory of the user
+		try {
+			$home = $this->getAttributeValue('saml-attribute-mapping-home_mapping', $attributes);
+		} catch (\InvalidArgumentException) {
+			$home = '';
+		}
+
+		if ($home !== '') {
+			//if attribute's value is an absolute path take this, otherwise append it to data dir
+			//check for / at the beginning or pattern c:\ resp. c:/
 				if ($home[0] !== '/'
 				   && !(strlen($home) > 3 && ctype_alpha($home[0])
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
-				) {
-					$home = $this->config->getSystemValue('datadirectory',
-						\OC::$SERVERROOT.'/data') . '/' . $home;
-				}
-
-				$values['home'] = $home;
+			) {
+				$home = $this->config->getSystemValue('datadirectory',
+					\OC::$SERVERROOT.'/data') . '/' . $home;
 			}
 
-			$qb = $this->db->getQueryBuilder();
-			$qb->insert('user_saml_users');
-			foreach ($values as $column => $value) {
-				$qb->setValue($column, $qb->createNamedParameter($value));
-			}
-			$qb->execute();
-
-			$this->initializeHomeDir($uid);
+			$values['home'] = $home;
 		}
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->insert('user_saml_users');
+		foreach ($values as $column => $value) {
+			$qb->setValue($column, $qb->createNamedParameter($value));
+		}
+		$qb->execute();
+
+		$this->initializeHomeDir($uid);
 	}
 
 	/**
