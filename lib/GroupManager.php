@@ -195,7 +195,7 @@ class GroupManager {
 
 	protected function createGroupInBackend(string $gid, ?string $originalGid = null): ?IGroup {
 		if ($this->groupManager instanceof PublicEmitter) {
-			$this->groupManager->emit('\OC\Group', 'preCreate', array($gid));
+			$this->groupManager->emit('\OC\Group', 'preCreate', [$gid]);
 		}
 		if (!$this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid)) {
 			return null;
@@ -203,7 +203,7 @@ class GroupManager {
 
 		$group = $this->groupManager->get($gid);
 		if ($this->groupManager instanceof PublicEmitter) {
-			$this->groupManager->emit('\OC\Group', 'postCreate', array($group));
+			$this->groupManager->emit('\OC\Group', 'postCreate', [$group]);
 		}
 
 		return $group;
@@ -218,7 +218,7 @@ class GroupManager {
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
 			''
 		);
-		$strictBackendCheck = '' === $migrationAllowListRaw;
+		$strictBackendCheck = $migrationAllowListRaw === '';
 
 		$migrationAllowList = null;
 		if ($migrationAllowListRaw !== '') {

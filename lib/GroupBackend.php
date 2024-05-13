@@ -198,7 +198,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $users;
 	}
 
-	public function createGroup(string $gid, string $samlGid = null): bool {
+	public function createGroup(string $gid, ?string $samlGid = null): bool {
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
