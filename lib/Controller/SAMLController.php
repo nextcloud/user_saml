@@ -413,6 +413,8 @@ class SAMLController extends Controller {
 			$response->addCookie('_shibsession_', 'authenticated');
 		}
 
+		$this->eventDispatcher->dispatchTyped(new UserLoggedInEvent($user, $user->getUID(), null, false));
+
 		$response->invalidateCookie('saml_data');
 		return $response;
 	}
