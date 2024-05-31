@@ -309,8 +309,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			->set('displayname', $query->createNamedParameter($displayName))
 			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
 		$query->execute();
-        
-        $this->groupCache[$gid] = $displayName;
+
+		$this->groupCache[$gid] = $displayName;
 
 		return true;
 	}
