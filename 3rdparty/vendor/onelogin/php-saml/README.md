@@ -1,10 +1,8 @@
-# OneLogin's SAML PHP Toolkit Compatible with PHP 7.X & 8.X
+# SAML PHP Toolkit Compatible with PHP 7.3,7.4 & 8.X
 
-[![Build Status](https://api.travis-ci.org/onelogin/php-saml.png?branch=master)](http://travis-ci.org/onelogin/php-saml) [![Coverage Status](https://coveralls.io/repos/onelogin/php-saml/badge.png)](https://coveralls.io/r/onelogin/php-saml) [![License](https://poser.pugx.org/onelogin/php-saml/license.png)](https://packagist.org/packages/onelogin/php-saml)
+[![php-saml 4.x-dev package](https://github.com/SAML-Toolkits/php-saml/actions/workflows/php-package.yml/badge.svg?branch=4.x-dev)](https://github.com/SAML-Toolkits/php-saml/actions/workflows/php-package.yml) [![Coverage Status](https://coveralls.io/repos/github/SAML-Toolkits/php-saml/badge.svg?branch=4.x-dev)](https://coveralls.io/github/SAML-Toolkits/php-saml?branch=4.x-dev) ![Packagist Dependency Version (specify version)](https://img.shields.io/packagist/dependency-v/onelogin/php-saml/php?version=4.0.0) [![License](https://poser.pugx.org/onelogin/php-saml/license.png)](https://packagist.org/packages/onelogin/php-saml) ![Packagist Downloads](https://img.shields.io/packagist/dm/onelogin/php-saml) ![Packagist Downloads](https://img.shields.io/packagist/dt/onelogin/php-saml?label=Total%20downloads)
 
 Add SAML support to your PHP software using this library.
-Forget those complicated libraries and use this open source library provided
-and supported by OneLogin Inc.
 
 
 Warning
@@ -15,7 +13,7 @@ This version is compatible with PHP >=7.3 and 8.X and does not include xmlseclib
 Security Guidelines
 -------------------
 
-If you believe you have discovered a security vulnerability in this toolkit, please report it at https://www.onelogin.com/security with a description. We follow responsible disclosure guidelines, and will work with you to quickly find a resolution.
+If you believe you have discovered a security vulnerability in this toolkit, please report it by mail to the maintainer: sixto.martin.garcia+security@gmail.com
 
 
 Why add SAML support to my software?
@@ -45,7 +43,7 @@ since 2002, but lately it is becoming popular due its advantages:
 General description
 -------------------
 
-OneLogin's SAML PHP toolkit let you build a SP (Service Provider) over
+SAML PHP toolkit let you build a SP (Service Provider) over
 your PHP application and connect it to any IdP (Identity Provider).
 
 Supports:
@@ -66,7 +64,7 @@ Key features:
  * **Easy to use** - Programmer will be allowed to code high-level and
    low-level programming, 2 easy to use APIs are available.
  * **Tested** - Thoroughly tested.
- * **Popular** - OneLogin's customers use it. Many PHP SAML plugins uses it.
+ * **Popular** - Developers use it. Many PHP SAML plugins uses it.
 
 Integrate your PHP toolkit at OneLogin using this guide: [https://developers.onelogin.com/page/saml-toolkit-for-php](https://developers.onelogin.com/page/saml-toolkit-for-php)
 
@@ -84,17 +82,17 @@ Installation
 
 #### Option 1. clone the repository from  github ####
 
-git clone git@github.com:onelogin/php-saml.git
+git clone git@github.com:SAML-Toolkits/php-saml.git
 
-Then pull the 3.X.X branch/tag
+Then pull the 4.X.X branch/tag
 
 #### Option 2. Download from github ####
 
 The toolkit is hosted on github. You can download it from:
 
- * https://github.com/onelogin/php-saml/releases
+ * https://github.com/SAML-Toolkits/php-saml/releases
 
-Search for 3.X.X releases
+Search for 4.X.X releases
 
 Copy the core of the library inside the php application. (each application has its
 structure so take your time to locate the PHP SAML toolkit in the best place).
@@ -126,7 +124,7 @@ Compatibility
 
 This 4.X.X supports PHP >=7.3 .
 
-It is not compatible with PHP5.6 or PHP7.0.
+It is not compatible with PHP5.6 or PHP7.0, PHP7.1 or PHP7.2
 
 Namespaces
 ----------
@@ -173,7 +171,7 @@ In order to avoid them, the SP can keep a list of SAML Messages or Assertion IDs
 to be stored the amount of time of the SAML Message life time, so
 we don't need to store all processed message/assertion Ids, but the most recent ones.
 
-The OneLogin_Saml2_Auth class contains the [getLastRequestID](https://github.com/onelogin/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L657), [getLastMessageId](https://github.com/onelogin/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L762) and [getLastAssertionId](https://github.com/onelogin/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L770) methods to retrieve the IDs
+The OneLogin\Saml2\Auth class contains the [getLastRequestID](https://github.com/SAML-Toolkits/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L657), [getLastMessageId](https://github.com/SAML-Toolkits/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L762) and [getLastAssertionId](https://github.com/SAML-Toolkits/php-saml/blob/b8214b74dd72960fa6aa88ab454667c64cea935c/src/Saml2/Auth.php#L770) methods to retrieve the IDs
 
 Checking that the ID of the current Message/Assertion does not exists in the list of the ones already processed will prevent reply
 attacks.
@@ -184,7 +182,7 @@ Getting started
 
 ### Knowing the toolkit ###
 
-The new OneLogin SAML Toolkit contains different folders (`certs`, `endpoints`,
+The new SAML Toolkit contains different folders (`certs`, `endpoints`,
 `lib`, `demo`, etc.) and some files.
 
 Let's start describing the folders:
@@ -310,7 +308,7 @@ $settings = array(
             // URL Location where the <Response> from the IdP will be returned
             'url' => '',
             // SAML protocol binding to be used when returning the <Response>
-            // message. OneLogin Toolkit supports this endpoint for the
+            // message. SAML Toolkit supports this endpoint for the
             // HTTP-POST binding only.
             'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
         ),
@@ -336,7 +334,7 @@ $settings = array(
             // URL Location where the <Response> from the IdP will be returned
             'url' => '',
             // SAML protocol binding to be used when returning the <Response>
-            // message. OneLogin Toolkit supports the HTTP-Redirect binding
+            // message. SAML Toolkit supports the HTTP-Redirect binding
             // only for this endpoint.
             'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
         ),
@@ -641,7 +639,7 @@ After that line we will be able to use the classes (and their methods) of the
 toolkit (because the external and the Saml2 libraries files are loaded).
 
 That toolkit depends on [xmlseclibs](https://github.com/robrichards/xmlseclibs) 3.X.X branch,
-you will need to get its code and place on your project and reuse the _toolkit_loader.php 
+you will need to get its code and place on your project and reuse the _toolkit_loader.php
 file to include xmlseclibs as well.
 
 
@@ -1230,7 +1228,7 @@ Lets describe now the classes and methods of the SAML2 library.
 
 ##### OneLogin\Saml2\Auth - Auth.php #####
 
-Main class of OneLogin PHP Toolkit
+Main class of SAML PHP Toolkit
 
  * `Auth` - Initializes the SP SAML instance
  * `login` - Initiates the SSO process.
@@ -1259,6 +1257,9 @@ Main class of OneLogin PHP Toolkit
  * `getLastRequestID` - Gets the ID of the last AuthNRequest or LogoutRequest generated by the Service Provider.
  * `getLastRequestXML` - Returns the most recently-constructed/processed XML SAML request (AuthNRequest, LogoutRequest)
  * `getLastResponseXML` - Returns the most recently-constructed/processed XML SAML response (SAMLResponse, LogoutResponse). If the SAMLResponse had an encrypted assertion, decrypts it.
+* `buildAuthnRequest` - Creates an AuthnRequest
+* `buildLogoutRequest` - Creates an LogoutRequest
+* `buildLogoutResponse` - Constructs a Logout Response object (Initialize params from settings and if provided load the Logout Response).
 
 
 ##### OneLogin\Saml2\AuthnRequest - `AuthnRequest.php` #####
@@ -1327,7 +1328,7 @@ SAML 2 Logout Response class
 
 ##### OneLogin\Saml2\Settings - `Settings.php` #####
 
-Configuration of the OneLogin PHP Toolkit
+Configuration of the SAML PHP Toolkit
 
  * `Settings` -  Initializes the settings: Sets the paths of
    the different folders and Loads settings info from settings file or
@@ -1439,7 +1440,7 @@ Demos require that SP and IdP are well configured before test it.
 
 ### SP setup ###
 
-The Onelogin's PHP Toolkit allows you to provide the settings info in two ways:
+The SAML PHP Toolkit allows you to provide the settings info in two ways:
 
  * Use a `settings.php` file that we should locate at the base folder of the
    toolkit.
@@ -1514,7 +1515,7 @@ must be done.
 
 ### SP setup ###
 
-The Onelogin's PHP Toolkit allows you to provide the settings info in two ways:
+The SAML PHP Toolkit allows you to provide the settings info in two ways:
 
  * Use a `settings.php` file that we should locate at the base folder of the
    toolkit.
@@ -1582,4 +1583,3 @@ demo1, only changes the targets.
     to the IdP (to the SLS endpoint of the IdP).The IdP receives the Logout
     Response, process it and close the session at of the IdP. Notice that the
     SLO Workflow starts and ends at the IdP.
-
