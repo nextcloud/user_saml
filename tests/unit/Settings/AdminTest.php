@@ -242,14 +242,14 @@ class AdminTest extends \Test\TestCase {
 				2 => 'Provider 2',
 			]);
 		$this->config
-			->expects($this->exactly(4)) # mode + three global values
+			->expects($this->exactly(3)) # mode + three global values
 			->method('getAppValue')
 			->withConsecutive(
 				['user_saml', 'type'],
 				['user_saml', 'general-require_provisioned_account'],
 				['user_saml', 'general-allow_multiple_user_back_ends'],
 			)
-			->willReturnOnConsecutiveCalls('saml', 0, 0, '');
+			->willReturnOnConsecutiveCalls('saml', '0', '0');
 		$this->defaults
 			->expects($this->any())
 			->method('getName')
@@ -257,8 +257,8 @@ class AdminTest extends \Test\TestCase {
 
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
-		$params['general']['require_provisioned_account']['value'] = 0;
-		$params['general']['allow_multiple_user_back_ends']['value'] = '';
+		$params['general']['require_provisioned_account']['value'] = '0';
+		$params['general']['allow_multiple_user_back_ends']['value'] = '0';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());

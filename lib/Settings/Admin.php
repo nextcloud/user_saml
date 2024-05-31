@@ -192,7 +192,7 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', 0)
+				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
 			];
 			$generalSettings['idp0_display_name'] = [
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
@@ -204,7 +204,7 @@ class Admin implements ISettings {
 				'type' => 'checkbox',
 				'hideForEnv' => true,
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends')
+				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0')
 			];
 		}
 
