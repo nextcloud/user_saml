@@ -110,31 +110,6 @@ if (!$cli &&
 	$redirectSituation = true;
 }
 
-// If a request to OCS or remote.php is sent by the official desktop clients it can
-// be intercepted as it supports SAML. All other clients don't yet and thus we
-// require the usage of application specific passwords there.
-//
-// However, it is an opt-in setting to use SAML for the desktop clients. For better
-// UX (users don't have to reauthenticate) we default to disallow the access via
-// SAML at the moment.
-$useSamlForDesktopClients = $config->getAppValue('user_saml', 'general-use_saml_auth_for_desktop', '0');
-if ($useSamlForDesktopClients === '1') {
-	$currentUrl = substr(explode('?', $request->getRequestUri(), 2)[0], strlen(\OC::$WEBROOT));
-	if (substr($currentUrl, 0, 12) === '/remote.php/' || substr($currentUrl, 0, 5) === '/ocs/') {
-		if (!$userSession->isLoggedIn() && $request->isUserAgent([\OCP\IRequest::USER_AGENT_CLIENT_DESKTOP])) {
-			$redirectSituation = true;
-
-			if (preg_match('/^.*\/(\d+\.\d+\.\d+).*$/', $request->getHeader('USER_AGENT'), $matches) === 1) {
-				$versionstring = $matches[1];
-
-				if (version_compare($versionstring, '2.5.0', '>=') === true) {
-					$redirectSituation = false;
-				}
-			}
-		}
-	}
-}
-
 $multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
 $configuredIdps = $samlSettings->getListOfIdps();
 $showLoginOptions = ($multipleUserBackEnds || count($configuredIdps) > 1) && $type === 'saml';
