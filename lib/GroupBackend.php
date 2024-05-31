@@ -79,6 +79,9 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			$query->where($query->expr()->iLike('gid', $query->createNamedParameter(
 				'%' . $this->dbc->escapeLikeParameter($search) . '%'
 			)));
+			$query->orWhere($query->expr()->iLike('displayname', $query->createNamedParameter(
+				'%' . $this->dbc->escapeLikeParameter($search) . '%'
+			))); 
 		}
 
 		if ((int)$limit > 0) {
