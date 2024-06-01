@@ -47,7 +47,6 @@ OC.L10N.register(
     "Unspecified" : "Nicht spezifiziert",
     "Windows domain qualified name" : "Windows-Domäne qualifizierter Name",
     "X509 subject name" : "X509-Subjektname ",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML-Autorisierung für die %s Desktop-Clients nutzen (erfordert eine Neu-Autorisierung der Benutzer)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Optional den Namen des Identitätsanbieters anzeigen (Standard: \"SSO- & SAML-Anmeldung\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Die Verwendung von mehreren Benutzerverwaltungen erlauben (z. B. LDAP)",
     "SSO & SAML authentication" : "SSO & SAML-Autorisierung",

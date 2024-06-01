@@ -45,7 +45,6 @@
     "Unspecified" : "غير محدد",
     "Windows domain qualified name" : "اسم نطاق ويندوز المؤهل",
     "X509 subject name" : "اسم موضوع معيار X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "استخدام مصادقة  SAML  لـ%sعملاء سطح المكتب (تتطلب إعادة مصادقة المستخدم)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "اسم العرض الاختياري لمزود الهوية (الافتراضي: \"تسجيل الدخول عبر تسجيل الدخول الأحادي \"SSO \" و SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "السماح باستخدام واجهات مستخدم متعددة (على سبيل المثال خادوم بروتوكول LDAP)",
     "SSO & SAML authentication" : "المصادقة عبر SSO و SAML",

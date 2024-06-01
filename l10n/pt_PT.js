@@ -22,7 +22,6 @@ OC.L10N.register(
     "Persistent" : "Persistente",
     "Unspecified" : "Não especificado",
     "Windows domain qualified name" : "Nome de Domínio do Windows",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar autenticação SAML para os clientes desktop %s (é necessária a nova autenticação do utilizador)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir a utilização de vários métodos de autenticação de utilizadores (ex. LDAP)",
     "SSO & SAML authentication" : "Autenticação SSO e SAML",
     "Authenticate using single sign-on" : "Autenticar utilizando Inicio de Sessão único",

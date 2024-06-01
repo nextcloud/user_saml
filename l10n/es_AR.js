@@ -18,7 +18,6 @@ OC.L10N.register(
     "Attribute to map the UID to." : "Atributo a mapear al UID.",
     "Attribute to map the displayname to." : "Atributo a mapear a displayname. ",
     "Attribute to map the email address to." : "Atributo a mapear a email address.",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Favor de usar autenticación SAML para los %s clientes de escritorio (se requiere volver a autenticar)",
     "SSO & SAML authentication" : "Autenticación SSO & SAML",
     "Open documentation" : "Abrir documentación",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Favor de seleccionar si usted desdea autenticarse usando el proveedor integrado SAML de Nextcloud o si desdea autenticarse contra una variable de ambiente.  ",

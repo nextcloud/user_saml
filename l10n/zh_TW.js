@@ -47,7 +47,6 @@ OC.L10N.register(
     "Unspecified" : "未指定",
     "Windows domain qualified name" : "Windows 網域限定名稱",
     "X509 subject name" : "X509 主體名稱",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "為 %s 桌面客戶端使用 SAML 認證（需要使用者重新驗證）",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "身份提供者的選擇性顯示名稱（預設：「SSO & SAML 登入」）",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "允許使用多個使用者後端（例如 LDAP）",
     "SSO & SAML authentication" : "SSO & SAML 驗證",

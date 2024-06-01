@@ -44,7 +44,6 @@
     "Unspecified" : "Sen especificar",
     "Windows domain qualified name" : "Nome cualificado do dominio de Windows",
     "X509 subject name" : "Nome do suxeito X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Usar a autenticación SAML para os clientes de escritorio %s (precisa unha nova autenticación do usuario)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nome para amosar opcional do provedor de identidade (por omisión: «rexistro SSO e SAML»)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Permitir o uso de várias infraestruturas de usuario (p. ex. LDAP) ",
     "SSO & SAML authentication" : "Autenticación SSO e SAML",

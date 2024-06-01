@@ -44,7 +44,6 @@
     "Unspecified" : "Nem meghatározott",
     "Windows domain qualified name" : "Windows tartományi név",
     "X509 subject name" : "X509 tárgy neve",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "SAML hitelesítés használata a(z) %s asztali klienseihez (a felhasználók ismételt hitelesítését igényli)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "A személyazonossági szolgáltató nem kötelező megjelenítendő neve (alapértelmezett: „SSO és SAML bejelentkezés”)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Megengedi a több felhasználói háttérszolgáltatás használatát (például LDAP)",
     "SSO & SAML authentication" : "SSO és SAML hitelesítés",

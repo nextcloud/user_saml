@@ -39,7 +39,6 @@
     "Unspecified" : "Ongedefinieerd",
     "Windows domain qualified name" : "Windows domain qualified name",
     "X509 subject name" : "X509 onderwerpnaam",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Gebruik SAML authenticatie voor de %s desktop clients (vereist gebruiker herauthenticatie)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Optionele weergave naam van de identity provider (standaard: \"SSO & SAML log-in\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Sta het gebruik van meerdere gebruikers back-ends toe (bijvoorbeeld LDAP)",
     "SSO & SAML authentication" : "SSO & SAML authenticatie",

@@ -47,7 +47,6 @@ OC.L10N.register(
     "Unspecified" : "Неодређено",
     "Windows domain qualified name" : "Квалификовано име Windows домена",
     "X509 subject name" : "X509 име субјекта",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Користи SAML проверу идентитета за %s десктоп клијенте (захтева поновну проверу идентитета)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Опциони натпис за опслужиоца идентитета (подразумевано: „SSO & SAML log in“)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Дозволи коришћење више позадинских механизама (нпр. LDAP)",
     "SSO & SAML authentication" : "SSO & SAML провера идентитета",

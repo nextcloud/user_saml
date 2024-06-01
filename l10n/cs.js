@@ -47,7 +47,6 @@ OC.L10N.register(
     "Unspecified" : "Neurčeno",
     "Windows domain qualified name" : "Úplný název domény Windows",
     "X509 subject name" : "Název subjektu pro X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Použít SAML pro %s desktopové klienty (vyžaduje, aby se uživatele znovu přihlásil)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Volitelný zobrazovaný název poskytovatele identity (výchozí: „SSO a SAML přihlášení“)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Povolit použití vícero podpůrných vrstev pro uživatelské účty (např. LDAP)",
     "SSO & SAML authentication" : "SSO a SAML ověření",

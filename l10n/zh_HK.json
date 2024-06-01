@@ -45,7 +45,6 @@
     "Unspecified" : "未明確的",
     "Windows domain qualified name" : "Windows域限定名稱",
     "X509 subject name" : "X509主體名稱",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "為 %s 桌面客戶端使用 SAML 認證（需要重新驗證用戶）",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "可選的身分提供者的顯示名稱（默認：\"SSO及SAML登入\"）",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "允許使用多個用戶後端（例如 LDAP）",
     "SSO & SAML authentication" : "SSO & SAML 認證",

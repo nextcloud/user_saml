@@ -40,7 +40,6 @@
     "Unspecified" : "指定なし",
     "Windows domain qualified name" : "Windowsドメイン修飾名",
     "X509 subject name" : "X509の件名",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s デスクトップクライアントにSAML認証を使用する（ユーザーの再認証が必要）",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "IDプロバイダーのオプションの表示名（デフォルト： \"SSO＆SAMLログイン\"）",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "複数のユーザーのバックエンド（LDAPなど）の使用を許可する",
     "SSO & SAML authentication" : "SSOとSAML認証",

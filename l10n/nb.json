@@ -45,7 +45,6 @@
     "Unspecified" : "Uspesifisert",
     "Windows domain qualified name" : "Windows-domenekvalifisert navn",
     "X509 subject name" : "X509 emne navn",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Bruk SAML-auth for %s-skrivebordsklienter (krever ny autentisering av brukere)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Valgfritt visningsnavn for identitetsleverandøren (standard: \"SSO & SAML logg inn\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Tillat bruk av flere brukerbakgrunner (f.eks. LDAP)",
     "SSO & SAML authentication" : "SSO- og SAML-autentisering",

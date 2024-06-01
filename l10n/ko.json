@@ -32,7 +32,6 @@
     "Attribute to map the users groups to." : "사용자 그룹을 매핑할 속성입니다.",
     "Email address" : "이메일 주소",
     "Encrypted" : "암호화",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s 데스크톱 클라이언트에 SAML 인증을 사용합니다(사용자 재인증이 필요함)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "인증 공급자 표시 이름(선택 사항, 기본값: \"SSO 및 SAML 로그인\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "다중 사용자 백엔드 허용(예: LDAP)",
     "SSO & SAML authentication" : "SSO 및 SAML 인증",

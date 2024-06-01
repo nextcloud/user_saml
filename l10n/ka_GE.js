@@ -19,7 +19,6 @@ OC.L10N.register(
     "Attribute to map the UID to." : "ატრიბუტი რომელსაც მიებმევა UID.",
     "Attribute to map the displayname to." : "ატრიბუტი რომელსაც მიებმევა დისპლეის სახელი.",
     "Attribute to map the email address to." : "ატრიბუტი რომელსაც მიებმევა ელ-ფოსტის მისამართი.",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "გამოიყენეთ SAML აუტენტიფიკაცია %s დესკტოპ კლიენტებისთვის (საჭიროებს ხელახალ აუტენტიფიკაციას)",
     "SSO & SAML authentication" : "SSO და SAML აუტენტიფიკაცია",
     "Open documentation" : "ღია დოკუმენტაცია",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "გთხოვთ აირჩიოთ აუტენტიფიკაცია გსურთ Nextcloud-ში ჩაშენებული SAML მომწოდებელით თუ გსურთ აუტენტიფიკაცია სხვა გარემოს ცვლადის წინააღმდეგ.",

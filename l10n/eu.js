@@ -43,7 +43,6 @@ OC.L10N.register(
     "Unspecified" : "Zehaztu gabea",
     "Windows domain qualified name" : "Windows domeinu-izen kualifikatua",
     "X509 subject name" : "X509 gaia",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Erabili SAML autentifikazioa mahaigaineko %s bezeroentzat (erabiltzaileak berriro autentifikatzea eskatzen du)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Identitate-hornitzailearen aukerako bistaratze-izena (lehenetsia: \"SSO eta SAML saioa hasi\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Baimendu erabiltzaile-atzealde anitzen erabilpena (adib. LDAP)",
     "SSO & SAML authentication" : "SSO eta SAML autentifikazioa",

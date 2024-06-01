@@ -38,7 +38,6 @@
     "Unspecified" : "Απροσδιόριστος",
     "Windows domain qualified name" : "Χαρακτηριστικό όνομα τομέα των Windows",
     "X509 subject name" : "Όνομα θέματος X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Χρησιμοποιείστε πιστοποίηση SAML για τους %s σταθερούς υπολογιστές (απαιτείται έλεγχος επαλήθευσης από τον χρήστη)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Προαιρετικά εμφάνιση ονόματος ταυτότητας παρόχου (προεπιλογή:\"SSO & SAML\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Επιτρέψτε τη χρήση εφαρμογών παρασκηνίου (π.χ. LDAP)",
     "SSO & SAML authentication" : "Πιστοποίηση SSO & SAML",

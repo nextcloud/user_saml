@@ -37,7 +37,6 @@
     "Unspecified" : "Nedoločeno",
     "Windows domain qualified name" : "Ime domene Windows",
     "X509 subject name" : "Ime predmeta X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Uporabi overitev SAML za odjemalec %s (zahteva ponovno overitev uporabnika)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Izbirno prikazno ime ponudnika istovetnosti (privzeto: »Prijava SSO in SAML«)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Dovoli uporabo več uporabniških računov (na primer LDAP)",
     "SSO & SAML authentication" : "Overitev SSO in SAML",

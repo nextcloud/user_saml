@@ -44,7 +44,6 @@
     "Unspecified" : "Неуточнен",
     "Windows domain qualified name" : "Квалифицирано име на домейн на Windows",
     "X509 subject name" : "Име на субекта X509",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "Използване на SAML удостоверяване за %s настолни клиенти (изисква повторно удостоверяване на потребителя)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Име на доставчика на самоличност, за показванепо избор (по подразбиране: „SSO & SAML вписване“)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Разрешаване на използването на множество потребителски сървъри (напр. LDAP)",
     "SSO & SAML authentication" : "SSO и SAML удостоверяване",

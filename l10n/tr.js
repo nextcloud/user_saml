@@ -47,7 +47,6 @@ OC.L10N.register(
     "Unspecified" : "Belirtilmemiş",
     "Windows domain qualified name" : "Windows etki alanı tam adı",
     "X509 subject name" : "X509 ögesi adı",
-    "Use SAML auth for the %s desktop clients (requires user re-authentication)" : "%s masaüstü istemcileri için SAML kimlik doğrulaması kullanılsın (kullanıcının kimliğini yeniden doğrulaması gerekir)",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "İsteğe bağlı olarak görüntülenecek kimlik hizmeti sağlayıcısının adı (varsayılan: \"SSO ve SAML oturum açma\")",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Birden çok kullanıcı arka yüzü kullanılabilsin (LDAP gibi)",
     "SSO & SAML authentication" : "SSO ve SAML kimlik doğrulaması",
