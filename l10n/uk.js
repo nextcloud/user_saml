@@ -55,6 +55,7 @@ OC.L10N.register(
     "Error" : "Помилка",
     "Access denied." : "Доступ заборонено.",
     "Account not provisioned." : "Обліковий запис не надано.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Ваш обліковий запис не надано, тому доступ до цієї послуги неможливий."
+    "Your account is not provisioned, access to this service is thus not possible." : "Ваш обліковий запис не надано, тому доступ до цієї послуги неможливий.",
+    "Choose an authentication provider" : "Виберіть постачальника послуг автентифікації"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
