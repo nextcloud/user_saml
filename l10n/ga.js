@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Saved" : "Shábháil",
     "Email address" : "Seoladh ríomhphoist",
+    "Encrypted" : "Criptithe",
     "Open documentation" : "Doiciméadú oscailte",
     "General" : "Ginearálta",
     "Error" : "Earráid"
