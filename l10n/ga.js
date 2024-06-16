@@ -5,6 +5,7 @@ OC.L10N.register(
     "Email address" : "Seoladh ríomhphoist",
     "Encrypted" : "Criptithe",
     "Open documentation" : "Doiciméadú oscailte",
+    "Global settings" : "Socruithe domhanda",
     "General" : "Ginearálta",
     "Error" : "Earráid"
 },
