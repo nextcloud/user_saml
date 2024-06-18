@@ -34,6 +34,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Atributo para asignar o cartafol dos usuarios.",
     "Attribute to map the users groups to." : "Atributo para asignar os grupos de usuarios.",
     "Attribute to map the users MFA login status" : "Atributo para asignar o estado do acceso MFA dos usuarios",
+    "Group Mapping Prefix, default: %s" : "Prefixo de asignación de grupos, predeterminado: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Rexeitar os membros destes grupos. Este axuste ten prioridade sobre as pertenzas necesarias.",
     "Group A, Group B, …" : "Grupo A, Grupo B, …",
     "Require membership in these groups, if any." : "Precisar a pertenza a estes grupos, se é o caso.",
@@ -92,6 +93,8 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "A súa conta está denegada, polo que non é posíbel o acceso a este servizo.",
     "Account not provisioned." : "Conta non aprovisionada.",
     "Your account is not provisioned, access to this service is thus not possible." : "A súa conta non esta aprovisionada, polo que non é posíbel o acceso a este servizo.",
-    "Login options:" : "Opcións de acceso"
+    "Login options:" : "Opcións de acceso",
+    "Choose an authentication provider" : "Escoller un provedor de autenticación",
+    "Group Mapping Prefix, default: SAML_" : "Prefixo de asignación de grupos, predeterminado: SAML_"
 },
 "nplurals=2; plural=(n != 1);");
