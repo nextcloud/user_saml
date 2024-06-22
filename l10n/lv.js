@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Saglabāts",
     "X.509 certificate of the Service Provider" : "X.509 sertifikātu no pakalpojumu sniedzēja",
     "Private key of the Service Provider" : "Privātā atslēga no pakalpojumu sniedzēja",
+    "Email address" : "E-pasta adrese",
     "SSO & SAML authentication" : "SSO & SAML autentifikācija",
     "Open documentation" : "Atvērt dokumentāciju",
     "Use built-in SAML authentication" : "Izmantot iebūvēto SAML autentifikācija",
