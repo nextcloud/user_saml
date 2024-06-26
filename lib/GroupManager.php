@@ -11,15 +11,15 @@ use OCA\User_SAML\Exceptions\NonMigratableGroupException;
 use OCA\User_SAML\Jobs\MigrateGroups;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\Events\BeforeGroupCreatedEvent;
+use OCP\Group\Events\BeforeGroupDeletedEvent;
+use OCP\Group\Events\GroupCreatedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
-use OCP\Group\Events\BeforeGroupCreatedEvent;
-use OCP\Group\Events\BeforeGroupDeletedEvent;
-use OCP\Group\Events\GroupCreatedEvent;
-use OCP\Group\Events\GroupDeletedEvent;
 
 class GroupManager {
 	public const LOCAL_GROUPS_CHECK_FOR_MIGRATION = 'localGroupsCheckForMigration';
