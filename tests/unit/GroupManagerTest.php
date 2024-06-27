@@ -11,6 +11,11 @@ use OC\Group\Manager;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\Events\BeforeGroupCreatedEvent;
+use OCP\Group\Events\BeforeGroupDeletedEvent;
+use OCP\Group\Events\GroupCreatedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -42,6 +47,7 @@ class GroupManagerTest extends TestCase {
 		$this->groupManager = $this->createMock(Manager::class);
 		$this->ownGroupBackend = $this->createMock(GroupBackend::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->jobList = $this->createMock(JobList::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
 		$this->ownGroupManager = $this->createMock(GroupManager::class);
@@ -55,6 +61,7 @@ class GroupManagerTest extends TestCase {
 					$this->groupManager,
 					$this->ownGroupBackend,
 					$this->config,
+					$this->eventDispatcher,
 					$this->jobList,
 					$this->settings
 				])
@@ -66,6 +73,7 @@ class GroupManagerTest extends TestCase {
 				$this->groupManager,
 				$this->ownGroupBackend,
 				$this->config,
+				$this->eventDispatcher,
 				$this->jobList,
 				$this->settings
 			);
@@ -163,10 +171,16 @@ class GroupManagerTest extends TestCase {
 			->expects($this->once())
 			->method('countUsersInGroup')
 			->willReturn(0);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new BeforeGroupDeletedEvent($groupA));
 		// assert group is deleted
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('deleteGroup');
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new GroupDeletedEvent($groupA));
 
 		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
@@ -216,12 +230,18 @@ class GroupManagerTest extends TestCase {
 		$this->groupManager
 			->method('get')
 			->willReturnOnConsecutiveCalls(null, $groupB);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new BeforeGroupCreatedEvent('groupB'));
 		// assert group is created
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupB', 'groupB')
 			->willReturn(true);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new GroupCreatedEvent($groupB));
 		// assert user gets added to group
 		$groupB->expects($this->once())
 			->method('addUser')
@@ -264,12 +284,18 @@ class GroupManagerTest extends TestCase {
 		// assert the default group prefix is configured
 		$this->settings
 			->method('get');
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new BeforeGroupCreatedEvent('groupC'));
 		// assert group is created with prefix + gid
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupC', 'groupC')
 			->willReturn(true);
+		$this->eventDispatcher->expects($this->once())
+			->method('dispatchTyped')
+			->with(new GroupCreatedEvent($groupC));
 		// assert user gets added to group
 		$groupC->expects($this->once())
 			->method('addUser')
