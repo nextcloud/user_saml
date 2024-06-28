@@ -30,6 +30,11 @@ class GetMetadataTest extends \Test\TestCase {
 		$inputInterface = $this->createMock(InputInterface::class);
 		$outputInterface = $this->createMock(OutputInterface::class);
 
+		$inputInterface->expects($this->any())
+			->method('getArgument')
+			->with('idp')
+			->willReturn('1');
+
 		$this->samlSettings->expects($this->any())
 			->method('getOneLoginSettingsArray')
 			->willReturn([
@@ -47,9 +52,12 @@ class GetMetadataTest extends \Test\TestCase {
 				]
 			]);
 
-		$outputInterface->expects($this->once())->method('writeln')
+		$outputInterface->expects($this->once())
+			->method('writeln')
 			->with($this->stringContains('md:EntityDescriptor'));
 
-		$this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
+		$result = $this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
+
+		$this->assertEquals(0, $result);
 	}
 }

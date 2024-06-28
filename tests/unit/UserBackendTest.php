@@ -106,7 +106,8 @@ class UserBackendTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
+			->willReturnCallback(function (string $appId, string $key, string $default) {
+				// Unused parameters are intentionally kept for clarity
 				return $default;
 			});
 
@@ -138,7 +139,8 @@ class UserBackendTest extends TestCase {
 		$this->getMockedBuilder();
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
+			->willReturnCallback(function (string $appId, string $key, string $default) {
+				// Unused parameters are intentionally kept for clarity
 				return $default;
 			});
 
@@ -155,26 +157,24 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
+		// Replace at() matcher with willReturnCallback to avoid deprecation warning
 		$this->config
-			->expects($this->at(0))
 			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
-			->willReturn('email');
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
-			->willReturn('displayname');
-		$this->config
-			->expects($this->at(2))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
-			->willReturn('quota');
-		$this->config
-			->expects($this->at(3))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-group_mapping', '')
-			->willReturn('groups');
+			->willReturnCallback(function ($appId, $key, $default) {
+				if ($appId === 'user_saml') {
+					switch ($key) {
+						case 'saml-attribute-mapping-email_mapping':
+							return 'email';
+						case 'saml-attribute-mapping-displayName_mapping':
+							return 'displayname';
+						case 'saml-attribute-mapping-quota_mapping':
+							return 'quota';
+						case 'saml-attribute-mapping-group_mapping':
+							return 'groups';
+					}
+				}
+				return $default;
+			});
 
 		$this->userManager
 			->expects($this->once())
@@ -221,7 +221,8 @@ class UserBackendTest extends TestCase {
 
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
+			->willReturnCallback(function (string $appId, string $key, string $default) {
+				// Unused $appId parameter is intentionally kept for clarity
 				switch ($key) {
 					case 'saml-attribute-mapping-email_mapping':
 						return 'email';
