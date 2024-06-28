@@ -171,16 +171,16 @@ class GroupManagerTest extends TestCase {
 			->expects($this->once())
 			->method('countUsersInGroup')
 			->willReturn(0);
-		$this->eventDispatcher->expects($this->once())
-			->method('dispatchTyped')
-			->with(new BeforeGroupDeletedEvent($groupA));
 		// assert group is deleted
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('deleteGroup');
-		$this->eventDispatcher->expects($this->once())
+		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->with(new GroupDeletedEvent($groupA));
+			->withConsecutive(
+				[new BeforeGroupDeletedEvent($groupA)],
+				[new GroupDeletedEvent($groupA)]
+			);
 
 		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
@@ -230,18 +230,18 @@ class GroupManagerTest extends TestCase {
 		$this->groupManager
 			->method('get')
 			->willReturnOnConsecutiveCalls(null, $groupB);
-		$this->eventDispatcher->expects($this->once())
-			->method('dispatchTyped')
-			->with(new BeforeGroupCreatedEvent('groupB'));
 		// assert group is created
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupB', 'groupB')
 			->willReturn(true);
-		$this->eventDispatcher->expects($this->once())
+		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->with(new GroupCreatedEvent($groupB));
+			->withConsecutive(
+				[new BeforeGroupCreatedEvent('SAML_groupB')],
+				[new GroupCreatedEvent($groupB)]
+			);
 		// assert user gets added to group
 		$groupB->expects($this->once())
 			->method('addUser')
@@ -284,18 +284,18 @@ class GroupManagerTest extends TestCase {
 		// assert the default group prefix is configured
 		$this->settings
 			->method('get');
-		$this->eventDispatcher->expects($this->once())
-			->method('dispatchTyped')
-			->with(new BeforeGroupCreatedEvent('groupC'));
 		// assert group is created with prefix + gid
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupC', 'groupC')
 			->willReturn(true);
-		$this->eventDispatcher->expects($this->once())
+		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->with(new GroupCreatedEvent($groupC));
+			->withConsecutive(
+				[new BeforeGroupCreatedEvent('SAML_groupC')],
+				[new GroupCreatedEvent($groupC)]
+			);
 		// assert user gets added to group
 		$groupC->expects($this->once())
 			->method('addUser')
