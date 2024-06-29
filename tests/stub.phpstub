@@ -24,9 +24,3 @@ namespace OC\Group {
 		\OCP\Group\Backend\INamedBackend {
 	}
 }
-
-namespace OC\Hooks {
-	interface PublicEmitter {
-		public function emit($scope, $method, array $arguments = []);
-	}
-}
