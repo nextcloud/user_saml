@@ -34,6 +34,8 @@ class GroupManagerTest extends TestCase {
 	private $ownGroupBackend;
 	/** @var IConfig|MockObject */
 	private $config;
+	/** @var IEventDispatcher|MockObject */
+	private $eventDispatcher;
 	/** @var JobList|MockObject */
 	private $jobList;
 	/** @var SAMLSettings|MockObject */
