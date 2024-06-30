@@ -214,7 +214,8 @@ class FeatureContext implements Context {
 	public function theResponseShouldBeASamlRedirectPageThatGetsSubmitted() {
 		$responseBody = $this->response->getBody();
 		$domDocument = new DOMDocument();
-		$domDocument->loadHTML($responseBody);
+		error_log(sprintf('Trying to load expected HTML document: %s', $responseBody));
+		$loaded = $domDocument->loadHTML($responseBody);
 		$xpath = new DOMXpath($domDocument);
 		$postData = [];
 		$inputElements = $xpath->query('//input');
