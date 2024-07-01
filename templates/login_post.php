@@ -1,3 +1,11 @@
+<?php
+/**
+ * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+/** @var array $_ */
+?>
 Please wait while you are redirected to the SSO server.
 
 <form action="<?= $_['ssoUrl'] ?>" method="post">
