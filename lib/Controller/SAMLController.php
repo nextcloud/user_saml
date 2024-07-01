@@ -6,6 +6,7 @@
 
 namespace OCA\User_SAML\Controller;
 
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
@@ -65,19 +66,19 @@ class SAMLController extends Controller {
 	private ITrustedDomainHelper $trustedDomainHelper;
 
 	public function __construct(
-		string $appName,
-		IRequest $request,
-		ISession $session,
-		IUserSession $userSession,
-		SAMLSettings $samlSettings,
-		UserBackend $userBackend,
-		IConfig $config,
-		IURLGenerator $urlGenerator,
-		LoggerInterface $logger,
-		IL10N $l,
-		UserResolver $userResolver,
-		UserData $userData,
-		ICrypto $crypto,
+		string               $appName,
+		IRequest             $request,
+		ISession             $session,
+		IUserSession         $userSession,
+		SAMLSettings         $samlSettings,
+		UserBackend          $userBackend,
+		IConfig              $config,
+		IURLGenerator        $urlGenerator,
+		LoggerInterface      $logger,
+		IL10N                $l,
+		UserResolver         $userResolver,
+		UserData             $userData,
+		ICrypto              $crypto,
 		ITrustedDomainHelper $trustedDomainHelper
 	) {
 		parent::__construct($appName, $request);
@@ -177,9 +178,9 @@ class SAMLController extends Controller {
 	 * @OnlyUnauthenticatedUsers
 	 * @NoCSRFRequired
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function login(int $idp = 1): Http\RedirectResponse {
+	public function login(int $idp = 1) {
 		$originalUrl = (string)$this->request->getParam('originalUrl', '');
 		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
 			$originalUrl = '';
@@ -192,7 +193,33 @@ class SAMLController extends Controller {
 
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
-				$response = new Http\RedirectResponse($ssoUrl);
+
+				$method = $this->request->getParam('method', 'get');
+				if ($method === 'post') {
+					$query = parse_url($ssoUrl, PHP_URL_QUERY);
+					parse_str($query, $params);
+
+					$samlRequest = $params['SAMLRequest'];
+					$relayState = $params['RelayState'] ?? '';
+					$sigAlg = $params['SigAlg'] ?? '';
+					$signature = $params['Signature'] ?? '';
+					$ssoUrl = explode('?', $ssoUrl)[0];
+
+					$nonce = base64_encode(random_bytes(16));
+
+					$response = new Http\TemplateResponse($this->appName, 'login_post', [
+						'ssoUrl' => $ssoUrl,
+						'samlRequest' => $samlRequest,
+						'relayState' => $relayState,
+						'sigAlg' => $sigAlg,
+						'signature' => $signature,
+						'nonce' => $nonce,
+					], 'guest');
+
+					$response->addHeader('Content-Security-Policy', "script-src 'self' 'nonce-$nonce' 'strict-dynamic' 'unsafe-eval';");
+				} else {
+					$response = new Http\RedirectResponse($ssoUrl);
+				}
 
 				// Small hack to make user_saml work with the loginflows
 				$flowData = [];
@@ -257,7 +284,7 @@ class SAMLController extends Controller {
 				}
 				break;
 			default:
-				throw new \Exception(
+				throw new Exception(
 					sprintf(
 						'Type of "%s" is not supported for user_saml',
 						$type
@@ -283,7 +310,7 @@ class SAMLController extends Controller {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
 			throw new Error(
-				'Invalid SP metadata: '.implode(', ', $errors),
+				'Invalid SP metadata: ' . implode(', ', $errors),
 				Error::METADATA_SP_INVALID
 			);
 		}
@@ -314,7 +341,7 @@ class SAMLController extends Controller {
 		// Decrypt and deserialize
 		try {
 			$cookie = $this->crypto->decrypt($cookie);
-		} catch (\Exception) {
+		} catch (Exception) {
 			$this->logger->debug('Could not decrypt SAML cookie', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
@@ -394,7 +421,7 @@ class SAMLController extends Controller {
 			}
 		} catch (NoUserFoundException) {
 			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->logger->critical($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
@@ -426,7 +453,7 @@ class SAMLController extends Controller {
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
 		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
-					 $this->config->getSystemValue('gss.mode', '') === 'master');
+			$this->config->getSystemValue('gss.mode', '') === 'master');
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
@@ -439,7 +466,7 @@ class SAMLController extends Controller {
 		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
 			// (or raise Error if request is invalid)
-			$pass = true ;
+			$pass = true;
 		} elseif ($isFromGS) {
 			// Request is from master GlobalScale
 			$jwt = $this->request->getParam('jwt', '');
@@ -450,7 +477,7 @@ class SAMLController extends Controller {
 
 				$idp = $decoded['idp'] ?? null;
 				$pass = true;
-			} catch (\Exception) {
+			} catch (Exception) {
 			}
 		} else {
 			// standard request : need read CRSF check
@@ -617,7 +644,8 @@ class SAMLController extends Controller {
 			[
 				'requesttoken' => $csrfToken->getEncryptedValue(),
 				'originalUrl' => $originalUrl,
-				'idp' => $idp
+				'idp' => $idp,
+				'method' => 'post',
 			]
 		);
 
