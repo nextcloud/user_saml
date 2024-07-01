@@ -66,19 +66,19 @@ class SAMLController extends Controller {
 	private ITrustedDomainHelper $trustedDomainHelper;
 
 	public function __construct(
-		string $appName,
-		IRequest $request,
-		ISession $session,
-		IUserSession $userSession,
-		SAMLSettings $samlSettings,
-		UserBackend $userBackend,
-		IConfig $config,
-		IURLGenerator $urlGenerator,
-		LoggerInterface $logger,
-		IL10N $l,
-		UserResolver $userResolver,
-		UserData $userData,
-		ICrypto $crypto,
+		string               $appName,
+		IRequest             $request,
+		ISession             $session,
+		IUserSession         $userSession,
+		SAMLSettings         $samlSettings,
+		UserBackend          $userBackend,
+		IConfig              $config,
+		IURLGenerator        $urlGenerator,
+		LoggerInterface      $logger,
+		IL10N                $l,
+		UserResolver         $userResolver,
+		UserData             $userData,
+		ICrypto              $crypto,
 		ITrustedDomainHelper $trustedDomainHelper
 	) {
 		parent::__construct($appName, $request);
@@ -198,13 +198,14 @@ class SAMLController extends Controller {
 				if ($method === 'post') {
 					$query = parse_url($ssoUrl, PHP_URL_QUERY);
 					parse_str($query, $params);
+
 					$samlRequest = $params['SAMLRequest'];
 					$relayState = $params['RelayState'] ?? '';
 					$sigAlg = $params['SigAlg'] ?? '';
 					$signature = $params['Signature'] ?? '';
+					$ssoUrl = explode('?', $ssoUrl)[0];
 
 					$nonce = base64_encode(random_bytes(16));
-					$ssoUrl = explode('?', $ssoUrl)[0];
 
 					$response = new Http\TemplateResponse($this->appName, 'login_post', [
 						'ssoUrl' => $ssoUrl,
@@ -214,11 +215,11 @@ class SAMLController extends Controller {
 						'signature' => $signature,
 						'nonce' => $nonce,
 					], 'guest');
-					$response->addHeader('Content-Security-Policy', "script-src 'self' 'nonce-$nonce' 'strict-dynamic' 'unsafe-eval';");
-					return $response;
-				}
 
-				$response = new Http\RedirectResponse($ssoUrl);
+					$response->addHeader('Content-Security-Policy', "script-src 'self' 'nonce-$nonce' 'strict-dynamic' 'unsafe-eval';");
+				} else {
+					$response = new Http\RedirectResponse($ssoUrl);
+				}
 
 				// Small hack to make user_saml work with the loginflows
 				$flowData = [];
@@ -309,7 +310,7 @@ class SAMLController extends Controller {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
 			throw new Error(
-				'Invalid SP metadata: '.implode(', ', $errors),
+				'Invalid SP metadata: ' . implode(', ', $errors),
 				Error::METADATA_SP_INVALID
 			);
 		}
@@ -452,7 +453,7 @@ class SAMLController extends Controller {
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
 		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
-					 $this->config->getSystemValue('gss.mode', '') === 'master');
+			$this->config->getSystemValue('gss.mode', '') === 'master');
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
@@ -465,7 +466,7 @@ class SAMLController extends Controller {
 		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
 			// (or raise Error if request is invalid)
-			$pass = true ;
+			$pass = true;
 		} elseif ($isFromGS) {
 			// Request is from master GlobalScale
 			$jwt = $this->request->getParam('jwt', '');

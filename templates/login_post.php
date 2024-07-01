@@ -1,6 +1,8 @@
+Please wait while you are redirected to the SSO server.
+
 <form action="<?= $_['ssoUrl'] ?>" method="post">
 	<input type="hidden" name="SAMLRequest" value="<?= $_['samlRequest'] ?>" />
-	<input type="hidden" name="RelayState" value="<?=$_['relayState'] ?>" />
+	<input type="hidden" name="RelayState" value="<?= $_['relayState'] ?>" />
 	<input type="hidden" name="SigAlg" value="<?= $_['sigAlg'] ?>" />
 	<input type="hidden" name="Signature" value="<?= $_['signature'] ?>" />
 	<noscript>
