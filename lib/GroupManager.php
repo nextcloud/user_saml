@@ -6,11 +6,15 @@
 
 namespace OCA\User_SAML;
 
-use OC\Hooks\PublicEmitter;
 use OCA\User_SAML\Exceptions\GroupNotFoundException;
 use OCA\User_SAML\Exceptions\NonMigratableGroupException;
 use OCA\User_SAML\Jobs\MigrateGroups;
 use OCP\BackgroundJob\IJobList;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\Events\BeforeGroupCreatedEvent;
+use OCP\Group\Events\BeforeGroupDeletedEvent;
+use OCP\Group\Events\GroupCreatedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -31,6 +35,8 @@ class GroupManager {
 	private $ownGroupBackend;
 	/** @var IConfig */
 	private $config;
+	/** @var IEventDispatcher */
+	private $dispatcher;
 	/** @var IJobList */
 	private $jobList;
 	/** @var SAMLSettings */
@@ -42,6 +48,7 @@ class GroupManager {
 		IGroupManager $groupManager,
 		GroupBackend $ownGroupBackend,
 		IConfig $config,
+		IEventDispatcher $dispatcher,
 		IJobList $jobList,
 		SAMLSettings $settings
 	) {
@@ -49,6 +56,7 @@ class GroupManager {
 		$this->groupManager = $groupManager;
 		$this->ownGroupBackend = $ownGroupBackend;
 		$this->config = $config;
+		$this->dispatcher = $dispatcher;
 		$this->jobList = $jobList;
 		$this->settings = $settings;
 	}
@@ -141,11 +149,9 @@ class GroupManager {
 		if ($this->hasSamlBackend($group)) {
 			$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
 			if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
-				/** @psalm-suppress UndefinedInterfaceMethod */
-				$this->groupManager->emit('\OC\Group', 'preDelete', [$group]);
+				$this->dispatcher->dispatchTyped(new BeforeGroupDeletedEvent($group));
 				$this->ownGroupBackend->deleteGroup($group->getGID());
-				/** @psalm-suppress UndefinedInterfaceMethod */
-				$this->groupManager->emit('\OC\Group', 'postDelete', [$group]);
+				$this->dispatcher->dispatchTyped(new GroupDeletedEvent($group));
 			}
 		} else {
 			$group->removeUser($user);
@@ -172,17 +178,13 @@ class GroupManager {
 	}
 
 	protected function createGroupInBackend(string $gid, ?string $originalGid = null): ?IGroup {
-		if ($this->groupManager instanceof PublicEmitter) {
-			$this->groupManager->emit('\OC\Group', 'preCreate', [$gid]);
-		}
+		$this->dispatcher->dispatchTyped(new BeforeGroupCreatedEvent($gid));
 		if (!$this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid)) {
 			return null;
 		}
 
 		$group = $this->groupManager->get($gid);
-		if ($this->groupManager instanceof PublicEmitter) {
-			$this->groupManager->emit('\OC\Group', 'postCreate', [$group]);
-		}
+		$this->dispatcher->dispatchTyped(new GroupCreatedEvent($group));
 
 		return $group;
 	}

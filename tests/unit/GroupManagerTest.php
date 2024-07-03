@@ -11,6 +11,11 @@ use OC\Group\Manager;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\Events\BeforeGroupCreatedEvent;
+use OCP\Group\Events\BeforeGroupDeletedEvent;
+use OCP\Group\Events\GroupCreatedEvent;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
@@ -29,6 +34,8 @@ class GroupManagerTest extends TestCase {
 	private $ownGroupBackend;
 	/** @var IConfig|MockObject */
 	private $config;
+	/** @var IEventDispatcher|MockObject */
+	private $eventDispatcher;
 	/** @var JobList|MockObject */
 	private $jobList;
 	/** @var SAMLSettings|MockObject */
@@ -42,6 +49,7 @@ class GroupManagerTest extends TestCase {
 		$this->groupManager = $this->createMock(Manager::class);
 		$this->ownGroupBackend = $this->createMock(GroupBackend::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->jobList = $this->createMock(JobList::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
 		$this->ownGroupManager = $this->createMock(GroupManager::class);
@@ -55,6 +63,7 @@ class GroupManagerTest extends TestCase {
 					$this->groupManager,
 					$this->ownGroupBackend,
 					$this->config,
+					$this->eventDispatcher,
 					$this->jobList,
 					$this->settings
 				])
@@ -66,6 +75,7 @@ class GroupManagerTest extends TestCase {
 				$this->groupManager,
 				$this->ownGroupBackend,
 				$this->config,
+				$this->eventDispatcher,
 				$this->jobList,
 				$this->settings
 			);
@@ -167,6 +177,12 @@ class GroupManagerTest extends TestCase {
 		$this->ownGroupBackend
 			->expects($this->once())
 			->method('deleteGroup');
+		$this->eventDispatcher->expects($this->exactly(2))
+			->method('dispatchTyped')
+			->withConsecutive(
+				[new BeforeGroupDeletedEvent($groupA)],
+				[new GroupDeletedEvent($groupA)]
+			);
 
 		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
@@ -222,6 +238,12 @@ class GroupManagerTest extends TestCase {
 			->method('createGroup')
 			->with('SAML_groupB', 'groupB')
 			->willReturn(true);
+		$this->eventDispatcher->expects($this->exactly(2))
+			->method('dispatchTyped')
+			->withConsecutive(
+				[new BeforeGroupCreatedEvent('SAML_groupB')],
+				[new GroupCreatedEvent($groupB)]
+			);
 		// assert user gets added to group
 		$groupB->expects($this->once())
 			->method('addUser')
@@ -270,6 +292,12 @@ class GroupManagerTest extends TestCase {
 			->method('createGroup')
 			->with('SAML_groupC', 'groupC')
 			->willReturn(true);
+		$this->eventDispatcher->expects($this->exactly(2))
+			->method('dispatchTyped')
+			->withConsecutive(
+				[new BeforeGroupCreatedEvent('SAML_groupC')],
+				[new GroupCreatedEvent($groupC)]
+			);
 		// assert user gets added to group
 		$groupC->expects($this->once())
 			->method('addUser')
