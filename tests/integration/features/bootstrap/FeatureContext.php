@@ -303,6 +303,43 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then The group :group has exactly the members :memberList
+	 */
+	public function theGroupHasExactlyTheMembers(string $group, string $memberList): void {
+		$this->response = $this->client->request(
+			'GET',
+			sprintf('http://localhost:8080/ocs/v2.php/cloud/groups/%s', $group),
+			[
+				'headers' => [
+					'OCS-APIRequest' => 'true',
+				],
+				'query' => [
+					'format' => 'json',
+				],
+				'auth' => [
+					'admin', 'admin'
+				],
+				'cookies' => '',
+			]
+		);
+
+		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		if ($responseArray['meta']['statuscode'] !== 200) {
+			throw new UnexpectedValueException(sprintf('Expected 200 status code but got %d', $responseArray['meta']['statusCode']));
+		}
+
+		$expectedMembers = array_map('trim', explode(',', $memberList));
+		$actualMembers = array_map('trim', $responseArray['data']['users']);
+
+		sort($expectedMembers);
+		sort($actualMembers);
+
+		if ($expectedMembers !== $actualMembers) {
+			throw new UnexpectedValueException(sprintf('Unexpectedly the returned members are: %s', implode(', ', $actualMembers)));
+		}
+	}
+
+	/**
 	 * @Given A local user with uid :uid exists
 	 * @param string $uid
 	 */
