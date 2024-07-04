@@ -34,6 +34,8 @@ use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class SAMLController extends Controller {
@@ -180,7 +182,7 @@ class SAMLController extends Controller {
 	 *
 	 * @throws Exception
 	 */
-	public function login(int $idp = 1) {
+	public function login(int $idp = 1): Http\RedirectResponse|Http\TemplateResponse {
 		$originalUrl = (string)$this->request->getParam('originalUrl', '');
 		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
 			$originalUrl = '';
@@ -194,7 +196,8 @@ class SAMLController extends Controller {
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
 
-				$method = $this->request->getParam('method', 'get');
+				$settings = $this->samlSettings->get($idp);
+				$method = $settings['general-saml_request_method'] ?? 'get';
 				if ($method === 'post') {
 					$query = parse_url($ssoUrl, PHP_URL_QUERY);
 					parse_str($query, $params);
@@ -630,6 +633,11 @@ class SAMLController extends Controller {
 		return $result;
 	}
 
+	/**
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
+	 * @throws \OCP\DB\Exception
+	 */
 	private function getSSOUrl(string $redirectUrl, string $idp): string {
 		$originalUrl = '';
 		if (!empty($redirectUrl)) {
@@ -639,17 +647,19 @@ class SAMLController extends Controller {
 		/** @var CsrfTokenManager $csrfTokenManager */
 		$csrfTokenManager = Server::get(CsrfTokenManager::class);
 		$csrfToken = $csrfTokenManager->getToken();
-		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
+
+		$settings = $this->samlSettings->get((int)$idp);
+		$method = $settings['general-saml_request_method'] ?? 'get';
+
+		return $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.login',
 			[
 				'requesttoken' => $csrfToken->getEncryptedValue(),
 				'originalUrl' => $originalUrl,
 				'idp' => $idp,
-				'method' => 'post',
+				'method' => $method,
 			]
 		);
-
-		return $ssoUrl;
 	}
 
 	/**

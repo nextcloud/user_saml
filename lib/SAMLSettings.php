@@ -26,6 +26,7 @@ class SAMLSettings {
 	public const IDP_CONFIG_KEYS = [
 		'general-idp0_display_name',
 		'general-uid_mapping',
+		'general-saml_request_method',
 		'idp-entityId',
 		'idp-singleLogoutService.responseUrl',
 		'idp-singleLogoutService.url',

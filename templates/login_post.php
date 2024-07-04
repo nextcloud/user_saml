@@ -4,9 +4,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/** @var array $_ */
+/**
+ * @var array $_
+ * @var IL10N $l
+ *
+ */
+
+use OCP\IL10N;
+
+p($l->t('Please wait while you are redirected to the SSO server.'));
 ?>
-Please wait while you are redirected to the SSO server.
 
 <form action="<?= $_['ssoUrl'] ?>" method="post">
 	<input type="hidden" name="SAMLRequest" value="<?= $_['samlRequest'] ?>" />
@@ -14,7 +21,9 @@ Please wait while you are redirected to the SSO server.
 	<input type="hidden" name="SigAlg" value="<?= $_['sigAlg'] ?>" />
 	<input type="hidden" name="Signature" value="<?= $_['signature'] ?>" />
 	<noscript>
-		<p>JavaScript is disabled. Click the button below to continue.</p>
+		<p>
+			<?php p($l->t('Please wait while you are redirected to the SSO server.')); ?>
+		</p>
 		<input type="submit" value="Continue" />
 	</noscript>
 </form>

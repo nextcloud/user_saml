@@ -84,6 +84,11 @@ class AdminTest extends \Test\TestCase {
 				'type' => 'line',
 				'required' => false,
 			],
+			'saml_request_method' => [
+				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
+				'type' => 'checkbox',
+				'required' => false,
+			],
 			'uid_mapping' => [
 				'text' => 'Attribute to map the UID to.',
 				'type' => 'line',
@@ -226,8 +231,7 @@ class AdminTest extends \Test\TestCase {
 			->willReturn('');
 
 		$params = $this->formDataProvider();
-		unset($params['general']['idp0_display_name']);
-		unset($params['general']['allow_multiple_user_back_ends']);
+		unset($params['general']['idp0_display_name'], $params['general']['saml_request_method'], $params['general']['allow_multiple_user_back_ends']);
 		$params['type'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
