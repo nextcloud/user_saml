@@ -24,3 +24,14 @@ namespace OC\Group {
 		\OCP\Group\Backend\INamedBackend {
 	}
 }
+
+namespace OC\DB\Exceptions {
+	class DbalException extends \OCP\DB\Exception {
+		public function isRetryable(): bool {
+		}
+	}
+}
+
+namespace OCP\Log {
+	public function logger(?string $appId = null): \Psr\Log\LoggerInterface;
+}
