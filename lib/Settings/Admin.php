@@ -199,7 +199,7 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => false,
 			];
-			$generalSettings['saml_request_method'] = [
+			$generalSettings['is_saml_request_using_post'] = [
 				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
 				'type' => 'checkbox',
 				'required' => false,

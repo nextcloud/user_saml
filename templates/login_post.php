@@ -22,7 +22,7 @@ p($l->t('Please wait while you are redirected to the SSO server.'));
 	<input type="hidden" name="Signature" value="<?= $_['signature'] ?>" />
 	<noscript>
 		<p>
-			<?php p($l->t('Please wait while you are redirected to the SSO server.')); ?>
+			<?php p($l->t('JavaScript is disabled in your browser. Please enable it to continue.')) ?>
 		</p>
 		<input type="submit" value="Continue" />
 	</noscript>

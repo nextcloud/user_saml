@@ -84,7 +84,7 @@ class AdminTest extends \Test\TestCase {
 				'type' => 'line',
 				'required' => false,
 			],
-			'saml_request_method' => [
+			'is_saml_request_using_post' => [
 				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
 				'type' => 'checkbox',
 				'required' => false,
@@ -231,7 +231,7 @@ class AdminTest extends \Test\TestCase {
 			->willReturn('');
 
 		$params = $this->formDataProvider();
-		unset($params['general']['idp0_display_name'], $params['general']['saml_request_method'], $params['general']['allow_multiple_user_back_ends']);
+		unset($params['general']['idp0_display_name'], $params['general']['is_saml_request_using_post'], $params['general']['allow_multiple_user_back_ends']);
 		$params['type'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);

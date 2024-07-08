@@ -197,8 +197,8 @@ class SAMLController extends Controller {
 				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
 
 				$settings = $this->samlSettings->get($idp);
-				$method = $settings['general-saml_request_method'] ?? 'get';
-				if ($method === 'post') {
+				$isSAMLRequestUsingPost = isset($settings['general-is_saml_request_using_post']) && $settings['general-is_saml_request_using_post'] === '1';
+				if ($isSAMLRequestUsingPost) {
 					$query = parse_url($ssoUrl, PHP_URL_QUERY);
 					parse_str($query, $params);
 
@@ -649,7 +649,7 @@ class SAMLController extends Controller {
 		$csrfToken = $csrfTokenManager->getToken();
 
 		$settings = $this->samlSettings->get((int)$idp);
-		$method = $settings['general-saml_request_method'] ?? 'get';
+		$method = $settings['general-is_saml_request_using_post'] ?? 'get';
 
 		return $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.login',
