@@ -10,6 +10,7 @@ namespace OCA\User_SAML\Jobs;
 
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\Service\GroupMigration;
 use OCP\AppFramework\Db\TTransactional;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
@@ -17,7 +18,6 @@ use OCP\DB\Exception;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
-use OCP\IUser;
 use Psr\Log\LoggerInterface;
 use Throwable;
 
@@ -44,6 +44,7 @@ class MigrateGroups extends QueuedJob {
 	private $logger;
 
 	public function __construct(
+		protected GroupMigration $groupMigration,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IDBConnection $dbc,
@@ -97,7 +98,7 @@ class MigrateGroups extends QueuedJob {
 		$isMigrated = false;
 		$allUsersInserted = false;
 		try {
-			$allUsersInserted = $this->migrateGroupUsers($gid);
+			$allUsersInserted = $this->groupMigration->migrateGroupUsers($gid);
 
 			$this->dbc->beginTransaction();
 
@@ -121,7 +122,7 @@ class MigrateGroups extends QueuedJob {
 
 		if ($allUsersInserted && $isMigrated) {
 			try {
-				$this->cleanUpOldGroupUsers($gid);
+				$this->groupMigration->cleanUpOldGroupUsers($gid);
 			} catch (Exception $e) {
 				$this->logger->warning('Error while cleaning up group members in (oc_)group_user of group (gid) {gid}', [
 					'app' => 'user_saml',
@@ -132,50 +133,6 @@ class MigrateGroups extends QueuedJob {
 		}
 
 		return $isMigrated;
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	protected function cleanUpOldGroupUsers(string $gid): void {
-		$cleanup = $this->dbc->getQueryBuilder();
-		$cleanup->delete('group_user')
-			->where($cleanup->expr()->eq('gid', $cleanup->createNamedParameter($gid)));
-		$cleanup->executeStatement();
-	}
-
-	/**
-	 * @returns bool true when all users were migrated, when they were only partly migrated
-	 * @throws Exception
-	 * @throws Throwable
-	 */
-	protected function migrateGroupUsers(string $gid): bool {
-		$originalGroup = $this->groupManager->get($gid);
-		$members = $originalGroup?->getUsers();
-
-		$areAllInserted = true;
-		foreach (array_chunk($members ?? [], self::BATCH_SIZE) as $userBatch) {
-			$areAllInserted = ($this->atomic(function () use ($userBatch, $gid) {
-				/** @var IUser $user */
-				foreach ($userBatch as $user) {
-					$this->dbc->insertIgnoreConflict(
-						GroupBackend::TABLE_MEMBERS,
-						[
-							'gid' => $gid,
-							'uid' => $user->getUID(),
-						]
-					);
-				}
-				return true;
-			}, $this->dbc) === true) && $areAllInserted;
-		}
-		if (!$areAllInserted) {
-			$this->logger->warning('Partial migration of users from local group {gid} to SAML.', [
-				'app' => 'user_saml',
-				'gid' => $gid,
-			]);
-		}
-		return $areAllInserted;
 	}
 
 	protected function getGroupsToMigrate(array $samlGroups, array $pool): array {
