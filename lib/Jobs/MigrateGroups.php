@@ -45,12 +45,13 @@ class MigrateGroups extends QueuedJob {
 
 	public function __construct(
 		protected GroupMigration $groupMigration,
+		protected GroupManager $ownGroupManager,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IDBConnection $dbc,
 		GroupBackend $ownGroupBackend,
 		LoggerInterface $logger,
-		ITimeFactory $timeFactory
+		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
 		$this->config = $config;
@@ -73,7 +74,7 @@ class MigrateGroups extends QueuedJob {
 
 	protected function updateCandidatePool(array $migratedGroups): void {
 		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === null || $candidateInfo === '') {
+		if ($candidateInfo === '' || $candidateInfo === GroupManager::STATE_MIGRATION_PHASE_EXPIRED) {
 			return;
 		}
 		$candidateInfo = \json_decode($candidateInfo, true);
@@ -162,14 +163,9 @@ class MigrateGroups extends QueuedJob {
 	}
 
 	protected function getMigratableGroups(): array {
-		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === null || $candidateInfo === '') {
-			throw new \RuntimeException('No migration of groups to SAML backend anymore');
-		}
-		$candidateInfo = \json_decode($candidateInfo, true);
-		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups']) || $candidateInfo['dropAfter'] < time()) {
-			$this->config->deleteAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
-			throw new \RuntimeException('Period for migration groups is over');
+		$candidateInfo = $this->ownGroupManager->getCandidateInfoIfValid();
+		if ($candidateInfo === null) {
+			throw new \RuntimeException('No migration tasks of groups to SAML backend');
 		}
 
 		return $candidateInfo['groups'];
