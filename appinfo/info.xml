@@ -45,6 +45,7 @@ While theoretically any other authentication provider implementing either one of
 		</post-migration>
 		<live-migration>
 			<step>OCA\User_SAML\Migration\CleanupRemovedConfig</step>
+			<step>OCA\User_SAML\Migration\TransferGroupMembers</step>
 		</live-migration>
 	</repair-steps>
 	<commands>
