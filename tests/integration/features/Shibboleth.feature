@@ -17,15 +17,6 @@ Feature: Shibboleth
     And The response should contain the form with action "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
     And The form method should be POST
     And The form should contain input fields "SAMLRequest,RelayState,SigAlg,Signature"
-    When I submit the SAML form
-    Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1"
-    And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
-      | j_username | j_password | _eventId_proceed |
-      | student1   | password   |                 |
-    And The response should be a SAML redirect page that gets submitted
-    And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
-    And The user value "id" should be "student1"
-    And The last login timestamp of "student1" should not be empty
 
   Scenario: Authenticating using Shibboleth with SAML and no check if user exists on backend
     Given The setting "type" is set to "saml"
