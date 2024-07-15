@@ -355,6 +355,22 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then I hack :uid into existence
+	 */
+	public function hackUserIntoExistence(string $uid): void {
+		rename(__DIR__ . '/../../../../../../data/' . $uid, __DIR__ . '/../../../../../../data/hide-' . $uid);
+		shell_exec(
+			sprintf(
+				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$uid
+			)
+		);
+		rename(__DIR__ . '/../../../../../../data/hide-' . $uid, __DIR__ . '/../../../../../../data/' . $uid);
+	}
+
+	/**
 	 * @Then The last login timestamp of :uid should not be empty
 	 *
 	 * @param string $uid
@@ -492,7 +508,19 @@ EOF;
 		);
 	}
 
-
+	/**
+	 * @Given the group :group is deleted
+	 */
+	public function theGroupIsDeleted(string $group) {
+		shell_exec(
+			sprintf(
+				'%s %s group:delete "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$group
+			)
+		);
+	}
 
 	/**
 	 * @Given /^I send a GET request with requesttoken to "([^"]*)"$/
@@ -536,6 +564,37 @@ EOF;
 				__DIR__ . '/../../../../../../occ',
 				$groupId,
 				$userId
+			)
+		);
+	}
+
+	/**
+	 * @Given I run the copy-incomplete-members command
+	 */
+	public function theCopyIncompleteMembersCommandIsRun() {
+		$out = shell_exec(
+			sprintf(
+				'%s %s saml:group-migration:copy-incomplete-members --verbose',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+			)
+		);
+		if ($out === false || $out === null) {
+			throw new RuntimeException('Failed to execute saml:group-migration:copy-incomplete-members command');
+		}
+	}
+
+	/**
+	 * @Given I :stateAction the app :appId
+	 */
+	public function theAppIsEnabledOrDisabled(string $appId, string $stateAction) {
+		shell_exec(
+			sprintf(
+				'%s %s app:%s "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$stateAction,
+				$appId
 			)
 		);
 	}
