@@ -44,7 +44,7 @@ class ConfigDelete extends Base {
 			$this->samlSettings->delete($pId);
 			$output->writeln('Provider deleted.');
 		} catch (Exception $e) {
-			$output->writeln('<error>Provider with id: ' . $providerId . ' does not exist.</error>');
+			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
 			return 1;
 		}
 		return 0;

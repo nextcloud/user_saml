@@ -303,6 +303,43 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then The group :group has exactly the members :memberList
+	 */
+	public function theGroupHasExactlyTheMembers(string $group, string $memberList): void {
+		$this->response = $this->client->request(
+			'GET',
+			sprintf('http://localhost:8080/ocs/v2.php/cloud/groups/%s', $group),
+			[
+				'headers' => [
+					'OCS-APIRequest' => 'true',
+				],
+				'query' => [
+					'format' => 'json',
+				],
+				'auth' => [
+					'admin', 'admin'
+				],
+				'cookies' => '',
+			]
+		);
+
+		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		if ($responseArray['meta']['statuscode'] !== 200) {
+			throw new UnexpectedValueException(sprintf('Expected 200 status code but got %d', $responseArray['meta']['statusCode']));
+		}
+
+		$expectedMembers = array_map('trim', explode(',', $memberList));
+		$actualMembers = array_map('trim', $responseArray['data']['users']);
+
+		sort($expectedMembers);
+		sort($actualMembers);
+
+		if ($expectedMembers !== $actualMembers) {
+			throw new UnexpectedValueException(sprintf('Unexpectedly the returned members are: %s', implode(', ', $actualMembers)));
+		}
+	}
+
+	/**
 	 * @Given A local user with uid :uid exists
 	 * @param string $uid
 	 */
@@ -315,6 +352,22 @@ class FeatureContext implements Context {
 				$uid
 			)
 		);
+	}
+
+	/**
+	 * @Then I hack :uid into existence
+	 */
+	public function hackUserIntoExistence(string $uid): void {
+		rename(__DIR__ . '/../../../../../../data/' . $uid, __DIR__ . '/../../../../../../data/hide-' . $uid);
+		shell_exec(
+			sprintf(
+				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$uid
+			)
+		);
+		rename(__DIR__ . '/../../../../../../data/hide-' . $uid, __DIR__ . '/../../../../../../data/' . $uid);
 	}
 
 	/**
@@ -455,7 +508,19 @@ EOF;
 		);
 	}
 
-
+	/**
+	 * @Given the group :group is deleted
+	 */
+	public function theGroupIsDeleted(string $group) {
+		shell_exec(
+			sprintf(
+				'%s %s group:delete "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$group
+			)
+		);
+	}
 
 	/**
 	 * @Given /^I send a GET request with requesttoken to "([^"]*)"$/
@@ -499,6 +564,37 @@ EOF;
 				__DIR__ . '/../../../../../../occ',
 				$groupId,
 				$userId
+			)
+		);
+	}
+
+	/**
+	 * @Given I run the copy-incomplete-members command
+	 */
+	public function theCopyIncompleteMembersCommandIsRun() {
+		$out = shell_exec(
+			sprintf(
+				'%s %s saml:group-migration:copy-incomplete-members --verbose',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+			)
+		);
+		if ($out === false || $out === null) {
+			throw new RuntimeException('Failed to execute saml:group-migration:copy-incomplete-members command');
+		}
+	}
+
+	/**
+	 * @Given I :stateAction the app :appId
+	 */
+	public function theAppIsEnabledOrDisabled(string $appId, string $stateAction) {
+		shell_exec(
+			sprintf(
+				'%s %s app:%s "%s"',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$stateAction,
+				$appId
 			)
 		);
 	}

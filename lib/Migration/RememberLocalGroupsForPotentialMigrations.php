@@ -44,6 +44,11 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 	 * @since 9.1.0
 	 */
 	public function run(IOutput $output) {
+		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+		if ($candidateInfo !== '') {
+			return;
+		}
+
 		try {
 			$backend = $this->findBackend();
 			$groupIds = $this->findGroupIds($backend);

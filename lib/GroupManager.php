@@ -23,6 +23,7 @@ use OCP\IUser;
 
 class GroupManager {
 	public const LOCAL_GROUPS_CHECK_FOR_MIGRATION = 'localGroupsCheckForMigration';
+	public const STATE_MIGRATION_PHASE_EXPIRED = 'EXPIRED';
 
 	/**
 	 * @var IDBConnection $db
@@ -68,8 +69,6 @@ class GroupManager {
 	 */
 	private function getGroupsToRemove(array $samlGroupNames, array $assignedGroups): array {
 		$groupsToRemove = [];
-		// FIXME: Seems unused
-		$this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
 		foreach ($assignedGroups as $group) {
 			// if group is not supplied by SAML and group has SAML backend
 			if (!in_array($group->getGID(), $samlGroupNames) && $this->hasSamlBackend($group)) {
@@ -201,7 +200,7 @@ class GroupManager {
 		$strictBackendCheck = $migrationAllowListRaw === '';
 
 		$migrationAllowList = null;
-		if ($migrationAllowListRaw !== '') {
+		if ($migrationAllowListRaw !== '' || $migrationAllowListRaw !== self::STATE_MIGRATION_PHASE_EXPIRED) {
 			/** @var array{dropAfter: int, groups: string[]} $migrationAllowList */
 			$migrationAllowList = \json_decode($migrationAllowListRaw, true);
 		}
@@ -238,13 +237,8 @@ class GroupManager {
 	}
 
 	protected function evaluateGroupMigrations(array $groups): void {
-		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === '') {
-			return;
-		}
-		$candidateInfo = \json_decode($candidateInfo, true);
-		if (!isset($candidateInfo['dropAfter']) || $candidateInfo['dropAfter'] < time()) {
-			$this->config->deleteAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
+		$candidateInfo = $this->getCandidateInfoIfValid();
+		if ($candidateInfo === null) {
 			return;
 		}
 
@@ -252,17 +246,29 @@ class GroupManager {
 	}
 
 	protected function isGroupInTransitionList(string $groupId): bool {
-		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === '') {
+		$candidateInfo = $this->getCandidateInfoIfValid();
+		if (!$candidateInfo) {
 			return false;
 		}
+		return in_array($groupId, $candidateInfo['groups'], true);
+	}
+
+	/**
+	 * @return array{dropAfter: int, groups: string[]}|null
+	 */
+	public function getCandidateInfoIfValid(): ?array {
+		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+		if ($candidateInfo === '' || $candidateInfo === self::STATE_MIGRATION_PHASE_EXPIRED) {
+			return null;
+		}
+		/** @var array{dropAfter: int, groups: string[]} $candidateInfo */
 		$candidateInfo = \json_decode($candidateInfo, true);
 		if (!isset($candidateInfo['dropAfter']) || $candidateInfo['dropAfter'] < time()) {
-			$this->config->deleteAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
-			return false;
+			$this->config->setAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, self::STATE_MIGRATION_PHASE_EXPIRED);
+			return null;
 		}
 
-		return in_array($groupId, $candidateInfo['groups']);
+		return $candidateInfo;
 	}
 
 	protected function hasGroupForeignMembers(IGroup $group): bool {

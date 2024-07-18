@@ -10,12 +10,16 @@ namespace OCA\User_SAML\Jobs;
 
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\Service\GroupMigration;
+use OCP\AppFramework\Db\TTransactional;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
+use OCP\DB\Exception;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Class MigrateGroups
@@ -24,6 +28,9 @@ use Psr\Log\LoggerInterface;
  * @todo: remove this, when dropping Nextcloud 29 support
  */
 class MigrateGroups extends QueuedJob {
+	use TTransactional;
+
+	protected const BATCH_SIZE = 1000;
 
 	/** @var IConfig */
 	private $config;
@@ -37,12 +44,14 @@ class MigrateGroups extends QueuedJob {
 	private $logger;
 
 	public function __construct(
+		protected GroupMigration $groupMigration,
+		protected GroupManager $ownGroupManager,
 		IConfig $config,
 		IGroupManager $groupManager,
 		IDBConnection $dbc,
 		GroupBackend $ownGroupBackend,
 		LoggerInterface $logger,
-		ITimeFactory $timeFactory
+		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
 		$this->config = $config;
@@ -63,16 +72,16 @@ class MigrateGroups extends QueuedJob {
 		}
 	}
 
-	protected function updateCandidatePool($migrateGroups) {
+	protected function updateCandidatePool(array $migratedGroups): void {
 		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === null || $candidateInfo === '') {
+		if ($candidateInfo === '' || $candidateInfo === GroupManager::STATE_MIGRATION_PHASE_EXPIRED) {
 			return;
 		}
 		$candidateInfo = \json_decode($candidateInfo, true);
 		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups'])) {
 			return;
 		}
-		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migrateGroups);
+		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migratedGroups);
 		$this->config->setAppValue(
 			'user_saml',
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
@@ -87,7 +96,11 @@ class MigrateGroups extends QueuedJob {
 	}
 
 	protected function migrateGroup(string $gid): bool {
+		$isMigrated = false;
+		$allUsersInserted = false;
 		try {
+			$allUsersInserted = $this->groupMigration->migrateGroupUsers($gid);
+
 			$this->dbc->beginTransaction();
 
 			$qb = $this->dbc->getQueryBuilder();
@@ -97,20 +110,30 @@ class MigrateGroups extends QueuedJob {
 			if ($affected === 0) {
 				throw new \RuntimeException('Could not delete group from local backend');
 			}
-
 			if (!$this->ownGroupBackend->createGroup($gid)) {
 				throw new \RuntimeException('Could not create group in SAML backend');
 			}
 
 			$this->dbc->commit();
-
-			return true;
-		} catch (\Exception $e) {
+			$isMigrated = true;
+		} catch (Throwable $e) {
 			$this->dbc->rollBack();
 			$this->logger->warning($e->getMessage(), ['app' => 'user_saml', 'exception' => $e]);
 		}
 
-		return false;
+		if ($allUsersInserted && $isMigrated) {
+			try {
+				$this->groupMigration->cleanUpOldGroupUsers($gid);
+			} catch (Exception $e) {
+				$this->logger->warning('Error while cleaning up group members in (oc_)group_user of group (gid) {gid}', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+					'exception' => $e,
+				]);
+			}
+		}
+
+		return $isMigrated;
 	}
 
 	protected function getGroupsToMigrate(array $samlGroups, array $pool): array {
@@ -140,14 +163,9 @@ class MigrateGroups extends QueuedJob {
 	}
 
 	protected function getMigratableGroups(): array {
-		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === null || $candidateInfo === '') {
-			throw new \RuntimeException('No migration of groups to SAML backend anymore');
-		}
-		$candidateInfo = \json_decode($candidateInfo, true);
-		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups']) || $candidateInfo['dropAfter'] < time()) {
-			$this->config->deleteAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
-			throw new \RuntimeException('Period for migration groups is over');
+		$candidateInfo = $this->ownGroupManager->getCandidateInfoIfValid();
+		if ($candidateInfo === null) {
+			throw new \RuntimeException('No migration tasks of groups to SAML backend');
 		}
 
 		return $candidateInfo['groups'];
