@@ -5,6 +5,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.2.0
+
+### Added
+
+* [Feat(deps): Add Nextcloud 30 support (user_saml#827)](https://github.com/nextcloud/user_saml/pull/827)
+* [Add SPDX header (user_saml#841)](https://github.com/nextcloud/user_saml/pull/841)
+
+### Fixed
+
+* [Fix: remove long-unused desktop option (user_saml#690)](https://github.com/nextcloud/user_saml/pull/690)
+* [Fix(Groups): take other DB errors into consideration (user_saml#839)](https://github.com/nextcloud/user_saml/pull/839)
+* [Feat: migrate from deprecated PublicEmitter to IEventDispatcher (user_saml#856)](https://github.com/nextcloud/user_saml/pull/856)
+* [Fix(Groups): take over members during migration (user_saml#863)](https://github.com/nextcloud/user_saml/pull/863)
+* [Perf(db): Avoid double querying (user_saml#834)](https://github.com/nextcloud/user_saml/pull/834)
+
+### Dependencies
+
+* [Build(deps): bump firebase/php-jwt from 6.8.1 to 6.10.0 in /3rdparty (user_saml#844)](https://github.com/nextcloud/user_saml/pull/844)
+* [Build(deps): bump firebase/php-jwt from 6.10.0 to 6.10.1 in /3rdparty (user_saml#852)](https://github.com/nextcloud/user_saml/pull/852)
+* [Build(deps): bump onelogin/php-saml from 4.1.0 to 4.2.0 in /3rdparty (user_saml#854)](https://github.com/nextcloud/user_saml/pull/854)
+
 ## 6.1.3
 
 ### Fixed
