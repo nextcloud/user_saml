@@ -85,7 +85,7 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
 				'type' => 'checkbox',
 				'global' => true,
-			]
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
@@ -197,6 +197,11 @@ class Admin implements ISettings {
 			$generalSettings['idp0_display_name'] = [
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
 				'type' => 'line',
+				'required' => false,
+			];
+			$generalSettings['is_saml_request_using_post'] = [
+				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
+				'type' => 'checkbox',
 				'required' => false,
 			];
 			$generalSettings['allow_multiple_user_back_ends'] = [

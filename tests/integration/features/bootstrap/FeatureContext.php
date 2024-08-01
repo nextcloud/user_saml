@@ -7,6 +7,8 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 class FeatureContext implements Context {
 	/** @var \GuzzleHttp\Message\Response */
@@ -615,6 +617,99 @@ EOF;
 		$responseArray = json_decode($response, true);
 		if (count($responseArray) > 0) {
 			throw new UnexpectedValueException('Background job axctuaslly was enqueued!');
+		}
+	}
+
+	/**
+	 * @Then The form method should be POST
+	 */
+	public function theFormMethodShouldBePost() {
+		$responseBody = (string) $this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+		$formElements = $xpath->query("//form[@method='post' or @method='POST']");
+		if ($formElements->length === 0) {
+			throw new \Exception("Expected form method 'POST' not found in response");
+		}
+	}
+
+	/**
+	 * @Then The response should contain the form with action :action
+	 */
+	public function theResponseShouldContainTheFormWithAction($action) {
+		$responseBody = (string) $this->response->getBody();
+		if (strpos($responseBody, 'action="' . $action . '"') === false) {
+			throw new \Exception("Expected form action '$action' not found in response");
+		}
+	}
+
+	/**
+	 * @Then The form should contain input fields :fields
+	 */
+	public function theFormShouldContainInputFields($fields) {
+		$responseBody = (string) $this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+		$fieldsArray = explode(',', $fields);
+		foreach ($fieldsArray as $field) {
+			$inputElements = $xpath->query("//input[@name='" . trim($field) . "']");
+			if ($inputElements->length === 0) {
+				throw new \Exception("Expected input field '$field' not found in response");
+			}
+		}
+	}
+
+	/**
+	 * @When I submit the SAML form
+	 */
+	public function iSubmitTheSAMLForm() {
+		$responseBody = (string) $this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+
+		// Find the form action
+		$formAction = $xpath->query("//form")->item(0)->getAttribute('action');
+
+		// Get the specified hidden input fields
+		$fields = ['SAMLRequest', 'RelayState', 'SigAlg', 'Signature'];
+		$postData = [];
+		foreach ($fields as $field) {
+			$inputElement = $xpath->query("//input[@type='hidden' and @name='" . $field . "']");
+			if ($inputElement->length === 0) {
+				throw new \Exception("Expected hidden input field '$field' not found in response");
+			}
+			$postData[$field] = $inputElement->item(0)->getAttribute('value');
+		}
+
+		// Send the POST request with the hidden input data
+		try {
+			$this->response = $this->client->request(
+				'POST',
+				$formAction,
+				[
+					'form_params' => $postData,
+					'headers' => [
+						'Content-Type' => 'application/x-www-form-urlencoded',
+						'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+					],
+					'cookies' => $this->cookieJar,
+				]
+			);
+		} catch (RequestException $e) {
+			echo "RequestException: " . $e->getMessage() . "\n";
+			if ($e->hasResponse()) {
+				$response = $e->getResponse();
+				echo "Status Code: " . $response->getStatusCode() . "\n";
+				echo "Headers: " . json_encode($response->getHeaders()) . "\n";
+				echo "Body: " . $response->getBody() . "\n";
+				echo "Request Headers: " . json_encode($e->getRequest()->getHeaders()) . "\n";
+				echo "Request Body: " . $e->getRequest()->getBody() . "\n";
+			}
+		} catch (GuzzleException $e) {
+			echo "GuzzleException: " . $e->getMessage() . "\n";
 		}
 	}
 }
