@@ -81,6 +81,10 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
+			'custom_hosts' => [
+				'text' => $this->l10n->t('Hostnames associated with this provider (e.g. nextcloud.a.com, nextcloud.b.com).'),
+				'type' => 'line',
+			],
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
 				'type' => 'checkbox',
