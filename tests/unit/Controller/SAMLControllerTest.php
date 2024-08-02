@@ -16,6 +16,7 @@ use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -57,6 +58,7 @@ class SAMLControllerTest extends TestCase {
 	/** @var SAMLController */
 	private $samlController;
 	private ITrustedDomainHelper|MockObject $trustedDomainController;
+	private IEventDispatcher $eventDispatcher;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -74,6 +76,7 @@ class SAMLControllerTest extends TestCase {
 		$this->userData = $this->createMock(UserData::class);
 		$this->crypto = $this->createMock(ICrypto::class);
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			function ($param) {
@@ -293,6 +296,10 @@ class SAMLControllerTest extends TestCase {
 			$user
 				->expects($this->exactly((int)($autoProvision < 2)))
 				->method('updateLastLoginTimestamp');
+
+			$this->eventDispatcher
+				->expects($this->once())
+				->method('dispatchTyped');
 
 			if ($userState === 0) {
 				$this->userResolver
