@@ -572,8 +572,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			$currentDisplayname = $this->getDisplayName($uid);
 			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
-				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
 				$this->setDisplayName($uid, $newDisplayname);
+				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
 			}
 
 			if ($newQuota !== null) {
