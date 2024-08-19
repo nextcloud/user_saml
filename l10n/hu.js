@@ -92,6 +92,7 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "A fiókja hozzáférése megtagadva, így ehhez a szolgáltatáshoz nem férhet hozzá.",
     "Account not provisioned." : "A fiók nem felügyelt.",
     "Your account is not provisioned, access to this service is thus not possible." : "A fiókja nem felügyelt, így ehhez a szolgáltatáshoz nem férhet hozzá.",
-    "Login options:" : "Bejelentkezési lehetőségek:"
+    "Login options:" : "Bejelentkezési lehetőségek:",
+    "Choose an authentication provider" : "Válasszon hitelesítésszolgáltatót"
 },
 "nplurals=2; plural=(n != 1);");
