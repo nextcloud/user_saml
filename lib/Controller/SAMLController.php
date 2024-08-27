@@ -220,7 +220,7 @@ class SAMLController extends Controller {
 				// And base64 encode it
 				$data = base64_encode($data);
 
-				$response->addCookie('saml_data', $data, null, 'None');
+				$response->addCookie('saml_data', $data, null, 'Strict');
 				break;
 			case 'environment-variable':
 				$ssoUrl = $originalUrl;
