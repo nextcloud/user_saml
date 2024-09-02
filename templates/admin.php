@@ -117,7 +117,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					<?php foreach ($_['name-id-formats'] as $key => $value): ?>
 					<option value="<?php p($key) ?>"
 						<?php if ($value['selected'] ?? false) {
-							p("selected");
+							p('selected');
 						} ?> ><?php p($value['label']) ?></option>
 					<?php endforeach; ?>
 				</select>

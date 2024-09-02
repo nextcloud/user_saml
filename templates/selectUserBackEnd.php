@@ -9,7 +9,7 @@ style('user_saml', 'selectUserBackEnd');
 Util::addScript('user_saml', 'selectUserBackEnd');
 
 /** @var array $_ */
-/** @var $l \OCP\IL10N */
+/** @var \OCP\IL10N $l */
 ?>
 
 <div id="saml-select-user-back-end">

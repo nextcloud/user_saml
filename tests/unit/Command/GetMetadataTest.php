@@ -14,9 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GetMetadataTest extends \Test\TestCase {
 
-	/** @var GetMetadata|MockObject*/
+	/** @var GetMetadata|MockObject */
 	protected $GetMetadata;
-	/** @var SAMLSettings|MockObject*/
+	/** @var SAMLSettings|MockObject */
 	private $samlSettings;
 
 	protected function setUp(): void {
