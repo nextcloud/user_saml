@@ -1,0 +1,132 @@
+# SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version = 1
+SPDX-PackageName = "user_saml"
+SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
+SPDX-PackageDownloadLocation = "https://github.com/nextcloud/user_saml"
+
+[[annotations]]
+path = [".gitattributes", ".github/issue_template.md", ".github/CODEOWNERS", ".editorconfig", "package-lock.json", "package.json", "composer.json", "composer.lock", "**/composer.json", "**/composer.lock", ".l10nignore", "cypress/tsconfig.json", "vendor-bin/**/composer.json", "vendor-bin/**/composer.lock", ".tx/config", "tsconfig.json", "js/vendor.LICENSE.txt", "krankerl.toml", ".npmignore", ".nextcloudignore", ".eslintrc.json", ".tx/backport"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["l10n/**.js", "l10n/**.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "emptyTemplates/**", "3rdparty/vendor/autoload.php", "tests/integration/vendor/autoload.php", "tests/integration/vendor/bin/**", "tests/data/**", "img/app.svg", "img/app-dark.svg", "screenshots/1.png", "screenshots/2.png", "tests/integration/features/**.feature"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "3rdparty/vendor/composer/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "3rdparty/vendor/firebase/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2011 Neuman Vong"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = "3rdparty/vendor/onelogin/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2010-2016 OneLogin, Inc."
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "3rdparty/vendor/robrichards/xmlseclibs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2007-2019, Robert Richards <rrichards@cdatazone.org>"
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = "tests/integration/vendor/behat/behat/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016 Konstantin Kudryashov <ever.zet@gmail.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/behat/gherkin/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2011-2013 Konstantin Kudryashov <ever.zet@gmail.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/behat/transliterator/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "behat/transliterator contributors"
+SPDX-License-Identifier = "Artistic-1.0"
+
+[[annotations]]
+path = "tests/integration/vendor/composer/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/guzzlehttp/guzzle/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2011 Michael Dowling <mtdowling@gmail.com>, 2012 Jeremy Lindblom <jeremeamia@gmail.com>, 2014 Graham Campbell <hello@gjcampbell.co.uk>, 2015 Márk Sági-Kazár <mark.sagikazar@gmail.com>, 2015 Tobias Schultze <webmaster@tubo-world.de>, 2016 Tobias Nyholm <tobias.nyholm@gmail.com>, 2016 George Mponos <gmponos@gmail.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/guzzlehttp/promises/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2015 Michael Dowling <mtdowling@gmail.com>, 2015 Graham Campbell <hello@gjcampbell.co.uk>, 2017 Tobias Schultze <webmaster@tubo-world.de>, 2020 Tobias Nyholm <tobias.nyholm@gmail.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/guzzlehttp/psr7/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2015 Michael Dowling <mtdowling@gmail.com>, 2015 Márk Sági-Kazár <mark.sagikazar@gmail.com>, 2015 Graham Campbell <hello@gjcampbell.co.uk>, 2016 Tobias Schultze <webmaster@tubo-world.de>, 2016 George Mponos <gmponos@gmail.com>, 2018 Tobias Nyholm <tobias.nyholm@gmail.com>"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/psr/container/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2013-2016 container-interop, 2016 PHP Framework Interoperability Group"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/psr/event-dispatcher/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2018 PHP-FIG"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/psr/http-client/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 PHP Framework Interoperability Group"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/psr/http-factory/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2018 PHP-FIG"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/psr/http-message/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2014 PHP Framework Interoperability Group"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/ralouphie/getallheaders/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2014 Ralph Khattar"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "tests/integration/vendor/symfony/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Fabien Potencier"
+SPDX-License-Identifier = "MIT"
