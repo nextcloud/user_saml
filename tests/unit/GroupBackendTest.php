@@ -88,9 +88,9 @@ class GroupBackendTest extends TestCase {
 			foreach ($this->users as $user) {
 				$result = $this->groupBackend->inGroup($user['uid'], $group['gid']);
 				if (in_array($group['gid'], $user['groups'])) {
-					$this->assertTrue($result, sprintf("User %s should be member of group %s", $user['uid'], $group['gid']));
+					$this->assertTrue($result, sprintf('User %s should be member of group %s', $user['uid'], $group['gid']));
 				} else {
-					$this->assertFalse($result, sprintf("User %s should not be member of group %s", $user['uid'], $group['gid']));
+					$this->assertFalse($result, sprintf('User %s should not be member of group %s', $user['uid'], $group['gid']));
 				}
 			}
 		}

@@ -40,7 +40,7 @@ class SAMLControllerTest extends TestCase {
 	private $session;
 	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
 	private $userSession;
-	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject*/
+	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject */
 	private $samlSettings;
 	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
 	private $userBackend;

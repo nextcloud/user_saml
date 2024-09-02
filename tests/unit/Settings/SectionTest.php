@@ -14,7 +14,7 @@ class SectionTest extends \Test\TestCase {
 	private $section;
 	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
 	private $l10n;
-	/** @var  IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
 	private $urlGenerator;
 
 	protected function setUp(): void {
