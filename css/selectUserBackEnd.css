@@ -1,47 +1,97 @@
-/*
- * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
+/** !CDSP: Custom stylesheet to match legacy look and feel. */
 html, body {
 	height: auto !important;
 	position: relative !important;
+	width: 100% !important;
+}
+
+.wrapper {
+	max-width: 1170px !important;
+	text-align: left !important;
+}
+
+.canada-brand {
+	max-height: 33px;
+	margin: 10px 15px;
+}
+
+.row.lang {
+	text-align: right;
+	padding: 10px 15px;
+}
+
+.row.lang * {
+	font-weight: normal !important;
+}
+
+.row.title {
+	background-color: #38414d;
+	margin-bottom: 0px;
+	padding: 10px 15px;
+}
+
+.row.title * {
+	color: white !important;
+	font-weight: bold !important;
+	margin-bottom: 0px !important;
+}
+
+.container {
+	padding: 0px 15px;
+	font-size: 14px;
+	background-color: #80808029;
+	margin-bottom: 20px;
+}
+
+.container h2 {
+	margin-top: 10px;
+}
+
+.lli-login-actions {
+	margin-top: 20px;
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+.lli-login-actions button {
+	min-width: 140px;
+}
+
+.lli-login-actions #agree {
+	background-color: #38414d;
+	color: white;
 }
 
 #saml-select-user-back-end {
-	color: var(--color-primary-text);
+	display: none;
 }
 
-#saml-select-user-back-end #av_mode {
-	height: auto;
-	background-color: var(--color-main-background);
-	color: var(--color-main-text);
+.can-footer {
+	background-color: #80808029;
+	padding: 15px;
 }
 
-#saml-select-user-back-end h1 {
-	font-size: 16px;
-	padding: 20px 0;
+.can-footer > * {
+	display: inline-block;
+	vertical-align: top;
+	width: 50%;
 }
 
-.login-option {
-	border: 1px solid var(--color-primary-text);
-	font-weight: 600;
-	height: 40px;
-
-	margin: 15px 0;
-	min-width: 269px;
-	border-radius: 3px;
-	font-size: 20px;
-}
-
-.login-option a {
-	display:inline-block;
-    width:100%;
-    line-height:40px;
-	color: var(--color-primary-text);
-	cursor: pointer;
-}
-
-.login-option .icon-confirm-white {
-	float: right;
+.can-footer-links li {
+	display: inline-block;
+	vertical-align: top;
 	line-height: 40px;
+	margin: 0px 10px;
+}
+
+.can-footer-links a {
+	font-weight: normal !important;
+}
+
+.can-footer-brand {
+	text-align: right;
+}
+
+.can-footer-brand img {
+	max-height: 40px;
 }

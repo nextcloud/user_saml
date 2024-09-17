@@ -6,26 +6,23 @@ script('user_saml', 'selectUserBackEnd');
 /** @var array $_ */
 /** @var $l \OCP\IL10N */
 ?>
-<div class='row lang'>
+<div class="row lang">
 	<a id="langbutton-fr" lang="fr">Français</a>
-	<a id="langbutton-en" lang="en" style=" display: none;">English</a>
+	<a id="langbutton-en" lang="en" style="display: none;">English</a>
 </div>
-<div class='row'>
-	<img class='image' src="https://www.canada.ca/etc/designs/canada/cdts/gcweb/v4_0_39/assets/sig-blk-en.svg"
-		alt="Symbol of the Government of Canada" />
+<div class="row">
+	<img class="image canada-brand" src="/ncloud/apps/user_saml/img/sig-blk-en.svg" alt="Symbol of the Government of Canada" />
 </div>
 <div class="row title">
-	<h2 id='title-en' class="wb-inv">
-		<a class="app-name" href="https://lli.agr.gc.ca/ncloud/index.php/login">Living Labs Cloud Data Storage
-			Platform</a>
+	<h2 id="title-en" class="wb-inv">
+    Living Labs Cloud Data Storage Platform
 	</h2>
-	<h2 id='title-fr' class="wb-inv" style=" display: none;">
-		<a class="app-name" href="https://lli.agr.gc.ca/ncloud/index.php/login">Plateforme de stockage de données
-			infonuagique des laboratoires vivants</a>
-	</h2>
+	<h2 id="title-fr" class="wb-inv" style="display: none;">
+    Plateforme de stockage de données infonuagique des laboratoires vivants
+  </h2>
 </div>
 <div id="wb-cont">
-	<div id=englishdisclaimer lang="en" class="container" style="background-color:#80808029;">
+	<div id=englishdisclaimer lang="en" class="container">
 		<h1 tabindex="0">AAFC Disclaimer</h1>
 		Living Labs Cloud Data Storage Platform Terms of Use
 		<br>
@@ -46,7 +43,7 @@ script('user_saml', 'selectUserBackEnd');
 				information is information that, if compromised, could cause injury to an individual, organization or
 				government. Examples include: contracts, tenders, unsolicited proposals, and pleadings. </li>
 			<li>The Platform may not be used to upload or save personal information as defined under the <a
-					href='http://laws-lois.justice.gc.ca/eng/acts/P-21/' class='disclaimer-link'>Privacy Act</a>. This
+					href="http://laws-lois.justice.gc.ca/eng/acts/P-21/" class="disclaimer-link">Privacy Act</a>. This
 				includes, for example, the age, marital status or address of an identifiable individual.</li>
 			<li>The Platform may not be used to upload or save Protected B information or anything above. Protected B
 				information is information that, if compromised, could cause serious injury to an individual, an
@@ -54,8 +51,8 @@ script('user_saml', 'selectUserBackEnd');
 				information), contract negotiations, risk assessments, government decision-making documents, trade
 				secrets, business-confidential records from producers, industry partners, individual’s finances.</li>
 			<li>Unauthorized use of the Platform, such as, but not limited to, using it for personal storage or storing
-				either personal information as defined under the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/'
-					class='disclaimer-link'>Privacy Act</a> or information above Protected A, may result in the user’s
+				either personal information as defined under the <a href="http://laws-lois.justice.gc.ca/eng/acts/P-21/"
+					class="disclaimer-link">Privacy Act</a> or information above Protected A, may result in the user’s
 				access being revoked immediately.</li>
 		</ul>
 		<h2>Monitoring</h2>
@@ -63,9 +60,9 @@ script('user_saml', 'selectUserBackEnd');
 			<li> AAFC reserves the right to monitor network activity on the Platform. That monitoring will be carried
 				out for various purposes, such as assessing system or network performance, protecting government
 				resources, and ensuring compliance with the intent of the Platform. All blocking and monitoring will be
-				done in compliance with the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/'
-					class='disclaimer-link'>Privacy Act</a> and the <a
-					href='http://laws-lois.justice.gc.ca/eng/Const/page-15.html#h-39' class='disclaimer-link'>Canadian
+				done in compliance with the <a href="http://laws-lois.justice.gc.ca/eng/acts/P-21/"
+					class="disclaimer-link">Privacy Act</a> and the <a
+					href="http://laws-lois.justice.gc.ca/eng/Const/page-15.html#h-39" class="disclaimer-link">Canadian
 					Charter of Rights and Freedoms</a>.</li>
 			<li> AAFC employs software programs to monitor network traffic and to identify unauthorized attempts to
 				upload or change information, or otherwise cause damage. This software receives and records the IP
@@ -73,7 +70,7 @@ script('user_saml', 'selectUserBackEnd');
 				pages visited. No attempt tolink these addresses with the identity of individuals visiting the Platform
 				will be made unless an attempt to damage the Platform or criminal activity has been made.
 				Thisinformation is collected pursuant to section 161 of the <a
-					href='https://laws-lois.justice.gc.ca/eng/acts/f-11/' class='disclaimer-link'>Financial
+					href="https://laws-lois.justice.gc.ca/eng/acts/f-11/" class="disclaimer-link">Financial
 					Administration Act</a>.The information may be shared with appropriate law enforcement authorities if
 				suspected criminal activities are detected. </li>
 		</ul>
@@ -81,23 +78,21 @@ script('user_saml', 'selectUserBackEnd');
 		<ul>
 			<li> All information transmitted and stored on Government of Canada networks and devices, whether
 				professional or personal in nature, may be accessible under the <a
-					href='http://laws-lois.justice.gc.ca/eng/acts/A-1/' class='disclaimer-link'>Access to Information
-					Act</a> and the <a href='http://laws-lois.justice.gc.ca/eng/acts/P-21/'
-					class='disclaimer-link'>Privacy Act</a>, subject to exclusions and exemptions under these Acts.</li>
+					href="http://laws-lois.justice.gc.ca/eng/acts/A-1/" class="disclaimer-link">Access to Information
+					Act</a> and the <a href="http://laws-lois.justice.gc.ca/eng/acts/P-21/"
+					class="disclaimer-link">Privacy Act</a>, subject to exclusions and exemptions under these Acts.</li>
 		</ul>
-		<br>
-		<hr>
-		By selecting Yes below, you acknowledge our AAFC Disclaimer
-		<br>
-		<br>
-		<div style="text-align: center;">
-			<button id="enagree" type="button" style="min-width: 140px;" class="btn btn-primary agree" lang="en">
+		<div class="lli-login-actions">
+      By selecting Yes below, you acknowledge our AAFC Disclaimer
+      <br>
+      <br>
+			<button id="agree" type="button" class="btn btn-primary agree" lang="en">
 				Yes</button>
-			<button id="endisagree" type="button" style="min-width: 140px;" class="btn btn-default" lang="en">
+			<button id="disagree" type="button" class="btn btn-default" lang="en">
 				No</button>
 		</div>
 	</div>
-	<div id="frenchdisclaimer" lang="fr" class="container" style="background-color:#80808029; display: none;">
+	<div id="frenchdisclaimer" lang="fr" class="container" style="display: none;">
 		<h1 tabindex="0">Avis de non-responsabilité d’AAC</h1>
 		Conditions d'utilisation de la plateforme de stockage de données en nuage des Laboratoires vivants<br>
 		L'accès à la plateforme de stockage de données en nuage des Laboratoires vivants (la Plateforme) est réservé aux
@@ -121,8 +116,8 @@ script('user_saml', 'selectUserBackEnd');
 				compromises, pourraient causer un préjudice à un individu, une organisation ou un gouvernement. Exemples
 				: contrats, appels d'offres, propositions non sollicitées et plaidoiries. </li>
 			<li> La Plateforme ne peut pas être utilisée pour télécharger ou sauvegarder des informations personnelles
-				telles que définies dans la <a href='https://laws-lois.justice.gc.ca/fra/lois/P-21/'
-					class='disclaimer-link'>Loi sur la protection des renseignements personnels</a>. Cela inclut, par
+				telles que définies dans la <a href="https://laws-lois.justice.gc.ca/fra/lois/P-21/"
+					class="disclaimer-link">Loi sur la protection des renseignements personnels</a>. Cela inclut, par
 				exemple, l'âge, l'état civil ou l'adresse d'une personne identifiable.</li>
 			<li> La plateforme ne peut pas être utilisée pour télécharger ou sauvegarder des informations protégées B ou
 				toute autre information ci-dessus. Les informations Protégé B sont des informations qui, si elles sont
@@ -133,7 +128,7 @@ script('user_saml', 'selectUserBackEnd');
 			</li>
 			<li> L'utilisation non autorisée de la Plateforme, telle que, mais non limitée à, l'utilisation pour le
 				stockage personnel ou le stockage soit d'informations personnelles telles que définies dans la <a
-					href='https://laws-lois.justice.gc.ca/fra/lois/P-21/' class='disclaimer-link'>Loi sur la protection
+					href="https://laws-lois.justice.gc.ca/fra/lois/P-21/" class="disclaimer-link">Loi sur la protection
 					des renseignements personnels</a>, soit d'informations au-dessus du niveau Protégé A, peut entraîner
 				la révocation immédiate de votre accès.</li>
 		</ul>
@@ -143,9 +138,9 @@ script('user_saml', 'selectUserBackEnd');
 				effectuée à des fins diverses, telles que l'évaluation de la performance du système ou du réseau, la
 				protection des ressources gouvernementales et la garantie de la conformité avec l'intention de la
 				Plateforme. Tout blocage et toute surveillance seront effectués conformément à la <a
-					href='https://laws-lois.justice.gc.ca/fra/lois/P-21/' class='disclaimer-link'>Loi sur la protection
+					href="https://laws-lois.justice.gc.ca/fra/lois/P-21/" class="disclaimer-link">Loi sur la protection
 					des renseignements personnels</a> et à la <a
-					href='https://laws-lois.justice.gc.ca/fra/Const/page-15.html' class='disclaimer-link'>Charte
+					href="https://laws-lois.justice.gc.ca/fra/Const/page-15.html" class="disclaimer-link">Charte
 					canadienne des droits et libertés</a>.</li>
 			<li> AAC utilise des logiciels pour surveiller le trafic sur le réseau et pour identifier les tentatives non
 				autorisées de téléchargement ou de modification des informations, ou pouvant causer d'autres dommages.
@@ -153,7 +148,7 @@ script('user_saml', 'selectUserBackEnd');
 				web, la date et l'heure de la visite et les pages consultées. Aucune tentative de relier ces adresses à
 				l'identité des personnes visitant la Plateforme ne sera faite à moins qu'une tentative de dommage à la
 				Plateforme ou activité criminelle n'ait été faite. Ces informations sont collectées conformément à
-				l'article 161 de la <a href='https://laws-lois.justice.gc.ca/fra/lois/f-11/' class='disclaimer-link'>Loi
+				l'article 161 de la <a href="https://laws-lois.justice.gc.ca/fra/lois/f-11/" class="disclaimer-link">Loi
 					sur la gestion des finances publiques</a>. Les informations peuvent être partagées avec les
 				autorités policières appropriées si des activités criminelles suspectes sont détectées.</li>
 		</ul>
@@ -161,18 +156,18 @@ script('user_saml', 'selectUserBackEnd');
 		<ul>
 			<li> Toutes les informations transmises et stockées sur les réseaux et dispositifs du gouvernement du
 				Canada, qu'elles soient de nature professionnelle ou personnelle, peuvent être accessibles en vertu de
-				la <a href='https://laws-lois.justice.gc.ca/fra/lois/A-1/' class='disclaimer-link'>Loi sur l'accès à
-					l'information</a> et de la <a href='https://laws-lois.justice.gc.ca/fra/lois/P-21/'
-					class='disclaimer-link'>Loi sur la protection des renseignements personnels</a>, sous réserve des
+				la <a href="https://laws-lois.justice.gc.ca/fra/lois/A-1/" class="disclaimer-link">Loi sur l'accès à
+					l'information</a> et de la <a href="https://laws-lois.justice.gc.ca/fra/lois/P-21/"
+					class="disclaimer-link">Loi sur la protection des renseignements personnels</a>, sous réserve des
 				exclusions et des exemptions prévues par ces lois.</li>
 		</ul>
-		En sélectionnant oui ci-dessous, vous reconnaissez l’avis de non-responsabilité d'AAC :
-		<br>
-		<br>
-		<div style="text-align: center;">
-			<button id="enagree" type="button" style="min-width: 140px;" class="btn btn-primary agree" lang="fr">
+		<div class="lli-login-actions">
+      En sélectionnant oui ci-dessous, vous reconnaissez l’avis de non-responsabilité d'AAC :
+      <br>
+		  <br>
+			<button id="agree" type="button" class="btn btn-primary agree" lang="fr">
 				Oui</button>
-			<button id="endisagree" type="button" style="min-width: 140px;" class="btn btn-default" lang="fr">
+			<button id="disagree" type="button" class="btn btn-default" lang="fr">
 				Non</button>
 		</div>
 	</div>
@@ -187,7 +182,8 @@ script('user_saml', 'selectUserBackEnd');
 			<?php } ?>
 			<?php if (isset($_['loginUrls']['directLogin'])): ?>
 				<option value="<?php p($_['loginUrls']['directLogin']['url']); ?>">
-					<?php p($_['loginUrls']['directLogin']['display-name']); ?></option>
+					<?php p($_['loginUrls']['directLogin']['display-name']); ?>
+				</option>
 			<?php endif; ?>
 		</select>
 	<?php } else { ?>
@@ -207,7 +203,7 @@ script('user_saml', 'selectUserBackEnd');
 	<?php } ?>
 </div>
 <div class="row can-footer">
-	<nav class="col-md-10 ftr-urlt-lnk">
+	<nav class="can-footer-links">
 		<ul id="footer-en">
 			<li><a href="https://www.canada.ca/en/contact.html">Contact information</a></li>
 			<li><a href="https://www.canada.ca/en/transparency/terms.html">Terms and conditions</a></li>
@@ -218,9 +214,8 @@ script('user_saml', 'selectUserBackEnd');
 			<li><a href="https://www.canada.ca/fr/transparence/avis.html">Avis</a></li>
 			<li><a href="https://www.canada.ca/fr/transparence/confidentialite.html">Confidentialité</a></li>
 		</ul>
-	</nav>
-	<div class="col-xs-6 col-md-3 col-lg-2 text-right">
-		<img class='footer-image' src="https://www.canada.ca/etc/designs/canada/cdts/gcweb/v4_0_39/assets/wmms-blk.svg"
+	</nav><div class="can-footer-brand">
+		<img class="footer-brand" src="/ncloud/apps/user_saml/img/wmms-blk.svg"
 			alt="Symbol of the Government of Canada">
 	</div>
 </div>
