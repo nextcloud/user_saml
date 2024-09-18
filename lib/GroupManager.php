@@ -70,6 +70,7 @@ class GroupManager {
 	private function getGroupsToRemove(array $samlGroupNames, array $assignedGroups): array {
 		$groupsToRemove = [];
 		foreach ($assignedGroups as $group) {
+			\OCP\Log\logger('user_saml')->debug('Checking group {group} for removal', ['group' => $group->getGID()]);
 			if (in_array($group->getGID(), $samlGroupNames, true)) {
 				continue;
 			}
@@ -91,6 +92,7 @@ class GroupManager {
 	private function getGroupsToAdd(array $samlGroupNames, array $assignedGroupIds): array {
 		$groupsToAdd = [];
 		foreach ($samlGroupNames as $groupName) {
+			\OCP\Log\logger('user_saml')->debug('Checking group {group} for addition', ['group' => $groupName]);
 			$group = $this->groupManager->get($groupName);
 			// if user is not assigned to the group or the provided group has a non SAML backend
 			if (!in_array($groupName, $assignedGroupIds) || !$this->hasSamlBackend($group)) {
@@ -296,7 +298,9 @@ class GroupManager {
 			&& $this->isGroupInTransitionList($group->getGID());
 
 		if ($isInTransition) {
+			\OCP\Log\logger('user_saml')->debug('Checking group {group} for foreign members', ['group' => $group->getGID()]);
 			$hasOnlySamlUsers = !$this->hasGroupForeignMembers($group);
+			\OCP\Log\logger('user_saml')->debug('Completed checking group {group} for foreign members', ['group' => $group->getGID()]);
 			if (!$hasOnlySamlUsers) {
 				$this->updateCandidatePool([$group->getGID()]);
 			}
