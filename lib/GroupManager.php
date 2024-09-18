@@ -70,6 +70,9 @@ class GroupManager {
 	private function getGroupsToRemove(array $samlGroupNames, array $assignedGroups): array {
 		$groupsToRemove = [];
 		foreach ($assignedGroups as $group) {
+			if (in_array($group->getGID(), $samlGroupNames, true)) {
+				continue;
+			}
 			// if group is not supplied by SAML and group has SAML backend
 			if (!in_array($group->getGID(), $samlGroupNames) && $this->hasSamlBackend($group)) {
 				$groupsToRemove[] = $group->getGID();
@@ -286,11 +289,35 @@ class GroupManager {
 	 * allowed only for groups owned by the SAML backend.
 	 */
 	protected function mayModifyGroup(?IGroup $group): bool {
-		return
+		$isInTransition =
 			$group !== null
 			&& $group->getGID() !== 'admin'
 			&& in_array('Database', $group->getBackendNames())
-			&& $this->isGroupInTransitionList($group->getGID())
-			&& !$this->hasGroupForeignMembers($group);
+			&& $this->isGroupInTransitionList($group->getGID());
+
+		if ($isInTransition) {
+			$hasOnlySamlUsers = !$this->hasGroupForeignMembers($group);
+			if (!$hasOnlySamlUsers) {
+				$this->updateCandidatePool([$group->getGID()]);
+			}
+		}
+		return $isInTransition && $hasOnlySamlUsers;
+	}
+
+	public function updateCandidatePool(array $migratedGroups): void {
+		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+		if ($candidateInfo === '' || $candidateInfo === self::STATE_MIGRATION_PHASE_EXPIRED) {
+			return;
+		}
+		$candidateInfo = \json_decode($candidateInfo, true);
+		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups'])) {
+			return;
+		}
+		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migratedGroups);
+		$this->config->setAppValue(
+			'user_saml',
+			self::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
+			json_encode($candidateInfo)
+		);
 	}
 }
