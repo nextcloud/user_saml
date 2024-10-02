@@ -101,12 +101,8 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Given The setting :settingName is set to :value
-	 *
-	 * @param string $settingName
-	 * @param string $value
 	 */
-	public function theSettingIsSetTo($settingName,
-		$value) {
+	public function theSettingIsSetTo(string $settingName, string $value): void {
 		if (in_array($settingName, [
 			'type',
 			'general-require_provisioned_account',
@@ -136,6 +132,44 @@ class FeatureContext implements Context {
 				1
 			)
 		);
+	}
+
+	/**
+	 * @Then The setting :settingName is currently :expectedValue
+	 */
+	public function theSettingIsCurrently(string $settingName, string $expectedValue): void {
+		if (in_array($settingName, [
+			'type',
+			'general-require_provisioned_account',
+			'general-allow_multiple_user_back_ends',
+			'localGroupsCheckForMigration',
+		])) {
+			$this->changedSettings[] = $settingName;
+			$value = shell_exec(
+				sprintf(
+					'%s %s config:app:get user_saml %s',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$settingName
+				)
+			);
+		} else {
+			$value = shell_exec(
+				sprintf(
+					'%s %s saml:config:set --"%s" %d',
+					PHP_BINARY,
+					__DIR__ . '/../../../../../../occ',
+					$settingName,
+					1
+				)
+			);
+		}
+		$value = rtrim($value); // remove trailing newline from shell output
+		if ($value !== $expectedValue) {
+			throw new UnexpectedValueException(
+				sprintf('Config value for %s is %s, but expected was %s', $settingName, $value, $expectedValue)
+			);
+		}
 	}
 
 	/**

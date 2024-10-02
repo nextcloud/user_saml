@@ -66,27 +66,10 @@ class MigrateGroups extends QueuedJob {
 			$candidates = $this->getMigratableGroups();
 			$toMigrate = $this->getGroupsToMigrate($argument['gids'], $candidates);
 			$migrated = $this->migrateGroups($toMigrate);
-			$this->updateCandidatePool($migrated);
+			$this->ownGroupManager->updateCandidatePool($migrated);
 		} catch (\RuntimeException $e) {
 			return;
 		}
-	}
-
-	protected function updateCandidatePool(array $migratedGroups): void {
-		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
-		if ($candidateInfo === '' || $candidateInfo === GroupManager::STATE_MIGRATION_PHASE_EXPIRED) {
-			return;
-		}
-		$candidateInfo = \json_decode($candidateInfo, true);
-		if (!isset($candidateInfo['dropAfter']) || !isset($candidateInfo['groups'])) {
-			return;
-		}
-		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migratedGroups);
-		$this->config->setAppValue(
-			'user_saml',
-			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
-			json_encode($candidateInfo)
-		);
 	}
 
 	protected function migrateGroups(array $toMigrate): array {

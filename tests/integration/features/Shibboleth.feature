@@ -420,6 +420,7 @@ Feature: Shibboleth
     Then the group backend of "Mixed Bag Of Sweets" should be "Database"
     And Then the group backend of "Mixed Bag Of Sweets" must not be "user_saml"
     And The user value "groups" should be "Mixed Bag Of Sweets,SAML_Astrophysics,SAML_Students"
+    And The setting "localGroupsCheckForMigration" is currently '{"dropAfter":9223372036854775807,"groups":["Astrophysics","Students"]}'
 
   Scenario: Not migrating a group with only SAML members that is not in the migration list
     Given The setting "type" is set to "saml"
