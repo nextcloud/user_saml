@@ -105,7 +105,9 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @param array $attributes
 	 */
 	public function createUserIfNotExists(string $uid, array $attributes = []): void {
-		if ($this->userExistsInDatabase($uid)) return;
+		if ($this->userExistsInDatabase($uid)) {
+			return;
+		}
 
 		$values = [
 			'uid' => $uid,
