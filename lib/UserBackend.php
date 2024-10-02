@@ -123,9 +123,9 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		if ($home !== '') {
 			//if attribute's value is an absolute path take this, otherwise append it to data dir
 			//check for / at the beginning or pattern c:\ resp. c:/
-				if ($home[0] !== '/'
-				   && !(strlen($home) > 3 && ctype_alpha($home[0])
-					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
+			if ($home[0] !== '/'
+				&& !(strlen($home) > 3 && ctype_alpha($home[0])
+					&& $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 			) {
 				$home = $this->config->getSystemValue('datadirectory',
 					\OC::$SERVERROOT.'/data') . '/' . $home;
