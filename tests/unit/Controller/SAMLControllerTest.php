@@ -26,6 +26,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
+use OCP\User\Events\UserLoggedInEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -103,7 +104,8 @@ class SAMLControllerTest extends TestCase {
 			$this->userResolver,
 			$this->userData,
 			$this->crypto,
-			$this->trustedDomainController
+			$this->trustedDomainController,
+			$this->eventDispatcher,
 		);
 	}
 
