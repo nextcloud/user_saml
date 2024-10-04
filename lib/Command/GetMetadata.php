@@ -20,7 +20,7 @@ class GetMetadata extends Command {
 	private SAMLSettings $SAMLSettings;
 
 	public function __construct(
-		SAMLSettings $SAMLSettings
+		SAMLSettings $SAMLSettings,
 	) {
 		parent::__construct();
 		$this->SAMLSettings = $SAMLSettings;
@@ -58,7 +58,7 @@ EOT
 			$output->writeln($metadata);
 		} else {
 			throw new Error(
-				'Invalid SP metadata: '.implode(', ', $errors),
+				'Invalid SP metadata: ' . implode(', ', $errors),
 				Error::METADATA_SP_INVALID
 			);
 		}

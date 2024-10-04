@@ -89,13 +89,13 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 			<?php foreach ($_['general'] as $key => $attribute): ?>
 				<?php if ($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
-						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-'.$key] ?? '0') ?>">
+						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-' . $key] ?? '0') ?>">
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
 					</p>
 				<?php elseif ($attribute['type'] === 'line' && !isset($attribute['global'])): ?>
 					<p>
 						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
-						<input data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> />
+						<input data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['general-' . $key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> />
 					</p>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -124,7 +124,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				<?php foreach ($_['sp'] as $key => $text): ?>
 					<p>
 						<label class="user-saml-standalone-label" for="user-saml-<?php p($key) ?>"><?php p($text) ?></label><br/>
-						<textarea id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>"><?php p($_['config']['sp-'.$key] ?? '') ?></textarea>
+						<textarea id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>"><?php p($_['config']['sp-' . $key] ?? '') ?></textarea>
 					</p>
 				<?php endforeach; ?>
 			</div>
@@ -168,7 +168,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					<?php if ($attribute['type'] === 'line'): ?>
 					<p>
 						<label class="user-saml-standalone-label" for="user-saml-<?php p($key) ?>"><?php p($attribute['text']) ?></label><br/>
-						<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?>/>
+						<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-attribute-mapping-' . $key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?>/>
 					</p>
 					<?php endif; ?>
 				<?php endforeach; ?>
@@ -185,14 +185,14 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				<h4><?php p($l->t('Signatures and encryption offered')) ?></h4>
 				<?php foreach ($_['security-offer'] as $key => $text): ?>
 					<p>
-						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-' . $key] ?? '0') ?>" class="checkbox">
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label><br/>
 					</p>
 				<?php endforeach; ?>
 				<h4><?php p($l->t('Signatures and encryption required')) ?></h4>
 				<?php foreach ($_['security-required'] as $key => $text): ?>
 					<p>
-						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
+						<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-' . $key] ?? '0') ?>" class="checkbox">
 						<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label>
 					</p>
 				<?php endforeach; ?>
@@ -202,12 +202,12 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 						<?php $text = $attribute['text'] ?>
 						<p>
 							<label for="user-saml-<?php p($key) ?>" class="user-saml-standalone-label"><?php p($attribute['text']) ?></label><br />
-							<input id="user-saml-<?php p($key) ?>" data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['security-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+							<input id="user-saml-<?php p($key) ?>" data-key="<?php p($key)?>" name="<?php p($key) ?>" value="<?php p($_['config']['security-' . $key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
 						</p>
 					<?php } else { ?>
 						<?php $text = $attribute ?>
 						<p>
-							<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-'.$key] ?? '0') ?>" class="checkbox">
+							<input type="checkbox" id="user-saml-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['security-' . $key] ?? '0') ?>" class="checkbox">
 							<label for="user-saml-<?php p($key)?>"><?php p($text) ?></label><br/>
 						</p>
 					<?php } ?>
@@ -227,7 +227,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					<?php if ($attribute['type'] === 'line'): ?>
 						<p class="group">
 							<label for="user-saml-<?php p($key) ?>" class="user-saml-standalone-label"><?php p($attribute['text']) ?></label><br/>
-							<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-'.$key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>
+							<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['saml-user-filter-' . $key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?> placeholder="<?php p($attribute['placeholder']) ?>"/>
 						</p>
 					<?php endif; ?>
 				<?php endforeach; ?>

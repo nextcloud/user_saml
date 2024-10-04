@@ -29,7 +29,7 @@ class SettingsController extends Controller {
 		IRequest $request,
 		IConfig $config,
 		Admin $admin,
-		SAMLSettings $samlSettings
+		SAMLSettings $samlSettings,
 	) {
 		parent::__construct($appName, $request);
 		$this->config = $config;

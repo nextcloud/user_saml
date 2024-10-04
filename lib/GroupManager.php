@@ -51,7 +51,7 @@ class GroupManager {
 		IConfig $config,
 		IEventDispatcher $dispatcher,
 		IJobList $jobList,
-		SAMLSettings $settings
+		SAMLSettings $settings,
 	) {
 		$this->db = $db;
 		$this->groupManager = $groupManager;

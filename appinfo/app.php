@@ -88,7 +88,7 @@ if ($user !== null) {
 				'message' => $l->t('This user account is disabled, please contact your administrator.')
 			]
 		);
-		header('Location: '.$targetUrl);
+		header('Location: ' . $targetUrl);
 		exit();
 	}
 }
@@ -131,7 +131,7 @@ if ($redirectSituation === true && $showLoginOptions) {
 			'redirectUrl' => $redirectUrl
 		]
 	);
-	header('Location: '.$targetUrl);
+	header('Location: ' . $targetUrl);
 	exit();
 }
 
@@ -155,6 +155,6 @@ if ($redirectSituation === true) {
 			'idp' => array_keys($configuredIdps)[0] ?? '',
 		]
 	);
-	header('Location: '.$targetUrl);
+	header('Location: ' . $targetUrl);
 	exit();
 }

@@ -28,7 +28,7 @@ class Admin implements ISettings {
 		IL10N        $l10n,
 		Defaults     $defaults,
 		IConfig      $config,
-		SAMLSettings $samlSettings
+		SAMLSettings $samlSettings,
 	) {
 		$this->l10n = $l10n;
 		$this->defaults = $defaults;

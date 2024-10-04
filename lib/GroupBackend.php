@@ -28,7 +28,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	public function __construct(
 		protected IDBConnection $dbc,
-		protected LoggerInterface $logger
+		protected LoggerInterface $logger,
 	) {
 	}
 
