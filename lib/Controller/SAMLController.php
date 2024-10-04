@@ -20,6 +20,7 @@ use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -29,6 +30,8 @@ use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Server;
+use OCP\User\Events\UserLoggedInEvent;
+use OCP\User\Events\UserLoggedOutEvent;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -63,6 +66,7 @@ class SAMLController extends Controller {
 	 */
 	private $crypto;
 	private ITrustedDomainHelper $trustedDomainHelper;
+	private IEventDispatcher $eventDispatcher;
 
 	public function __construct(
 		string $appName,
@@ -78,7 +82,8 @@ class SAMLController extends Controller {
 		UserResolver $userResolver,
 		UserData $userData,
 		ICrypto $crypto,
-		ITrustedDomainHelper $trustedDomainHelper
+		ITrustedDomainHelper $trustedDomainHelper,
+		IEventDispatcher $eventDispatcher
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -93,6 +98,7 @@ class SAMLController extends Controller {
 		$this->userData = $userData;
 		$this->crypto = $crypto;
 		$this->trustedDomainHelper = $trustedDomainHelper;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -413,6 +419,8 @@ class SAMLController extends Controller {
 			$response->addCookie('_shibsession_', 'authenticated');
 		}
 
+		$this->eventDispatcher->dispatchTyped(new UserLoggedInEvent($user, $user->getUID(), null, false));
+
 		$response->invalidateCookie('saml_data');
 		return $response;
 	}
@@ -425,6 +433,8 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
+		$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
+
 		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
 					 $this->config->getSystemValue('gss.mode', '') === 'master');
 
@@ -486,10 +496,13 @@ class SAMLController extends Controller {
 				} catch (Error $e) {
 					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
+					$this->eventDispatcher->dispatchTyped(new UserLoggedOutEvent($user));
 				}
 			}
+
 			if (!empty($targetUrl) && !$auth->getLastErrorReason()) {
 				$this->userSession->logout();
+				$this->eventDispatcher->dispatchTyped(new UserLoggedOutEvent($user));
 			}
 		}
 		if (empty($targetUrl)) {
