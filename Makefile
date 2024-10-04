@@ -32,6 +32,7 @@ appstore: clean
 	--exclude=.gitattributes \
 	--exclude=.github \
 	--exclude=.gitignore \
+	--exclude=.git-blame-ignore-revs \
 	--exclude=.scrutinizer.yml \
 	--exclude=.travis.yml \
 	--exclude=.tx \
