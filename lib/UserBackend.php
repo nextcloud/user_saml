@@ -24,9 +24,8 @@ use OCP\User\Backend\ICountUsersBackend;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Events\UserChangedEvent;
-use OCP\User\Events\UserFirstTimeLoggedInEvent;
-use OCP\User\Events\UserCreatedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\UserInterface;
 use Psr\Log\LoggerInterface;
 
