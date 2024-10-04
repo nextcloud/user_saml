@@ -346,7 +346,7 @@ class FeatureContext implements Context {
 	public function aLocalUserWithUidExists($uid) {
 		shell_exec(
 			sprintf(
-				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of ' . $uid . '" --password-from-env',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid
@@ -361,7 +361,7 @@ class FeatureContext implements Context {
 		rename(__DIR__ . '/../../../../../../data/' . $uid, __DIR__ . '/../../../../../../data/hide-' . $uid);
 		shell_exec(
 			sprintf(
-				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of '.$uid.'" --password-from-env',
+				'OC_PASS=password %s %s user:add %s --display-name "Default displayname of ' . $uid . '" --password-from-env',
 				PHP_BINARY,
 				__DIR__ . '/../../../../../../occ',
 				$uid

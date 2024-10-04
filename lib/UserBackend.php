@@ -62,7 +62,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		SAMLSettings $settings,
 		LoggerInterface $logger,
 		UserData $userData,
-		IEventDispatcher $eventDispatcher
+		IEventDispatcher $eventDispatcher,
 	) {
 		$this->config = $config;
 		$this->urlGenerator = $urlGenerator;
@@ -123,7 +123,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 				) {
 					$home = $this->config->getSystemValue('datadirectory',
-						\OC::$SERVERROOT.'/data') . '/' . $home;
+						\OC::$SERVERROOT . '/data') . '/' . $home;
 				}
 
 				$values['home'] = $home;

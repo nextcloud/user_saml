@@ -13,7 +13,9 @@ use OCP\Migration\IRepairStep;
 
 class CleanupRemovedConfig implements IRepairStep {
 
-	public function __construct(protected IConfig $config) {
+	public function __construct(
+		protected IConfig $config,
+	) {
 	}
 
 	/**

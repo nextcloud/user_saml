@@ -29,7 +29,7 @@ class OnlyLoggedInMiddleware extends Middleware {
 	public function __construct(
 		IControllerMethodReflector $reflector,
 		IUserSession $userSession,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
 	) {
 		$this->reflector = $reflector;
 		$this->userSession = $userSession;

@@ -78,7 +78,7 @@ class SAMLController extends Controller {
 		UserResolver $userResolver,
 		UserData $userData,
 		ICrypto $crypto,
-		ITrustedDomainHelper $trustedDomainHelper
+		ITrustedDomainHelper $trustedDomainHelper,
 	) {
 		parent::__construct($appName, $request);
 		$this->session = $session;
@@ -283,7 +283,7 @@ class SAMLController extends Controller {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
 			throw new Error(
-				'Invalid SP metadata: '.implode(', ', $errors),
+				'Invalid SP metadata: ' . implode(', ', $errors),
 				Error::METADATA_SP_INVALID
 			);
 		}

@@ -25,7 +25,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 
 	public function __construct(
 		IGroupManager $groupManager,
-		IConfig $config
+		IConfig $config,
 	) {
 		$this->groupManager = $groupManager;
 		$this->config = $config;

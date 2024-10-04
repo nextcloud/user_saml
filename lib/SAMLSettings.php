@@ -81,7 +81,7 @@ class SAMLSettings {
 		IURLGenerator $urlGenerator,
 		IConfig       $config,
 		ISession      $session,
-		ConfigurationsMapper $mapper
+		ConfigurationsMapper $mapper,
 	) {
 		$this->urlGenerator = $urlGenerator;
 		$this->config = $config;
