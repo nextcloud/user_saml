@@ -26,7 +26,7 @@ class ConfigCreate extends Base {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$output->writeln($this->samlSettings->getNewProviderId());
+		$output->writeln((string)$this->samlSettings->getNewProviderId());
 		return 0;
 	}
 }
