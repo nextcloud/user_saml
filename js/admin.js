@@ -355,10 +355,12 @@ $(function() {
 			} else {
 				$(this).val("0");
 			}
+
 			if(key === 'require_provisioned_account') {
 				$('#user-saml-attribute-mapping').toggleClass('hidden');
 				$('#user-saml-filtering').toggleClass('hidden');
 			}
+
 			OCA.User_SAML.Admin.setSamlConfigValue('general', key, $(this).val(), true);
 		});
 	});
