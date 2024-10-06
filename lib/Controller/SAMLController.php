@@ -228,12 +228,15 @@ class SAMLController extends Controller {
 
 				$response->addCookie('saml_data', $data, null, 'None');
 				break;
+
+
 			case 'environment-variable':
 				$ssoUrl = $originalUrl;
 				if (empty($ssoUrl)) {
 					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
 				}
 				$this->session->set('user_saml.samlUserData', $_SERVER);
+				
 				try {
 					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
 					$this->autoprovisionIfPossible();
@@ -241,12 +244,15 @@ class SAMLController extends Controller {
 					$firstLogin = $user->updateLastLoginTimestamp();
 					if ($firstLogin) {
 						$this->userBackend->initializeHomeDir($user->getUID());
-					}
+					} 
+						$this->eventDispatcher->dispatchTyped(new UserLoggedInEvent($user, $user->getUID(), null, false));
+
 				} catch (NoUserFoundException $e) {
 					if ($e->getMessage()) {
 						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
 					}
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
+
 				} catch (UserFilterViolationException $e) {
 					$this->logger->info(
 						'SAML filter constraints not met: {msg}',
@@ -257,11 +263,14 @@ class SAMLController extends Controller {
 					);
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted');
 				}
+
 				$response = new Http\RedirectResponse($ssoUrl);
 				if (isset($e)) {
 					$this->session->clear();
 				}
 				break;
+
+
 			default:
 				throw new \Exception(
 					sprintf(
@@ -373,11 +382,13 @@ class SAMLController extends Controller {
 		try {
 			$this->userData->setAttributes($auth->getAttributes());
 			$this->autoprovisionIfPossible();
+
 		} catch (NoUserFoundException $e) {
 			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
+
 		} catch (UserFilterViolationException $e) {
 			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
