@@ -5,6 +5,36 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.3.0
+
+### Added
+
+* [Feat(deps): Add Nextcloud 31 support (user_saml#875)](https://github.com/nextcloud/user_saml/pull/875)
+* [Migrate REUSE to toml format (user_saml#881)](https://github.com/nextcloud/user_saml/pull/881)
+* [Fix: Add more logging to the saml/acs endpoint (user_saml#885)](https://github.com/nextcloud/user_saml/pull/885)
+* [Fix: Log attribute updates (user_saml#886)](https://github.com/nextcloud/user_saml/pull/886)
+* [Debug(Groups): log group handling upon login (user_saml#889)](https://github.com/nextcloud/user_saml/pull/889)
+
+### Fixed
+
+* [Fix: Fire UserChangedEvent only after change happened (user_saml#873)](https://github.com/nextcloud/user_saml/pull/873)
+* [Fix(Groups): drop groups with mixed users from transition list (user_saml#888)](https://github.com/nextcloud/user_saml/pull/888)
+* [Fix(command): Ensure that writeln() argument is string (user_saml#893)](https://github.com/nextcloud/user_saml/pull/893)
+
+### Dependencies
+
+* [Build(deps-dev): bump guzzlehttp/guzzle from 7.8.1 to 7.9.1 in /tests/integration (user_saml#868)](https://github.com/nextcloud/user_saml/pull/868)
+* [Build(deps-dev): bump guzzlehttp/guzzle from 7.9.1 to 7.9.2 in /tests/integration (user_saml#869)](https://github.com/nextcloud/user_saml/pull/869)
+* [Build(deps-dev): bump nextcloud/coding-standard from 1.2.1 to 1.2.3 (user_saml#878)](https://github.com/nextcloud/user_saml/pull/878)
+* [Build(deps-dev): bump psalm/phar from 5.25.0 to 5.26.0 (user_saml#883)](https://github.com/nextcloud/user_saml/pull/883)
+* [Build(deps-dev): bump psalm/phar from 5.26.0 to 5.26.1 (user_saml#884)](https://github.com/nextcloud/user_saml/pull/884)
+* [Build(deps-dev): bump nextcloud/coding-standard from 1.2.3 to 1.3.1 (user_saml#891)](https://github.com/nextcloud/user_saml/pull/891)
+
+### Other
+
+* [Chore: update workflows from templates (user_saml#809)](https://github.com/nextcloud/user_saml/pull/809)
+* [Chore(CI): Adjust testing matrix for Nextcloud 30 on master (user_saml#874)](https://github.com/nextcloud/user_saml/pull/874)
+
 ## 6.2.0
 
 ### Added
