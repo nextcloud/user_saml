@@ -564,23 +564,52 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 
 		if ($user !== null) {
-			$currentEmail = (string)(method_exists($user, 'getSystemEMailAddress') ? $user->getSystemEMailAddress() : $user->getEMailAddress());
+			$this->logger->debug('Updating attributes for existing user', ['app' => 'user_saml', 'user' => $user->getUID()]);
+			$currentEmail = (string)$user->getSystemEMailAddress();
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
-				$user->setEMailAddress($newEmail);
+				$user->setSystemEMailAddress($newEmail);
+				$this->logger->debug('Email address updated', ['app' => 'user_saml', 'user' => $user->getUID()]);
+			} else {
+				$this->logger->debug('Email address not updated', [
+					'app' => 'user_saml',
+					'user' => $user->getUID(),
+					'currentEmail' => $currentEmail,
+					'newEmail' => $newEmail,
+				]);
 			}
 			$currentDisplayname = $this->getDisplayName($uid);
 			if ($newDisplayname !== null
 				&& $currentDisplayname !== $newDisplayname) {
 				$this->setDisplayName($uid, $newDisplayname);
+				$this->logger->debug('Display name updated', ['app' => 'user_saml', 'user' => $user->getUID()]);
 				$this->eventDispatcher->dispatchTyped(new UserChangedEvent($user, 'displayName', $newDisplayname, $currentDisplayname));
+				$this->logger->debug('Display name update event dispatched', ['app' => 'user_saml', 'user' => $user->getUID()]);
+			} else {
+				$this->logger->debug('Display name not updated', [
+					'app' => 'user_saml',
+					'user' => $user->getUID(),
+					'newDisplayname' => $newDisplayname,
+					'currentDisplayname' => $currentDisplayname,
+				]);
 			}
 
 			if ($newQuota !== null) {
 				$user->setQuota($newQuota);
+				$this->logger->debug('Quota updated', ['app' => 'user_saml', 'user' => $user->getUID()]);
+			} else {
+				$this->logger->debug('Quota not updated', [
+					'app' => 'user_saml',
+					'user' => $user->getUID(),
+				]);
 			}
 
 			$this->groupManager->handleIncomingGroups($user, $newGroups ?? []);
+			$this->logger->debug('Incoming groups updated', [
+				'app' => 'user_saml',
+				'user' => $user->getUID(),
+				'groups' => $newGroups,
+			]);
 		}
 	}
 
