@@ -114,20 +114,13 @@ class UserBackendTest extends TestCase {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		if (method_exists($user, 'getSystemEMailAddress')) {
-			$user
-				->expects($this->once())
-				->method('getSystemEMailAddress')
-				->willReturn(null);
-		} else {
-			$user
-				->expects($this->once())
-				->method('getEMailAddress')
-				->willReturn(null);
-		}
+		$user
+			->expects($this->once())
+			->method('getSystemEMailAddress')
+			->willReturn(null);
 		$user
 			->expects($this->never())
-			->method('setEMailAddress');
+			->method('setSystemEMailAddress');
 		$this->userBackend
 			->expects($this->once())
 			->method('getDisplayName')
@@ -187,20 +180,13 @@ class UserBackendTest extends TestCase {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		if (method_exists($user, 'getSystemEMailAddress')) {
-			$user
-				->expects($this->once())
-				->method('getSystemEMailAddress')
-				->willReturn('old@example.com');
-		} else {
-			$user
-				->expects($this->once())
-				->method('getEMailAddress')
-				->willReturn('old@example.com');
-		}
 		$user
 			->expects($this->once())
-			->method('setEMailAddress')
+			->method('getSystemEMailAddress')
+			->willReturn('old@example.com');
+		$user
+			->expects($this->once())
+			->method('setSystemEMailAddress')
 			->with('new@example.com');
 		$user
 			->expects($this->once())
@@ -251,20 +237,13 @@ class UserBackendTest extends TestCase {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn($user);
-		if (method_exists($user, 'getSystemEMailAddress')) {
-			$user
-				->expects($this->once())
-				->method('getSystemEMailAddress')
-				->willReturn('old@example.com');
-		} else {
-			$user
-				->expects($this->once())
-				->method('getEMailAddress')
-				->willReturn('old@example.com');
-		}
 		$user
 			->expects($this->once())
-			->method('setEMailAddress')
+			->method('getSystemEMailAddress')
+			->willReturn('old@example.com');
+		$user
+			->expects($this->once())
+			->method('setSystemEMailAddress')
 			->with('new@example.com');
 		$user
 			->expects($this->once())

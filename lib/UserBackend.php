@@ -565,10 +565,10 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 		if ($user !== null) {
 			$this->logger->debug('Updating attributes for existing user', ['app' => 'user_saml', 'user' => $user->getUID()]);
-			$currentEmail = (string)(method_exists($user, 'getSystemEMailAddress') ? $user->getSystemEMailAddress() : $user->getEMailAddress());
+			$currentEmail = (string)$user->getSystemEMailAddress();
 			if ($newEmail !== null
 				&& $currentEmail !== $newEmail) {
-				$user->setEMailAddress($newEmail);
+				$user->setSystemEMailAddress($newEmail);
 				$this->logger->debug('Email address updated', ['app' => 'user_saml', 'user' => $user->getUID()]);
 			} else {
 				$this->logger->debug('Email address not updated', [
