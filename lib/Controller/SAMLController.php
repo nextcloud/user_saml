@@ -361,6 +361,7 @@ class SAMLController extends Controller {
 			$response->invalidateCookie('saml_data');
 			return $response;
 		}
+		$this->logger->debug('Authentication successful', ['app' => 'user_saml']);
 
 		// Check whether the user actually exists, if not redirect to an error page
 		// explaining the issue.
@@ -368,12 +369,12 @@ class SAMLController extends Controller {
 			$this->userData->setAttributes($auth->getAttributes());
 			$this->autoprovisionIfPossible();
 		} catch (NoUserFoundException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
+			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
 		} catch (UserFilterViolationException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName]);
+			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -386,6 +387,7 @@ class SAMLController extends Controller {
 		$this->session->set('user_saml.samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
 		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
 		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
+		$this->logger->debug('Session values set', ['app' => 'user_saml']);
 		try {
 			$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
 			$firstLogin = $user->updateLastLoginTimestamp();
@@ -400,6 +402,7 @@ class SAMLController extends Controller {
 			$response->invalidateCookie('saml_data');
 			return $response;
 		}
+		$this->logger->debug('User found, last login timestamp updated', ['app' => 'user_saml']);
 
 		$originalUrl = $data['RelayState'] ?? $data['OriginalUrl'];
 		if ($originalUrl !== null && $originalUrl !== '') {
