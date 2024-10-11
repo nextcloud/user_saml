@@ -38,61 +38,23 @@ use Psr\Log\LoggerInterface;
 class SAMLController extends Controller {
 	use TXmlHelper;
 
-	/** @var ISession */
-	private $session;
-	/** @var IUserSession */
-	private $userSession;
-	/** @var SAMLSettings */
-	private $samlSettings;
-	/** @var UserBackend */
-	private $userBackend;
-	/** @var IConfig */
-	private $config;
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var LoggerInterface */
-	private $logger;
-	/** @var IL10N */
-	private $l;
-	/** @var UserResolver */
-	private $userResolver;
-	/** @var UserData */
-	private $userData;
-	/**
-	 * @var ICrypto
-	 */
-	private $crypto;
-	private ITrustedDomainHelper $trustedDomainHelper;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
-		IUserSession $userSession,
-		SAMLSettings $samlSettings,
-		UserBackend $userBackend,
-		IConfig $config,
-		IURLGenerator $urlGenerator,
-		LoggerInterface $logger,
-		IL10N $l,
-		UserResolver $userResolver,
-		UserData $userData,
-		ICrypto $crypto,
-		ITrustedDomainHelper $trustedDomainHelper,
+		private ISession $session,
+		private IUserSession $userSession,
+		private SAMLSettings $samlSettings,
+		private UserBackend $userBackend,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private LoggerInterface $logger,
+		private IL10N $l,
+		private UserResolver $userResolver,
+		private UserData $userData,
+		private ICrypto $crypto,
+		private ITrustedDomainHelper $trustedDomainHelper,
 	) {
 		parent::__construct($appName, $request);
-		$this->session = $session;
-		$this->userSession = $userSession;
-		$this->samlSettings = $samlSettings;
-		$this->userBackend = $userBackend;
-		$this->config = $config;
-		$this->urlGenerator = $urlGenerator;
-		$this->logger = $logger;
-		$this->l = $l;
-		$this->userResolver = $userResolver;
-		$this->userData = $userData;
-		$this->crypto = $crypto;
-		$this->trustedDomainHelper = $trustedDomainHelper;
 	}
 
 	/**
@@ -109,8 +71,8 @@ class SAMLController extends Controller {
 		$this->assertGroupMemberships();
 
 		if ($this->userData->getOriginalUid() === '') {
-			$this->logger->error('Uid is not a valid uid please check your attribute mapping', ['app' => $this->appName]);
-			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping.');
+			$this->logger->error('Given UID is not valid, please check your attribute mapping', ['app' => $this->appName]);
+			throw new \InvalidArgumentException('No valid UID given, please check your attribute mapping.');
 		}
 		$uid = $this->userData->getEffectiveUid();
 		$userExists = $uid !== '';
@@ -118,8 +80,8 @@ class SAMLController extends Controller {
 		// if this server acts as a global scale master and the user is not
 		// a local admin of the server we just create the user and continue
 		// no need to update additional attributes
-		$isGsEnabled = $this->config->getSystemValue('gs.enabled', false);
-		$isGsMaster = $this->config->getSystemValue('gss.mode', 'slave') === 'master';
+		$isGsEnabled = $this->config->getSystemValueBool('gs.enabled', false);
+		$isGsMaster = $this->config->getSystemValueString('gss.mode', 'slave') === 'master';
 		$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []));
 		if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
 			$this->userBackend->createUserIfNotExists($this->userData->getOriginalUid());
@@ -428,8 +390,8 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
-		$isFromGS = ($this->config->getSystemValue('gs.enabled', false) &&
-					 $this->config->getSystemValue('gss.mode', '') === 'master');
+		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false) &&
+					 $this->config->getSystemValueString('gss.mode', '') === 'master');
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
@@ -448,7 +410,7 @@ class SAMLController extends Controller {
 			$jwt = $this->request->getParam('jwt', '');
 
 			try {
-				$key = $this->config->getSystemValue('gss.jwt.key', '');
+				$key = $this->config->getSystemValueString('gss.jwt.key', '');
 				$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
 
 				$idp = $decoded['idp'] ?? null;
