@@ -25,9 +25,9 @@ class Admin implements ISettings {
 	private $samlSettings;
 
 	public function __construct(
-		IL10N        $l10n,
-		Defaults     $defaults,
-		IConfig      $config,
+		IL10N $l10n,
+		Defaults $defaults,
+		IConfig $config,
 		SAMLSettings $samlSettings,
 	) {
 		$this->l10n = $l10n;
