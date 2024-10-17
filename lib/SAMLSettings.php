@@ -79,8 +79,8 @@ class SAMLSettings {
 
 	public function __construct(
 		IURLGenerator $urlGenerator,
-		IConfig       $config,
-		ISession      $session,
+		IConfig $config,
+		ISession $session,
 		ConfigurationsMapper $mapper,
 	) {
 		$this->urlGenerator = $urlGenerator;

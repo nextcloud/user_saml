@@ -23,9 +23,9 @@ class GroupMigration {
 	protected const CHUNK_SIZE = 1000;
 
 	public function __construct(
-		protected GroupBackend    $ownGroupBackend,
-		protected IGroupManager   $groupManager,
-		protected IDBConnection   $dbc,
+		protected GroupBackend $ownGroupBackend,
+		protected IGroupManager $groupManager,
+		protected IDBConnection $dbc,
 		protected LoggerInterface $logger,
 	) {
 	}
