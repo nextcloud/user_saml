@@ -1,7 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "تم تعطيل حساب هذا المستخدم، يرجى الاتصال بالمسؤول.",
+    "This user account is disabled, please contact your administrator." : "تم تعطيل حساب هذا المستخدم، يرجى الاتصال بمسؤول النظام.",
     "Saved" : "تم الإحتفاظ به",
     "Could not save" : "تعذّر الحفظ",
     "Provider" : "المزوّد",
