@@ -30,6 +30,7 @@ class SAMLSettings {
 		'idp-singleLogoutService.responseUrl',
 		'idp-singleLogoutService.url',
 		'idp-singleSignOnService.url',
+		'passthroughParameters',
 		'idp-x509cert',
 		'security-authnRequestsSigned',
 		'security-general',
@@ -133,6 +134,7 @@ class SAMLSettings {
 			'strict' => true,
 			'debug' => $this->config->getSystemValue('debug', false),
 			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
+			'passthroughParameters' => $this->configurations[$idp]['passthroughParameters'] ?? '',
 			'security' => [
 				'nameIdEncrypted' => ($this->configurations[$idp]['security-nameIdEncrypted'] ?? '0') === '1',
 				'authnRequestsSigned' => ($this->configurations[$idp]['security-authnRequestsSigned'] ?? '0') === '1',

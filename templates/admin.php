@@ -153,6 +153,10 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 					<label class="user-saml-standalone-label" for="user-saml-x509cert"><?php p($l->t('Public X.509 certificate of the IdP')) ?></label><br/>
 					<textarea id="user-saml-x509cert" name="x509cert"><?php p($_['config']['idp-x509cert'] ?? '') ?></textarea>
 				</p>
+				<p>
+					<label class="user-saml-standalone-label" for="user-saml-passthroughParameters"><?php p($l->t('Request parameters to pass-through to IdP (comma separated list)')) ?></label><br/>
+					<input id="user-saml-passthroughParameters" name="passthroughParameters" value="<?php p($_['config']['passthroughParameters'] ?? '') ?>" type="text" placeholder="idp_hint,extra_parameter"/>
+				</p>
 			</div>
 		</div>
 
