@@ -151,9 +151,18 @@ class SAMLController extends Controller {
 		switch ($type) {
 			case 'saml':
 				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
+				$passthroughParams = $this->config->getSystemValue('user_saml.passthrough_parameters', []);
+				$passthroughValues = [];
+				foreach ($passthroughParams as $passthroughParam) {
+					$value = (string)$this->request->getParam($passthroughParam, '');
+					if ($value !== '') {
+						$passthroughValues[$passthroughParam] = $value;
+					}
+				}
+
 
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
-				$ssoUrl = $auth->login($returnUrl, [], false, false, true);
+				$ssoUrl = $auth->login($returnUrl, $passthroughValues, false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
 
 				// Small hack to make user_saml work with the loginflows
