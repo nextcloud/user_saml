@@ -150,7 +150,7 @@ class SAMLController extends Controller {
 		$type = $this->config->getAppValue($this->appName, 'type');
 		switch ($type) {
 			case 'saml':
-				$settings= $this->samlSettings->getOneLoginSettingsArray($idp);
+				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
 				$auth = new Auth($settings);
 				$passthroughParamsString = trim($settings['passthroughParameters'] ?? '') ;
 				$passthroughParams = array_map('trim', explode(',', $passthroughParamsString));
