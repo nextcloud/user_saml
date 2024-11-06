@@ -159,7 +159,6 @@ class SAMLController extends Controller {
 				foreach ($passthroughParams as $passthroughParam) {
 					$value = (string)$this->request->getParam($passthroughParam, '');
 					if ($value !== '') {
-						$this->logger->info('Passthrough parameters: ' . $passthroughParam . ' : ' . $value);
 						$passthroughValues[$passthroughParam] = $value;
 					}
 				}
