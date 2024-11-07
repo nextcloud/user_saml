@@ -152,7 +152,7 @@ class SAMLController extends Controller {
 			case 'saml':
 				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
 				$auth = new Auth($settings);
-				$passthroughParamsString = trim($settings['passthroughParameters'] ?? '') ;
+				$passthroughParamsString = trim($settings['idp-passthroughParameters'] ?? '') ;
 				$passthroughParams = array_map('trim', explode(',', $passthroughParamsString));
 
 				$passthroughValues = [];
