@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -133,6 +134,41 @@ class FeatureContext implements Context {
 			)
 		);
 	}
+	/**
+	 * @Given The config :configName is :value
+	 */
+	public function theConfigIs(string $configName, string $value): void {
+		shell_exec(
+			sprintf(
+				'%s %s saml:config:set --"%s"="%s" %d',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$configName,
+				$value,
+				1
+			)
+		);
+	}
+	/**
+	 * @Then The config :configName should be :expectedValue
+	 */
+	public function theConfigShouldBe(string $configName, string $expectedValue): void {
+		$json = shell_exec(
+			sprintf(
+				'%s %s saml:config:get --providerId %d --output json',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				1
+			)
+		);
+		$json = json_decode($json);
+		$value = $json->{'1'}->$configName;
+		if ($value !== $expectedValue) {
+			throw new UnexpectedValueException(
+				sprintf('Config value for %s is %s, but expected was %s', $configName, $value, $expectedValue)
+			);
+		}
+	}
 
 	/**
 	 * @Then The setting :settingName is currently :expectedValue
@@ -189,6 +225,24 @@ class FeatureContext implements Context {
 			]
 		);
 	}
+	/**
+	 * @When I send a GET request with query params to :url
+	 */
+	public function iSendAGetRequestWithQueryParamsTo($url) {
+		$url = $url . '&idp=1';
+		$query = parse_url($url)['query'];
+		$url = str_replace('?' . $query, '', $url);
+		$this->response = $this->client->request(
+			'GET',
+			$url,
+			[
+				'headers' => [
+					'Accept' => 'text/html',
+				],
+				'query' => $query
+			]
+		);
+	}
 
 	/**
 	 * @Then I should be redirected to :targetUrl
@@ -223,6 +277,54 @@ class FeatureContext implements Context {
 			}
 		}
 	}
+	/**
+	 * @Then I should be redirected to :targetUrl with query params
+	 *
+	 * @param string $targetUrl
+	 * @throws InvalidArgumentException
+	 */
+	public function iShouldBeRedirectedToWithQueryParams($targetUrl) {
+		$redirectHeader = $this->response->getHeader('X-Guzzle-Redirect-History');
+		$firstUrl = $redirectHeader[0];
+		$firstUrlParsed = parse_url($firstUrl);
+		$targetUrl = parse_url($targetUrl);
+		$paramsToCheck = [
+			'scheme',
+			'host',
+			'path',
+			'query'
+		];
+
+		// Remove everything after a comma in the URL since cookies are passed there
+		[$firstUrlParsed['path']] = explode(';', $firstUrlParsed['path']);
+		$passthroughParams = $targetUrl['query'];
+		foreach ($paramsToCheck as $param) {
+			if ($param == 'query') {
+				foreach (explode('&', $passthroughParams) as $passthrough) {
+					if (!str_contains($firstUrl, $passthrough)) {
+						throw new InvalidArgumentException(
+							sprintf(
+								'Expected to find %s for parameter %s',
+								$passthrough,
+								$param,
+							)
+						);
+					}
+				}
+			} else {
+				if ($targetUrl[$param] !== $firstUrlParsed[$param]) {
+					throw new InvalidArgumentException(
+						sprintf(
+							'Expected %s for parameter %s, got %s',
+							$targetUrl[$param],
+							$param,
+							$firstUrlParsed[$param]
+						)
+					);
+				}
+			}
+		}
+	}
 
 	/**
 	 * @Then I send a POST request to :url with the following data
@@ -230,8 +332,10 @@ class FeatureContext implements Context {
 	 * @param string $url
 	 * @param TableNode $table
 	 */
-	public function iSendAPostRequestToWithTheFollowingData($url,
-		TableNode $table) {
+	public function iSendAPostRequestToWithTheFollowingData(
+		$url,
+		TableNode $table,
+	) {
 		$postParams = $table->getColumnsHash()[0];
 		$this->response = $this->client->request(
 			'POST',
@@ -351,7 +455,8 @@ class FeatureContext implements Context {
 					'format' => 'json',
 				],
 				'auth' => [
-					'admin', 'admin'
+					'admin',
+					'admin'
 				],
 				'cookies' => '',
 			]
