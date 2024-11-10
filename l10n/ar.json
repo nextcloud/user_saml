@@ -71,6 +71,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "عنوان محدد موقع الموارد المُوحّد لمزود الهوية حيث يرسل مزود الخدمة طلب تسجيل الخروج الفردي \"SLO\"",
     "URL Location of the IDP's SLO Response" : "موقع عنوان URL لاستجابة مزد الهوية \"IDP\" لتسجيل الخروج الفردي\"SLO \"",
     "Public X.509 certificate of the IdP" : "شهادة X.509 العامة لمزود الهوية \"IdP\" ",
+    "Request parameters to pass-through to IdP (comma separated list)" : "طلب البارامترات التي سيتم تمريرها إلى موفر الهوية (في شكل قائمة مفصولة بفواصل)",
     "Attribute mapping" : "تعيين السمة",
     "If you want to optionally map attributes to the user you can configure these here." : "إذا كنت تريد تعيين الخصائص بشكل اختياري للمستخدم ، فيمكنك تكوينها هنا.",
     "Show attribute mapping settings…" : "عرض إعدادات تعيين الخصائص...",

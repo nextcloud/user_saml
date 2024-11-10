@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Enderezo URL do IdP onde o SP enviará as solicitudes SLO",
     "URL Location of the IDP's SLO Response" : "Localización URL da resposta SLO do IdP",
     "Public X.509 certificate of the IdP" : "Certificado público X.509 do IdP",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Parámetros de solicitude para pasar ao IdP (lista separada por comas)",
     "Attribute mapping" : "Asignación de atributos",
     "If you want to optionally map attributes to the user you can configure these here." : "Se queres asignar atributos opcionais ao usuario, podes configuralos aquí.",
     "Show attribute mapping settings…" : "Amosar  os axustes de asignación de atributos…",
