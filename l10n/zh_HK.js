@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL 在 SP 發送 SLO 請求的 IdP 的位置",
     "URL Location of the IDP's SLO Response" : "IDP 的 SLO 響應的 URL 位置",
     "Public X.509 certificate of the IdP" : "公共 X.509 證書的 IdP",
+    "Request parameters to pass-through to IdP (comma separated list)" : "請求參數以傳遞給身份提供者（用逗號分隔的列表）",
     "Attribute mapping" : "屬性映射",
     "If you want to optionally map attributes to the user you can configure these here." : "如果要選擇將屬性映射到用戶，可以在這裡配置。",
     "Show attribute mapping settings…" : "顯示屬性映射設置...",

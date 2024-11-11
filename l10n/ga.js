@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL Suíomh an IdP áit a seolfaidh an SP an Iarratas SLO",
     "URL Location of the IDP's SLO Response" : "URL Suíomh Freagra SLO an IDP",
     "Public X.509 certificate of the IdP" : "Deimhniú poiblí X.509 den Id",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Iarr ar pharaiméadair pas a fháil tríd chuig IdP (liosta scartha le camóg)",
     "Attribute mapping" : "Mapáil tréithe",
     "If you want to optionally map attributes to the user you can configure these here." : "Más mian leat tréithe a mhapáil go roghnach don úsáideoir is féidir leat iad seo a chumrú anseo.",
     "Show attribute mapping settings…" : "Taispeáin socruithe mapála tréithe…",

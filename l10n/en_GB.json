@@ -71,6 +71,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "URL Location of the IdP where the SP will send the SLO Request",
     "URL Location of the IDP's SLO Response" : "URL Location of the IDP's SLO Response",
     "Public X.509 certificate of the IdP" : "Public X.509 certificate of the IdP",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Request parameters to pass-through to IdP (comma separated list)",
     "Attribute mapping" : "Attribute mapping",
     "If you want to optionally map attributes to the user you can configure these here." : "If you want to optionally map attributes to the user you can configure these here.",
     "Show attribute mapping settings…" : "Show attribute mapping settings…",
