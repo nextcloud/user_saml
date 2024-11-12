@@ -71,6 +71,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "SP 要傳送 SLO 請求的 IdP URL 位置",
     "URL Location of the IDP's SLO Response" : "IdP 的 SLO 回應的 URL 位置",
     "Public X.509 certificate of the IdP" : "IdP 的公開 X.509 憑證",
+    "Request parameters to pass-through to IdP (comma separated list)" : "要傳遞給 IdP 的請求參數（逗號分隔清單）",
     "Attribute mapping" : "屬性對映",
     "If you want to optionally map attributes to the user you can configure these here." : "若您想要選擇性地將屬性對映至使用者，您可以在此處設定。",
     "Show attribute mapping settings…" : "顯示屬性對映設定……",
