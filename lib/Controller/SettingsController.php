@@ -57,7 +57,7 @@ class SettingsController extends Controller {
 			'singleSignOnService.url' => ['required' => false],
 			'entityId' => ['required' => false],
 			'x509cert' => ['required' => false],
-			'idp-passthroughParameters' => ['required' => false],
+			'passthroughParameters' => ['required' => false],
 		];
 		/* Fetch all config values for the given providerId */
 
