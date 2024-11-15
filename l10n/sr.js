@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL локација добављача идентитета где ће добављач услуга послати SLO захтев",
     "URL Location of the IDP's SLO Response" : "URL адреса IDP SLO одговора",
     "Public X.509 certificate of the IdP" : "Јавни X.509 сертификат добављача идентитета",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Захтевај да се параметри проследе до IdP (листа раздвојена запетама)",
     "Attribute mapping" : "Мапирање атрибута",
     "If you want to optionally map attributes to the user you can configure these here." : "Ако желите да опционо мапирате атрибуте на корисника, то можете учинити овде.",
     "Show attribute mapping settings…" : "Прикажи поставке мапирања атрибута…",
