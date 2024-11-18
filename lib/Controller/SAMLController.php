@@ -539,7 +539,7 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
-	public function selectUserBackEnd(string $redirectUrl): Http\TemplateResponse {
+	public function selectUserBackEnd(string $redirectUrl = ''): Http\TemplateResponse {
 		$attributes = ['loginUrls' => []];
 
 		if ($this->samlSettings->allowMultipleUserBackEnds()) {
