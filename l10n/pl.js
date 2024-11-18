@@ -34,6 +34,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Atrybut do mapowania katalogów domowych użytkowników.",
     "Attribute to map the users groups to." : "Atrybut do mapowania grup użytkowników.",
     "Attribute to map the users MFA login status" : "Atrybut do mapowania statusu logowania użytkowników MFA",
+    "Group Mapping Prefix, default: %s" : "Prefiks mapowania grupy, domyślny: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Odrzuć członków tych grup. To ustawienie ma pierwszeństwo przed wymaganymi członkostwami.",
     "Group A, Group B, …" : "Grupa A, Grupa B,…",
     "Require membership in these groups, if any." : "Wymagaj członkostwa w tych grupach, jeśli takie istnieją.",
@@ -72,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Adres URL IdP gdzie dostawca usług wyśle żądanie SLO",
     "URL Location of the IDP's SLO Response" : "Adres URL lokalizacji odpowiedzi SLO IDP",
     "Public X.509 certificate of the IdP" : "Publiczny certyfikat X.509 IdP",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Żądaj parametrów do przekazania do dostawcy tożsamości (lista oddzielona przecinkami)",
     "Attribute mapping" : "Atrybut mapowania",
     "If you want to optionally map attributes to the user you can configure these here." : "Tutaj możesz opcjonalnie przypisać atrybuty użytkownikowi.",
     "Show attribute mapping settings…" : "Wyświetl ustawienia atrybutów mapowania…",
@@ -92,6 +94,8 @@ OC.L10N.register(
     "Your account is denied, access to this service is thus not possible." : "Twoje konto zostało zablokowane, dostęp do tej usługi jest niemożliwe.",
     "Account not provisioned." : "Brak konta.",
     "Your account is not provisioned, access to this service is thus not possible." : "Nie posiadasz konta, stąd dostęp do tej usługi jest niemożliwy.",
-    "Login options:" : "Opcje logowania:"
+    "Login options:" : "Opcje logowania:",
+    "Choose an authentication provider" : "Wybierz dostawcę uwierzytelniania",
+    "Group Mapping Prefix, default: SAML_" : "Prefiks mapowania grupy, domyślny: SAML_"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
