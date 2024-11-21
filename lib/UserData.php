@@ -14,14 +14,11 @@ class UserData {
 	private $uid;
 	/** @var array */
 	private $attributes;
-	/** @var UserResolver */
-	private $userResolver;
-	/** @var SAMLSettings */
-	private $samlSettings;
 
-	public function __construct(UserResolver $userResolver, SAMLSettings $samlSettings) {
-		$this->userResolver = $userResolver;
-		$this->samlSettings = $samlSettings;
+	public function __construct(
+		private UserResolver $userResolver,
+		private SAMLSettings $samlSettings,
+	) {
 	}
 
 	public function setAttributes(array $attributes): void {

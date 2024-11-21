@@ -15,25 +15,13 @@ use OCP\Settings\ISettings;
 use OneLogin\Saml2\Constants;
 
 class Admin implements ISettings {
-	/** @var IL10N */
-	private $l10n;
-	/** @var Defaults */
-	private $defaults;
-	/** @var IConfig */
-	private $config;
-	/** @var SAMLSettings */
-	private $samlSettings;
 
 	public function __construct(
-		IL10N $l10n,
-		Defaults $defaults,
-		IConfig $config,
-		SAMLSettings $samlSettings,
+		private IL10N $l10n,
+		private Defaults $defaults,
+		private IConfig $config,
+		private SAMLSettings $samlSettings,
 	) {
-		$this->l10n = $l10n;
-		$this->defaults = $defaults;
-		$this->config = $config;
-		$this->samlSettings = $samlSettings;
 	}
 
 	/**

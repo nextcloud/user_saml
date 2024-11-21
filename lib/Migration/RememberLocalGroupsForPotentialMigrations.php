@@ -18,17 +18,10 @@ use function json_encode;
 
 class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var IConfig */
-	private $config;
-
 	public function __construct(
-		IGroupManager $groupManager,
-		IConfig $config,
+		private IGroupManager $groupManager,
+		private IConfig $config,
 	) {
-		$this->groupManager = $groupManager;
-		$this->config = $config;
 	}
 
 	public function getName(): string {

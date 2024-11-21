@@ -65,29 +65,17 @@ class SAMLSettings {
 
 	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var IConfig */
-	private $config;
-	/** @var ISession */
-	private $session;
 	/** @var array<int, array<string, string>> */
 	private $configurations = [];
 	/** @var int */
 	private $configurationsLoadedState = self::LOADED_NONE;
-	/** @var ConfigurationsMapper */
-	private $mapper;
 
 	public function __construct(
-		IURLGenerator $urlGenerator,
-		IConfig $config,
-		ISession $session,
-		ConfigurationsMapper $mapper,
+		private IURLGenerator $urlGenerator,
+		private IConfig $config,
+		private ISession $session,
+		private ConfigurationsMapper $mapper,
 	) {
-		$this->urlGenerator = $urlGenerator;
-		$this->config = $config;
-		$this->session = $session;
-		$this->mapper = $mapper;
 	}
 
 	/**
@@ -132,7 +120,7 @@ class SAMLSettings {
 
 		$settings = [
 			'strict' => true,
-			'debug' => $this->config->getSystemValue('debug', false),
+			'debug' => $this->config->getSystemValueBool('debug', false),
 			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
 			'security' => [
 				'nameIdEncrypted' => ($this->configurations[$idp]['security-nameIdEncrypted'] ?? '0') === '1',

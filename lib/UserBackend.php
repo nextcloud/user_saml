@@ -29,51 +29,21 @@ use OCP\UserInterface;
 use Psr\Log\LoggerInterface;
 
 class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend {
-	/** @var IConfig */
-	private $config;
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var ISession */
-	private $session;
-	/** @var IDBConnection */
-	private $db;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var GroupManager */
-	private $groupManager;
 	/** @var \OCP\UserInterface[] */
 	private static $backends = [];
-	/** @var SAMLSettings */
-	private $settings;
-	/** @var LoggerInterface */
-	private $logger;
-	/** @var UserData */
-	private $userData;
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
 
 	public function __construct(
-		IConfig $config,
-		IURLGenerator $urlGenerator,
-		ISession $session,
-		IDBConnection $db,
-		IUserManager $userManager,
-		GroupManager $groupManager,
-		SAMLSettings $settings,
-		LoggerInterface $logger,
-		UserData $userData,
-		IEventDispatcher $eventDispatcher,
+		private IConfig $config,
+		private IURLGenerator $urlGenerator,
+		private ISession $session,
+		private IDBConnection $db,
+		private IUserManager $userManager,
+		private GroupManager $groupManager,
+		private SAMLSettings $settings,
+		private LoggerInterface $logger,
+		private UserData $userData,
+		private IEventDispatcher $eventDispatcher,
 	) {
-		$this->config = $config;
-		$this->urlGenerator = $urlGenerator;
-		$this->session = $session;
-		$this->db = $db;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->settings = $settings;
-		$this->logger = $logger;
-		$this->userData = $userData;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -88,7 +58,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			->from('user_saml_users')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
-		$result = $qb->execute();
+		$result = $qb->executeQuery();
 		$users = $result->fetchAll();
 		$result->closeCursor();
 
@@ -122,7 +92,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 				   && !(strlen($home) > 3 && ctype_alpha($home[0])
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 				) {
-					$home = $this->config->getSystemValue('datadirectory',
+					$home = $this->config->getSystemValueString('datadirectory',
 						\OC::$SERVERROOT . '/data') . '/' . $home;
 				}
 
@@ -134,7 +104,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			foreach ($values as $column => $value) {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
-			$qb->execute();
+			$qb->executeStatement();
 
 			$this->initializeHomeDir($uid);
 		}
@@ -294,7 +264,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			->setMaxResults($limit)
 			->setFirstResult($offset);
 
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$displayNames = [];
 		while ($row = $result->fetch()) {
 			$displayNames[(string)$row['uid']] = (string)$row['displayname'];
@@ -617,7 +587,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))
 			->from('user_saml_users');
-		$result = $query->execute();
+		$result = $query->executeQuery();
 
 		return $result->fetchColumn();
 	}

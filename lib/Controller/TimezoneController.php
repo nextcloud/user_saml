@@ -16,22 +16,14 @@ use OCP\ISession;
 
 class TimezoneController extends Controller {
 
-	/** @var IConfig */
-	private $config;
-	/** @var string */
-	private $userId;
-	/** @var ISession */
-	private $session;
-
-	public function __construct($appName,
+	public function __construct(
+		$appName,
 		IRequest $request,
-		IConfig $config,
-		$userId,
-		ISession $session) {
+		private IConfig $config,
+		private $userId,
+		private ISession $session,
+	) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
-		$this->userId = $userId;
-		$this->session = $session;
 	}
 
 	/**

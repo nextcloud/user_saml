@@ -17,24 +17,14 @@ use OneLogin\Saml2\Constants;
 
 class SettingsController extends Controller {
 
-	/** @var IConfig */
-	private $config;
-	/** @var Admin */
-	private $admin;
-	/** @var SAMLSettings */
-	private $samlSettings;
-
 	public function __construct(
 		$appName,
 		IRequest $request,
-		IConfig $config,
-		Admin $admin,
-		SAMLSettings $samlSettings,
+		private IConfig $config,
+		private Admin $admin,
+		private SAMLSettings $samlSettings,
 	) {
 		parent::__construct($appName, $request);
-		$this->config = $config;
-		$this->admin = $admin;
-		$this->samlSettings = $samlSettings;
 	}
 
 	public function getSamlProviderIds(): DataResponse {
