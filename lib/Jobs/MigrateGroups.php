@@ -42,6 +42,7 @@ class MigrateGroups extends QueuedJob {
 		private LoggerInterface $logger,
 		ITimeFactory $timeFactory,
 	) {
+		parent::__construct($timeFactory);
 	}
 
 	protected function run($argument) {
