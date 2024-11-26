@@ -18,34 +18,10 @@ SPDX-FileCopyrightText = "2017 Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = ["js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "emptyTemplates/**", "3rdparty/vendor/autoload.php", "tests/integration/vendor/autoload.php", "tests/integration/vendor/bin/**", "tests/data/**", "img/app.svg", "img/app-dark.svg", "screenshots/1.png", "screenshots/2.png", "tests/integration/features/**.feature"]
+path = ["js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "emptyTemplates/**", "tests/integration/vendor/autoload.php", "tests/integration/vendor/bin/**", "tests/data/**", "img/app.svg", "img/app-dark.svg", "screenshots/1.png", "screenshots/2.png", "tests/integration/features/**.feature"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2016 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
-
-[[annotations]]
-path = "3rdparty/vendor/composer/**"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "Nils Adermann, Jordi Boggiano"
-SPDX-License-Identifier = "MIT"
-
-[[annotations]]
-path = "3rdparty/vendor/firebase/**"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2011 Neuman Vong"
-SPDX-License-Identifier = "BSD-3-Clause"
-
-[[annotations]]
-path = "3rdparty/vendor/onelogin/**"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2010-2016 OneLogin, Inc."
-SPDX-License-Identifier = "MIT"
-
-[[annotations]]
-path = "3rdparty/vendor/robrichards/xmlseclibs/**"
-precedence = "aggregate"
-SPDX-FileCopyrightText = "2007-2019, Robert Richards <rrichards@cdatazone.org>"
-SPDX-License-Identifier = "BSD-3-Clause"
 
 [[annotations]]
 path = "tests/integration/vendor/behat/behat/**"

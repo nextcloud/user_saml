@@ -10,7 +10,7 @@ use OCA\User_SAML\UserBackend;
 use OCP\IGroupManager;
 use Psr\Log\LoggerInterface;
 
-require_once __DIR__ . '/../3rdparty/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // If we run in CLI mode do not set up the app as it can fail the OCC execution
 // since the URLGenerator isn't accessible.

@@ -29,7 +29,6 @@ jobs:
               - 'templates/**'
               - 'tests/**'
               - 'vendor/**'
-              - '3rdparty/**'
               - 'composer.json'
               - 'composer.lock'
 
