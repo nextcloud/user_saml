@@ -150,7 +150,9 @@ class GroupManager {
 			return;
 		}
 
-		if ($this->hasSamlBackend($group)) {
+		$keepEmptyGroups = $this->config->getSystemValue('user_saml_keep_empty_groups', false);
+
+		if ($this->hasSamlBackend($group) AND $keepEmptyGroups === false) {
 			$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
 			if ($this->ownGroupBackend->countUsersInGroup($gid) === 0) {
 				$this->dispatcher->dispatchTyped(new BeforeGroupDeletedEvent($group));
