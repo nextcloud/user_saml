@@ -150,6 +150,7 @@ class GroupManager {
 			return;
 		}
 
+		// keep empty groups if user_saml_keep_empty_groups is set to true
 		$keepEmptyGroups = $this->config->getSystemValue('user_saml_keep_empty_groups', false);
 
 		if ($this->hasSamlBackend($group) AND $keepEmptyGroups === false) {
