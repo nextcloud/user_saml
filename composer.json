@@ -5,6 +5,16 @@
 		"classmap-authoritative": true,
 		"platform": {
 			"php": "8.0"
+		},
+		"allow-plugins": {
+			"cweagans/composer-patches": true
+		}
+	},
+	"extra": {
+		"patches": {
+			"onelogin/php-saml": {
+				"PHP 8.4 compatibility": "https://patch-diff.githubusercontent.com/raw/SAML-Toolkits/php-saml/pull/600.patch"
+			}
 		}
 	},
 	"scripts": {
@@ -22,6 +32,7 @@
 	},
 	"require": {
 		"onelogin/php-saml": "^4.2",
-		"firebase/php-jwt": "^6.10"
+		"firebase/php-jwt": "^6.10",
+		"cweagans/composer-patches": "^1.7"
 	}
 }
