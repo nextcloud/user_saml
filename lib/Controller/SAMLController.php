@@ -569,7 +569,7 @@ class SAMLController extends Controller {
 	 */
 	private function getIdps(string $redirectUrl): array {
 		$result = [];
-		$idps = $this->samlSettings->getListOfIdps();
+		$idps = $this->samlSettings->getListOfIdps($this->request);
 		foreach ($idps as $idpId => $displayName) {
 			$result[] = [
 				'url' => $this->getSSOUrl($redirectUrl, (string)$idpId),
