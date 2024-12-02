@@ -81,7 +81,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			)));
 			$query->orWhere($query->expr()->iLike('displayname', $query->createNamedParameter(
 				'%' . $this->dbc->escapeLikeParameter($search) . '%'
-			))); 
+			)));
 		}
 
 		if ((int)$limit > 0) {
@@ -305,16 +305,18 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		$displayName = trim($displayName);
 		if ($displayName === '') {
 			$displayName = $gid;
-		} 
+		}
 
 		$query = $this->dbc->getQueryBuilder();
-		$query->update(self::TABLE_GROUPS)
+		$isUpdated = $query->update(self::TABLE_GROUPS)
 			->set('displayname', $query->createNamedParameter($displayName))
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
-		$query->execute();
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->executeStatement() > 0;
 
-		$this->groupCache[$gid] = $displayName;
+		if ($isUpdated) {
+			$this->groupCache[$gid] = $displayName;
+		}
 
-		return true;
+		return $isUpdated;
 	}
 }
