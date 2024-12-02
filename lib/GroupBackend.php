@@ -15,10 +15,11 @@ use OCP\Group\Backend\IDeleteGroupBackend;
 use OCP\Group\Backend\IGetDisplayNameBackend;
 use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
+use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, INamedBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend {
 
 	/** @var array */
 	private $groupCache = [];
@@ -76,6 +77,9 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 		if ($search !== '') {
 			$query->where($query->expr()->iLike('gid', $query->createNamedParameter(
+				'%' . $this->dbc->escapeLikeParameter($search) . '%'
+			)));
+			$query->orWhere($query->expr()->iLike('displayname', $query->createNamedParameter(
 				'%' . $this->dbc->escapeLikeParameter($search) . '%'
 			)));
 		}
@@ -291,5 +295,28 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		return $this->groupCache[$gid] ?? $gid;
+	}
+
+	public function setDisplayName(string $gid, string $displayName): bool {
+		if (!$this->groupExists($gid)) {
+			return false;
+		}
+
+		$displayName = trim($displayName);
+		if ($displayName === '') {
+			$displayName = $gid;
+		}
+
+		$query = $this->dbc->getQueryBuilder();
+		$isUpdated = $query->update(self::TABLE_GROUPS)
+			->set('displayname', $query->createNamedParameter($displayName))
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->executeStatement() > 0;
+
+		if ($isUpdated) {
+			$this->groupCache[$gid] = $displayName;
+		}
+
+		return $isUpdated;
 	}
 }
