@@ -494,6 +494,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Given A local user with uid :uid is disabled
+	 * @param string $uid
+	 */
+	public function aLocalUserWithUidIsDisabled($uid) {
+		shell_exec(
+			sprintf(
+				'OC_PASS=password %s %s user:disable %s',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$uid
+			)
+		);
+	}
+
+	/**
 	 * @Then I hack :uid into existence
 	 */
 	public function hackUserIntoExistence(string $uid): void {
