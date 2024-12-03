@@ -120,26 +120,32 @@
 		},
 
 		testMetaData: function() {
-			var type = $('#user-saml').data('type');
-
+			// Checks on each request whether the settings make sense or not
+			const type = document.getElementById('user-saml').dataset.type;
 			if (type === 'environment-variable') {
 				return
 			}
 
-			// Checks on each request whether the settings make sense or not
-			$.ajax({
-				url: OC.generateUrl('/apps/user_saml/saml/metadata'),
-				data: { idp: this.currentConfig },
-				type: 'GET'
-			}).fail(function (e) {
-				if (e.status === 500) {
-					$('#user-saml-settings-complete').addClass('hidden');
-					$('#user-saml-settings-incomplete').removeClass('hidden');
+			let xhr = new XMLHttpRequest();
+			xhr.open('GET', OC.generateUrl('/apps/user_saml/saml/metadata?idp=' + this.currentConfig));
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.setRequestHeader('requesttoken', OC.requestToken);
+
+			xhr.onload = function () {
+				if (xhr.status >= 200 && xhr.status < 300) {
+					document.getElementById('user-saml-settings-complete').classList.remove('hidden');
+					document.getElementById('user-saml-settings-incomplete').classList.add('hidden');
+				} else {
+					document.getElementById('user-saml-settings-complete').classList.add('hidden');
+					document.getElementById('user-saml-settings-incomplete').classList.remove('hidden');
 				}
-			}).success(function () {
-				$('#user-saml-settings-complete').removeClass('hidden');
-				$('#user-saml-settings-incomplete').addClass('hidden');
-			});
+			};
+			xhr.onerror = function () {
+				document.getElementById('user-saml-settings-complete').classList.add('hidden');
+				document.getElementById('user-saml-settings-incomplete').classList.remove('hidden');
+			};
+
+			xhr.send();
 		},
 
 		setSamlConfigValue: function(category, setting, value, global) {
@@ -156,6 +162,9 @@
 				},
 				error: function() {
 					OC.msg.finishedSaving('#user-saml-save-indicator', {status: 'error', data: {message: t('user_saml', 'Could not save')}});
+					// reset any meta data indicator as the test would not be called now, old state might be misleading
+					document.getElementById('user-saml-settings-complete').classList.add('hidden');
+					document.getElementById('user-saml-settings-incomplete').classList.add('hidden');
 				}
 			};
 
