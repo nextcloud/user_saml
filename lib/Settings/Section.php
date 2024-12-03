@@ -11,19 +11,11 @@ use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
 
 class Section implements IIconSection {
-	/** @var IL10N */
-	private $l;
-	/** @var IURLGenerator */
-	private $url;
 
-	/**
-	 * @param IL10N $l
-	 * @param IURLGenerator $url
-	 */
-	public function __construct(IL10N $l,
-		IURLGenerator $url) {
-		$this->l = $l;
-		$this->url = $url;
+	public function __construct(
+		private IL10N $l,
+		private IURLGenerator $url,
+	) {
 	}
 
 	/**

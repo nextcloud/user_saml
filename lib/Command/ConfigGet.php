@@ -14,11 +14,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigGet extends Base {
-	private SAMLSettings $samlSettings;
 
-	public function __construct(SAMLSettings $samlSettings) {
+	public function __construct(
+		private SAMLSettings $samlSettings,
+	) {
 		parent::__construct();
-		$this->samlSettings = $samlSettings;
 	}
 
 	protected function configure(): void {

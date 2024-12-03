@@ -20,46 +20,22 @@ use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 class GroupManager {
 	public const LOCAL_GROUPS_CHECK_FOR_MIGRATION = 'localGroupsCheckForMigration';
 	public const STATE_MIGRATION_PHASE_EXPIRED = 'EXPIRED';
 
-	/**
-	 * @var IDBConnection $db
-	 */
-	protected $db;
-
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var GroupBackend */
-	private $ownGroupBackend;
-	/** @var IConfig */
-	private $config;
-	/** @var IEventDispatcher */
-	private $dispatcher;
-	/** @var IJobList */
-	private $jobList;
-	/** @var SAMLSettings */
-	private $settings;
-
-
 	public function __construct(
-		IDBConnection $db,
-		IGroupManager $groupManager,
-		GroupBackend $ownGroupBackend,
-		IConfig $config,
-		IEventDispatcher $dispatcher,
-		IJobList $jobList,
-		SAMLSettings $settings,
+		protected IDBConnection $db,
+		private IGroupManager $groupManager,
+		private GroupBackend $ownGroupBackend,
+		private IConfig $config,
+		private IEventDispatcher $dispatcher,
+		private IJobList $jobList,
+		private SAMLSettings $settings,
 	) {
-		$this->db = $db;
-		$this->groupManager = $groupManager;
-		$this->ownGroupBackend = $ownGroupBackend;
-		$this->config = $config;
-		$this->dispatcher = $dispatcher;
-		$this->jobList = $jobList;
-		$this->settings = $settings;
 	}
 
 	/**
@@ -70,7 +46,7 @@ class GroupManager {
 	private function getGroupsToRemove(array $samlGroupNames, array $assignedGroups): array {
 		$groupsToRemove = [];
 		foreach ($assignedGroups as $group) {
-			\OCP\Log\logger('user_saml')->debug('Checking group {group} for removal', ['group' => $group->getGID()]);
+			Server::get(LoggerInterface::class)->debug('Checking group {group} for removal', ['app' => 'user_saml', 'group' => $group->getGID()]);
 			if (in_array($group->getGID(), $samlGroupNames, true)) {
 				continue;
 			}
@@ -92,7 +68,7 @@ class GroupManager {
 	private function getGroupsToAdd(array $samlGroupNames, array $assignedGroupIds): array {
 		$groupsToAdd = [];
 		foreach ($samlGroupNames as $groupName) {
-			\OCP\Log\logger('user_saml')->debug('Checking group {group} for addition', ['group' => $groupName]);
+			Server::get(LoggerInterface::class)->debug('Checking group {group} for addition', ['app' => 'user_saml', 'group' => $groupName]);
 			$group = $this->groupManager->get($groupName);
 			// if user is not assigned to the group or the provided group has a non SAML backend
 			if (!in_array($groupName, $assignedGroupIds) || !$this->hasSamlBackend($group)) {
@@ -298,9 +274,9 @@ class GroupManager {
 			&& $this->isGroupInTransitionList($group->getGID());
 
 		if ($isInTransition) {
-			\OCP\Log\logger('user_saml')->debug('Checking group {group} for foreign members', ['group' => $group->getGID()]);
+			Server::get(LoggerInterface::class)->debug('Checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
 			$hasOnlySamlUsers = !$this->hasGroupForeignMembers($group);
-			\OCP\Log\logger('user_saml')->debug('Completed checking group {group} for foreign members', ['group' => $group->getGID()]);
+			Server::get(LoggerInterface::class)->debug('Completed checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
 			if (!$hasOnlySamlUsers) {
 				$this->updateCandidatePool([$group->getGID()]);
 			}

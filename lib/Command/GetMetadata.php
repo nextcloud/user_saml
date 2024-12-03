@@ -17,13 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GetMetadata extends Command {
 	use TXmlHelper;
 
-	private SAMLSettings $SAMLSettings;
-
 	public function __construct(
-		SAMLSettings $SAMLSettings,
+		private SAMLSettings $samlSettings,
 	) {
 		parent::__construct();
-		$this->SAMLSettings = $SAMLSettings;
 	}
 
 	protected function configure(): void {
@@ -49,7 +46,11 @@ EOT
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$idp = (int)$input->getArgument('idp');
-		$settings = new Settings($this->SAMLSettings->getOneLoginSettingsArray($idp));
+		$settingsArray = $this->samlSettings->getOneLoginSettingsArray($idp);
+		if ($settingsArray === null) {
+			throw new \InvalidArgumentException('Settings cannot be null');
+		}
+		$settings = new Settings($settingsArray);
 		$metadata = $settings->getSPMetadata();
 		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
 			return $settings->validateMetadata($metadata);

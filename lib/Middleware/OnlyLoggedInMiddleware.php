@@ -19,21 +19,12 @@ use OCP\IUserSession;
  * @package OCA\User_SAML\MiddleWare
  */
 class OnlyLoggedInMiddleware extends Middleware {
-	/** @var IControllerMethodReflector */
-	private $reflector;
-	/** @var IUserSession */
-	private $userSession;
-	/** @var IURLGenerator */
-	private $urlGenerator;
 
 	public function __construct(
-		IControllerMethodReflector $reflector,
-		IUserSession $userSession,
-		IURLGenerator $urlGenerator,
+		private IControllerMethodReflector $reflector,
+		private IUserSession $userSession,
+		private IURLGenerator $urlGenerator,
 	) {
-		$this->reflector = $reflector;
-		$this->userSession = $userSession;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**

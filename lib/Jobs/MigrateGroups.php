@@ -32,33 +32,17 @@ class MigrateGroups extends QueuedJob {
 
 	protected const BATCH_SIZE = 1000;
 
-	/** @var IConfig */
-	private $config;
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var IDBConnection */
-	private $dbc;
-	/** @var GroupBackend */
-	private $ownGroupBackend;
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(
 		protected GroupMigration $groupMigration,
 		protected GroupManager $ownGroupManager,
-		IConfig $config,
-		IGroupManager $groupManager,
-		IDBConnection $dbc,
-		GroupBackend $ownGroupBackend,
-		LoggerInterface $logger,
+		private IConfig $config,
+		private IGroupManager $groupManager,
+		private IDBConnection $dbc,
+		private GroupBackend $ownGroupBackend,
+		private LoggerInterface $logger,
 		ITimeFactory $timeFactory,
 	) {
 		parent::__construct($timeFactory);
-		$this->config = $config;
-		$this->groupManager = $groupManager;
-		$this->dbc = $dbc;
-		$this->ownGroupBackend = $ownGroupBackend;
-		$this->logger = $logger;
 	}
 
 	protected function run($argument) {

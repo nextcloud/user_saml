@@ -15,21 +15,16 @@ use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
 
 class DavPlugin extends ServerPlugin {
-	private $session;
-	private $config;
-	private $auth;
 	/** @var Server */
 	private $server;
-	/** @var SAMLSettings */
-	private $samlSettings;
 
-	public function __construct(ISession $session, IConfig $config, array $auth, SAMLSettings $samlSettings) {
-		$this->session = $session;
-		$this->config = $config;
-		$this->auth = $auth;
-		$this->samlSettings = $samlSettings;
+	public function __construct(
+		private ISession $session,
+		private IConfig $config,
+		private array $auth,
+		private SAMLSettings $samlSettings,
+	) {
 	}
-
 
 	public function initialize(Server $server) {
 		// before auth
