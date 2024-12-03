@@ -5,6 +5,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.4.0
+
+### Added
+
+* [Feat(groups): add setting display name to group backend (user_saml#855)](https://github.com/nextcloud/user_saml/pull/855)
+* [Feat(PassthroughParameters): Make it possible to pass through parameters to the SAML library (user_saml#901)](https://github.com/nextcloud/user_saml/pull/901)
+
+### Fixed
+
+* [Fix(settings): Fix settings name (user_saml#903)](https://github.com/nextcloud/user_saml/pull/903)
+* [Fix(Controller): make redirectUrl optional (user_saml#905)](https://github.com/nextcloud/user_saml/pull/905)
+* [Fix(UI): fix usage of $.ajax by going VanillaJS (user_saml#913)](https://github.com/nextcloud/user_saml/pull/913)
+
+### Dependencies
+
+* [Build(deps): bump firebase/php-jwt from 6.10.1 to 6.10.2 in /3rdparty (user_saml#908)](https://github.com/nextcloud/user_saml/pull/908)
+* [Deps(php-saml): apply PHP 8.4 compat patch (user_saml#912)](https://github.com/nextcloud/user_saml/pull/912)
+
+### Under the hood
+
+* [Refactor: small adjustments not impacting functionalities (user_saml#896)](https://github.com/nextcloud/user_saml/pull/896)
+* [Build(deps-dev): bump nextcloud/coding-standard from 1.3.1 to 1.3.2 (user_saml#899)](https://github.com/nextcloud/user_saml/pull/899)
+* [Build(deps-dev): bump behat/behat from 3.14.0 to 3.15.0 in /tests/integration (user_saml#900)](https://github.com/nextcloud/user_saml/pull/900)* [Build(deps-dev): bump nextcloud/coding-standard from 1.3.1 to 1.3.2 (user_saml#899)](https://github.com/nextcloud/user_saml/pull/899)
+* [Refactor: Apply code best practices PHP8+ (user_saml#907)](https://github.com/nextcloud/user_saml/pull/907)
+* [Build(deps): cleanup composer (user_saml#909)](https://github.com/nextcloud/user_saml/pull/909)
+
 ## 6.3.0
 
 ### Added
