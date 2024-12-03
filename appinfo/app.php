@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+use OC\User\LoginException;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
@@ -63,7 +64,21 @@ if ($type === 'environment-variable') {
 		return;
 	}
 
-	OC_User::handleApacheAuth();
+	try {
+		OC_User::handleApacheAuth();
+	} catch (LoginException $e) {
+		if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
+			return;
+		}
+		$targetUrl = $urlGenerator->linkToRouteAbsolute(
+			'user_saml.SAML.genericError',
+			[
+				'message' => $e->getMessage()
+			]
+		);
+		header('Location: ' . $targetUrl);
+		exit();
+	}
 }
 
 if ($returnScript === true) {

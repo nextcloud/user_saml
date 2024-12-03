@@ -27,3 +27,13 @@ Feature: EnvironmentVariable
     And The environment variable "REMOTE_USER" is set to "certainly-not-provisioned-user"
     When I send a GET request to "http://localhost:8080/index.php/login"
     Then I should be redirected to "http://localhost:8080/index.php/apps/user_saml/saml/notProvisioned"
+
+  Scenario: Authenticating using environment variable with SSO as a disabled user on backend
+    Given A local user with uid "provisioned-disabled-user" exists
+    And A local user with uid "provisioned-disabled-user" is disabled
+    And The setting "type" is set to "environment-variable"
+    And The setting "general-require_provisioned_account" is set to "1"
+    And The setting "general-uid_mapping" is set to "REMOTE_USER"
+    And The environment variable "REMOTE_USER" is set to "provisioned-disabled-user"
+    When I send a GET request to "http://localhost:8080/index.php/login"
+    Then I should be redirected to "http://localhost:8080/index.php/apps/user_saml/saml/error"
