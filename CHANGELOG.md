@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.4.1
+
+### Fixed
+
+* [Handle LoginException when authenticating with Apache (user_saml#910)](https://github.com/nextcloud/user_saml/pull/910)
+
 ## 6.4.0
 
 ### Added
