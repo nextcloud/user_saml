@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "URL du fournisseur d'identité où le fournisseur de service enverra la requête de déconnexion SLO",
     "URL Location of the IDP's SLO Response" : "URL de la réponse SLO du fournisseur d’identité",
     "Public X.509 certificate of the IdP" : "Certificat public X.509 de l'IdP",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Paramètres de requête à passer au fournisseur d'identité (séparés par une virgule)",
     "Attribute mapping" : "Mappage des attributs",
     "If you want to optionally map attributes to the user you can configure these here." : "Si vous préférez relier les attributs à l'utilisateur, vous pouvez les configurer ici.",
     "Show attribute mapping settings…" : "Afficher les paramètres de mappage des attributs...",
