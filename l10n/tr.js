@@ -73,6 +73,7 @@ OC.L10N.register(
     "URL Location of the IdP where the SP will send the SLO Request" : "Hizmet sağlayıcının SLO isteğini göndereceği kimlik hizmeti sağlayıcı adresini yazın",
     "URL Location of the IDP's SLO Response" : "Kimlik hizmeti sağlayıcının SLO yanıtı adresi",
     "Public X.509 certificate of the IdP" : "Kimlik hizmeti sağlayıcının herkese açık X.509 sertifikası",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Kimlik hizmeti sağlayıcı üzerine aktarılacak istek parametreleri (virgül ile ayrılmış liste)",
     "Attribute mapping" : "Öznitelik eşleştirme",
     "If you want to optionally map attributes to the user you can configure these here." : "Öznitelikler isteğe bağlı olarak kullanıcı ile buradan eşleştirilebilir.",
     "Show attribute mapping settings…" : "Öznitelik eşleştirme ayarlarını görüntüle …",
