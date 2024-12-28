@@ -71,6 +71,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "URL SPがSLO要求を送信するIdPの場所",
     "URL Location of the IDP's SLO Response" : "IDPがSLOレスポンスを提供するURL",
     "Public X.509 certificate of the IdP" : "IdPの公開X.509証明書",
+    "Request parameters to pass-through to IdP (comma separated list)" : "IdPに渡すリクエストパラメータ（カンマ区切りリスト）",
     "Attribute mapping" : "属性マッピング",
     "If you want to optionally map attributes to the user you can configure these here." : "オプションで属性をユーザーにマップする場合は、ここでそれらを構成できます。",
     "Show attribute mapping settings…" : "属性マッピングの設定を表示する...",
