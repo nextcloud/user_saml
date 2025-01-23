@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ "8.0", "8.1", "8.2", "8.3" ]
+        php-versions: [ "8.0", "8.1", "8.2", "8.3", "8.4" ]
         databases: [ "mysql" ]
         server-versions: [ "stable28", "stable29", "stable30", "stable31", "master" ]
         exclude:
@@ -74,6 +74,15 @@ jobs:
             databases: "mysql"
           - server-versions: "stable28"
             php-versions: "8.1"
+            databases: "mysql"
+          - server-versions: "stable28"
+            php-versions: "8.4"
+            databases: "mysql"
+          - server-versions: "stable29"
+            php-versions: "8.4"
+            databases: "mysql"
+          - server-versions: "stable30"
+            php-versions: "8.4"
             databases: "mysql"
         include:
           - server-versions: "stable28"
