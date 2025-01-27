@@ -111,16 +111,31 @@ class MigrateGroups extends QueuedJob {
 
 			$group = $this->groupManager->get($gid);
 			if ($group === null) {
+				$this->logger->debug('Not migrating group "{gid}": not found by the group manager', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+				]);
 				return false;
 			}
 
 			$backendNames = $group->getBackendNames();
 			if (!in_array('Database', $backendNames, true)) {
+				$this->logger->debug('Not migrating group "{gid}": not belonging to local database backend', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+					'backends' => $backendNames,
+				]);
 				return false;
 			}
 
 			foreach ($group->getUsers() as $user) {
 				if ($user->getBackendClassName() !== 'user_saml') {
+					$this->logger->debug('Not migrating group "{gid}": user "{userId}" from a different backend "{userBackend}"', [
+						'app' => 'user_saml',
+						'gid' => $gid,
+						'userId' => $user->getUID(),
+						'userBackend' => $user->getBackendClassName(),
+					]);
 					return false;
 				}
 			}
