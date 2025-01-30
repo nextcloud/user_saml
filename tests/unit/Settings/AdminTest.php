@@ -93,6 +93,7 @@ class AdminTest extends \Test\TestCase {
 				'text' => 'Only allow authentication if an account exists on some other backend (e.g. LDAP).',
 				'type' => 'checkbox',
 				'global' => true,
+				'value' => '0'
 			],
 			'allow_multiple_user_back_ends' => [
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
@@ -220,10 +221,10 @@ class AdminTest extends \Test\TestCase {
 				2 => 'Provider 2',
 			]);
 		$this->config
-			->expects($this->once())
+			->expects($this->exactly(2)) // 'type' and 'general-require_provisioned_account'
 			->method('getAppValue')
-			->with('user_saml', 'type')
-			->willReturn('');
+			->with('user_saml', $this->anything(), $this->anything())
+			->willReturn($this->returnArgument(2));
 
 		$params = $this->formDataProvider();
 		unset($params['general']['idp0_display_name']);

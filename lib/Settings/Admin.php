@@ -175,13 +175,14 @@ class Admin implements ISettings {
 		}
 
 		$type = $this->config->getAppValue('user_saml', 'type');
+
+		$generalSettings['require_provisioned_account'] = [
+			'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
+			'type' => 'checkbox',
+			'global' => true,
+			'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
+		];
 		if ($type === 'saml') {
-			$generalSettings['require_provisioned_account'] = [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
-				'type' => 'checkbox',
-				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
-			];
 			$generalSettings['idp0_display_name'] = [
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
 				'type' => 'line',
