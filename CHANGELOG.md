@@ -5,6 +5,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.5.0
+
+### Added
+
+* [Feat(deps): Add Nextcloud 32 support (user_saml#921)](https://github.com/nextcloud/user_saml/pull/921)
+
+### Fixed
+
+* [Fix(UI): set value to the require_provisioned_account option also in env mode (user_saml#916)](https://github.com/nextcloud/user_saml/pull/916)
+* [Fix(GroupMigration): issue debug info on why a group is not being migrated (user_saml#923)](https://github.com/nextcloud/user_saml/pull/923)
+
+### Dependencies
+
+* [Build(deps): bump firebase/php-jwt from 6.10.2 to 6.11.0 (user_saml#924)](https://github.com/nextcloud/user_saml/pull/924)
+
+### Under the hood
+
+* [Chore(CI): Adjust testing matrix for Nextcloud 31 on master (user_saml#920)](https://github.com/nextcloud/user_saml/pull/920)
+* [Ci(integration): also test against PHP 8.4 (user_saml#922)](https://github.com/nextcloud/user_saml/pull/922)
+
 ## 6.4.1
 
 ### Fixed
