@@ -135,7 +135,7 @@ class GroupManager {
 
 		if ($this->hasSamlBackend($group)) {
 			$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
-			if ($this->ownGroupBackend->countUsersInGroup($gid) === 0 && !$keepEmptyGroups == '1') {
+			if ($keepEmptyGroups !== '1' && $this->ownGroupBackend->countUsersInGroup($gid) === 0) {
 				$this->dispatcher->dispatchTyped(new BeforeGroupDeletedEvent($group));
 				$this->ownGroupBackend->deleteGroup($group->getGID());
 				$this->dispatcher->dispatchTyped(new GroupDeletedEvent($group));

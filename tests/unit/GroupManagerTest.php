@@ -216,7 +216,7 @@ class GroupManagerTest extends TestCase {
 			->method('removeFromGroup');
 		// assert no remaining group memberships
 		$this->ownGroupBackend
-			->expects($this->once())
+			->expects($this->never())
 			->method('countUsersInGroup')
 			->willReturn(0);
 		// assert group is not deleted
