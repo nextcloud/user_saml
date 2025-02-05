@@ -71,6 +71,7 @@
     "URL Location of the IdP where the SP will send the SLO Request" : "Umiestnenie URL IdP, kam SP zašle SLO požiadavku",
     "URL Location of the IDP's SLO Response" : "Umiestnenie URL IDP, kam SLO pošle odpoveď",
     "Public X.509 certificate of the IdP" : "Verejný certifikát X.509 poskytovateľa prihlasovacích údajov",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Parametre žiadosti pre predanie do IdP (zoznam oddelený čiarkou)",
     "Attribute mapping" : "Mapovanie atribútov",
     "If you want to optionally map attributes to the user you can configure these here." : "Ak chcete voliteľne priradiť atribúty k používateľom, môžete ich nastaviť tu.",
     "Show attribute mapping settings…" : "Zobraziť nastavenia priradzovania atribútov ...",
