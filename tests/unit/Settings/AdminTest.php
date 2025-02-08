@@ -53,7 +53,7 @@ class AdminTest extends \Test\TestCase {
 			});
 
 		$serviceProviderFields = [
-            'x509cert' => [
+			'x509cert' => [
 				'text' => 'X.509 certificate of the Service Provider',
 				'type' => 'text',
 				'required' => false,

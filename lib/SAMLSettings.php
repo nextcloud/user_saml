@@ -59,7 +59,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-group_mapping_prefix',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
-        'sp-entityId',
+		'sp-entityId',
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',
