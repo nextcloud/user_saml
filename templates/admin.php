@@ -126,7 +126,7 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 						<label class="user-saml-standalone-label" for="user-saml-<?php p($key) ?>"><?php p($attribute['text']) ?></label><br/>
 						<?php if ($attribute['type'] === 'line'): ?>
 							<input id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" value="<?php p($_['config']['sp-' . $key] ?? '') ?>" type="text" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?>/>
-						<? else: ?>
+						<?php else: ?>
 							<textarea id="user-saml-<?php p($key) ?>" name="<?php p($key) ?>" <?php if (isset($attribute['required']) && $attribute['required'] === true): ?>class="required"<?php endif;?>><?php p($_['config']['sp-' . $key] ?? '') ?></textarea>
 						<?php endif; ?>
 					</p>
