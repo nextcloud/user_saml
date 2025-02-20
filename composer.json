@@ -27,7 +27,7 @@
 	"require-dev": {
 		"nextcloud/coding-standard": "^1.1",
 		"phpunit/phpunit": "^9",
-		"psalm/phar": "^5.13",
+		"psalm/phar": "^6.8",
 		"nextcloud/ocp": "dev-stable27"
 	},
 	"require": {
