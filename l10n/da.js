@@ -21,7 +21,7 @@ OC.L10N.register(
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Angiver et krav til NameID-elementet på SAMLResponse modtaget af denne SP skal være til stede.",
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Angiver et krav for, at NameID modtaget af denne SP skal krypteres.",
     "Indicates if the SP will validate all received XML." : "Angiver om SP'en vil validere alle modtagne XML'er.",
-    "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-koder SAML-data som små bogstaver, og værktøjet bruger som standard store bogstaver. Aktivér for ADFS-kompatibilitet ved underskriftskontrol.",
+    "ADFS URL-Encodes SAML data as lowercase, and the toolkit by default uses uppercase. Enable for ADFS compatibility on signature verification." : "ADFS URL-koder SAML-data som små bogstaver, og værktøjet bruger som standard store bogstaver. Aktiver for ADFS-kompatibilitet ved underskriftskontrol.",
     "Attribute to map the UID to." : "Egenskab til at kortlægge UID til.",
     "Attribute to map the displayname to." : "Egenskab til at kortlægge visningsnavn til.",
     "Attribute to map the email address to." : "Egenskab til at kortlægge e-mail-adressen til.",
