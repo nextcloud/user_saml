@@ -187,6 +187,48 @@ class GroupManagerTest extends TestCase {
 		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
 
+	public function testUnassignUserFromGroupsWithKeepEmpytGroups() {
+		$this->getGroupManager();
+		// set general-keep_groups to 1 and assert it was read
+		$this->config
+			->expects($this->exactly(1))
+			->method('getAppValue')
+			->with('user_saml', 'general-keep_groups', '0')
+			->willReturn('1');
+		// create user and group mock
+		$user = $this->createMock(IUser::class);
+		$groupA = $this->createMock(IGroup::class);
+		$groupA->method('getBackendNames')
+			->willReturn(['Database', 'user_saml']);
+		$this->groupManager
+			->method('get')
+			->with('groupA')
+			->willReturn($groupA);
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('uid');
+		$groupA->expects($this->exactly(1))
+			->method('getGID')
+			->willReturn('gid');
+		// assert membership gets removed
+		$this->ownGroupBackend
+			->expects($this->once())
+			->method('removeFromGroup');
+		// assert no remaining group memberships
+		$this->ownGroupBackend
+			->expects($this->never())
+			->method('countUsersInGroup')
+			->willReturn(0);
+		// assert group is not deleted
+		$this->ownGroupBackend
+			->expects($this->never())
+			->method('deleteGroup');
+		$this->eventDispatcher->expects($this->exactly(0))
+			->method('dispatchTyped');
+
+		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
+	}
+
 	public function testAssignUserToGroups() {
 		$this->getGroupManager(['hasSamlBackend', 'createGroupInBackend']);
 		$user = $this->createMock(IUser::class);
