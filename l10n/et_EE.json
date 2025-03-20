@@ -3,6 +3,7 @@
     "X.509 certificate of the Service Provider" : "Teenusepakkuja X.509 sertifikaat",
     "Private key of the Service Provider" : "Teenusepakkuja privaatvõti",
     "Email address" : "E-posti aadress",
+    "Encrypted" : "Krüptitud",
     "SSO & SAML authentication" : "SSO & SAML autentimine",
     "Open documentation" : "Ava dokumentatsioon",
     "Use built-in SAML authentication" : "Kasuta sisse-ehitatud SAML autentimist",
