@@ -26,30 +26,6 @@ namespace OC\Core\Command {
 	}
 }
 
-namespace Symfony\Component\Console\Output {
-	class OutputInterface {
-		public function isVerbose(): bool;
-		public function isQuiet(): bool;
-		public function writeln($messages, int $options = 0): void;
-	}
-}
-
-namespace Symfony\Component\Console\Input {
-	class InputInterface {
-		public function getArgument(string $name): mixed;
-		public function getOptions(): array;
-		public function getOption(string $name): mixed;
-	}
-
-	class InputArgument {
-		public const REQUIRED = 1;
-	}
-
-	class InputOption {
-		public const VALUE_REQUIRED = 2;
-	}
-}
-
 namespace OC\Group {
 	abstract class Database extends \OCP\Group\Backend\ABackend implements
 		\OCP\Group\Backend\IAddToGroupBackend,
