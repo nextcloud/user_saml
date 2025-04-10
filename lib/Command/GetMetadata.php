@@ -47,9 +47,6 @@ EOT
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$idp = (int)$input->getArgument('idp');
 		$settingsArray = $this->samlSettings->getOneLoginSettingsArray($idp);
-		if ($settingsArray === null) {
-			throw new \InvalidArgumentException('Settings cannot be null');
-		}
 		$settings = new Settings($settingsArray);
 		$metadata = $settings->getSPMetadata();
 		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
