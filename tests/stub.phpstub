@@ -52,3 +52,24 @@ namespace OC\DB\Exceptions {
 namespace OCP\Log {
 	public function logger(?string $appId = null): \Psr\Log\LoggerInterface;
 }
+
+namespace OC\Security\CSRF {
+	class CsrfToken {
+		public function getEncryptedValue(): string {
+			return 'token';
+		}
+	}
+	class CsrfTokenManager {
+			abstract public function getToken(): CsrfToken;
+	}
+}
+
+namespace OC\User {
+	class LoginException extends \Exception {
+	}
+}
+
+class OC_User {
+	public static function useBackend($userBackend): void;
+	public static function handleApacheAuth(): void;
+}
