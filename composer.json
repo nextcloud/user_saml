@@ -23,17 +23,17 @@
 		}
 	},
 	"scripts": {
-        "post-install-cmd": [
-            "[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
-        ],
-        "post-update-cmd": [
-            "[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all update --ansi"
-        ],
+		"post-install-cmd": [
+			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
+		],
+		"post-update-cmd": [
+			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all update --ansi"
+		],
 		"cs:fix": "php-cs-fixer fix",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
-        "psalm": "psalm",
-        "psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
-        "psalm:update-baseline": "psalm --threads=1 --update-baseline",
+		"psalm": "psalm",
+		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
 		"lint": "find . -name \\*.php -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",
 		"test:unit": "phpunit -c tests/unit/phpunit.xml"
 	},
