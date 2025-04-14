@@ -9,6 +9,9 @@
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorBaseline="tests/psalm-baseline.xml"
+	findUnusedBaselineEntry="true"
+	findUnusedCode="false"
+	phpVersion="8.0"
 >
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true"/>
@@ -16,9 +19,10 @@
     <projectFiles>
         <directory name="lib" />
     </projectFiles>
-    <extraFiles>
-        <directory name="vendor/nextcloud/ocp" />
-    </extraFiles>
+	<extraFiles>
+		<directory name="vendor" />
+		<directory name="vendor-bin/psalm/vendor" />
+	</extraFiles>
 	<issueHandlers>
 		<DeprecatedMethod>
 			<errorLevel type="error" />
