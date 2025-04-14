@@ -48,33 +48,28 @@ namespace OC\DB\Exceptions {
 		}
 	}
 }
-namespace OC\Security\CSRF {
-	class CsrfToken {
-		public function getEncryptedValue(): string {
-			return 'token';
-		}
-	}
-}
 
 namespace OCP\Log {
 	public function logger(?string $appId = null): \Psr\Log\LoggerInterface;
 }
 
 namespace OC\Security\CSRF {
+	class CsrfToken {
+		public function getEncryptedValue(): string {
+			return 'token';
+		}
+	}
 	class CsrfTokenManager {
 			abstract public function getToken(): CsrfToken;
 	}
 }
 
-class OC {
-	static $WEBROOT = '';
-}
-
-class \OC_Util {
-	public static function copySkeleton($userId, \OCP\Files\Folder $userDirectory) {}
+namespace OC\User {
+	class LoginException extends \Exception {
+	}
 }
 
 class OC_User {
-	static function useBackend($userBackend) {}
-	static function handleApacheAuth() {}
+	public static function useBackend($userBackend): void;
+	public static function handleApacheAuth(): void;
 }

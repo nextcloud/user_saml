@@ -5,13 +5,7 @@
 -->
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/AppInfo/Application.php">
-    <DeprecatedMethod>
-      <code><![CDATA[registerMiddleWare]]></code>
-      <code><![CDATA[registerService]]></code>
-      <code><![CDATA[registerService]]></code>
-    </DeprecatedMethod>
     <MissingDependency>
-      <code><![CDATA[DavPlugin]]></code>
       <code><![CDATA[DavPlugin]]></code>
       <code><![CDATA[DavPlugin]]></code>
     </MissingDependency>
@@ -33,12 +27,7 @@
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[CsrfTokenManager]]></code>
     </UndefinedClass>
-    <UndefinedDocblockClass>
-      <code><![CDATA[$csrfTokenManager]]></code>
-      <code><![CDATA[$csrfTokenManager]]></code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/DavPlugin.php">
     <UndefinedClass>
@@ -88,7 +77,6 @@
       <code><![CDATA[$offset]]></code>
     </InvalidArgument>
     <UndefinedClass>
-      <code><![CDATA[CsrfTokenManager]]></code>
       <code><![CDATA[\OC]]></code>
       <code><![CDATA[\OC]]></code>
     </UndefinedClass>

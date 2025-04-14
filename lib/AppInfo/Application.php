@@ -35,6 +35,7 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use OCP\Server;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -78,12 +79,12 @@ class Application extends App implements IBootstrap {
 				CsrfTokenManager $csrfTokenManager,
 				bool $isCLI,
 			) {
-				$groupBackend = \OC::$server->get(GroupBackend::class);
-				\OC::$server->get(IGroupManager::class)->addBackend($groupBackend);
+				$groupBackend = Server::get(GroupBackend::class);
+				Server::get(IGroupManager::class)->addBackend($groupBackend);
 
-				$samlSettings = \OC::$server->get(SAMLSettings::class);
+				$samlSettings = Server::get(SAMLSettings::class);
 
-				$userBackend = \OCP\Server::get(UserBackend::class);
+				$userBackend = Server::get(UserBackend::class);
 
 				$userBackend->registerBackends($userManager->getBackends());
 				OC_User::useBackend($userBackend);
@@ -212,7 +213,7 @@ class Application extends App implements IBootstrap {
 				}
 			});
 		} catch (Throwable $e) {
-			\OCP\Server::get(LoggerInterface::class)->critical('Error when loading user_saml app', [
+			Server::get(LoggerInterface::class)->critical('Error when loading user_saml app', [
 				'exception' => $e,
 			]);
 		}
