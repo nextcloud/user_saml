@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Обліковий запис не активний, будь ласка зверніться до адміністратора.",
     "Saved" : "Збережено",
     "Could not save" : "Не вдалося зберегти",
     "Provider" : "Провайдер",
+    "This user account is disabled, please contact your administrator." : "Обліковий запис не активний, будь ласка зверніться до адміністратора.",
     "Unknown error, please check the log file for more details." : "Невідома помилка, будь ласка, перевірте файл журналу, щоб дізнатися більше.",
     "Direct log in" : "Прямий вхід",
     "SSO & SAML log in" : "Увійдіть у систему SSO та SAML",

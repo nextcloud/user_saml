@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Ez a fiók le van tiltva, lépjen kapcsolatba a rendszergazdával.",
     "Saved" : "Mentve",
     "Could not save" : "Nem sikerült menteni",
     "Provider" : "Szolgáltató",
+    "This user account is disabled, please contact your administrator." : "Ez a fiók le van tiltva, lépjen kapcsolatba a rendszergazdával.",
     "Unknown error, please check the log file for more details." : "Ismeretlen hiba, a további részletekért ellenőrizze a naplófájlokat.",
     "Direct log in" : "Közvetlen bejelentkezés",
     "SSO & SAML log in" : "SSO és SAML bejelentkezés",

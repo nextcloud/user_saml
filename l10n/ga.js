@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Tá an cuntas úsáideora seo díchumasaithe, déan teagmháil le do riarthóir le do thoil.",
     "Saved" : "Shábháil",
     "Could not save" : "Níorbh fhéidir a shábháil",
     "Provider" : "Soláthraí",
+    "This user account is disabled, please contact your administrator." : "Tá an cuntas úsáideora seo díchumasaithe, déan teagmháil le do riarthóir le do thoil.",
     "Unknown error, please check the log file for more details." : "Earráid anaithnid, seiceáil an logchomhad le haghaidh tuilleadh sonraí le do thoil.",
     "Direct log in" : "Logáil isteach díreach",
     "SSO & SAML log in" : "SSO & SAML logáil isteach",

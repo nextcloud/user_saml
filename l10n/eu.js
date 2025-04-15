@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Erabiltzaile-kontu hau desgaitua dago, jarri harremanetan administratzailearekin",
     "Saved" : "Gordeta",
     "Could not save" : "Ezin izan da gorde",
     "Provider" : "Hornitzailea",
+    "This user account is disabled, please contact your administrator." : "Erabiltzaile-kontu hau desgaitua dago, jarri harremanetan administratzailearekin",
     "Unknown error, please check the log file for more details." : "Errore ezezaguna, egiaztatu egunkari-fitxategia xehetasun gehiagorako.",
     "Direct log in" : "Saio-hasiera zuzena",
     "SSO & SAML log in" : "SSO eta SAML saio-hasiera",

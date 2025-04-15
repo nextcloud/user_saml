@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Esta cuenta de usuario está deshabilitada. Por favor, ponte en contacto con el administrador.",
     "Saved" : "Guardado",
     "Could not save" : "No se pudo guardar",
     "Provider" : "Proveedor",
+    "This user account is disabled, please contact your administrator." : "Esta cuenta de usuario está deshabilitada. Por favor, ponte en contacto con el administrador.",
     "Unknown error, please check the log file for more details." : "Error desconocido. Por favor, revisa el registro para más información.",
     "Direct log in" : "Inicio de sesión directo",
     "SSO & SAML log in" : "Inicio de sesión mediante SSO & SAML",

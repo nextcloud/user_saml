@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Ο λογαριασμός χρήστη είναι απενεργοποιημένος, επικοινωνήστε με τον διαχειριστή σας.",
     "Saved" : "Αποθηκεύτηκαν",
     "Provider" : "Πάροχος",
+    "This user account is disabled, please contact your administrator." : "Ο λογαριασμός χρήστη είναι απενεργοποιημένος, επικοινωνήστε με τον διαχειριστή σας.",
     "Unknown error, please check the log file for more details." : "Άγνωστο σφάλμα, παρακαλούμε ελέξτε το ιστορικό για περισσότερες λεπτομέρειες.",
     "Direct log in" : "Άμεση είσοδος",
     "SSO & SAML log in" : "Είσοδος SSO & SAML",

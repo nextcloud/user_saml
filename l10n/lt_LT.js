@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Ši naudotojo paskyra yra išjungta, susisiekite su administratoriumi.",
     "Saved" : "Įrašyta",
     "Could not save" : "Nepavyko įrašyti",
+    "This user account is disabled, please contact your administrator." : "Ši naudotojo paskyra yra išjungta, susisiekite su administratoriumi.",
     "Unknown error, please check the log file for more details." : "Nežinoma klaida, išsamesnei informacijai žiūrėkite žurnalo failą.",
     "Direct log in" : "Tiesioginis prisijungimas",
     "X.509 certificate of the Service Provider" : "Paslaugų teikėjo X.509 liudijimas",

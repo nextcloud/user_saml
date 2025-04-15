@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "このユーザーアカウントは無効です。管理者に連絡してください。",
     "Saved" : "保存しました",
     "Could not save" : "保存できませんでした",
     "Provider" : "プロバイダー",
+    "This user account is disabled, please contact your administrator." : "このユーザーアカウントは無効です。管理者に連絡してください。",
     "Unknown error, please check the log file for more details." : "不明なエラー、詳細はログファイルを確認してください。",
     "Direct log in" : "ダイレクトログイン",
     "SSO & SAML log in" : "SSO & SAML log in",

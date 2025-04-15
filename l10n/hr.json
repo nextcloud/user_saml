@@ -1,7 +1,7 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Ovaj je korisnički račun onemogućen, obratite se svom administratoru.",
     "Saved" : "Spremljeno",
     "Provider" : "Davatelj usluge",
+    "This user account is disabled, please contact your administrator." : "Ovaj je korisnički račun onemogućen, obratite se svom administratoru.",
     "Unknown error, please check the log file for more details." : "Došlo je do nepoznate pogreške, provjerite datoteku sa zapisom.",
     "Direct log in" : "Izravna prijava",
     "SSO & SAML log in" : "Prijava SSO i SAML",

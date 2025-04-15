@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Denne brukerkontoen er avskrudd, kontakt administratoren din.",
     "Saved" : "Lagret",
     "Could not save" : "Kunne ikke lagre",
     "Provider" : "Tilbyder",
+    "This user account is disabled, please contact your administrator." : "Denne brukerkontoen er avskrudd, kontakt administratoren din.",
     "Unknown error, please check the log file for more details." : "Ukjent feil, sjekk loggfilen for flere detaljer.",
     "Direct log in" : "Direkte innlogging",
     "SSO & SAML log in" : "SSO- og SAML -innlogging",

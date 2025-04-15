@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Esta conta de usuario está desactivada, póñase en contacto coa administración desta instancia.",
     "Saved" : "Gardado",
     "Could not save" : "Non foi posíbel gardalo",
     "Provider" : "Provedor",
+    "This user account is disabled, please contact your administrator." : "Esta conta de usuario está desactivada, póñase en contacto coa administración desta instancia.",
     "Unknown error, please check the log file for more details." : "Produciuse un erro descoñecido, revise o rexistro para obter máis información.",
     "Direct log in" : "Acceso directo",
     "SSO & SAML log in" : "Acceso SSO e SAML",

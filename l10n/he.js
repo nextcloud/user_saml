@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "החשבון הזה מושבת, נא ליצור קשר עם מנהל המערכת.",
     "Saved" : "נשמר",
     "Provider" : "ספק",
+    "This user account is disabled, please contact your administrator." : "החשבון הזה מושבת, נא ליצור קשר עם מנהל המערכת.",
     "Unknown error, please check the log file for more details." : "שגיאה בלתי ידועה, נא לעיין בקובץ הרישום לפרטים נוספים.",
     "Direct log in" : "כניסה ישירה",
     "SSO & SAML log in" : "כניסה עם SSO ו־SAML",

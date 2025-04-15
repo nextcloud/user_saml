@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "此用戶賬號已被停用，請聯繫管理員。",
     "Saved" : "已儲存",
     "Could not save" : "無法保存",
     "Provider" : "提供者",
+    "This user account is disabled, please contact your administrator." : "此用戶賬號已被停用，請聯繫管理員。",
     "Unknown error, please check the log file for more details." : "錯誤不詳，請在日誌檔案檢查更多詳情。",
     "Direct log in" : "直接登入",
     "SSO & SAML log in" : "SSO & SAML 登入",

@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "This user account is disabled, please contact your administrator.",
     "Saved" : "Saved",
     "Could not save" : "Could not save",
     "Provider" : "Provider",
+    "This user account is disabled, please contact your administrator." : "This user account is disabled, please contact your administrator.",
     "Unknown error, please check the log file for more details." : "Unknown error, please check the log file for more details.",
     "Direct log in" : "Direct log in",
     "SSO & SAML log in" : "SSO & SAML log in",

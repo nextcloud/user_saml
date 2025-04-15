@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "بۇ ئىشلەتكۈچى ھېساباتى چەكلەنگەن ، باشقۇرغۇچىڭىز بىلەن ئالاقىلىشىڭ.",
     "Saved" : "ساقلاندى",
     "Could not save" : "ساقلىيالمىدى",
     "Provider" : "تەمىنلىگۈچى",
+    "This user account is disabled, please contact your administrator." : "بۇ ئىشلەتكۈچى ھېساباتى چەكلەنگەن ، باشقۇرغۇچىڭىز بىلەن ئالاقىلىشىڭ.",
     "Unknown error, please check the log file for more details." : "نامەلۇم خاتالىق ، تېخىمۇ كۆپ تەپسىلاتلارنى خاتىرە ھۆججىتىنى تەكشۈرۈپ بېقىڭ.",
     "Direct log in" : "بىۋاسىتە كىرىڭ",
     "SSO & SAML log in" : "SSO & SAML كىرىڭ",

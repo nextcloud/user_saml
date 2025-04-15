@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Tento používateľský účet bol zakázaný, obráťte sa na správcu.",
     "Saved" : "Uložené",
     "Could not save" : "Nepodarilo sa uložiť",
     "Provider" : "Poskytovateľ",
+    "This user account is disabled, please contact your administrator." : "Tento používateľský účet bol zakázaný, obráťte sa na správcu.",
     "Unknown error, please check the log file for more details." : "Neznáma chyba. Pre viac informácií skontrolujte logy.",
     "Direct log in" : "Priame prihlásenie",
     "SSO & SAML log in" : "SSO a SAML prihlásenie",

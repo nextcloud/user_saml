@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "此用户账号已禁用，请联系管理员。",
     "Saved" : "已保存",
     "Provider" : "服务商",
+    "This user account is disabled, please contact your administrator." : "此用户账号已禁用，请联系管理员。",
     "Unknown error, please check the log file for more details." : "未知错误，请在日志文件检查更多详情。",
     "Direct log in" : "直接登录",
     "SSO & SAML log in" : "SSO & SAML 登录",

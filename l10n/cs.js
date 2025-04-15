@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Tento uživatelský účet byl znepřístupněn, obraťte se na správce.",
     "Saved" : "Uloženo",
     "Could not save" : "Není možné uložit",
     "Provider" : "Poskytovatel",
+    "This user account is disabled, please contact your administrator." : "Tento uživatelský účet byl znepřístupněn, obraťte se na správce.",
     "Unknown error, please check the log file for more details." : "Neznámá chyba, podrobnosti naleznete v záznamu událostí.",
     "Direct log in" : "Přímé přihlášení",
     "SSO & SAML log in" : "SSO a SAML přihlášení",

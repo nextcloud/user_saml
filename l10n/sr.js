@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Овај кориснички налог је искључен. Контактирајте администратора.",
     "Saved" : "Сачувано",
     "Could not save" : "Није могло да се сачува",
     "Provider" : "Провајдер",
+    "This user account is disabled, please contact your administrator." : "Овај кориснички налог је искључен. Контактирајте администратора.",
     "Unknown error, please check the log file for more details." : "Непозната грешка. Проверите дневнике за више детаља.",
     "Direct log in" : "Директна пријава",
     "SSO & SAML log in" : "SSO & SAML пријава",

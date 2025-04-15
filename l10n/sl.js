@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Ta uporabniški račun je onemogočen. Stopite v stik s skrbnikom sistema.",
     "Saved" : "Shranjeno",
     "Provider" : "Ponudnik",
+    "This user account is disabled, please contact your administrator." : "Ta uporabniški račun je onemogočen. Stopite v stik s skrbnikom sistema.",
     "Unknown error, please check the log file for more details." : "Neznana napaka; več podrobnosti je zapisanih v dnevniški datoteki.",
     "Direct log in" : "Račun ni zagotovljen",
     "SSO & SAML log in" : "Prijava SSO in SAML",

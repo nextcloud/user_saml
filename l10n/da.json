@@ -1,7 +1,7 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Denne bruger konto er deaktiveret. Kontakt venligst din administrator.",
     "Saved" : "Gemt",
     "Provider" : "Udbyder",
+    "This user account is disabled, please contact your administrator." : "Denne bruger konto er deaktiveret. Kontakt venligst din administrator.",
     "Unknown error, please check the log file for more details." : "Ukendt fejl, tjek venligst logfilen for flere detaljer.",
     "Direct log in" : "Direkte login",
     "SSO & SAML log in" : "SSO & SAML log in",

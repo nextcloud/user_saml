@@ -1,10 +1,10 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "این حساب کاربری غیرفعال شده ، لطفاً با مدیر خود تماس بگیرید.",
     "Saved" : "ذخیره شد",
     "Could not save" : "Could not save",
     "Provider" : "تامین کننده",
+    "This user account is disabled, please contact your administrator." : "این حساب کاربری غیرفعال شده ، لطفاً با مدیر خود تماس بگیرید.",
     "Unknown error, please check the log file for more details." : "خطای ناشناخته ، لطفاً پرونده ورود را برای جزئیات بیشتر بررسی کنید.",
     "Direct log in" : "جزئیات ورود",
     "SSO & SAML log in" : " SSO و SAMLورود ",

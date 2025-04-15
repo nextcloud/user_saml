@@ -1,7 +1,7 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Þessi notandaaðgangur er óvirkur; hafðu samband við kerfisstjóra.",
     "Saved" : "Vistað",
     "Provider" : "Þjónustuveita",
+    "This user account is disabled, please contact your administrator." : "Þessi notandaaðgangur er óvirkur; hafðu samband við kerfisstjóra.",
     "Unknown error, please check the log file for more details." : "Óþekkt villa, skoðaðu atvikaskráninguna til að sjá nánari upplýsingar.",
     "Direct log in" : "Bein innskráning",
     "SSO & SAML log in" : "SSO & SAML innskráning",

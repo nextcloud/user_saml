@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Tämä käyttäjätili ei ole käytössä. Ota yhteys ylläpitoon.",
     "Saved" : "Tallennettu",
     "Provider" : "Tarjoaja",
+    "This user account is disabled, please contact your administrator." : "Tämä käyttäjätili ei ole käytössä. Ota yhteys ylläpitoon.",
     "Unknown error, please check the log file for more details." : "Tuntematon virhe. Tarkista lisätiedot lokista.",
     "Direct log in" : "Suora kirjautuminen",
     "SSO & SAML log in" : "SSO- ja SAML-kirjautuminen",

@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Aquest compte d'usuari està inhabilitat, contacteu amb l'administrador.",
     "Saved" : "Desat",
     "Could not save" : "No s'ha pogut desar",
     "Provider" : "Proveïdor",
+    "This user account is disabled, please contact your administrator." : "Aquest compte d'usuari està inhabilitat, contacteu amb l'administrador.",
     "Unknown error, please check the log file for more details." : "Error desconegut, comprovar el fitxer de registre per a més detalls.",
     "Direct log in" : "Entrada directa",
     "SSO & SAML log in" : "Entrada SSO i SAML",

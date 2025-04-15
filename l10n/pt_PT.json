@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Esta conta do utilizador está desativada, por favor, contacte o seu administrador.",
     "Saved" : "Guardado",
     "Could not save" : "Não foi possível guardar",
     "Provider" : "Fornecedor",
+    "This user account is disabled, please contact your administrator." : "Esta conta do utilizador está desativada, por favor, contacte o seu administrador.",
     "Unknown error, please check the log file for more details." : "Erro desconhecido. Por favor, verifique o ficheiro de logs para obter mais detalhes.",
     "Direct log in" : "Início de Sessão direto",
     "SSO & SAML log in" : "Início de sessão SSO e SAML",

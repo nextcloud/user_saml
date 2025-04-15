@@ -1,9 +1,9 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Custu contu utente est disativadu, cuntata s'amministratzione.",
     "Saved" : "Sarvadu",
     "Provider" : "Frunidore",
+    "This user account is disabled, please contact your administrator." : "Custu contu utente est disativadu, cuntata s'amministratzione.",
     "Unknown error, please check the log file for more details." : "Errore disconnotu, controlla s'archìviu de registru pro àteros detàllios.",
     "Direct log in" : "Intrada dereta",
     "SSO & SAML log in" : "Intrada SSO & SAML",

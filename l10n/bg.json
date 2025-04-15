@@ -1,8 +1,8 @@
 { "translations": {
-    "This user account is disabled, please contact your administrator." : "Този потребителски профил е деактивиран, моля свържете се с вашия администратор.",
     "Saved" : "Запазено",
     "Could not save" : "Не можа да се запише",
     "Provider" : "Доставчик",
+    "This user account is disabled, please contact your administrator." : "Този потребителски профил е деактивиран, моля свържете се с вашия администратор.",
     "Unknown error, please check the log file for more details." : "Неизвестна грешка, моля, проверете регистрационния файл/журнал/ за повече подробности.",
     "Direct log in" : "Директно вписване",
     "SSO & SAML log in" : "Вписване в SSO и SAML",
