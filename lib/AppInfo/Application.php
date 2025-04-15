@@ -12,10 +12,12 @@ namespace OCA\User_SAML\AppInfo;
 use OC\Security\CSRF\CsrfTokenManager;
 use OC\User\LoginException;
 use OC_User;
+use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\Listener\LoadAdditionalScriptsListener;
+use OCA\User_SAML\Listener\SabrePluginEventListener;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
@@ -50,6 +52,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginEventListener::class);
 		$context->registerService(DavPlugin::class, function (ContainerInterface $c) {
 			return new DavPlugin(
 				$c->get(ISession::class),
