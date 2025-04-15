@@ -69,6 +69,12 @@ namespace OC\User {
 	}
 }
 
+namespace OCA\DAV\Connector\Sabre {
+	class Auth {
+		public const DAV_AUTHENTICATED = 'AUTHENTICATED_TO_DAV_BACKEND';
+	}
+}
+
 class OC_User {
 	public static function useBackend($userBackend): void;
 	public static function handleApacheAuth(): void;

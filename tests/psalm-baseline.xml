@@ -4,12 +4,6 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
-  <file src="lib/AppInfo/Application.php">
-    <MissingDependency>
-      <code><![CDATA[DavPlugin]]></code>
-      <code><![CDATA[DavPlugin]]></code>
-    </MissingDependency>
-  </file>
   <file src="lib/Controller/SAMLController.php">
     <RedundantCondition>
       <code><![CDATA[!$userExists]]></code>
@@ -27,11 +21,6 @@
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
       <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/DavPlugin.php">
-    <UndefinedClass>
-      <code><![CDATA[ServerPlugin]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/ConfigurationsMapper.php">

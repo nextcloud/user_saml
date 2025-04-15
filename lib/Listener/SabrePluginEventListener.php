@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\User_SAML\Listener;
 
-use OCP\DavPlugin;
+use OCA\User_SAML\DavPlugin;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\SabrePluginEvent;
