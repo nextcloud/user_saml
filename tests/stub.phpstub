@@ -75,6 +75,14 @@ namespace OCA\DAV\Connector\Sabre {
 	}
 }
 
+namespace OCA\DAV\Events {
+	use OCP\EventDispatcher\Event;
+	use Sabre\DAV\Server;
+	class SabrePluginAddEvent extends Event {
+		public function getServer(): Server;
+	}
+}
+
 class OC_User {
 	public static function useBackend($userBackend): void;
 	public static function handleApacheAuth(): void;
