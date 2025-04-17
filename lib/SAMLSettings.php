@@ -59,6 +59,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-group_mapping_prefix',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
+		'sp-entityId',
 		'sp-x509cert',
 		'sp-name-id-format',
 		'sp-privateKey',
@@ -141,7 +142,9 @@ class SAMLSettings {
 				// "sloWebServerDecode" is not expected to be passed to the OneLogin class
 			],
 			'sp' => [
-				'entityId' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
+				'entityId' => (array_key_exists('sp-entityId', $this->configurations[$idp]) && trim($this->configurations[$idp]['sp-entityId']) != '')
+					? $this->configurations[$idp]['sp-entityId']
+					: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
 				'assertionConsumerService' => [
 					'url' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.assertionConsumerService'),
 				],
