@@ -41,6 +41,7 @@
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "URL for IdP'en, hvor SP'en sender meddelelsen om godkendelsesanmodning",
     "URL Location of the IdP where the SP will send the SLO Request" : "URL-placering af IdP'en, hvor SP'en sender SLO-anmodningen",
     "Public X.509 certificate of the IdP" : "Offentligt X.509-certifikat for IdP",
+    "Attribute mapping" : "Attribut- kortlægning",
     "Security settings" : "Sikkerhedsindstillinger",
     "For increased security we recommend enabling the following settings if supported by your environment." : "For øget sikkerhed anbefaler vi at aktivere følgende indstillinger, hvis det understøttes af dit miljø.",
     "Show security settings…" : "Vis sikkerhedsindstillinger...",
