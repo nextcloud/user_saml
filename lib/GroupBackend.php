@@ -18,6 +18,7 @@ use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
+use PDO;
 use Psr\Log\LoggerInterface;
 
 class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend {
@@ -49,7 +50,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	/**
-	 * @return string[] Group names
+	 * @return list<string> Group names
 	 */
 	public function getUserGroups($uid): array {
 		$qb = $this->dbc->getQueryBuilder();
@@ -134,7 +135,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			->from(self::TABLE_GROUPS)
 			->where($qb->expr()->eq('saml_gid', $qb->createNamedParameter($samlGid)))
 			->executeQuery();
-		$result = $cursor->fetch(\PDO::FETCH_NUM);
+		$result = $cursor->fetch(PDO::FETCH_NUM);
 		$cursor->closeCursor();
 
 		if ($result !== false) {
@@ -148,7 +149,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 * @param string $search
 	 * @param int $limit
 	 * @param int $offset
-	 * @return string[] User ids
+	 * @return array<int,string> User ids
 	 */
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
