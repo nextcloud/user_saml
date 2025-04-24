@@ -32,29 +32,7 @@
       <code><![CDATA[getConfigurationArray]]></code>
     </UndefinedMagicMethod>
   </file>
-  <file src="lib/GroupBackend.php">
-    <LessSpecificImplementedReturnType>
-      <code><![CDATA[string[]]]></code>
-    </LessSpecificImplementedReturnType>
-  </file>
-  <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
-    <DeprecatedMethod>
-      <code><![CDATA[hasAnnotation]]></code>
-    </DeprecatedMethod>
-  </file>
-  <file src="lib/Migration/Version5000Date20211025124248.php">
-    <DeprecatedMethod>
-      <code><![CDATA[execute]]></code>
-      <code><![CDATA[execute]]></code>
-      <code><![CDATA[execute]]></code>
-      <code><![CDATA[execute]]></code>
-      <code><![CDATA[execute]]></code>
-    </DeprecatedMethod>
-  </file>
   <file src="lib/UserBackend.php">
-    <DeprecatedMethod>
-      <code><![CDATA[fetchColumn]]></code>
-    </DeprecatedMethod>
     <ImplementedParamTypeMismatch>
       <code><![CDATA[$limit]]></code>
       <code><![CDATA[$offset]]></code>
