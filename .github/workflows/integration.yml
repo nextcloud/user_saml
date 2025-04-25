@@ -4,6 +4,9 @@ name: Integration tests
 
 on: pull_request
 
+permissions:
+  contents: read
+
 env:
   APP_NAME: user_saml
   LDAP_SUFFIX: dc=idptestbed
@@ -127,19 +130,21 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          persist-credentials: false
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
           submodules: true
 
       - name: Checkout app
-        uses: actions/checkout@v3
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
+          persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@c665c7a15b5295c2488ac8a87af9cb806cd72198 # v2
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
