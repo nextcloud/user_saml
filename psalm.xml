@@ -24,9 +24,11 @@
 		<directory name="vendor-bin/psalm/vendor" />
 	</extraFiles>
 	<issueHandlers>
-		<DeprecatedMethod>
-			<errorLevel type="error" />
-		</DeprecatedMethod>
+		<DeprecatedClass errorLevel="info" />
+		<DeprecatedMethod errorLevel="info" />
+		<DeprecatedProperty errorLevel="info" />
+		<DeprecatedFunction errorLevel="info" />
+		<DeprecatedConstant errorLevel="info" />
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="Doctrine\DBAL\Types\Types"/>
