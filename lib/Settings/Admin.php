@@ -38,8 +38,21 @@ class Admin implements ISettings {
 			];
 		}
 		$serviceProviderFields = [
-			'x509cert' => $this->l10n->t('X.509 certificate of the Service Provider'),
-			'privateKey' => $this->l10n->t('Private key of the Service Provider'),
+			'x509cert' => [
+				'text' => $this->l10n->t('X.509 certificate of the Service Provider'),
+				'type' => 'text',
+				'required' => false,
+			],
+			'privateKey' => [
+				'text' => $this->l10n->t('Private key of the Service Provider'),
+				'type' => 'text',
+				'required' => false,
+			],
+			'entityId' => [
+				'text' => $this->l10n->t('Service Provider EntityId (optional)'),
+				'type' => 'line',
+				'required' => false,
+			]
 		];
 		$securityOfferFields = [
 			'nameIdEncrypted' => $this->l10n->t('Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted.'),
