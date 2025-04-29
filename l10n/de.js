@@ -29,7 +29,7 @@ OC.L10N.register(
     "Attribute to map the UID to." : "Attribut dem die UID zugeordnet werden soll.",
     "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Authentifizierung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z. B. LDAP).",
     "Attribute to map the displayname to." : "Attribut dem der Anzeigename zugeordnet werden soll.",
-    "Attribute to map the email address to." : "Attribut dem die E-Mail-Adresse zugeordnet werden soll.",
+    "Attribute to map the email address to." : "Attribut, dem die E-Mail-Adresse zugeordnet werden soll.",
     "Attribute to map the quota to." : "Attribut, dem das Kontingent zugeordnet werden soll.",
     "Attribute to map the users home to." : "Attribut dem das zu Hause des Benutzers zugeordnet werden soll.",
     "Attribute to map the users groups to." : "Attribut, dem die Gruppen des Benutzers zugeordnet werden sollen.",
