@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Salvestatud",
+    "Could not save" : "Ei õnnestunud salvestada",
     "X.509 certificate of the Service Provider" : "Teenusepakkuja X.509 sertifikaat",
     "Private key of the Service Provider" : "Teenusepakkuja privaatvõti",
     "Email address" : "E-posti aadress",

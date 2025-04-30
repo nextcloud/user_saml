@@ -10,6 +10,7 @@
     "Provider " : "Anbieter",
     "X.509 certificate of the Service Provider" : "X.509-Zertifikat des Service-Providers",
     "Private key of the Service Provider" : "Privater Schlüssel des Diensteanbieters",
+    "Service Provider EntityId (optional)" : "Dienstanbieter-EntityId (optional)",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Zeigt an, dass die nameID des <samlp:logoutRequest> von diesem Diensteanbieter verschlüsselt versandt werden.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Zeigt an, ob die von diesem Diensteanbieter gesendeten <samlp:AuthnRequest> - Nachrichten signiert werden. [Die Metadaten des Diensteanbieters zeigen diese Infos an]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Zeigt an, ob die von diesem Diensteanbieter gesendeten <samlp:logoutRequest> - Nachrichten signiert werden.",
