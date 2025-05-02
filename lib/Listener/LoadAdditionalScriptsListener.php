@@ -20,9 +20,9 @@ use OCP\Util;
 /** @template-implements IEventListener<BeforeTemplateRenderedEvent|Event> */
 class LoadAdditionalScriptsListener implements IEventListener {
 	public function __construct(
-		private ISession $session,
-		private IUserSession $userSession,
-		private IConfig $config,
+		private readonly ISession $session,
+		private readonly IUserSession $userSession,
+		private readonly IConfig $config,
 	) {
 	}
 

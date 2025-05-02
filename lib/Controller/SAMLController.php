@@ -281,9 +281,7 @@ class SAMLController extends Controller {
 	public function getMetadata(int $idp = 1): Http\DataDownloadResponse {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
-		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
-			return $settings->validateMetadata($metadata);
-		});
+		$errors = $this->callWithXmlEntityLoader(fn () => $settings->validateMetadata($metadata));
 		if (empty($errors)) {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
@@ -516,15 +514,13 @@ class SAMLController extends Controller {
 			try {
 				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 				// validator (called with processSLO()) needs an XML entity loader
-				$targetUrl = $this->callWithXmlEntityLoader(function () use ($auth, $idp): string {
-					return $auth->processSLO(
-						true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
-						null,
-						$this->samlSettings->usesSloWebServerDecode($idp),
-						null,
-						true
-					);
-				});
+				$targetUrl = $this->callWithXmlEntityLoader(fn (): string => $auth->processSLO(
+					true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
+					null,
+					$this->samlSettings->usesSloWebServerDecode($idp),
+					null,
+					true
+				));
 				if ($auth->getLastErrorReason() === null) {
 					return [$targetUrl, $auth];
 				}

@@ -60,7 +60,7 @@ class GroupBackendTest extends TestCase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->groupBackend = new GroupBackend(\OC::$server->get(IDBConnection::class), $this->createMock(LoggerInterface::class));
+		$this->groupBackend = new GroupBackend(\OCP\Server::get(IDBConnection::class), $this->createMock(LoggerInterface::class));
 		foreach ($this->groups as $group) {
 			$this->groupBackend->createGroup($group['gid'], $group['saml_gid']);
 		}
@@ -73,7 +73,7 @@ class GroupBackendTest extends TestCase {
 
 	public function tearDown(): void {
 		parent::tearDown();
-		$this->groupBackend = new GroupBackend(\OC::$server->get(IDBConnection::class), $this->createMock(LoggerInterface::class));
+		$this->groupBackend = new GroupBackend(\OCP\Server::get(IDBConnection::class), $this->createMock(LoggerInterface::class));
 		foreach ($this->users as $user) {
 			foreach ($user['groups'] as $group) {
 				$this->groupBackend->removeFromGroup($user['uid'], $group);

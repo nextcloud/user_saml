@@ -19,8 +19,8 @@ use function json_encode;
 class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 
 	public function __construct(
-		private IGroupManager $groupManager,
-		private IConfig $config,
+		private readonly IGroupManager $groupManager,
+		private readonly IConfig $config,
 	) {
 	}
 
@@ -45,7 +45,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 		try {
 			$backend = $this->findBackend();
 			$groupIds = $this->findGroupIds($backend);
-		} catch (UnexpectedValueException $e) {
+		} catch (UnexpectedValueException) {
 			return;
 		}
 

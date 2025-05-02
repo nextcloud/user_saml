@@ -18,10 +18,10 @@ use OneLogin\Saml2\Constants;
 class Admin implements ISettings {
 
 	public function __construct(
-		private IL10N $l10n,
-		private Defaults $defaults,
-		private IConfig $config,
-		private SAMLSettings $samlSettings,
+		private readonly IL10N $l10n,
+		private readonly Defaults $defaults,
+		private readonly IConfig $config,
+		private readonly SAMLSettings $samlSettings,
 	) {
 	}
 

@@ -186,7 +186,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
-			$samlGid = $samlGid ?? $gid;
+			$samlGid ??= $gid;
 			$result = $builder->insert(self::TABLE_GROUPS)
 				->setValue('gid', $builder->createNamedParameter($gid))
 				->setValue('displayname', $builder->createNamedParameter($samlGid))

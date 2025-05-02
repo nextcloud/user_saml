@@ -32,7 +32,7 @@ class UserResolver {
 		}
 		try {
 			$sanitized = $this->sanitizeUserIdCandidate($rawUidCandidate);
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException) {
 			$sanitized = '';
 		}
 		if ($this->userManager->userExists($sanitized)) {
@@ -57,7 +57,7 @@ class UserResolver {
 		try {
 			$this->findExistingUserId($uid, $force);
 			return true;
-		} catch (NoUserFoundException $e) {
+		} catch (NoUserFoundException) {
 			return false;
 		}
 	}

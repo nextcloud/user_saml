@@ -19,9 +19,9 @@ class TimezoneController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
-		private IConfig $config,
+		private readonly IConfig $config,
 		private $userId,
-		private ISession $session,
+		private readonly ISession $session,
 	) {
 		parent::__construct($appName, $request);
 	}
