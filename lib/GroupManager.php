@@ -30,12 +30,12 @@ class GroupManager {
 
 	public function __construct(
 		protected IDBConnection $db,
-		private IGroupManager $groupManager,
-		private GroupBackend $ownGroupBackend,
-		private IConfig $config,
-		private IEventDispatcher $dispatcher,
-		private IJobList $jobList,
-		private SAMLSettings $settings,
+		private readonly IGroupManager $groupManager,
+		private readonly GroupBackend $ownGroupBackend,
+		private readonly IConfig $config,
+		private readonly IEventDispatcher $dispatcher,
+		private readonly IJobList $jobList,
+		private readonly SAMLSettings $settings,
 	) {
 	}
 
@@ -97,9 +97,7 @@ class GroupManager {
 	protected function updateUserGroups(IUser $user, array $samlGroupNames): void {
 		$this->translateGroupToIds($samlGroupNames);
 		$assignedGroups = $this->groupManager->getUserGroups($user);
-		$assignedGroupIds = array_map(function (IGroup $group) {
-			return $group->getGID();
-		}, $assignedGroups);
+		$assignedGroupIds = array_map(fn (IGroup $group) => $group->getGID(), $assignedGroups);
 		$groupsToRemove = $this->getGroupsToRemove($samlGroupNames, $assignedGroups);
 		$groupsToAdd = $this->getGroupsToAdd($samlGroupNames, $assignedGroupIds);
 		$this->handleUserUnassignedFromGroups($user, $groupsToRemove);
@@ -107,7 +105,7 @@ class GroupManager {
 	}
 
 	protected function translateGroupToIds(array &$samlGroups): void {
-		array_walk($samlGroups, function (&$gid) {
+		array_walk($samlGroups, function (&$gid): void {
 			$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
 			if ($altGid !== null) {
 				$gid = $altGid;
@@ -155,7 +153,7 @@ class GroupManager {
 	protected function assignUserToGroup(IUser $user, string $gid): void {
 		try {
 			$group = $this->findGroup($gid);
-		} catch (GroupNotFoundException|NonMigratableGroupException $e) {
+		} catch (GroupNotFoundException|NonMigratableGroupException) {
 			$providerId = $this->settings->getProviderId();
 			$settings = $this->settings->get($providerId);
 			$groupPrefix = $settings['saml-attribute-mapping-group_mapping_prefix'] ?? SAMLSettings::DEFAULT_GROUP_PREFIX;

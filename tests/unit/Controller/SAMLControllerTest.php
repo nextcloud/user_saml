@@ -77,15 +77,11 @@ class SAMLControllerTest extends TestCase {
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
-			function ($param) {
-				return $param;
-			}
+			fn ($param) => $param
 		);
 
 		$this->config->expects($this->any())->method('getSystemValue')
-			->willReturnCallback(function ($key, $default) {
-				return $default;
-			});
+			->willReturnCallback(fn ($key, $default) => $default);
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -221,15 +217,10 @@ class SAMLControllerTest extends TestCase {
 		$this->session
 			->expects($this->any())
 			->method('get')
-			->willReturnCallback(function (string $key) use ($samlUserData) {
-				switch ($key) {
-					case 'user_saml.samlUserData':
-						return $samlUserData;
-					case 'user_saml.Idp':
-						return 1;
-					default:
-						return null;
-				}
+			->willReturnCallback(fn (string $key) => match ($key) {
+				'user_saml.samlUserData' => $samlUserData,
+				'user_saml.Idp' => 1,
+				default => null,
 			});
 
 		$this->userData
@@ -251,15 +242,13 @@ class SAMLControllerTest extends TestCase {
 		$this->userData
 			->expects($this->any())
 			->method('testEncodedObjectGUID')
-			->willReturnCallback(function ($uid) {
-				return $uid;
-			});
+			->willReturnCallback(fn ($uid) => $uid);
 		$this->userData
 			->expects($this->any())
 			->method('getEffectiveUid')
 			->willReturn($userState > 0 ? 'MyUid' : '');
 
-		if (strpos($redirect, 'notProvisioned') !== false) {
+		if (str_contains($redirect, 'notProvisioned')) {
 			$this->urlGenerator
 				->expects($this->once())
 				->method('linkToRouteAbsolute')
