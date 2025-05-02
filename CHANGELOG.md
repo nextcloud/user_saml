@@ -5,6 +5,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 6.6.0
+
+### Added
+
+* [Feat(keepEmptyGroups): Add app configuration parameter to keep empty groups (user_saml#911)](https://github.com/nextcloud/user_saml/pull/911)
+* [Feat(settings): optional config option for sp entityId (user_saml#932)](https://github.com/nextcloud/user_saml/pull/932)
+
+### Under the hood
+
+* [Cleanup app bootstrap (user_saml#611)](https://github.com/nextcloud/user_saml/pull/611)
+* [Fix: Register the dav plugin through an event listener (user_saml#943)](https://github.com/nextcloud/user_saml/pull/943)
+
 ## 6.5.0
 
 ### Added
