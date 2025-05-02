@@ -11,7 +11,7 @@
     "Global settings" : "Globālie iestatījumi",
     "General" : "Vispārīgi",
     "Service Provider Data" : "Pakalpojumu sniedzēja dati",
-    "If your Service Provider should use certificates you can optionally specify them here." : "Ja jūsu pakalpojumu sniedzējs izmanto sertifikātus, varat norādiet tos šeit.",
+    "If your Service Provider should use certificates you can optionally specify them here." : "Ja pakalpojumu sniedzējs izmanto sertifikātus, tos vajadzības gadījumā var norādīt šeit.",
     "Identity Provider Data" : "Identitātes nodrošinātāja dati",
     "Security settings" : "Drošības iestatījumi",
     "For increased security we recommend enabling the following settings if supported by your environment." : "Lai paaugstinātu drošību, iesakām iespējot šos iestatījumus, ja to atbalsta jūsu vidē.",
