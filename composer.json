@@ -35,6 +35,8 @@
 		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:update-baseline": "psalm --threads=1 --update-baseline",
 		"lint": "find . -name \\*.php -not -path '*/vendor/*' -print0 | xargs -0 -n1 php -l",
+		"rector:check": "rector --dry-run",
+		"rector:fix": "rector",
 		"test:unit": "phpunit -c tests/unit/phpunit.xml"
 	},
 	"require-dev": {
