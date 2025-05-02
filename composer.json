@@ -14,7 +14,7 @@
 	"extra": {
 		"patches": {
 			"onelogin/php-saml": {
-				"PHP 8.4 compatibility": "https://patch-diff.githubusercontent.com/raw/SAML-Toolkits/php-saml/pull/600.patch"
+				"PHP 8.4 compatibility": ".patches/php-saml-600.patch"
 			}
 		},
 		"bamarni-bin": {

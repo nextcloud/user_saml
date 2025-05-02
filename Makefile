@@ -33,6 +33,7 @@ appstore: clean
 	--exclude=.github \
 	--exclude=.gitignore \
 	--exclude=.git-blame-ignore-revs \
+	--exclude=.patches \
 	--exclude=.php-cs-fixer.dist.php \
 	--exclude=.scrutinizer.yml \
 	--exclude=.travis.yml \
