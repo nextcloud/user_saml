@@ -10,6 +10,7 @@
     "Provider " : "Soláthraí",
     "X.509 certificate of the Service Provider" : "Deimhniú X.509 ón Soláthraí Seirbhíse",
     "Private key of the Service Provider" : "Eochair phríobháideach an tSoláthraí Seirbhíse",
+    "Service Provider EntityId (optional)" : "Aitheantas Eintitis an tSoláthraí Seirbhíse (roghnach)",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Tugann sé le fios go mbeidh ID ainm an <samlp:logoutRequest> a sheol an SP seo criptithe.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Léiríonn sé cé acu an síneofar an <samlp:AuthnRequest> teachtaireacht a sheol an SP seo. [Tairgfidh meiteashonraí an SP an fhaisnéis seo]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Léiríonn sé cé acu an síneofar an <samlp:logoutRequest> teachtaireacht a sheol an SP seo.",
