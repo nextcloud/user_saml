@@ -51,15 +51,13 @@ class MigrateGroups extends QueuedJob {
 			$toMigrate = $this->getGroupsToMigrate($argument['gids'], $candidates);
 			$migrated = $this->migrateGroups($toMigrate);
 			$this->ownGroupManager->updateCandidatePool($migrated);
-		} catch (\RuntimeException $e) {
+		} catch (\RuntimeException) {
 			return;
 		}
 	}
 
 	protected function migrateGroups(array $toMigrate): array {
-		return array_filter($toMigrate, function ($gid) {
-			return $this->migrateGroup($gid);
-		});
+		return array_filter($toMigrate, fn ($gid) => $this->migrateGroup($gid));
 	}
 
 	protected function migrateGroup(string $gid): bool {

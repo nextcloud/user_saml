@@ -120,15 +120,10 @@ class GroupManagerTest extends TestCase {
 			->willReturn([$groupA, $groupB]);
 		$this->groupManager
 			->method('get')
-			->willReturnCallback(function ($groupId) use ($groupA, $groupB): ?IGroup {
-				switch ($groupId) {
-					case 'groupA':
-						return $groupA;
-					case 'groupB':
-						return $groupB;
-					default:
-						return null;
-				}
+			->willReturnCallback(fn ($groupId): ?IGroup => match ($groupId) {
+				'groupA' => $groupA,
+				'groupB' => $groupB,
+				default => null,
 			});
 		// assert all groups are supplied by SAML backend
 		$this->ownGroupManager
@@ -308,14 +303,10 @@ class GroupManagerTest extends TestCase {
 		// assert group exists
 		$this->groupManager
 			->method('get')
-			->willReturnCallback(function ($groupId) use ($groupC) {
-				switch ($groupId) {
-					case 'groupC':
-						return $groupC;
-					case 'SAML_groupC':
-						return $groupC;
-				}
-				return null;
+			->willReturnCallback(fn ($groupId) => match ($groupId) {
+				'groupC' => $groupC,
+				'SAML_groupC' => $groupC,
+				default => null,
 			});
 		// assert differnt group backend
 		$this->ownGroupManager

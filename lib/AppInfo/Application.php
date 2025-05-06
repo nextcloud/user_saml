@@ -53,14 +53,12 @@ class Application extends App implements IBootstrap {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginEventListener::class);
-		$context->registerService(DavPlugin::class, function (ContainerInterface $c) {
-			return new DavPlugin(
-				$c->get(ISession::class),
-				$c->get(IConfig::class),
-				$_SERVER,
-				$c->get(SAMLSettings::class)
-			);
-		});
+		$context->registerService(DavPlugin::class, fn (ContainerInterface $c) => new DavPlugin(
+			$c->get(ISession::class),
+			$c->get(IConfig::class),
+			$_SERVER,
+			$c->get(SAMLSettings::class)
+		));
 	}
 
 	public function boot(IBootContext $context): void {
@@ -81,7 +79,7 @@ class Application extends App implements IBootstrap {
 				IEventDispatcher $dispatcher,
 				CsrfTokenManager $csrfTokenManager,
 				bool $isCLI,
-			) {
+			): void {
 				$groupBackend = Server::get(GroupBackend::class);
 				Server::get(IGroupManager::class)->addBackend($groupBackend);
 
@@ -157,7 +155,7 @@ class Application extends App implements IBootstrap {
 					($request->getPathInfo() === '/login')) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					if (isset($params['direct']) && ($params['direct'] === 1 || $params['direct'] === '1')) {
@@ -173,7 +171,7 @@ class Application extends App implements IBootstrap {
 				if ($redirectSituation === true && $showLoginOptions) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					$redirectUrl = '';
@@ -194,7 +192,7 @@ class Application extends App implements IBootstrap {
 				if ($redirectSituation === true) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					$originalUrl = '';

@@ -21,9 +21,9 @@ class SettingsController extends Controller {
 	public function __construct(
 		$appName,
 		IRequest $request,
-		private IConfig $config,
-		private Admin $admin,
-		private SAMLSettings $samlSettings,
+		private readonly IConfig $config,
+		private readonly Admin $admin,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -61,12 +61,12 @@ class SettingsController extends Controller {
 			}
 			foreach ($content as $setting => $details) {
 				/* use security as category instead of security-* */
-				if (strpos($category, 'security-') === 0) {
+				if (str_starts_with($category, 'security-')) {
 					$category = 'security';
 				}
 				// make sure we properly fetch the attribute mapping
 				// as this is the only category that has the saml- prefix on config keys
-				if (strpos($category, 'attribute-mapping') === 0) {
+				if (str_starts_with($category, 'attribute-mapping')) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
 				} elseif ($category === 'name-id-formats') {

@@ -253,7 +253,7 @@ class FeatureContext implements Context {
 	public function iShouldBeRedirectedTo($targetUrl) {
 		$redirectHeader = $this->response->getHeader('X-Guzzle-Redirect-History');
 		$lastUrl = $redirectHeader[count($redirectHeader) - 1];
-		$url = parse_url($lastUrl);
+		$url = parse_url((string)$lastUrl);
 		$targetUrl = parse_url($targetUrl);
 		$paramsToCheck = [
 			'scheme',
@@ -286,7 +286,7 @@ class FeatureContext implements Context {
 	public function iShouldBeRedirectedToWithQueryParams($targetUrl) {
 		$redirectHeader = $this->response->getHeader('X-Guzzle-Redirect-History');
 		$firstUrl = $redirectHeader[0];
-		$firstUrlParsed = parse_url($firstUrl);
+		$firstUrlParsed = parse_url((string)$firstUrl);
 		$targetUrl = parse_url($targetUrl);
 		$paramsToCheck = [
 			'scheme',
@@ -301,7 +301,7 @@ class FeatureContext implements Context {
 		foreach ($paramsToCheck as $param) {
 			if ($param == 'query') {
 				foreach (explode('&', $passthroughParams) as $passthrough) {
-					if (!str_contains($firstUrl, $passthrough)) {
+					if (!str_contains((string)$firstUrl, $passthrough)) {
 						throw new InvalidArgumentException(
 							sprintf(
 								'Expected to find %s for parameter %s',
@@ -393,10 +393,10 @@ class FeatureContext implements Context {
 			]
 		);
 
-		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		$responseArray = (json_decode((string)$this->response->getBody(), true))['ocs'];
 
 		if (!isset($responseArray['data'][$key]) || count((array)$responseArray['data'][$key]) === 0) {
-			if (strpos($key, '.') !== false) {
+			if (str_contains($key, '.')) {
 				// support nested arrays, specify the key seperated by "."s, e.g. quota.total
 				$keys = explode('.', $key);
 				if (isset($responseArray['data'][$keys[0]])) {
@@ -417,7 +417,7 @@ class FeatureContext implements Context {
 			$responseArray['data'][$key] = '';
 		}
 
-		$actualValue = $actualValue ?? $responseArray['data'][$key];
+		$actualValue ??= $responseArray['data'][$key];
 		if (is_array($actualValue)) {
 			// transform array to string, ensuring values are in the same order
 			$value = explode(',', $value);
@@ -462,7 +462,7 @@ class FeatureContext implements Context {
 			]
 		);
 
-		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		$responseArray = (json_decode((string)$this->response->getBody(), true))['ocs'];
 		if ($responseArray['meta']['statuscode'] !== 200) {
 			throw new UnexpectedValueException(sprintf('Expected 200 status code but got %d', $responseArray['meta']['statusCode']));
 		}
@@ -681,10 +681,10 @@ EOF;
 	 */
 	public function iSendAGETRequestWithRequesttokenTo($url) {
 		$requestToken = substr(
-			preg_replace(
+			(string)preg_replace(
 				'/(.*)data-requesttoken="(.*)">(.*)/sm',
 				'\2',
-				$this->response->getBody()->getContents()
+				(string)$this->response->getBody()->getContents()
 			),
 			0,
 			89

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigSet extends Base {
 
 	public function __construct(
-		private SAMLSettings $samlSettings,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct();
 	}
@@ -53,7 +53,7 @@ class ConfigSet extends Base {
 		}
 		try {
 			$settings = $this->samlSettings->get($pId);
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
 			return 1;
 		}

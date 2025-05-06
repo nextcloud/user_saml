@@ -20,16 +20,16 @@ class DavPlugin extends ServerPlugin {
 	private $server;
 
 	public function __construct(
-		private ISession $session,
-		private IConfig $config,
+		private readonly ISession $session,
+		private readonly IConfig $config,
 		private array $auth,
-		private SAMLSettings $samlSettings,
+		private readonly SAMLSettings $samlSettings,
 	) {
 	}
 
 	public function initialize(Server $server) {
 		// before auth
-		$server->on('beforeMethod:*', [$this, 'beforeMethod'], 9);
+		$server->on('beforeMethod:*', $this->beforeMethod(...), 9);
 		$this->server = $server;
 	}
 

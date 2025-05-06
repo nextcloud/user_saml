@@ -54,7 +54,7 @@ class ConfigurationsMapper extends QBMapper {
 		/** @var ConfigurationsEntity $entity */
 		try {
 			$entity = $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			return [];
 		}
 		return $entity->getConfigurationArray();
@@ -70,7 +70,7 @@ class ConfigurationsMapper extends QBMapper {
 		try {
 			$entity = $this->findEntity($qb);
 			$newId = $entity->getId() + 1; // autoincrement manually
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			$newId = 1;
 		}
 
