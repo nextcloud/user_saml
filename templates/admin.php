@@ -90,7 +90,10 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 				<?php if ($attribute['type'] === 'checkbox' && !$attribute['global']): ?>
 					<p>
 						<input type="checkbox" data-key="<?php p($key)?>" id="user-saml-general-<?php p($key)?>" name="<?php p($key)?>" value="<?php p($_['config']['general-' . $key] ?? '0') ?>">
-						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label><br/>
+						<label for="user-saml-general-<?php p($key)?>"><?php p($attribute['text']) ?></label>
+						<?php if ($key === 'is_saml_request_using_post'): ?>
+							<div class="warning"><?php p($l->t('This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests.')) ?></div>
+						<?php endif; ?>
 					</p>
 				<?php elseif ($attribute['type'] === 'line' && !isset($attribute['global'])): ?>
 					<p>
