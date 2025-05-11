@@ -49,7 +49,7 @@ class Admin implements ISettings {
 				'required' => false,
 			],
 			'entityId' => [
-				'text' => $this->l10n->t('Service Provider EntityId (optional)'),
+				'text' => $this->l10n->t('Service Provider Entity ID (optional)'),
 				'type' => 'line',
 				'required' => false,
 			]
