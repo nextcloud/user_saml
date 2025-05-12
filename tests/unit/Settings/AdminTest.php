@@ -64,7 +64,7 @@ class AdminTest extends \Test\TestCase {
 				'required' => false,
 			],
 			'entityId' => [
-				'text' => 'Service Provider EntityId (optional)',
+				'text' => 'Service Provider Entity ID (optional)',
 				'type' => 'line',
 				'required' => false,
 			]
