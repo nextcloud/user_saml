@@ -12,7 +12,6 @@ OC.L10N.register(
     "Provider " : "Провајдер",
     "X.509 certificate of the Service Provider" : "X.509 сертификат провајдера услуга",
     "Private key of the Service Provider" : "Приватни кључ провајдера услуга",
-    "Service Provider EntityId (optional)" : "EntityId пружаоца услуге (није обавезно)",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Назначава да ће се nameID од <samlp:logoutRequest> који шаље добављач услуга бити шифрован.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Назначава да ли ће <samlp:AuthnRequest> поруке које шаље добављач услуга бити потписане. [метаподаци овог добављача услуга ће понудити ову информацију]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Назначава да ли ће <samlp:logoutRequest> поруке које шаље добављач услуга бити потписане.",

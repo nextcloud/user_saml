@@ -10,7 +10,6 @@
     "Provider " : "提供者",
     "X.509 certificate of the Service Provider" : "服務提供者（SP）的 X.509 憑證",
     "Private key of the Service Provider" : "服務提供者（SP）的私鑰",
-    "Service Provider EntityId (optional)" : "服務提供者實體 ID（非強制的）",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "表明 SP 發送的 <samlp:logoutRequest> nameID 將被加密。",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "指示此SP發送的<samlp:AuthnRequest>消息是否將被簽名。[SP的元數據將提供此信息]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "表明是否將對此SP發送的 <samlp:logoutRequest> 條消息進行簽名。",

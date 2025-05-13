@@ -12,7 +12,6 @@ OC.L10N.register(
     "Provider " : "Provedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do Provedor de Serviços",
     "Private key of the Service Provider" : "Chave privada do Provedor de Serviços",
-    "Service Provider EntityId (optional)" : "EntityId do provedor de serviços (opcional)",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que o ID do nome do <samlp:logoutRequest> enviado por este SP será criptografado.",
     "Indicates whether the <samlp:AuthnRequest> messages sent by this SP will be signed. [Metadata of the SP will offer this info]" : "Indica se as mensagens <samlp:AuthnRequest> enviadas por este SP serão assinadas. [Metadados do SP oferecerá esta informação]",
     "Indicates whether the  <samlp:logoutRequest> messages sent by this SP will be signed." : "Indica se as mensagens <samlp:logoutRequest> enviadas por este SP serão assinadas.",
