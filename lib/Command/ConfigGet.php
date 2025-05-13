@@ -35,11 +35,7 @@ class ConfigGet extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$providerId = (int)$input->getOption('providerId');
-		if (!empty($providerId)) {
-			$providerIds = [$providerId];
-		} else {
-			$providerIds = array_keys($this->samlSettings->getListOfIdps());
-		}
+		$providerIds = !empty($providerId) ? [$providerId] : array_keys($this->samlSettings->getListOfIdps();
 
 		$settings = [];
 		foreach ($providerIds as $pid) {
