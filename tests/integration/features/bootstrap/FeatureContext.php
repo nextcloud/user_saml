@@ -550,15 +550,44 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then User :userId is part of the groups :groups
+	 */
+	public function theUserIsPartOfTheseGroups(string $userId, string $groups) {
+		$response = shell_exec(
+			sprintf(
+				'%s %s user:info %s --output=json',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$userId
+			)
+		);
+
+		$groupsActual = json_decode(trim($response), true)['groups'];
+		$groupsExpected = array_map('trim', explode(',', $groups));
+
+		foreach ($groupsExpected as $expectedGroup) {
+			if (!in_array($expectedGroup, $groupsActual)) {
+				$actualGroupStr = implode(', ', $groupsActual);
+				throw new UnexpectedValueException("Expected to find $expectedGroup in '$actualGroupStr'");
+			}
+		}
+	}
+
+	/**
 	 * @Given The environment variable :key is set to :value
 	 */
 	public function theEnvironmentVariableIsSetTo($key, $value) {
-		// Attention, this works currently for one value only. It generates an
-		// extra config file that injects the value to $_SERVER (as used in
-		// `SAMLController::login()`), so that it stays across requests in PHPs
-		// built-in server.
-		$envConfigPhp = <<<EOF
+		// It generates an extra config file that injects the value to $_SERVER
+		// (as used in `SAMLController::login()`), so that it stays across
+		// requests in PHPs built-in server.
+		if (file_exists(self::ENV_CONFIG_FILE)) {
+			$envConfigPhp = file_get_contents(self::ENV_CONFIG_FILE) . PHP_EOL;
+		} else {
+			$envConfigPhp = <<<EOF
 <?php
+EOF . PHP_EOL;
+		}
+		$envConfigPhp .= <<<EOF
 \$_SERVER["$key"] = "$value";
 EOF;
 		file_put_contents(self::ENV_CONFIG_FILE, $envConfigPhp);

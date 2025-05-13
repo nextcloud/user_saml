@@ -155,6 +155,13 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
+		$attributes = [
+			'email' => 'new@example.com',
+			'displayname' => 'New Displayname',
+			'quota' => '50MB',
+			'groups' => ['groupB', 'groupC'],
+		];
+
 		// Replace at() matcher with willReturnCallback to avoid deprecation warning
 		$this->config
 			->method('getAppValue')
@@ -204,19 +211,20 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('handleIncomingGroups')
 			->with($user, ['groupB', 'groupC']);
-		$this->userBackend->updateAttributes('ExistingUser', [
-			'email' => 'new@example.com',
-			'displayname' => 'New Displayname',
-			'quota' => '50MB',
-			'groups' => ['groupB', 'groupC'],
-		]);
+		$this->userData->expects($this->any())
+			->method('getAttributes')
+			->willReturn($attributes);
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn($attributes['groups']);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
 	public function testUpdateAttributesQuotaDefaultFallback() {
 		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
-
+		$attributes = ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => ''];
 
 		$this->config->method('getAppValue')
 			->willReturnCallback(fn (string $appId, string $key, string $default) =>
@@ -261,6 +269,12 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('handleIncomingGroups')
 			->with($user, []);
-		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
+		$this->userData->expects($this->any())
+			->method('getAttributes')
+			->willReturn($attributes);
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn([]);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 }
