@@ -45,8 +45,10 @@ use Throwable;
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class Application extends App implements IBootstrap {
+	public const APP_ID = 'user_saml';
+
 	public function __construct(array $urlParams = []) {
-		parent::__construct('user_saml', $urlParams);
+		parent::__construct(self::APP_ID, $urlParams);
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -95,7 +97,7 @@ class Application extends App implements IBootstrap {
 				$params = [];
 
 				// Setting up the one login config may fail, if so, do not catch the requests later.
-				switch ($config->getAppValue('user_saml', 'type')) {
+				switch ($config->getAppValue(self::APP_ID, 'type')) {
 					case 'saml':
 						$type = 'saml';
 						break;
@@ -116,11 +118,11 @@ class Application extends App implements IBootstrap {
 					try {
 						OC_User::handleApacheAuth();
 					} catch (LoginException $e) {
-						if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
+						if ($request->getPathInfo() === '/apps/' . self::APP_ID . '/saml/error') {
 							return;
 						}
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
-							'user_saml.SAML.genericError',
+							self::APP_ID . '.SAML.genericError',
 							[
 								'message' => $e->getMessage()
 							]
@@ -136,11 +138,11 @@ class Application extends App implements IBootstrap {
 				if ($user !== null) {
 					$enabled = $user->isEnabled();
 					if ($enabled === false) {
-						if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
+						if ($request->getPathInfo() === '/apps/' . self::APP_ID . '/saml/error') {
 							return;
 						}
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
-							'user_saml.SAML.genericError',
+							self::APP_ID . '.SAML.genericError',
 							[
 								'message' => $l10n->t('This user account is disabled, please contact your administrator.')
 							]
@@ -182,7 +184,7 @@ class Application extends App implements IBootstrap {
 					}
 
 					$targetUrl = $urlGenerator->linkToRouteAbsolute(
-						'user_saml.SAML.selectUserBackEnd',
+						self::APP_ID . '.SAML.selectUserBackEnd',
 						[
 							'redirectUrl' => $redirectUrl
 						]
@@ -204,7 +206,7 @@ class Application extends App implements IBootstrap {
 
 					$csrfToken = $csrfTokenManager->getToken();
 					$targetUrl = $urlGenerator->linkToRouteAbsolute(
-						'user_saml.SAML.login',
+						self::APP_ID . '.SAML.login',
 						[
 							'requesttoken' => $csrfToken->getEncryptedValue(),
 							'originalUrl' => $originalUrl,
@@ -216,7 +218,7 @@ class Application extends App implements IBootstrap {
 				}
 			});
 		} catch (Throwable $e) {
-			Server::get(LoggerInterface::class)->critical('Error when loading user_saml app', [
+			Server::get(LoggerInterface::class)->critical('Error when loading ' . self::APP_ID . ' app', [
 				'exception' => $e,
 			]);
 		}
