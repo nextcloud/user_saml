@@ -7,6 +7,7 @@ OC.L10N.register(
     "Private key of the Service Provider" : "Teenusepakkuja privaatvõti",
     "Email address" : "E-posti aadress",
     "Encrypted" : "Krüptitud",
+    "Use POST method for SAML request (default: GET)" : "Kasuta SAML-i päringute jaoks POST-meetodit (vaikimisi on kasutusel GET-meetod)",
     "SSO & SAML authentication" : "SSO & SAML autentimine",
     "Open documentation" : "Ava dokumentatsioon",
     "Use built-in SAML authentication" : "Kasuta sisse-ehitatud SAML autentimist",
@@ -14,6 +15,7 @@ OC.L10N.register(
     "General" : "Üldine",
     "Service Provider Data" : "Teenusepakkuja andmed",
     "Security settings" : "Turvaseaded",
-    "Error" : "Viga"
+    "Error" : "Viga",
+    "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript on sinu veebibrauseris keelatud. Jätkamiseks palun luba JavaScripti kasutamine."
 },
 "nplurals=2; plural=(n != 1);");
