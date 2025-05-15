@@ -13,13 +13,9 @@ trait TXmlHelper {
 	 * @returns mixed returns the result of the callable parameter
 	 */
 	public function callWithXmlEntityLoader(callable $func) {
-		libxml_set_external_entity_loader(static function ($public, $system) {
-			return $system;
-		});
+		libxml_set_external_entity_loader(static fn ($public, $system) => $system);
 		$result = $func();
-		libxml_set_external_entity_loader(static function () {
-			return null;
-		});
+		libxml_set_external_entity_loader(static fn () => null);
 		return $result;
 	}
 }

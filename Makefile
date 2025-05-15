@@ -33,6 +33,7 @@ appstore: clean
 	--exclude=.github \
 	--exclude=.gitignore \
 	--exclude=.git-blame-ignore-revs \
+	--exclude=.patches \
 	--exclude=.php-cs-fixer.dist.php \
 	--exclude=.scrutinizer.yml \
 	--exclude=.travis.yml \
@@ -45,10 +46,12 @@ appstore: clean
 	--exclude=/Makefile \
 	--exclude=/psalm.xml \
 	--exclude=/README.md \
+	--exclude=/rector.php \
 	--exclude=/screenshots \
 	--exclude=/tests \
 	--exclude=/translationfiles \
-	--exclude=/vendor/cweagens \
+	--exclude=/vendor/cweagans \
+	--exclude=/vendor-bin \
 	$(project_dir)/ $(sign_dir)/$(app_name)
 	tar -czf $(build_dir)/$(app_name).tar.gz \
 		-C $(sign_dir) $(app_name)

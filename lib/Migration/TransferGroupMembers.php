@@ -16,8 +16,8 @@ use Throwable;
 class TransferGroupMembers implements IRepairStep {
 
 	public function __construct(
-		private GroupMigration $groupMigration,
-		private LoggerInterface $logger,
+		private readonly GroupMigration $groupMigration,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 

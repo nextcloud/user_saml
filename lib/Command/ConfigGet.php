@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigGet extends Base {
 
 	public function __construct(
-		private SAMLSettings $samlSettings,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct();
 	}

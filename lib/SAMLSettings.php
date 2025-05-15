@@ -75,10 +75,10 @@ class SAMLSettings {
 	private $configurationsLoadedState = self::LOADED_NONE;
 
 	public function __construct(
-		private IURLGenerator $urlGenerator,
-		private IConfig $config,
-		private ISession $session,
-		private ConfigurationsMapper $mapper,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly IConfig $config,
+		private readonly ISession $session,
+		private readonly ConfigurationsMapper $mapper,
 	) {
 	}
 

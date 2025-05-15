@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigDelete extends Base {
 
 	public function __construct(
-		private SAMLSettings $samlSettings,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct();
 	}
@@ -43,7 +43,7 @@ class ConfigDelete extends Base {
 		try {
 			$this->samlSettings->delete($pId);
 			$output->writeln('Provider deleted.');
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
 			return 1;
 		}

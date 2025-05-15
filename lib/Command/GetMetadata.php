@@ -50,9 +50,7 @@ EOT
 		$settingsArray = $this->samlSettings->getOneLoginSettingsArray($idp);
 		$settings = new Settings($settingsArray);
 		$metadata = $settings->getSPMetadata();
-		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
-			return $settings->validateMetadata($metadata);
-		});
+		$errors = $this->callWithXmlEntityLoader(fn () => $settings->validateMetadata($metadata));
 		if (empty($errors)) {
 			$output->writeln($metadata);
 		} else {

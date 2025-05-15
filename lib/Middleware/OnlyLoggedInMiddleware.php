@@ -22,9 +22,9 @@ use OCP\IUserSession;
 class OnlyLoggedInMiddleware extends Middleware {
 
 	public function __construct(
-		private IControllerMethodReflector $reflector,
-		private IUserSession $userSession,
-		private IURLGenerator $urlGenerator,
+		private readonly IControllerMethodReflector $reflector,
+		private readonly IUserSession $userSession,
+		private readonly IURLGenerator $urlGenerator,
 	) {
 	}
 
