@@ -355,7 +355,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 
 		try {
-			$result['formatted']['groups'] = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$result['formatted']['groups'] = $this->userData->getGroups();
 		} catch (\InvalidArgumentException) {
 			$result['formatted']['groups'] = null;
 		}
@@ -474,24 +474,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $value;
 	}
 
-	private function getAttributeArrayValue($name, array $attributes) {
-		$keys = $this->getAttributeKeys($name);
-
-		$value = [];
-		foreach ($keys as $key) {
-			if (isset($attributes[$key])) {
-				if (is_array($attributes[$key])) {
-					$value = array_merge($value, array_values($attributes[$key]));
-				} else {
-					$value[] = $attributes[$key];
-				}
-			}
-		}
-
-		return $value;
-	}
-
-	public function updateAttributes(string $uid, array $attributes): void {
+	public function updateAttributes(string $uid): void {
+		$attributes = $this->userData->getAttributes();
 		$user = $this->userManager->get($uid);
 		try {
 			$newEmail = $this->getAttributeValue('saml-attribute-mapping-email_mapping', $attributes);
@@ -519,7 +503,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 
 		try {
-			$newGroups = $this->getAttributeArrayValue('saml-attribute-mapping-group_mapping', $attributes);
+			$newGroups = $this->userData->getGroups();
 			$this->logger->debug('Group attribute content: {groups}', ['app' => 'user_saml', 'groups' => json_encode($newGroups)]);
 		} catch (\InvalidArgumentException $e) {
 			$this->logger->debug('Failed to fetch group attribute: {exception}', ['app' => 'user_saml', 'exception' => $e->getMessage()]);
