@@ -83,8 +83,6 @@ class Application extends App implements IBootstrap {
 				$groupBackend = Server::get(GroupBackend::class);
 				Server::get(IGroupManager::class)->addBackend($groupBackend);
 
-				$samlSettings = Server::get(SAMLSettings::class);
-
 				$userBackend = Server::get(UserBackend::class);
 
 				$userBackend->registerBackends($userManager->getBackends());
@@ -166,7 +164,7 @@ class Application extends App implements IBootstrap {
 
 				$multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
 				$configuredIdps = $samlSettings->getListOfIdps();
-				$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
+				$showLoginOptions = $type !== 'environment-variable' && ($multipleUserBackEnds || count($configuredIdps) > 1);
 
 				if ($redirectSituation === true && $showLoginOptions) {
 					try {
