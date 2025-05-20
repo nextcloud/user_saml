@@ -55,6 +55,7 @@ While theoretically any other authentication provider implementing either one of
 		<command>OCA\User_SAML\Command\ConfigSet</command>
 		<command>OCA\User_SAML\Command\GetMetadata</command>
 		<command>OCA\User_SAML\Command\GroupMigrationCopyIncomplete</command>
+		<command>OCA\User_SAML\Command\UserAdd</command>
 	</commands>
 	<settings>
 		<admin>OCA\User_SAML\Settings\Admin</admin>
