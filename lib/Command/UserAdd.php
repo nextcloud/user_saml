@@ -1,0 +1,87 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+namespace OCA\User_SAML\Command;
+
+use OC\Core\Command\Base;
+use OCA\User_SAML\Service\GroupMigration;
+use OCA\User_SAML\UserBackend;
+use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+
+class UserAdd extends Base {
+	public function __construct(
+		protected IUserManager $userManager,
+		protected UserBackend $backend,
+		private LoggerInterface $logger,
+	) {
+		parent::__construct();
+	}
+	protected function configure(): void {
+		$this
+			->setName('saml:user:add')
+			->setDescription('adds an saml account')
+			->addArgument(
+				'uid',
+				InputArgument::REQUIRED,
+				'Account ID used to login (must only contain a-z, A-Z, 0-9, -, _ and @)'
+			)
+			->addOption(
+				'display-name',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'Login used in the web UI (can contain any characters)'
+			)
+			->addOption(
+				'email',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'When set, users may register using the default email verification workflow'
+			);
+	}
+
+	protected function execute(InputInterface $input, OutputInterface $output): int {
+		$uid = $input->getArgument('uid');
+		
+		if ($this->userManager->userExists($uid)) {
+			$output->writeln('<error>The account "' . $uid . '" already exists.</error>');
+			return 1;
+		}
+
+		if (!$output->isQuiet()) {
+			$output->writeln('<info>The account "' . $uid . '" is to be added to SAML.</info>');
+		}
+
+		try {
+   			$this->backend->createUserIfNotExists($uid);
+		} catch (\Exception $e) {
+			$output->writeln('<error>SAML create user ' . $e->getMessage() . '</error>');
+			return 1;
+		}
+
+		try {
+			$user = $this->userManager->get($uid);
+		 	$user->setSystemEMailAddress($input->getOption('email'));
+			$this->backend->setDisplayName($uid, $input->getOption('display-name'));
+		} catch (\Exception $e) {
+			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');
+			return 1;
+		}
+
+		if (!$output->isQuiet()) {
+			$output->writeln('<info>SAML user "' . $uid .'" added.</info>');
+		}
+		
+		return 0;
+	}
+
+}
