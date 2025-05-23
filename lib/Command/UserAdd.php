@@ -33,13 +33,13 @@ class UserAdd extends Base {
 			->addArgument(
 				'uid',
 				InputArgument::REQUIRED,
-				'Account ID used to login (must only contain a-z, A-Z, 0-9, -, _ and @)'
+				'Account ID as provided by the IdP (must only contain a-z, A-Z, 0-9, -, _ and @)'
 			)
 			->addOption(
 				'display-name',
 				null,
 				InputOption::VALUE_REQUIRED,
-				'Login used in the web UI (can contain any characters)'
+				'Name as presented in the web interface (can contain any characters)'
 			)
 			->addOption(
 				'email',
@@ -58,7 +58,7 @@ class UserAdd extends Base {
 		}
 
 		if (!$output->isQuiet()) {
-			$output->writeln('<info>The account "' . $uid . '" is to be added to SAML.</info>');
+			$output->writeln('<info>The account "' . $uid . '" is to be added to the SAML backend.</info>');
 		}
 
 		try {
