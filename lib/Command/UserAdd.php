@@ -33,7 +33,7 @@ class UserAdd extends Base {
 			->addArgument(
 				'uid',
 				InputArgument::REQUIRED,
-				'Account ID used to login (must only contain a-z, A-Z, 0-9, -, _ and @)'
+				'Account ID as provided by the IdP (must only contain a-z, A-Z, 0-9, -, _ and @)'
 			)
 			->addOption(
 				'display-name',
