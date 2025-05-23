@@ -39,7 +39,7 @@ class UserAdd extends Base {
 				'display-name',
 				null,
 				InputOption::VALUE_REQUIRED,
-				'Login used in the web UI (can contain any characters)'
+				'Name as presented in the web interface (can contain any characters)'
 			)
 			->addOption(
 				'email',
