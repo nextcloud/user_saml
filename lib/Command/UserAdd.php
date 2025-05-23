@@ -58,7 +58,7 @@ class UserAdd extends Base {
 		}
 
 		if (!$output->isQuiet()) {
-			$output->writeln('<info>The account "' . $uid . '" is to be added to SAML.</info>');
+			$output->writeln('<info>The account "' . $uid . '" is to be added to the SAML backend.</info>');
 		}
 
 		try {
