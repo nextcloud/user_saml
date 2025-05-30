@@ -1,7 +1,7 @@
 {
     "require-dev": {
         "nextcloud/ocp": "dev-stable28",
-        "vimeo/psalm": "^5.26",
+        "vimeo/psalm": "^6.12",
         "sabre/dav": "4.7.0"
     },
     "config": {
