@@ -45,7 +45,7 @@ class UserAdd extends Base {
 				'email',
 				null,
 				InputOption::VALUE_REQUIRED,
-				'When set, users may register using the default email verification workflow'
+				'Set user default email in user profile'
 			);
 	}
 
