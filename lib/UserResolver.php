@@ -73,12 +73,15 @@ class UserResolver {
 		//FIXME: adjusted copy of LDAP's Access::sanitizeUsername(), should go to API
 		$sanitized = trim($rawUidCandidate);
 
-		// Transliteration to ASCII
-		$transliterated = @iconv('UTF-8', 'ASCII//TRANSLIT', $sanitized);
-		if ($transliterated !== false) {
-			// depending on system config iconv can work or not
-			$sanitized = $transliterated;
-		}
+		// Use htmlentities to get rid of accents
+		$sanitized = htmlentities($sanitized, ENT_NOQUOTES, 'UTF-8');
+
+		// Remove accents
+		$sanitized = preg_replace('#&([A-Za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $sanitized);
+		// Remove ligatures
+		$sanitized = preg_replace('#&([A-Za-z]{2})(?:lig);#', '\1', $sanitized);
+		// Remove unknown leftover entities
+		$sanitized = preg_replace('#&[^;]+;#', '', $sanitized);
 
 		// Replacements
 		$sanitized = str_replace(' ', '_', $sanitized);
