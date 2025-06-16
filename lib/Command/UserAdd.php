@@ -44,7 +44,7 @@ class UserAdd extends Base {
 			->addOption(
 				'email',
 				null,
-				InputOption::VALUE_REQUIRED,
+				InputOption::VALUE_OPTIONAL,
 				'Set user default email in user profile'
 			);
 	}
