@@ -69,11 +69,11 @@ class UserAdd extends Base {
 		}
 
 		try {
+		        $this->backend->setDisplayName($uid, $input->getOption('display-name'));
 			$email = $input->getOption('email');
 			if (!empty($email)) {
 			   $user = $this->userManager->get($uid);
 			   $user->setSystemEMailAddress($email);
-			   $this->backend->setDisplayName($uid, $input->getOption('display-name'));
 			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');
