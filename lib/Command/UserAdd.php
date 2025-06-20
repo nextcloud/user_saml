@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
-use OCA\User_SAML\Service\GroupMigration;
 use OCA\User_SAML\UserBackend;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
@@ -16,7 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Throwable;
 
 class UserAdd extends Base {
 	public function __construct(
@@ -62,18 +60,18 @@ class UserAdd extends Base {
 		}
 
 		try {
-   			$this->backend->createUserIfNotExists($uid);
+			$this->backend->createUserIfNotExists($uid);
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user ' . $e->getMessage() . '</error>');
 			return 1;
 		}
 
 		try {
-		        $this->backend->setDisplayName($uid, $input->getOption('display-name'));
+			$this->backend->setDisplayName($uid, $input->getOption('display-name'));
 			$email = $input->getOption('email');
 			if (!empty($email)) {
-			   $user = $this->userManager->get($uid);
-			   $user->setSystemEMailAddress($email);
+				$user = $this->userManager->get($uid);
+				$user->setSystemEMailAddress($email);
 			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');
@@ -81,7 +79,7 @@ class UserAdd extends Base {
 		}
 
 		if (!$output->isQuiet()) {
-			$output->writeln('<info>SAML user "' . $uid .'" added.</info>');
+			$output->writeln('<info>SAML user "' . $uid . '" added.</info>');
 		}
 		
 		return 0;
