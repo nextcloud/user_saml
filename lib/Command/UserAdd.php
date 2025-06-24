@@ -49,7 +49,7 @@ class UserAdd extends Base {
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$uid = $input->getArgument('uid');
-		
+
 		if ($this->userManager->userExists($uid)) {
 			$output->writeln('<error>The account "' . $uid . '" already exists.</error>');
 			return 1;
@@ -81,7 +81,7 @@ class UserAdd extends Base {
 		if (!$output->isQuiet()) {
 			$output->writeln('<info>SAML user "' . $uid . '" added.</info>');
 		}
-		
+
 		return 0;
 	}
 
