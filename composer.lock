@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "45cd7794b245c1413c81f5f5e244c09f",
+    "content-hash": "7be06e446b10a4eaa44e1782e5e21dda",
     "packages": [
         {
             "name": "cweagans/composer-patches",
@@ -119,16 +119,16 @@
         },
         {
             "name": "onelogin/php-saml",
-            "version": "4.2.0",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SAML-Toolkits/php-saml.git",
-                "reference": "d3b5172f137db2f412239432d77253ceaaa1e939"
+                "reference": "bf5efce9f2df5d489d05e78c27003a0fc8bc50f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SAML-Toolkits/php-saml/zipball/d3b5172f137db2f412239432d77253ceaaa1e939",
-                "reference": "d3b5172f137db2f412239432d77253ceaaa1e939",
+                "url": "https://api.github.com/repos/SAML-Toolkits/php-saml/zipball/bf5efce9f2df5d489d05e78c27003a0fc8bc50f0",
+                "reference": "bf5efce9f2df5d489d05e78c27003a0fc8bc50f0",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +179,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-30T15:10:40+00:00"
+            "time": "2025-05-25T14:28:00+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -2034,13 +2034,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.32"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
