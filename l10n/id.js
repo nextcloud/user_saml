@@ -14,7 +14,7 @@ OC.L10N.register(
     "Indicates a requirement for the <saml:Assertion> elements received by this SP to be encrypted." : "Mengindikasikan keharusan elemen <saml:Assertion> yang diterima SP ini untuk dienkripsi.",
     " Indicates a requirement for the NameID element on the SAMLResponse received by this SP to be present." : "Mengindikasikan keharusan untuk elemen NameID di SAMLResponse yang diterima oleh SP ini untuk hadir.",
     "Indicates a requirement for the NameID received by this SP to be encrypted." : "Mengindikasikan keharusan untuk elemen NameID yang diterima oleh SP ini untuk dienkripsi.",
-    "Email address" : "Alamat surel",
+    "Email address" : "Alamat email",
     "Open documentation" : "Buka dokumentasi",
     "General" : "Umum",
     "Service Provider Data" : "Data Penyedia Layanan",
