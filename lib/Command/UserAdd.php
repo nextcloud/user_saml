@@ -27,7 +27,7 @@ class UserAdd extends Base {
 	protected function configure(): void {
 		$this
 			->setName('saml:user:add')
-			->setDescription('adds an saml account')
+			->setDescription('Add a SAML account')
 			->addArgument(
 				'uid',
 				InputArgument::REQUIRED,
