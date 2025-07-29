@@ -106,9 +106,9 @@ class UserBackendTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(fn (string $appId, string $key, string $default) =>
+			->willReturnCallback(fn (string $appId, string $key, string $default)
 				// Unused parameters are intentionally kept for clarity
-				$default);
+				=> $default);
 
 		$this->userManager
 			->expects($this->once())
@@ -138,9 +138,9 @@ class UserBackendTest extends TestCase {
 		$this->getMockedBuilder();
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(fn (string $appId, string $key, string $default) =>
+			->willReturnCallback(fn (string $appId, string $key, string $default)
 				// Unused parameters are intentionally kept for clarity
-				$default);
+				=> $default);
 
 		$this->userManager
 			->expects($this->once())
@@ -227,9 +227,9 @@ class UserBackendTest extends TestCase {
 		$attributes = ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => ''];
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(fn (string $appId, string $key, string $default) =>
+			->willReturnCallback(fn (string $appId, string $key, string $default)
 				// Unused $appId parameter is intentionally kept for clarity
-				match ($key) {
+				=> match ($key) {
 					'saml-attribute-mapping-email_mapping' => 'email',
 					'saml-attribute-mapping-displayName_mapping' => 'displayname',
 					'saml-attribute-mapping-quota_mapping' => 'quota',
