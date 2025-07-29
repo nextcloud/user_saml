@@ -431,8 +431,8 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 */
 	public function singleLogoutService(): Http\RedirectResponse {
-		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false) &&
-					 $this->config->getSystemValueString('gss.mode', '') === 'master');
+		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false)
+					 && $this->config->getSystemValueString('gss.mode', '') === 'master');
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
