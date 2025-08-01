@@ -45,6 +45,7 @@
     "Windows domain qualified name" : "Квалифицированное имя домена Windows",
     "X509 subject name" : "Имя субъекта X509",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Дополнительное отображаемое имя поставщика удостоверений (по умолчанию: «SSO & SAML log in»)",
+    "Use POST method for SAML request (default: GET)" : "Использовать POST метод при SAML запросе (по-умолчанию: GET)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Разрешить использование нескольких пользовательских back-end (например, LDAP)",
     "SSO & SAML authentication" : "Аутентификация SSO и SAML",
     "Authenticate using single sign-on" : "Аутентификация с использованием единого входа",
@@ -86,10 +87,12 @@
     "Metadata invalid" : "Метаданные не верны",
     "Metadata valid" : "Метаданные верны",
     "Error" : "Ошибка",
+    "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript выключен в вашем браузере. Пожалуйста, включите его чтобы продолжить.",
     "Access denied." : "Доступ запрещен.",
     "Your account is denied, access to this service is thus not possible." : "Ваша учетная запись запрещена, поэтому доступ к этой услуге невозможен.",
     "Account not provisioned." : "Учётная запись не обслуживается.",
     "Your account is not provisioned, access to this service is thus not possible." : "Ваша учётная запись не обслуживается. Доступ к этой услуге, таким образом, не представляется возможным.",
-    "Login options:" : "Варианты входа:"
+    "Login options:" : "Варианты входа:",
+    "Choose an authentication provider" : "Выберите службу аутентификации"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
