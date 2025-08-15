@@ -9,7 +9,6 @@ namespace OCA\User_SAML;
 
 use OCA\User_SAML\Exceptions\GroupNotFoundException;
 use OCA\User_SAML\Exceptions\NonMigratableGroupException;
-use OCA\User_SAML\Jobs\MigrateGroups;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\BeforeGroupCreatedEvent;
