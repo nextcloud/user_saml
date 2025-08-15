@@ -90,8 +90,6 @@ class GroupManager {
 		}
 
 		$this->updateUserGroups($user, $samlGroupNames);
-		// TODO: drop following line with dropping NC 28 support
-		$this->evaluateGroupMigrations($samlGroupNames);
 	}
 
 	protected function updateUserGroups(IUser $user, array $samlGroupNames): void {
@@ -221,15 +219,6 @@ class GroupManager {
 
 	protected function hasSamlBackend(IGroup $group): bool {
 		return in_array('user_saml', $group->getBackendNames());
-	}
-
-	protected function evaluateGroupMigrations(array $groups): void {
-		$candidateInfo = $this->getCandidateInfoIfValid();
-		if ($candidateInfo === null) {
-			return;
-		}
-
-		$this->jobList->add(MigrateGroups::class, ['gids' => $groups]);
 	}
 
 	protected function isGroupInTransitionList(string $groupId): bool {
