@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Захавана",
+    "Group A, Group B, …" : "Група A, Група B, …",
     "Email address" : "Адрас электроннай пошты",
     "Open documentation" : "Адкрыць дакументацыю",
     "General" : "Агульныя",
