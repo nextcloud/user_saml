@@ -24,15 +24,25 @@ class UserResolver {
 	 * @throws NoUserFoundException
 	 */
 	public function findExistingUserId(string $rawUidCandidate, bool $force = false): string {
-		if ($force) {
-			$this->ensureUser($rawUidCandidate);
+		if ($force)
+		{
+			$usersFound=$this->ensureUser($rawUidCandidate);
+			if(count($usersFound) != 1)
+			{
+				throw new NoUserFoundException('User' . $rawUidCandidate . ' not valid or not found');
+			}
+			$user = array_keys($usersFound)[0];
 		}
-		if ($this->userManager->userExists($rawUidCandidate)) {
-			return $rawUidCandidate;
+		else
+		{
+			$user=$rawUidCandidate;
+		}
+		if ($this->userManager->userExists($user)) {
+			return $user;
 		}
 		try {
 			$sanitized = $this->sanitizeUserIdCandidate($rawUidCandidate);
-		} catch (\InvalidArgumentException) {
+		} catch (\InvalidArgumentException $e) {
 			$sanitized = '';
 		}
 		if ($this->userManager->userExists($sanitized)) {
@@ -57,13 +67,13 @@ class UserResolver {
 		try {
 			$this->findExistingUserId($uid, $force);
 			return true;
-		} catch (NoUserFoundException) {
+		} catch (NoUserFoundException $e) {
 			return false;
 		}
 	}
 
 	protected function ensureUser($search) {
-		$this->userManager->search($search);
+		return $this->userManager->search($search);
 	}
 
 	/**
