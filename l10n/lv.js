@@ -16,7 +16,7 @@ OC.L10N.register(
     "If your Service Provider should use certificates you can optionally specify them here." : "Ja pakalpojumu sniedzējs izmanto sertifikātus, tos vajadzības gadījumā var norādīt šeit.",
     "Identity Provider Data" : "Identitātes nodrošinātāja dati",
     "Security settings" : "Drošības iestatījumi",
-    "For increased security we recommend enabling the following settings if supported by your environment." : "Lai paaugstinātu drošību, iesakām iespējot šos iestatījumus, ja to atbalsta jūsu vidē.",
+    "For increased security we recommend enabling the following settings if supported by your environment." : "Uzlabotai drošībai mēs iesakām iespējot zemāk esošos iestatījumus, ja Tava vide to atbalsta.",
     "Show security settings…" : "Rādīt drošības iestatījumus ...",
     "Signatures and encryption required" : "Paraksti un šifrēšana ir nepieciešama",
     "Download metadata XML" : "Lejupielādēt metadatu XML",
@@ -25,6 +25,6 @@ OC.L10N.register(
     "Metadata valid" : "Derīgi metadati",
     "Error" : "Kļūda",
     "Account not provisioned." : "Konts nav nodrošināts.",
-    "Your account is not provisioned, access to this service is thus not possible." : "Jūsu konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."
+    "Your account is not provisioned, access to this service is thus not possible." : "Tavs konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
