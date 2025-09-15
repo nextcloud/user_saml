@@ -253,7 +253,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			->orWhere($query->expr()->iLike('displayname', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
 			->orWhere($query->expr()->iLike('configvalue', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
 			->orderBy($query->func()->lower('displayname'), 'ASC')
-			->orderBy('uid', 'ASC')
+			->addOrderBy('uid', 'ASC')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
 
