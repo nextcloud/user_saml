@@ -4,6 +4,7 @@ OC.L10N.register(
     "Saved" : "Захавана",
     "Group A, Group B, …" : "Група A, Група B, …",
     "Email address" : "Адрас электроннай пошты",
+    "Encrypted" : "Зашыфравана",
     "Open documentation" : "Адкрыць дакументацыю",
     "General" : "Агульныя",
     "Security settings" : "Налады бяспекі",
