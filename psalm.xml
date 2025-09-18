@@ -15,6 +15,10 @@
 >
 	<stubs>
 		<file name="tests/stub.phpstub" preloadClasses="true"/>
+		<file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_column.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_schema.php" />
+		<file name="tests/stubs/doctrine_dbal_schema_table.php" />
 	</stubs>
     <projectFiles>
         <directory name="lib" />
@@ -31,18 +35,8 @@
 		<DeprecatedConstant errorLevel="info" />
 		<UndefinedClass>
 			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Types\Types"/>
 				<referencedClass name="Symfony\Component\Console\Command\Command"/>
 			</errorLevel>
 		</UndefinedClass>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
-				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
-				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
-				<referencedClass name="Doctrine\DBAL\Schema\Table" />
-				<referencedClass name="Doctrine\DBAL\Statement" />
-			</errorLevel>
-		</UndefinedDocblockClass>
 	</issueHandlers>
 </psalm>
