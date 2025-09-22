@@ -82,20 +82,20 @@ jobs:
           MYSQL_ROOT_PASSWORD: rootpassword
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
       directory:
-        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest
+        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest # zizmor: ignore[unpinned-images]
         ports:
           - 389:3389/tcp
         options:
           --name directory
       sso:
-        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest
+        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest # zizmor: ignore[unpinned-images]
         ports:
           - 4443:8443/tcp
           - 9090:8080/tcp
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
           repository: nextcloud/server
@@ -103,13 +103,13 @@ jobs:
           submodules: true
 
       - name: Checkout app
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
