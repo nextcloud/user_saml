@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group A, Group B, …" : "Група A, Група B, …",
     "Email address" : "Адрас электроннай пошты",
     "Encrypted" : "Зашыфравана",
+    "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Неабавязковае імя для паказу пастаўшчыка ідэнтыфікацыйных даных (прадвызначана: \"Уваход у SSO і SAML\")",
     "Open documentation" : "Адкрыць дакументацыю",
     "General" : "Агульныя",
     "Security settings" : "Налады бяспекі",
