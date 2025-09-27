@@ -64,7 +64,7 @@ OC.L10N.register(
     "Remove identity provider" : "Retirar o provedor de identidade",
     "Add identity provider" : "Engadir un provedor de identidade",
     "General" : "Xeral",
-    "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "É posible que esta funcionalidade non traballe con todos os provedores de identidade. Usea só se o seu IdP require especificamente a unión POST para as solicitudes SAML.",
+    "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "É posíbel que esta funcionalidade non traballe con todos os provedores de identidade. Usea só se o seu IdP require especificamente a unión POST para as solicitudes SAML.",
     "Service Provider Data" : "Provedor do servizo de datos",
     "If your Service Provider should use certificates you can optionally specify them here." : "Se o seu provedor do servizo usa certificados, pode, opcionalmente, especificalos aquí.",
     "Show Service Provider settings…" : "Amosar os axustes do provedor dos servizos…",
