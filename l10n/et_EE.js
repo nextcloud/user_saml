@@ -12,6 +12,7 @@ OC.L10N.register(
     "Open documentation" : "Ava dokumentatsioon",
     "Use built-in SAML authentication" : "Kasuta sisse-ehitatud SAML autentimist",
     "Use environment variable" : "Kasuta keskonnamuutujat",
+    "Global settings" : "Üldised seadistused",
     "General" : "Üldine",
     "Service Provider Data" : "Teenusepakkuja andmed",
     "Security settings" : "Turvaseaded",
