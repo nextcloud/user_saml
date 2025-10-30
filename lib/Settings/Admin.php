@@ -34,7 +34,7 @@ class Admin implements ISettings {
 		foreach ($providerIds as $id => $name) {
 			$providers[] = [
 				'id' => $id,
-				'name' => $name === '' ? $this->l10n->t('Provider ') . $id : $name
+				'name' => $name === '' ? $this->l10n->t('Provider') . $id : $name
 			];
 		}
 		$serviceProviderFields = [
