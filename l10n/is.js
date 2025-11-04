@@ -8,7 +8,6 @@ OC.L10N.register(
     "Direct log in" : "Bein innskráning",
     "SSO & SAML log in" : "SSO & SAML innskráning",
     "This page should not be visited directly." : "Þessa síðu ætti ekki að heimsækja beint.",
-    "Provider " : "Þjónustuveita ",
     "X.509 certificate of the Service Provider" : "X.509 skilríki internetþjónustu",
     "Private key of the Service Provider" : "Einkalykill internetþjónustu",
     "Whether the metadata should be signed." : "Hvort undirrita eigi lýsigögnin.",

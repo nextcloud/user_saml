@@ -8,7 +8,6 @@ OC.L10N.register(
     "Direct log in" : "直接登录",
     "SSO & SAML log in" : "SSO & SAML 登录",
     "This page should not be visited directly." : "此页面不应被直接访问 。",
-    "Provider " : "服务商",
     "X.509 certificate of the Service Provider" : "服务商 X.509 认证",
     "Private key of the Service Provider" : "服务商私钥",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "表明 SP 发送的 <samlp:logoutRequest> nameID 将被加密。",

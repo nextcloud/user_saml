@@ -4,7 +4,6 @@ OC.L10N.register(
     "Saved" : "Saglabāts",
     "Provider" : "Nodrošinātājs",
     "Unknown error, please check the log file for more details." : "Nezināma kļūda, lūgums pārbaudīt žurnālu, lai iegūtu vairāk informācijas.",
-    "Provider " : "Nodrošinātājs",
     "X.509 certificate of the Service Provider" : "X.509 sertifikātu no pakalpojumu sniedzēja",
     "Private key of the Service Provider" : "Privātā atslēga no pakalpojumu sniedzēja",
     "Email address" : "E-pasta adrese",

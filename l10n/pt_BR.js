@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Login direto",
     "SSO & SAML log in" : "Login SSO & SAML",
     "This page should not be visited directly." : "Esta página não deve ser visitada diretamente.",
-    "Provider " : "Provedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do Provedor de Serviços",
     "Private key of the Service Provider" : "Chave privada do Provedor de Serviços",
     "Service Provider Entity ID (optional)" : "ID de Entidade do Provedor de Serviço (opcional)",

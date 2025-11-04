@@ -7,7 +7,6 @@
     "Direct log in" : "Connexion directe",
     "SSO & SAML log in" : "Connexion SSO & SAML",
     "This page should not be visited directly." : "Cette page ne devrait pas être accessible directement.",
-    "Provider " : "Fournisseur",
     "X.509 certificate of the Service Provider" : "Certificat X.509 du fournisseur de service",
     "Private key of the Service Provider" : "Clé privée du fournisseur de service",
     "Service Provider Entity ID (optional)" : "ID de l'entité du Fournisseur de Service (SP, optionnel)",

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Direkte innlogging",
     "SSO & SAML log in" : "SSO- og SAML -innlogging",
     "This page should not be visited directly." : "Denne siden bør ikke besøkes direkte.",
-    "Provider " : "Tilbyder",
     "X.509 certificate of the Service Provider" : "X.509-sertifikat for tjenesteleverandøren",
     "Private key of the Service Provider" : "Privat nøkkel for tjenesteleverandøren",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Forteller om <samlp:logoutRequest> av denne SPen er kryptert.",

@@ -7,7 +7,6 @@
     "Direct log in" : "Doğrudan oturum açma",
     "SSO & SAML log in" : "SSO ve SAML oturum açma",
     "This page should not be visited directly." : "Bu sayfaya doğrudan erişilememelidir.",
-    "Provider " : "Hizmet sağlayıcı",
     "X.509 certificate of the Service Provider" : "Hizmet sağlayıcısının X.509 sertifikası",
     "Private key of the Service Provider" : "Hizmet sağlayıcısının kişisel anahtarı",
     "Service Provider Entity ID (optional)" : "Hizmet sağlayıcı varlığı kimliği (isteğe bağlı)",

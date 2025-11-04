@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Saved" : "Bewaar",
     "Provider" : "Verskaffer",
-    "Provider " : "Verskaffer",
     "Private key of the Service Provider" : "Privaatsleutel van die Diensverskaffer",
     "Email address" : "E-posadres",
     "Open documentation" : "Open dokumentasie",

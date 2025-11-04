@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Ingia moja kwa moja",
     "SSO & SAML log in" : "Ingia kwa SSO & SAML ",
     "This page should not be visited directly." : "Ukurasa huu haupaswi kutembelewa moja kwa moja.",
-    "Provider " : "Mtoa huduma",
     "X.509 certificate of the Service Provider" : "Cheti cha X.509 cha Mtoa Huduma",
     "Private key of the Service Provider" : "Ufunguo wa kibinafsi wa Mtoa Huduma",
     "Service Provider Entity ID (optional)" : "Kitambulisho cha Huluki ya Mtoa Huduma (si lazima)",

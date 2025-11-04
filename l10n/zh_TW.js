@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "直接登入",
     "SSO & SAML log in" : "SSO & SAML 登入",
     "This page should not be visited directly." : "不應直接存取此頁面。",
-    "Provider " : "提供者",
     "X.509 certificate of the Service Provider" : "服務提供者的 X.509 憑證",
     "Private key of the Service Provider" : "服務提供者的私鑰",
     "Service Provider Entity ID (optional)" : "服務提供者實體 ID（選擇性）",

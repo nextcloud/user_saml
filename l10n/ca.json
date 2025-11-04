@@ -7,7 +7,6 @@
     "Direct log in" : "Entrada directa",
     "SSO & SAML log in" : "Entrada SSO i SAML",
     "This page should not be visited directly." : "No s' hauria de visitar directament aquesta plana.",
-    "Provider " : "Proveïdor ",
     "X.509 certificate of the Service Provider" : "X.509 El certificat d'aquest servidor és invàlid",
     "Private key of the Service Provider" : "Clau privada del proveïdor de serveis",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que la identificació del nom de la <samlp: logout Request> enviada per aquest SP serà xifrada.",

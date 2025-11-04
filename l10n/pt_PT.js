@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Início de Sessão direto",
     "SSO & SAML log in" : "Início de sessão SSO e SAML",
     "This page should not be visited directly." : "Esta página não deve ser visualizada diretamente.",
-    "Provider " : "Fornecedor",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do Fornecedor do Serviço",
     "Private key of the Service Provider" : "Chave privada do Fornecedor de Serviço",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indica que o nameID de <samlp:logoutRequest> enviado pelo Fornecedor do Serviço será encriptado.",

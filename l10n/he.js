@@ -8,7 +8,6 @@ OC.L10N.register(
     "Direct log in" : "כניסה ישירה",
     "SSO & SAML log in" : "כניסה עם SSO ו־SAML",
     "This page should not be visited directly." : "אין סיבה להגיע לעמוד זה ישירות.",
-    "Provider " : "ספק",
     "X.509 certificate of the Service Provider" : "אישור X.509 של ספק השירות",
     "Private key of the Service Provider" : "מפתח פרטי של ספק השירות",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "מציין שה־nameID של ה־<samlp:logoutRequest> שנשלח על ידי ספק השירות הזה יהיה מוצפן.",

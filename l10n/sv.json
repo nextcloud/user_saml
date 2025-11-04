@@ -7,7 +7,6 @@
     "Direct log in" : "Direkt inloggning",
     "SSO & SAML log in" : "SSO & SAML-inloggning",
     "This page should not be visited directly." : "Den här sidan ska inte besökas direkt.",
-    "Provider " : "Leverantör",
     "X.509 certificate of the Service Provider" : "X.509-certifikat av leverantören",
     "Private key of the Service Provider" : "Privat nyckel från leverantören",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Indikerar att nameID av <samlp:logoutRequest> som skickats av SP kommer att krypteras.",

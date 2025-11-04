@@ -7,7 +7,6 @@
     "Direct log in" : "Közvetlen bejelentkezés",
     "SSO & SAML log in" : "SSO és SAML bejelentkezés",
     "This page should not be visited directly." : "Ezt az oldalt ne keresse fel közvetlenül.",
-    "Provider " : "Szolgáltató ",
     "X.509 certificate of the Service Provider" : "Szolgáltató X.509 tanúsítványa",
     "Private key of the Service Provider" : "Szolgáltató titkos kulcsa",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Azt jelzi, hogy az ezen az SP által küldött <samlp:logoutRequest> nameID mezője titkosítva lesz.",

@@ -7,7 +7,6 @@
     "Direct log in" : "Saio-hasiera zuzena",
     "SSO & SAML log in" : "SSO eta SAML saio-hasiera",
     "This page should not be visited directly." : "Orri hau ezin da zuzenean ikusi.",
-    "Provider " : "Hornitzailea",
     "X.509 certificate of the Service Provider" : "Zerbitzu-hornitzailearen X.509 ziurtagiria",
     "Private key of the Service Provider" : "Zerbitzu-hornitzaileraren gako pribatua",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "SP honek bidalitako <samlp:logoutRequest> nameIDa enkriptatuta egongo dela adierazten du.",

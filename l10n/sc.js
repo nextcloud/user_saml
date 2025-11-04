@@ -8,7 +8,6 @@ OC.L10N.register(
     "Direct log in" : "Intrada dereta",
     "SSO & SAML log in" : "Intrada SSO & SAML",
     "This page should not be visited directly." : "Custa pàgina non si diat dèpere visitare deretu",
-    "Provider " : "Frunidore",
     "X.509 certificate of the Service Provider" : "Tzertificadu X.509 de su frunidore de su servìtziu",
     "Private key of the Service Provider" : "Crae privada de su frunidore de su servìtziu",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Inditat chi su nùmeneID de su <samlp:logoutRequest> imbiadu dae custu SP at a èssere tzifradu.",

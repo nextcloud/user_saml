@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "ダイレクトログイン",
     "SSO & SAML log in" : "SSO & SAML log in",
     "This page should not be visited directly." : "このページには直接アクセスしないでください。",
-    "Provider " : "プロバイダー",
     "X.509 certificate of the Service Provider" : "サービスプロバイダーのX.509 証明書",
     "Private key of the Service Provider" : "サービスプロバイダーの秘密鍵",
     "Service Provider Entity ID (optional)" : "サービスプロバイダエンティティID (オプション)",

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Прямий вхід",
     "SSO & SAML log in" : "Увійдіть у систему SSO та SAML",
     "This page should not be visited directly." : "Цю сторінку не слід відвідувати безпосередньо.",
-    "Provider " : "Провайдер",
     "X.509 certificate of the Service Provider" : "Сертифікат X.509 Постачальника послуг",
     "Private key of the Service Provider" : "Закритий ключ Постачальника послуг",
     "Service Provider Entity ID (optional)" : "Ідентифікатор організації постачальника послуг (необов'язково)",

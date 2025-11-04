@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "Aniciu de la sesión direutu",
     "SSO & SAML log in" : "Aniciu de la sesión SAML y SSO",
     "This page should not be visited directly." : "Esta páxina nun s'habría visitar direutamente.",
-    "Provider " : "Fornidor",
     "X.509 certificate of the Service Provider" : "Certificáu X.509 del fornidor de servicios",
     "Private key of the Service Provider" : "Clave privada del fornidor de servicios",
     "Indicates if the SP will validate all received XML." : "Indica si'l fornidor de servicios va validar tolos XML recibíos",

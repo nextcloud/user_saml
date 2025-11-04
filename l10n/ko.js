@@ -9,7 +9,6 @@ OC.L10N.register(
     "Direct log in" : "직접 로그인",
     "SSO & SAML log in" : "SSO 및 SAML 로그인",
     "This page should not be visited directly." : "이 페이지를 직접 방문하면 안 됩니다.",
-    "Provider " : "공급자",
     "X.509 certificate of the Service Provider" : "서비스 공급자의 X.509 인증서",
     "Private key of the Service Provider" : "서비스 공급자의 개인 키",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "이 서비스 공급자가 보낸 <samlp:logoutRequest>의 nameID를 암호화할지 여부입니다.",

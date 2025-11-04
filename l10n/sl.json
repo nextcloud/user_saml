@@ -6,7 +6,6 @@
     "Direct log in" : "Račun ni zagotovljen",
     "SSO & SAML log in" : "Prijava SSO in SAML",
     "This page should not be visited directly." : "Ta strani naj ne bi bilo mogoče obiskati neposredno.",
-    "Provider " : "Ponudnik",
     "X.509 certificate of the Service Provider" : "Potrdilo X.509 ponudnika storitev",
     "Private key of the Service Provider" : "Zasebni ključ ponudnika storitev",
     "Indicates that the nameID of the <samlp:logoutRequest> sent by this SP will be encrypted." : "Določa, da bo ID imena <samlp:logoutRequest> poslan s tega ponudnika storitev, šifriran.",
