@@ -7,6 +7,7 @@
     "Direct log in" : "Acceso directo",
     "SSO & SAML log in" : "Acceso SSO e SAML",
     "This page should not be visited directly." : "Esta páxina non debe ser visitada directamente.",
+    "Provider %s" : "Provedor %s",
     "X.509 certificate of the Service Provider" : "Certificado X.509 do provedor do servizo",
     "Private key of the Service Provider" : "Chave privada do provedor do servizo",
     "Service Provider Entity ID (optional)" : "ID de entidade do provedor de servizos (opcional)",

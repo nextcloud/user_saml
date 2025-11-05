@@ -1,8 +1,12 @@
 { "translations": {
     "Saved" : "Salvestatud",
     "Could not save" : "Ei õnnestunud salvestada",
+    "Provider" : "Teenusepakkuja",
+    "Provider %s" : "Teenusepakkuja %s",
     "X.509 certificate of the Service Provider" : "Teenusepakkuja X.509 sertifikaat",
     "Private key of the Service Provider" : "Teenusepakkuja privaatvõti",
+    "Group A, Group B, …" : "Grupp A, grupp B, …",
+    "Require membership in these groups, if any." : "Eelda nende gruppide liikmelisust, kui seda vaja peaks olema.",
     "Email address" : "E-posti aadress",
     "Encrypted" : "Krüptitud",
     "Use POST method for SAML request (default: GET)" : "Kasuta SAML-i päringute jaoks POST-meetodit (vaikimisi on kasutusel GET-meetod)",
@@ -11,10 +15,14 @@
     "Use built-in SAML authentication" : "Kasuta sisse-ehitatud SAML autentimist",
     "Use environment variable" : "Kasuta keskonnamuutujat",
     "Global settings" : "Üldised seadistused",
+    "Remove identity provider" : "Eemalda isikutuvastusteenuse pakkuja",
+    "Add identity provider" : "Lisa isikutuvastusteenuse pakkuja",
     "General" : "Üldine",
     "Service Provider Data" : "Teenusepakkuja andmed",
     "Security settings" : "Turvaseaded",
+    "Reset settings" : "Lähtesta seadistused",
     "Error" : "Viga",
-    "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript on sinu veebibrauseris keelatud. Jätkamiseks palun luba JavaScripti kasutamine."
+    "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript on sinu veebibrauseris keelatud. Jätkamiseks palun luba JavaScripti kasutamine.",
+    "Access denied." : "Ligipääs on keelatud."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
