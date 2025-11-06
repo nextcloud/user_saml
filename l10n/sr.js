@@ -9,6 +9,7 @@ OC.L10N.register(
     "Direct log in" : "Директна пријава",
     "SSO & SAML log in" : "SSO & SAML пријава",
     "This page should not be visited directly." : "Ова страна не би требало да се посећује директно.",
+    "Provider %s" : "Пружалац услуге %s",
     "X.509 certificate of the Service Provider" : "X.509 сертификат провајдера услуга",
     "Private key of the Service Provider" : "Приватни кључ провајдера услуга",
     "Service Provider Entity ID (optional)" : "Entity ID пружаоца услуге (није обавезно)",
