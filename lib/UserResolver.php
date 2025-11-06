@@ -23,9 +23,13 @@ class UserResolver {
 	/**
 	 * @throws NoUserFoundException
 	 */
-	public function findExistingUserId(string $rawUidCandidate, bool $force = false): string {
+	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): string {
 		if ($force) {
-			$this->ensureUser($rawUidCandidate);
+			if ($isActiveDirectory) {
+				$this->ensureUser($this->formatGuid2ForFilterUser($rawUidCandidate));
+			} else {
+				$this->ensureUser($rawUidCandidate);
+			}
 		}
 		if ($this->userManager->userExists($rawUidCandidate)) {
 			return $rawUidCandidate;
@@ -39,6 +43,42 @@ class UserResolver {
 			return $sanitized;
 		}
 		throw new NoUserFoundException('User' . $rawUidCandidate . ' not valid or not found');
+	}
+
+	/**
+	 * @see \OCA\User_LDAP\Access::formatGuid2ForFilterUser
+	 */
+	private function formatGuid2ForFilterUser(string $guid): string {
+		$blocks = explode('-', $guid);
+		if (count($blocks) !== 5) {
+			/*
+			 * Why not throw an Exception instead? This method is a utility
+			 * called only when trying to figure out whether a "missing" known
+			 * LDAP user was or was not renamed on the LDAP server. And this
+			 * even on the use case that a reverse lookup is needed (UUID known,
+			 * not DN), i.e. when finding users (search dialog, users page,
+			 * login, …) this will not be fired. This occurs only if shares from
+			 * a users are supposed to be mounted who cannot be found. Throwing
+			 * an exception here would kill the experience for a valid, acting
+			 * user. Instead we write a log message.
+			 */
+			\OCP\Log\logger()->info(
+				'Passed string does not resemble a valid GUID. Known UUID '
+				. '({uuid}) probably does not match UUID configuration.',
+				['app' => 'user_saml', 'uuid' => $guid]
+			);
+			return $guid;
+		}
+		for ($i = 0; $i < 3; $i++) {
+			$pairs = str_split($blocks[$i], 2);
+			$pairs = array_reverse($pairs);
+			$blocks[$i] = implode('', $pairs);
+		}
+		for ($i = 0; $i < 5; $i++) {
+			$pairs = str_split($blocks[$i], 2);
+			$blocks[$i] = '\\' . implode('\\', $pairs);
+		}
+		return implode('', $blocks);
 	}
 
 	/**
