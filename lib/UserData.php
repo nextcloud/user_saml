@@ -48,9 +48,9 @@ class UserData {
 		}
 		$this->assertIsInitialized();
 		try {
-			$uid = $this->extractSamlUserId();
-			$uid = $this->testEncodedObjectGUID($uid);
-			$uid = $this->userResolver->findExistingUserId($uid, true);
+			$providedUid = $this->extractSamlUserId();
+			$uid = $this->testEncodedObjectGUID($providedUid);
+			$uid = $this->userResolver->findExistingUserId($uid, true, $providedUid !== $uid);
 			$this->uid = $uid;
 		} catch (NoUserFoundException) {
 			return '';
