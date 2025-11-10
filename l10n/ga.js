@@ -9,6 +9,7 @@ OC.L10N.register(
     "Direct log in" : "Logáil isteach díreach",
     "SSO & SAML log in" : "SSO & SAML logáil isteach",
     "This page should not be visited directly." : "Níor cheart cuairt a thabhairt ar an leathanach seo go díreach.",
+    "Provider %s" : "Soláthraí %s",
     "X.509 certificate of the Service Provider" : "Deimhniú X.509 ón Soláthraí Seirbhíse",
     "Private key of the Service Provider" : "Eochair phríobháideach an tSoláthraí Seirbhíse",
     "Service Provider Entity ID (optional)" : "Aitheantas Eintitis Soláthraí Seirbhíse (roghnach)",
