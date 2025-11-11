@@ -5,6 +5,57 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.0
+
+### Added
+
+* [Feat(deps): Add Nextcloud 33 support (user_saml#986)](https://github.com/nextcloud/user_saml/pull/986)
+
+### Fixed
+
+* [Fix(Users): add to, not overwrite, order by clause (user_saml#976)](https://github.com/nextcloud/user_saml/pull/976)
+* [Fix(LDAP): lookup of AD users through objectGUID (user_saml#995)](https://github.com/nextcloud/user_saml/pull/995)
+
+### Other
+
+* [Chore(CI): Adjust testing matrix for Nextcloud 32 on master (user_saml#985)](https://github.com/nextcloud/user_saml/pull/985)
+* [Chore(migration): Port away from deprecated IQueryBuilder::execute (user_saml#988)](https://github.com/nextcloud/user_saml/pull/988)
+* [Chore(i18n):  Remove trailing space (user_saml#993)](https://github.com/nextcloud/user_saml/pull/993)
+
+### Dependencies
+* [Build(deps-dev): bump guzzlehttp/guzzle from 7.9.3 to 7.10.0 in /tests/integration (user_saml#983)](https://github.com/nextcloud/user_saml/pull/983)
+* [Ci: Update github actions (user_saml#989)](https://github.com/nextcloud/user_saml/pull/989)
+
+## 7.0.0
+
+### Added
+
+* [Feat: Initiate login to IdP via POST (user_saml#861)](https://github.com/nextcloud/user_saml/pull/861)
+* [Feat: add saml:user:add command to pre-provision users (user_saml#962)](https://github.com/nextcloud/user_saml/pull/962)
+
+### Removed
+
+* [Drop support for NC 28+29, requires PHP >= 8.1, update deps, add rector (user_saml#950)](https://github.com/nextcloud/user_saml/pull/950)
+
+### Fixed
+
+* [Chore(i18n): Changed spelling of entity ID (user_saml#953)](https://github.com/nextcloud/user_saml/pull/953)
+* [Fix(env-mode): accept multiple comma-separated groups (user_saml#954)](https://github.com/nextcloud/user_saml/pull/954)
+* [Fix(Settings): do not fail badly on unknown keys (user_saml#955)](https://github.com/nextcloud/user_saml/pull/955)
+* [Fix: do not show login options on env mode (there is just one) (user_saml#956)](https://github.com/nextcloud/user_saml/pull/956)
+* [Fix(Resolver): replace iconv (user_saml#967)](https://github.com/nextcloud/user_saml/pull/967)
+
+### Other
+
+* [Chore(tests): Cleanup bootstrap.php to be forward-compatible (user_saml#961)](https://github.com/nextcloud/user_saml/pull/961)
+* [Chore: update codeowners (user_saml#979)](https://github.com/nextcloud/user_saml/pull/979)
+
+### Dependencies
+
+* [Build(deps): bump onelogin/php-saml from 4.2.0 to 4.3.0 (user_saml#965)](https://github.com/nextcloud/user_saml/pull/965)
+* [Build(deps-dev): bump nextcloud/coding-standard from 1.3.2 to 1.4.0 in /vendor-bin/cs-fixer (user_saml#971)](https://github.com/nextcloud/user_saml/pull/971)
+* [Ci: update reuse.yml workflow from template (user_saml#972)](https://github.com/nextcloud/user_saml/pull/972)
+
 ## 6.6.0
 
 ### Added
