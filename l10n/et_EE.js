@@ -11,6 +11,7 @@ OC.L10N.register(
     "Require membership in these groups, if any." : "Eelda nende gruppide liikmelisust, kui seda vaja peaks olema.",
     "Email address" : "E-posti aadress",
     "Encrypted" : "Krüptitud",
+    "Unspecified" : "Määratlemata",
     "Use POST method for SAML request (default: GET)" : "Kasuta SAML-i päringute jaoks POST-meetodit (vaikimisi on kasutusel GET-meetod)",
     "SSO & SAML authentication" : "SSO & SAML autentimine",
     "Open documentation" : "Ava dokumentatsioon",
