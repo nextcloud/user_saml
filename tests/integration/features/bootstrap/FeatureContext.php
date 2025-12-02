@@ -597,7 +597,24 @@ EOF;
 	 * @Given /^the group "([^"]*)" should exists$/
 	 */
 	public function theGroupShouldExists(string $gid): void {
-		$response = shell_exec(
+		$groupInfo = $this->fetchGroupInfo($gid);
+		if (!isset($groupInfo['groupID']) || $groupInfo['groupID'] !== $gid) {
+			throw new UnexpectedValueException('Group does not exist');
+		}
+	}
+
+	/**
+	 * @Then the group :gid has the display name :expectedDisplayName
+	 */
+	public function theGroupHasTheDisplayName(string $gid, string $expectedDisplayName): void {
+		$groupInfo = $this->fetchGroupInfo($gid);
+		if (!isset($groupInfo['displayName']) || $groupInfo['displayName'] !== $expectedDisplayName) {
+			throw new UnexpectedValueException('The group`s display name does not match');
+		}
+	}
+
+	protected function fetchGroupInfo(string $gid): ?array {
+		$groupInfoOutput = shell_exec(
 			sprintf(
 				'%s %s group:info --output=json "%s"',
 				PHP_BINARY,
@@ -605,11 +622,7 @@ EOF;
 				$gid
 			)
 		);
-
-		$responseArray = json_decode($response, true);
-		if (!isset($responseArray['groupID']) || $responseArray['groupID'] !== $gid) {
-			throw new UnexpectedValueException('Group does not exist');
-		}
+		return json_decode($groupInfoOutput, true);
 	}
 
 	/**

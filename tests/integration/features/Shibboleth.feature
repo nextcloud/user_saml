@@ -87,6 +87,22 @@ Feature: Shibboleth
     And the group "SAML_Students" should exists
     And The last login timestamp of "student1" should not be empty
 
+  Scenario: Authenticating using Shibboleth with SAML in provisioning mode and an overlong group name
+    Given The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"
+    And The setting "saml-attribute-mapping-group_mapping" is set to "groups"
+    When I send a GET request to "http://localhost:8080/index.php/login"
+    Then I should be redirected to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO"
+    And I send a POST request to "https://localhost:4443/idp/profile/SAML2/Redirect/SSO?execution=e1s1" with the following data
+        |j_username|j_password|_eventId_proceed|
+        |student3  |password  |                |
+    And The response should be a SAML redirect page that gets submitted
+    And I should be redirected to "http://localhost:8080/index.php/apps/dashboard/"
+    And The user value "id" should be "student3"
+    And The user value "display-name" should be "Alice Alisson"
+    And The user value "groups" should be "SAML_a8c9502da8297f759c8d3ad26860efa9527d83e17130901d,SAML_Students"
+    And the group "SAML_a8c9502da8297f759c8d3ad26860efa9527d83e17130901d" should exists
+	And the group "SAML_a8c9502da8297f759c8d3ad26860efa9527d83e17130901d" has the display name "AGroupNameContainingMoreThan64CharactersRepeatAGroupNameContainingMoreThan64Characters"
+
   Scenario: Authenticating using Shibboleth with SAML with custom redirect URL
     Given The setting "saml-attribute-mapping-email_mapping" is set to "urn:oid:0.9.2342.19200300.100.1.3"
     And The setting "saml-attribute-mapping-displayName_mapping" is set to "urn:oid:2.5.4.42 urn:oid:2.5.4.4"

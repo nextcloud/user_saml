@@ -82,7 +82,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: rootpassword
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
       directory:
-        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest # zizmor: ignore[unpinned-images]
+        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:2
         ports:
           - 389:3389/tcp
         options:
