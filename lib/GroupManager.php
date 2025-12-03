@@ -157,7 +157,23 @@ class GroupManager {
 			$providerId = $this->settings->getProviderId();
 			$settings = $this->settings->get($providerId);
 			$groupPrefix = $settings['saml-attribute-mapping-group_mapping_prefix'] ?? SAMLSettings::DEFAULT_GROUP_PREFIX;
-			$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
+
+			$newNextcloudGroupId = $groupPrefix . $gid;
+			if (strlen($newNextcloudGroupId) > 64) {
+				$newNextcloudGroupId = $groupPrefix . hash('tiger192,4', $gid);
+				if (strlen($newNextcloudGroupId) > 64) {
+					Server::get(LoggerInterface::class)->error(
+						'Cannot create group ID as it is too long. Original name from SAML is {name}',
+						[
+							'app' => 'user_saml',
+							'name' => $gid,
+						]
+					);
+					return;
+				}
+			}
+
+			$group = $this->createGroupInBackend($newNextcloudGroupId, $gid);
 		}
 
 		$group->addUser($user);
