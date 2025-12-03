@@ -39,7 +39,7 @@ class Version6000Date20220912152700 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('saml_gid', Types::STRING, [
 				'notnull' => true,
-				'length' => 64,
+				'length' => 255,
 				'default' => '',
 			]);
 			$table->setPrimaryKey(['gid']);
