@@ -226,7 +226,7 @@ class AdminTest extends \Test\TestCase {
 		];
 	}
 
-	public function testGetFormWithoutType() {
+	public function testGetFormWithoutType(): void {
 		$this->settings->expects($this->once())
 			->method('getListOfIdps')
 			->willReturn([
@@ -237,13 +237,13 @@ class AdminTest extends \Test\TestCase {
 			->expects($this->exactly(1)) // 'type'
 			->method('getAppValueString')
 			->with($this->anything(), $this->anything())
-			->willReturn($this->returnArgument(1));
+			->willReturnArgument(1);
 
 		$this->appConfig
 			->expects($this->exactly(1)) // 'general-require_provisioned_account'
 			->method('getAppValueInt')
 			->with($this->anything(), $this->anything())
-			->willReturn($this->returnArgument(1));
+			->willReturnArgument(1);
 
 		$params = $this->formDataProvider();
 		unset($params['general']['idp0_display_name'], $params['general']['is_saml_request_using_post'], $params['general']['allow_multiple_user_back_ends']);
@@ -253,7 +253,7 @@ class AdminTest extends \Test\TestCase {
 		$this->assertEquals($expected, $this->admin->getForm());
 	}
 
-	public function testGetFormWithSaml() {
+	public function testGetFormWithSaml(): void {
 		$this->settings->expects($this->once())
 			->method('getListOfIdps')
 			->willReturn([
@@ -288,11 +288,11 @@ class AdminTest extends \Test\TestCase {
 		$this->assertEquals($expected, $this->admin->getForm());
 	}
 
-	public function testGetSection() {
+	public function testGetSection(): void {
 		$this->assertSame('saml', $this->admin->getSection());
 	}
 
-	public function testGetPriority() {
+	public function testGetPriority(): void {
 		$this->assertSame(0, $this->admin->getPriority());
 	}
 }

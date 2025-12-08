@@ -22,6 +22,11 @@ use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\Attribute\UseSession;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -50,6 +55,7 @@ class SAMLController extends Controller {
 		private SAMLSettings $samlSettings,
 		private UserBackend $userBackend,
 		private IConfig $config,
+		private IAppConfig $appConfig,
 		private IURLGenerator $urlGenerator,
 		private LoggerInterface $logger,
 		private IL10N $l,
@@ -137,20 +143,19 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
-	 * @NoCSRFRequired
-	 *
 	 * @throws Exception
 	 */
+	#[PublicPage]
+	#[UseSession]
+	#[NoCSRFRequired]
 	public function login(int $idp = 1): Http\RedirectResponse|Http\TemplateResponse {
 		$originalUrl = (string)$this->request->getParam('originalUrl', '');
 		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
 			$originalUrl = '';
 		}
 
-		$type = $this->config->getAppValue($this->appName, 'type');
+		$type = $this->appConfig->getAppValueString('type');
 		switch ($type) {
 			case 'saml':
 				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
@@ -273,10 +278,10 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @throws Error
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function getMetadata(int $idp = 1): Http\DataDownloadResponse {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
@@ -292,9 +297,6 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @UseSession
 	 * @OnlyUnauthenticatedUsers
 	 * @NoSameSiteCookieRequired
 	 *
@@ -302,6 +304,9 @@ class SAMLController extends Controller {
 	 * @throws Error
 	 * @throws ValidationError
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[UseSession]
 	public function assertionConsumerService(): Http\RedirectResponse {
 		// Fetch and decrypt the cookie
 		$cookie = $this->request->getCookie('saml_data');
@@ -423,12 +428,12 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @UseSession
 	 * @throws Error
 	 */
+	#[PublicPage]
+	#[NoAdminRequired]
+	#[UseSession]
+	#[NoCSRFRequired]
 	public function singleLogoutService(): Http\RedirectResponse {
 		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false)
 					 && $this->config->getSystemValueString('gss.mode', '') === 'master');
@@ -506,7 +511,7 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @returns [?string, ?Auth]
+	 * @return array{0: ?string, 1: ?Auth}
 	 */
 	private function tryProcessSLOResponse(?int $idp): array {
 		$idps = ($idp !== null) ? [$idp] : array_keys($this->samlSettings->getListOfIdps());
@@ -532,28 +537,28 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function notProvisioned(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function notPermitted(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notPermitted', [], 'guest');
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function genericError(string $message): Http\TemplateResponse {
 		if (empty($message)) {
 			$message = $this->l->t('Unknown error, please check the log file for more details.');
@@ -562,17 +567,17 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function selectUserBackEnd(string $redirectUrl = ''): Http\TemplateResponse {
 		$attributes = ['loginUrls' => []];
 
 		if ($this->samlSettings->allowMultipleUserBackEnds()) {
 			$displayName = $this->l->t('Direct log in');
 
-			$customDisplayName = $this->config->getAppValue('user_saml', 'directLoginName', '');
+			$customDisplayName = $this->appConfig->getAppValueString('directLoginName');
 			if ($customDisplayName !== '') {
 				$displayName = $customDisplayName;
 			}
@@ -584,9 +589,7 @@ class SAMLController extends Controller {
 		}
 
 		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
-
 		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4;
-
 
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
 	}
@@ -651,17 +654,14 @@ class SAMLController extends Controller {
 	 * get Nextcloud login URL
 	 */
 	private function getDirectLoginUrl(string $redirectUrl): string {
-		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
+		return $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
 			'direct' => '1',
 			'redirect_url' => $redirectUrl,
 		]);
-		return $directUrl;
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function base(): Http\TemplateResponse {
 		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');

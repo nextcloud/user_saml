@@ -83,11 +83,6 @@ class Admin implements ISettings {
 				'type' => 'line',
 				'required' => true,
 			],
-			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
-				'type' => 'checkbox',
-				'global' => true,
-			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
@@ -188,7 +183,7 @@ class Admin implements ISettings {
 			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
 		}
 
-		$type = $this->appConfig->getAppValueString( 'type');
+		$type = $this->appConfig->getAppValueString('type');
 
 		$generalSettings['require_provisioned_account'] = [
 			'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
@@ -213,7 +208,7 @@ class Admin implements ISettings {
 				'type' => 'checkbox',
 				'hideForEnv' => true,
 				'global' => true,
-				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends' )
+				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends')
 			];
 		}
 
