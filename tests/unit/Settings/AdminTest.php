@@ -100,6 +100,7 @@ class AdminTest extends \Test\TestCase {
 				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
 				'type' => 'checkbox',
 				'required' => false,
+				'global' => false,
 			],
 			'uid_mapping' => [
 				'text' => 'Attribute to map the UID to.',
