@@ -318,7 +318,7 @@ class GroupManager {
 		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migratedGroups);
 		$this->appConfig->setAppValueString(
 			self::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
-			json_encode($candidateInfo)
+			json_encode($candidateInfo, JSON_THROW_ON_ERROR)
 		);
 	}
 }

@@ -77,7 +77,6 @@ class SAMLSettings {
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,
-		private readonly IAppConfig $appConfig,
 		private readonly IConfig $config,
 		private readonly IAppConfig $appConfig,
 		private readonly ISession $session,

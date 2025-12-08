@@ -21,7 +21,7 @@ class UserResolver {
 	/**
 	 * @throws NoUserFoundException
 	 */
-	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): ?string {
+	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): string {
 		if ($force) {
 			if ($isActiveDirectory) {
 				$this->ensureUser($this->formatGuid2ForFilterUser($rawUidCandidate));
@@ -107,7 +107,7 @@ class UserResolver {
 	/**
 	 * @throws \InvalidArgumentException
 	 */
-	protected function sanitizeUserIdCandidate(string $rawUidCandidate): ?string {
+	protected function sanitizeUserIdCandidate(string $rawUidCandidate): string {
 		//FIXME: adjusted copy of LDAP's Access::sanitizeUsername(), should go to API
 		$sanitized = trim($rawUidCandidate);
 
@@ -122,10 +122,10 @@ class UserResolver {
 		$sanitized = preg_replace('#&[^;]+;#', '', (string)$sanitized);
 
 		// Replacements
-		$sanitized = str_replace(' ', '_', $sanitized);
+		$sanitized = str_replace(' ', '_', (string)$sanitized);
 
 		// Every remaining disallowed characters will be removed
-		$sanitized = preg_replace('/[^a-zA-Z0-9_.@-]/u', '', $sanitized);
+		$sanitized = (string)preg_replace('/[^a-zA-Z0-9_.@-]/u', '', (string)$sanitized);
 
 		if ($sanitized === '') {
 			throw new \InvalidArgumentException('provided name template for username does not contain any allowed characters');

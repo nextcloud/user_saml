@@ -228,6 +228,7 @@ class Admin implements IDelegatedSettings {
 		$this->initialState->provideInitialState('userFilterSettings', $userFilterSettings);
 		$this->initialState->provideInitialState('globalConfig', $globalConfig);
 
+		// Only used in unit tests
 		$params = [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,

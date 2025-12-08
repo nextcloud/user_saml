@@ -54,7 +54,7 @@ class UserData {
 		} catch (NoUserFoundException) {
 			return '';
 		}
-		return $uid ?? '';
+		return $uid;
 	}
 
 	/**

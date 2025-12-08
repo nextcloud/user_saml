@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\User_SAML;
 
 use OC\Security\CSRF\CsrfTokenManager;
-use OCA\User_SAML\Model\SessionData;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -135,6 +134,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
 	}
 
+	#[Override]
 	public function deleteUser($uid): bool {
 		$qb = $this->db->getQueryBuilder();
 		$affected = $qb->delete('user_saml_users')

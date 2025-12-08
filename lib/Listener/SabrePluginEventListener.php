@@ -11,17 +11,34 @@ namespace OCA\User_SAML\Listener;
 
 use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
+use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\Server;
+use OCP\ISession;
 
 /** @template-implements IEventListener<SabrePluginAddEvent|Event> */
 class SabrePluginEventListener implements IEventListener {
+	public function __construct(
+		private readonly ISession $session,
+		private readonly IAppConfig $appConfig,
+		private readonly SAMLSettings $settings,
+		private readonly SessionService $sessionService,
+	) {
+	}
+
 	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof SabrePluginAddEvent) {
 			return;
 		}
-		$event->getServer()->addPlugin(Server::get(DavPlugin::class));
+		$event->getServer()->addPlugin(new DavPlugin(
+			$this->session,
+			$this->appConfig,
+			$_SERVER,
+			$this->settings,
+			$this->sessionService,
+		));
 	}
 }
