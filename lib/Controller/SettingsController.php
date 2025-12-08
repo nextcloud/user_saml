@@ -10,24 +10,32 @@ namespace OCA\User_SAML\Controller;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IRequest;
 use OneLogin\Saml2\Constants;
 
+/**
+ * @psalm-api
+ */
 class SettingsController extends Controller {
 
 	public function __construct(
-		$appName,
+		string $appName,
 		IRequest $request,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly Admin $admin,
 		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @return DataResponse<Http::STATUS_OK, array{providerIds: string}, array{}>
+	 * @throws \OCP\DB\Exception
+	 */
 	public function getSamlProviderIds(): DataResponse {
 		$keys = array_keys($this->samlSettings->getListOfIdps());
 		return new DataResponse([ 'providerIds' => implode(',', $keys)]);
@@ -51,6 +59,7 @@ class SettingsController extends Controller {
 			'passthroughParameters' => ['required' => false],
 		];
 		/* Fetch all config values for the given providerId */
+		$settings = [];
 
 		// initialize settings with default value for option box (others are left empty)
 		$settings['sp']['name-id-format'] = Constants::NAMEID_UNSPECIFIED;
@@ -81,7 +90,7 @@ class SettingsController extends Controller {
 
 				if (isset($details['global']) && $details['global']) {
 					// Read legacy data from oc_appconfig
-					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
+					$settings[$category][$setting] = $this->appConfig->getAppValueString($key, '');
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';
 				}
@@ -90,7 +99,7 @@ class SettingsController extends Controller {
 		return $settings;
 	}
 
-	public function deleteSamlProviderSettings($providerId): Response {
+	public function deleteSamlProviderSettings(int $providerId): Response {
 		$this->samlSettings->delete($providerId);
 		return new Response();
 	}
@@ -102,6 +111,9 @@ class SettingsController extends Controller {
 		return new Response();
 	}
 
+	/*
+	 * @return DataResponse<Http::STATUS_OK, array{id: int}, array{}>
+	 */
 	public function newSamlProviderSettingsId(): DataResponse {
 		return new DataResponse(['id' => $this->samlSettings->getNewProviderId()]);
 	}

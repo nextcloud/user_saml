@@ -4,25 +4,6 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
-  <file src="lib/Controller/SAMLController.php">
-    <RedundantCondition>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[$autoProvisioningAllowed]]></code>
-    </RedundantCondition>
-    <UndefinedClass>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Db/ConfigurationsMapper.php">
     <MissingTemplateParam>
       <code><![CDATA[ConfigurationsMapper]]></code>
@@ -31,24 +12,5 @@
       <code><![CDATA[getConfigurationArray]]></code>
       <code><![CDATA[getConfigurationArray]]></code>
     </UndefinedMagicMethod>
-  </file>
-  <file src="lib/UserBackend.php">
-    <ImplementedParamTypeMismatch>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$offset]]></code>
-    </ImplementedParamTypeMismatch>
-    <InvalidArgument>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$offset]]></code>
-      <code><![CDATA[$offset]]></code>
-    </InvalidArgument>
-    <UndefinedClass>
-      <code><![CDATA[\OC]]></code>
-      <code><![CDATA[\OC]]></code>
-    </UndefinedClass>
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[setDisplayName]]></code>
-    </UndefinedInterfaceMethod>
   </file>
 </files>

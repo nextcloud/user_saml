@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -10,34 +12,29 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\Defaults;
-use OCP\IConfig;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AdminTest extends \Test\TestCase {
-	/** @var SAMLSettings|MockObject */
-	private $settings;
-	/** @var Admin */
-	private $admin;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l10n;
-	/** @var Defaults|\PHPUnit_Framework_MockObject_MockObject */
-	private $defaults;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-	private $config;
+	private SAMLSettings&MockObject $settings;
+	private Admin $admin;
+	private IL10N&MockObject $l10n;
+	private Defaults&MockObject $defaults;
+	private IAppConfig&MockObject $appConfig;
 
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
 
 		$this->admin = new Admin(
 			$this->l10n,
 			$this->defaults,
-			$this->config,
+			$this->appConfig,
 			$this->settings
 		);
 
@@ -212,7 +209,7 @@ class AdminTest extends \Test\TestCase {
 			],
 		];
 
-		$params = [
+		return [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
@@ -227,8 +224,6 @@ class AdminTest extends \Test\TestCase {
 			'name-id-formats' => $nameIdFormats,
 			'config' => [],
 		];
-
-		return $params;
 	}
 
 	public function testGetFormWithoutType() {
@@ -238,11 +233,17 @@ class AdminTest extends \Test\TestCase {
 				1 => 'Provider 1',
 				2 => 'Provider 2',
 			]);
-		$this->config
-			->expects($this->exactly(2)) // 'type' and 'general-require_provisioned_account'
-			->method('getAppValue')
-			->with('user_saml', $this->anything(), $this->anything())
-			->willReturn($this->returnArgument(2));
+		$this->appConfig
+			->expects($this->exactly(1)) // 'type'
+			->method('getAppValueString')
+			->with($this->anything(), $this->anything())
+			->willReturn($this->returnArgument(1));
+
+		$this->appConfig
+			->expects($this->exactly(1)) // 'general-require_provisioned_account'
+			->method('getAppValueInt')
+			->with($this->anything(), $this->anything())
+			->willReturn($this->returnArgument(1));
 
 		$params = $this->formDataProvider();
 		unset($params['general']['idp0_display_name'], $params['general']['is_saml_request_using_post'], $params['general']['allow_multiple_user_back_ends']);
@@ -259,15 +260,20 @@ class AdminTest extends \Test\TestCase {
 				1 => 'Provider 1',
 				2 => 'Provider 2',
 			]);
-		$this->config
-			->expects($this->exactly(3)) # mode + three global values
-			->method('getAppValue')
+		$this->appConfig
+			->expects($this->exactly(1))
+			->method('getAppValueString')
+			->with('type')
+			->willReturn('saml');
+
+		$this->appConfig
+			->expects($this->exactly(2))
+			->method('getAppValueInt')
 			->withConsecutive(
-				['user_saml', 'type'],
-				['user_saml', 'general-require_provisioned_account'],
-				['user_saml', 'general-allow_multiple_user_back_ends'],
+				['general-require_provisioned_account'],
+				['general-allow_multiple_user_back_ends'],
 			)
-			->willReturnOnConsecutiveCalls('saml', '0', '0');
+			->willReturnOnConsecutiveCalls(0, 0);
 		$this->defaults
 			->expects($this->any())
 			->method('getName')
@@ -275,8 +281,8 @@ class AdminTest extends \Test\TestCase {
 
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
-		$params['general']['require_provisioned_account']['value'] = '0';
-		$params['general']['allow_multiple_user_back_ends']['value'] = '0';
+		$params['general']['require_provisioned_account']['value'] = 0;
+		$params['general']['allow_multiple_user_back_ends']['value'] = 0;
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());

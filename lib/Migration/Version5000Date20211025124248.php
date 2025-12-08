@@ -108,6 +108,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		$prefixes = $this->fetchPrefixes();
 		foreach ($prefixes as $prefix) {
 			$keyStart = $prefix === 1 ? '' : $prefix . '-';
+			/** @var list<string> $configKeys */
 			$configKeys = array_reduce(
 				self::IDP_CONFIG_KEYS,
 				function (array $carry, string $rawConfigKey) use ($keyStart): array {

@@ -100,13 +100,12 @@ class SAMLController extends Controller {
 		}
 		$uid = $this->userData->getOriginalUid();
 		$uid = $this->userData->testEncodedObjectGUID($uid);
-		if (!$userExists && !$autoProvisioningAllowed) {
+		if (!$autoProvisioningAllowed) {
 			throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
-		} elseif (!$userExists && $autoProvisioningAllowed) {
-			$this->userBackend->createUserIfNotExists($uid, $auth);
-			$this->userBackend->updateAttributes($uid);
-			return;
 		}
+
+		$this->userBackend->createUserIfNotExists($uid, $auth);
+		$this->userBackend->updateAttributes($uid);
 	}
 
 	/**
@@ -355,7 +354,7 @@ class SAMLController extends Controller {
 			foreach ($errors as $error) {
 				$this->logger->error($error, ['app' => $this->appName]);
 			}
-			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
+			$this->logger->error($auth->getLastErrorReason() ?? 'No last error reason found', ['app' => $this->appName]);
 		}
 
 		if (!$auth->isAuthenticated()) {
@@ -457,6 +456,7 @@ class SAMLController extends Controller {
 				$idp = $decoded['idp'] ?? null;
 				$pass = true;
 			} catch (Exception) {
+				$pass = false;
 			}
 		} else {
 			// standard request : need read CRSF check
@@ -494,7 +494,7 @@ class SAMLController extends Controller {
 					$this->userSession->logout();
 				}
 			}
-			if (!empty($targetUrl) && !$auth->getLastErrorReason()) {
+			if (!empty($targetUrl) && $auth && !$auth->getLastErrorReason()) {
 				$this->userSession->logout();
 			}
 		}

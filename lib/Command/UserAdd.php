@@ -50,7 +50,8 @@ class UserAdd extends Base {
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$uid = $input->getArgument('uid');
 
-		if ($this->userManager->userExists($uid)) {
+		$user = $this->userManager->get($uid);
+		if ($user === null) {
 			$output->writeln('<error>The account "' . $uid . '" already exists.</error>');
 			return 1;
 		}
@@ -70,7 +71,6 @@ class UserAdd extends Base {
 			$this->backend->setDisplayName($uid, $input->getOption('display-name'));
 			$email = $input->getOption('email');
 			if (!empty($email)) {
-				$user = $this->userManager->get($uid);
 				$user->setSystemEMailAddress($email);
 			}
 		} catch (\Exception $e) {

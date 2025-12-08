@@ -36,6 +36,9 @@ class LoadAdditionalScriptsListener implements IEventListener {
 		}
 
 		$user = $this->userSession->getUser();
+		if ($user === null) {
+			return; // already checked by $event->isLoggedIn above
+		}
 		$timezoneDB = $this->config->getUserValue($user->getUID(), 'core', 'timezone', '');
 
 		if ($timezoneDB === '' || !$this->session->exists('timezone')) {
