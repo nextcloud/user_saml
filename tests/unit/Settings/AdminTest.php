@@ -26,6 +26,7 @@ class AdminTest extends \Test\TestCase {
 	private Defaults&MockObject $defaults;
 	private IAppConfig&MockObject $appConfig;
 	private IInitialState&MockObject $initialState;
+	private IConfig&MockObject $config;
 
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
@@ -249,7 +250,7 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueInt')
+			->method('getAppValueBool')
 			->with($this->anything(), $this->anything())
 			->willReturnArgument(1);
 
@@ -268,6 +269,12 @@ class AdminTest extends \Test\TestCase {
 				2 => 'Provider 2',
 			]);
 		$this->appConfig
+			->expects($this->exactly(1))
+			->method('getAppValueString')
+			->with('type')
+			->willReturn('saml');
+
+		$this->appConfig
 			->expects($this->exactly(2))
 			->method('getAppValueInt')
 			->withConsecutive(
@@ -275,13 +282,6 @@ class AdminTest extends \Test\TestCase {
 				['general-allow_multiple_user_back_ends'],
 			)
 			->willReturnOnConsecutiveCalls(0, 0);
-
-		$this->appConfig
-			->expects($this->exactly(1))
-			->method('getAppValueString')
-			->with('type')
-			->willReturn('saml');
-
 		$this->defaults
 			->expects($this->any())
 			->method('getName')

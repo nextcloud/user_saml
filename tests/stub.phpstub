@@ -87,3 +87,7 @@ class OC_User {
 	public static function useBackend($userBackend): void;
 	public static function handleApacheAuth(): void;
 }
+
+class OC_Util {
+	public static function copySkeleton(string $userId, \OCP\Files\Folder $userDirectory): void { }
+}

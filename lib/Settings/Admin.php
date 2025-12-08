@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -15,9 +17,9 @@ use OCP\Defaults;
 use OCP\IL10N;
 use OCP\Settings\IDelegatedSettings;
 use OneLogin\Saml2\Constants;
+use Override;
 
 class Admin implements IDelegatedSettings {
-
 	public function __construct(
 		private readonly IL10N $l10n,
 		private readonly Defaults $defaults,
@@ -27,11 +29,8 @@ class Admin implements IDelegatedSettings {
 	) {
 	}
 
-	/**
-	 * @return TemplateResponse
-	 */
-	#[\Override]
-	public function getForm() {
+	#[Override]
+	public function getForm(): TemplateResponse {
 		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
 		foreach ($providerIds as $id => $name) {
@@ -91,7 +90,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->appConfig->getAppValueInt('general-require_provisioned_account'),
+				'value' => $this->appConfig->getAppValueBool('general-require_provisioned_account'),
 				'provider_type' => '',
 			],
 			'idp0_display_name' => [
@@ -111,7 +110,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends'),
+				'value' => $this->appConfig->getAppValueBool('general-allow_multiple_user_back_ends'),
 				'provider_type' => '',
 			],
 		];
@@ -245,22 +244,22 @@ class Admin implements IDelegatedSettings {
 		return new TemplateResponse('user_saml', 'admin', $params);
 	}
 
-	#[\Override]
+	#[Override]
 	public function getSection(): string {
 		return 'saml';
 	}
 
-	#[\Override]
+	#[Override]
 	public function getPriority(): int {
 		return 0;
 	}
 
-	#[\Override]
+	#[Override]
 	public function getName(): ?string {
 		return $this->l10n->t('SSO & SAML authentication');
 	}
 
-	#[\Override]
+	#[Override]
 	public function getAuthorizedAppConfig(): array {
 		return [
 			'user_saml' => [

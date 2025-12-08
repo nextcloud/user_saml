@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -9,6 +11,7 @@ namespace OCA\User_SAML;
 
 use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Model\SessionData;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IRootFolder;
@@ -24,19 +27,23 @@ use OCP\IUserSession;
 use OCP\Server;
 use OCP\User\Backend\ABackend;
 use OCP\User\Backend\ICountUsersBackend;
+use OCP\User\Backend\ICustomLogout;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
+use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\UserInterface;
+use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend {
 	/** @var \OCP\UserInterface[] */
-	private static $backends = [];
+	private static array $backends = [];
 
 	public function __construct(
 		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly ISession $session,
 		private readonly IDBConnection $db,
@@ -51,9 +58,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 	/**
 	 * Whether $uid exists in the database
-	 *
-	 * @param string $uid
-	 * @return bool
 	 */
 	protected function userExistsInDatabase(string $uid): bool {
 		$qb = $this->db->getQueryBuilder();
@@ -71,9 +75,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	/**
 	 * Creates a user if it does not exist. In case home directory mapping
 	 * is enabled we also set up the user's home from $attributes.
-	 *
-	 * @param string $uid
-	 * @param array $attributes
 	 */
 	public function createUserIfNotExists(string $uid, array $attributes = []): void {
 		if (!$this->userExistsInDatabase($uid)) {
@@ -92,7 +93,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 				//if attribute's value is an absolute path take this, otherwise append it to data dir
 				//check for / at the beginning or pattern c:\ resp. c:/
 				if ($home[0] !== '/'
-				   && !(strlen((string)$home) > 3 && ctype_alpha((string)$home[0])
+				   && !(strlen($home) > 3 && ctype_alpha($home[0])
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 				) {
 					$home = $this->config->getSystemValueString('datadirectory',
@@ -128,10 +129,12 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 		// trigger any other initialization
 		$user = $this->userManager->get($uid);
+		if ($user === null) {
+			throw new \LogicException('Trying to initialize home dir for a non-existent user');
+		}
 		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
 	}
 
-	#[\Override]
 	public function deleteUser($uid): bool {
 		$qb = $this->db->getQueryBuilder();
 		$affected = $qb->delete('user_saml_users')
@@ -140,12 +143,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $affected > 0;
 	}
 
-	/**
-	 * Returns the user's home directory, if home directory mapping is set up.
-	 *
-	 * @param string $uid the username
-	 */
-	#[\Override]
+	#[Override]
 	public function getHome(string $uid): string|false {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('home')
@@ -158,16 +156,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $users[0]['home'] ?? false;
 	}
 
-	/**
-	 * Get a list of all users
-	 *
-	 * @param string $search
-	 * @param null|int $limit
-	 * @param null|int $offset
-	 * @return string[] an array of all uids
-	 * @since 4.5.0
-	 */
-	#[\Override]
+	#[Override]
 	public function getUsers($search = '', $limit = null, $offset = null): array {
 		// shamelessly duplicated from \OC\User\Database
 		$users = $this->getDisplayNames($search, $limit, $offset);
@@ -176,13 +165,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $userIds;
 	}
 
-	/**
-	 * check if a user exists
-	 * @param string $uid the username
-	 * @return boolean
-	 * @since 4.5.0
-	 */
-	#[\Override]
+	#[Override]
 	public function userExists($uid): bool {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->userExists($uid);
@@ -191,8 +174,10 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 	}
 
+	#[Override]
 	public function setDisplayName(string $uid, $displayName): bool {
 		if ($backend = $this->getActualUserBackend($uid)) {
+			/** @var ISetDisplayNameBackend $backend */
 			return $backend->setDisplayName($uid, $displayName);
 		}
 
@@ -204,14 +189,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $affected > 0;
 	}
 
-	/**
-	 * Get display name of the user
-	 *
-	 * @param string $uid user ID of the user
-	 * @return string display name
-	 * @since 14.0.0
-	 */
-	#[\Override]
+	#[Override]
 	public function getDisplayName($uid): string {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->getDisplayName($uid);
@@ -228,16 +206,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $users[0]['displayname'] ?? $uid;
 	}
 
-	/**
-	 * Get a list of all display names and user ids.
-	 *
-	 * @param string $search
-	 * @param string|null $limit
-	 * @param string|null $offset
-	 * @return array an array of all displayNames (value) and the corresponding uids (key)
-	 * @since 4.5.0
-	 */
-	#[\Override]
+	#[Override]
 	public function getDisplayNames($search = '', $limit = null, $offset = null): array {
 		// shamelessly duplicate from \OC\User\Database
 		$query = $this->db->getQueryBuilder();
@@ -255,8 +224,11 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			->orWhere($query->expr()->iLike('configvalue', $query->createPositionalParameter('%' . $this->db->escapeLikeParameter($search) . '%')))
 			->orderBy($query->func()->lower('displayname'), 'ASC')
 			->addOrderBy('uid', 'ASC')
-			->setMaxResults($limit)
-			->setFirstResult($offset);
+			->setMaxResults($limit);
+
+		if ($offset !== null) {
+			$query->setFirstResult($offset);
+		}
 
 		$result = $query->executeQuery();
 		$displayNames = [];
@@ -268,31 +240,17 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $displayNames;
 	}
 
-	/**
-	 * Check if a user list is available or not
-	 * @return boolean if users can be listed or not
-	 * @since 4.5.0
-	 */
-	#[\Override]
+	#[Override]
 	public function hasUserListings(): bool {
 		return $this->autoprovisionAllowed();
 	}
 
-	/**
-	 * In case the user has been authenticated by Apache true is returned.
-	 *
-	 * @return boolean whether Apache reports a user as currently logged in.
-	 * @since 6.0.0
-	 */
-	#[\Override]
+	#[Override]
 	public function isSessionActive(): bool {
-		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
+		return $this->session->get('user_saml.samlUserData') !== null;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	#[\Override]
+	#[Override]
 	public function getLogoutUrl(): string {
 		$id = $this->settings->getProviderId();
 		$settings = $this->settings->get($id);
@@ -312,7 +270,19 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	}
 
 	/**
-	 * return user data from the idp
+	 * Return user data from the idp
+	 *
+	 * @return array{
+	 *      formatted: array{
+	 *          email: ?string,
+	 *           displayName: ?string,
+	 *          quota: ?string,
+	 *          groups: ?list<string>,
+	 *           mfaVerified: ?string,
+	 *          uid: non-empty-string,
+	 *      },
+	 *      raw: array,
+	 *  }
 	 */
 	public function getUserData(): array {
 		$userData = $this->session->get('user_saml.samlUserData');
@@ -320,17 +290,29 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 		// make sure that a valid UID is given
 		if (empty($userData['formatted']['uid'])) {
-			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => 'user_saml', 'uid' => $userData['uid']]);
-			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['uid']);
+			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => 'user_saml', 'uid' => $userData['formatted']['uid']]);
+			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['formatted']['uid']);
 		}
 
 		return $userData;
 	}
 
 	/**
-	 * format user data and map them to the configured attributes
+	 * Format user data and map them to the configured attributes
+	 *
+	 * @return array{
+	 *     formatted: array{
+	 *         email: ?string,
+	 *     	   displayName: ?string,
+	 *         quota: ?string,
+	 *         groups: ?list<string>,
+	 *     	   mfaVerified: ?string,
+	 *         uid: string,
+	 *     },
+	 *     raw: array,
+	 * }
 	 */
-	private function formatUserData($attributes): array {
+	private function formatUserData(array $attributes): array {
 		$this->userData->setAttributes($attributes);
 
 		$result = ['formatted' => [], 'raw' => $attributes];
@@ -371,13 +353,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $result;
 	}
 
-	/**
-	 * Return the id of the current user
-	 * @return string
-	 * @since 6.0.0
-	 */
-	#[\Override]
-	public function getCurrentUserId() {
+	#[Override]
+	public function getCurrentUserId(): string {
 		$user = Server::get(IUserSession::class)->getUser();
 
 		if ($user instanceof IUser && $this->session->get('user_saml.samlUserData')) {
@@ -395,7 +372,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	}
 
 
-	#[\Override]
+	#[Override]
 	public function getBackendName(): string {
 		return 'user_saml';
 	}
@@ -404,7 +381,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * Whether autoprovisioning is enabled or not
 	 */
 	public function autoprovisionAllowed(): bool {
-		return $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0') === '0';
+		return $this->appConfig->getAppValueInt('general-require_provisioned_account') === 0;
 	}
 
 	/**
@@ -435,10 +412,11 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 	/**
 	 * @throws \OCP\DB\Exception
+	 * @return string[]
 	 */
-	private function getAttributeKeys(string $name) {
+	private function getAttributeKeys(string $name): array {
 		$settings = $this->settings->get($this->settings->getProviderId());
-		$keys = explode(' ', $settings[$name] ?? $this->config->getAppValue('user_saml', $name, ''));
+		$keys = explode(' ', $settings[$name] ?? $this->appConfig->getAppValueString($name, ''));
 
 		if (count($keys) === 1 && $keys[0] === '') {
 			throw new \InvalidArgumentException('Attribute is not configured');
@@ -446,7 +424,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $keys;
 	}
 
-	private function getAttributeValue(string $name, array $attributes) {
+	private function getAttributeValue(string $name, array $attributes): string {
 		$keys = $this->getAttributeKeys($name);
 
 		$value = '';

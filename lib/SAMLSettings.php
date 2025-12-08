@@ -72,12 +72,14 @@ class SAMLSettings {
 
 	/** @var array<int, array<string, string>> */
 	private array $configurations = [];
+	/** @var self::LOADED_* $configurationsLoadedState */
 	private int $configurationsLoadedState = self::LOADED_NONE;
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,
 		private readonly IAppConfig $appConfig,
 		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly ISession $session,
 		private readonly ConfigurationsMapper $mapper,
 	) {
@@ -125,7 +127,7 @@ class SAMLSettings {
 
 		$settings = [
 			'strict' => true,
-			'debug' => $this->config->getSystemValueBool('debug', false),
+			'debug' => $this->config->getSystemValueBool('debug'),
 			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
 			'security' => [
 				'nameIdEncrypted' => ($this->configurations[$idp]['security-nameIdEncrypted'] ?? '0') === '1',
