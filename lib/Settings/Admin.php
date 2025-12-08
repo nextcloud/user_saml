@@ -206,6 +206,7 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
 				'type' => 'checkbox',
 				'required' => false,
+				'global' => false,
 			];
 			$generalSettings['allow_multiple_user_back_ends'] = [
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
