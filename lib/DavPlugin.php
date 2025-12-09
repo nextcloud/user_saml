@@ -35,8 +35,8 @@ class DavPlugin extends ServerPlugin {
 
 	public function beforeMethod(RequestInterface $request, ResponseInterface $response) {
 		if (
-			$this->config->getAppValue('user_saml', 'type') === 'environment-variable' &&
-			!$this->session->exists('user_saml.samlUserData')
+			$this->config->getAppValue('user_saml', 'type') === 'environment-variable'
+			&& !$this->session->exists('user_saml.samlUserData')
 		) {
 			$uidMapping = $this->samlSettings->get(1)['general-uid_mapping'];
 			if (isset($this->auth[$uidMapping])) {
