@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/**'
+      - '3rdparty/**'
       - 'appinfo/**'
       - 'lib/**'
       - 'templates/**'
@@ -39,7 +40,7 @@ env:
 
 jobs:
   phpunit-oci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -48,9 +49,23 @@ jobs:
 
     services:
       oracle:
-        image: deepdiver/docker-oracle-xe-11g # 'wnameless/oracle-xe-11g-r2'
+        image: ghcr.io/gvenzl/oracle-xe:11
+
+        # Provide passwords and other environment variables to container
+        env:
+          ORACLE_RANDOM_PASSWORD: true
+          APP_USER: autotest
+          APP_USER_PASSWORD: owncloud
+
         ports:
           - 1521:1521/tcp
+
+        # Provide healthcheck script options for startup
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
 
     steps:
       - name: Set app env
