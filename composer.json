@@ -11,17 +11,6 @@
 			"bamarni/composer-bin-plugin": true
 		}
 	},
-	"extra": {
-		"patches": {
-			"onelogin/php-saml": {
-				"PHP 8.4 compatibility": "https://patch-diff.githubusercontent.com/raw/SAML-Toolkits/php-saml/pull/600.patch"
-			}
-		},
-		"bamarni-bin": {
-			"bin-links": true,
-			"forward-command": true
-		}
-	},
 	"scripts": {
 		"post-install-cmd": [
 			"[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
@@ -43,7 +32,6 @@
 	},
 	"require": {
 		"onelogin/php-saml": "^4.2",
-		"firebase/php-jwt": "^6.10",
-		"cweagans/composer-patches": "^1.7"
+		"firebase/php-jwt": "^6.10"
 	}
 }
