@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.2.8
+
+### Fixed
+
+* [fix: Fire UserChangedEvent only after change happenned (user_saml#877)](https://github.com/nextcloud/user_saml/pull/877)
+
+### Dependencies
+
+* [build\(deps\): bump onelogin/php\-saml to 4.3.1 (user_saml#1007)](https://github.com/nextcloud/user_saml/pull/1007)
+
 ## 5.2.7
 
 ### Fixed
