@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/integration.yml'
+      - '3rdparty/**'
       - 'appinfo/**'
       - 'lib/**'
       - 'tests/**'
