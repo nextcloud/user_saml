@@ -152,9 +152,9 @@ class Application extends App implements IBootstrap {
 
 				// All requests that are not authenticated and match against the "/login" route are
 				// redirected to the SAML login endpoint
-				if (!$isCLI &&
-					!$userSession->isLoggedIn() &&
-					($request->getPathInfo() === '/login')) {
+				if (!$isCLI
+					&& !$userSession->isLoggedIn()
+					&& ($request->getPathInfo() === '/login')) {
 					try {
 						$params = $request->getParams();
 					} catch (\LogicException $e) {

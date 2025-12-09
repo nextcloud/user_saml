@@ -275,8 +275,8 @@ class GroupManager {
 	 * allowed only for groups owned by the SAML backend.
 	 */
 	protected function mayModifyGroup(?IGroup $group): bool {
-		$isInTransition =
-			$group !== null
+		$isInTransition
+			= $group !== null
 			&& $group->getGID() !== 'admin'
 			&& in_array('Database', $group->getBackendNames())
 			&& $this->isGroupInTransitionList($group->getGID());

@@ -43,12 +43,12 @@ jobs:
       matrix:
         php-versions: [ "8.0", "8.1", "8.2", "8.3", "8.4" ]
         databases: [ "mysql" ]
-        server-versions: [ "stable28", "stable29", "stable30", "stable31", "master" ]
+        server-versions: [ "stable28", "stable29", "stable30", "stable31", "stable32" ]
         exclude:
-          - server-versions: "master"
+          - server-versions: "stable32"
             php-versions: "8.0"
             databases: "mysql"
-          - server-versions: "master"
+          - server-versions: "stable32"
             php-versions: "8.2"
             databases: "mysql"
           - server-versions: "stable31"
