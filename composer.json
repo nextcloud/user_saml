@@ -3,7 +3,7 @@
 	"config": {
 		"optimize-autoloader": true,
 		"platform": {
-			"php": "7.2"
+			"php": "7.2.6"
 		}
 	},
 	"scripts": {
