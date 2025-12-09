@@ -8,10 +8,18 @@
 if (!defined('PHPUNIT_RUN')) {
 	define('PHPUNIT_RUN', 1);
 }
+
 require_once __DIR__ . '/../../../../lib/base.php';
-\OC::$loader->addValidRoot(\OC::$SERVERROOT . '/tests');
+
+if (property_exists(\OC::class, 'loader')) {
+	\OC::$loader->addValidRoot(\OC::$SERVERROOT . '/tests');
+} else {
+	require_once __DIR__ . '/../../../../tests/autoload.php';
+}
+
 \OC_App::loadApp('user_saml');
-if (!class_exists('\PHPUnit\Framework\TestCase')) {
+
+if (!class_exists(\PHPUnit\Framework\TestCase::class)) {
 	require_once('PHPUnit/Autoload.php');
 }
 OC_Hook::clear();
