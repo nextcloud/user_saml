@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.3.7
+### Dependencies
+- bump onelogin/php-saml to 3.8.1
+
 ## 3.3.6
 ### Fixed
 - enable xml entity loader where necessary
