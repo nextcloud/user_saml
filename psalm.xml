@@ -4,7 +4,7 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <psalm
-    errorLevel="4"
+    errorLevel="3"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -19,9 +19,17 @@
 		<file name="tests/stubs/doctrine_dbal_schema_column.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_schema.php" />
 		<file name="tests/stubs/doctrine_dbal_schema_table.php" />
+		<file name="tests/stubs/oc_hooks_basicemitter.php" />
+		<file name="tests/stubs/oc_hooks_emitter.php" />
+		<file name="tests/stubs/oc_core_controller_clientflowloginv2controller.php" />
+		<file name="tests/stubs/oc_core_controller_clientflowlogincontroller.php" />
+		<file name="tests/stubs/oc.php" />
 	</stubs>
     <projectFiles>
         <directory name="lib" />
+		<ignoreFiles>
+			<directory name="vendor" />
+		</ignoreFiles>
     </projectFiles>
 	<extraFiles>
 		<directory name="vendor" />

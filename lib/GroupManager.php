@@ -10,18 +10,17 @@ namespace OCA\User_SAML;
 use OCA\User_SAML\Exceptions\GroupNotFoundException;
 use OCA\User_SAML\Exceptions\NonMigratableGroupException;
 use OCA\User_SAML\Jobs\MigrateGroups;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\BackgroundJob\IJobList;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\BeforeGroupCreatedEvent;
 use OCP\Group\Events\BeforeGroupDeletedEvent;
 use OCP\Group\Events\GroupCreatedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
-use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class GroupManager {
@@ -32,10 +31,11 @@ class GroupManager {
 		protected IDBConnection $db,
 		private readonly IGroupManager $groupManager,
 		private readonly GroupBackend $ownGroupBackend,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly IEventDispatcher $dispatcher,
 		private readonly IJobList $jobList,
 		private readonly SAMLSettings $settings,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
@@ -47,7 +47,7 @@ class GroupManager {
 	private function getGroupsToRemove(array $samlGroupNames, array $assignedGroups): array {
 		$groupsToRemove = [];
 		foreach ($assignedGroups as $group) {
-			Server::get(LoggerInterface::class)->debug('Checking group {group} for removal', ['app' => 'user_saml', 'group' => $group->getGID()]);
+			$this->logger->debug('Checking group {group} for removal', ['app' => 'user_saml', 'group' => $group->getGID()]);
 			if (in_array($group->getGID(), $samlGroupNames, true)) {
 				continue;
 			}
@@ -69,10 +69,20 @@ class GroupManager {
 	private function getGroupsToAdd(array $samlGroupNames, array $assignedGroupIds): array {
 		$groupsToAdd = [];
 		foreach ($samlGroupNames as $groupName) {
-			Server::get(LoggerInterface::class)->debug('Checking group {group} for addition', ['app' => 'user_saml', 'group' => $groupName]);
+			$this->logger->debug('Checking group {group} for addition', ['app' => 'user_saml', 'group' => $groupName]);
+
+			// if user is not assigned to the group
+			if (!in_array($groupName, $assignedGroupIds)) {
+				$groupsToAdd[] = $groupName;
+				continue;
+			}
+
 			$group = $this->groupManager->get($groupName);
-			// if user is not assigned to the group or the provided group has a non SAML backend
-			if (!in_array($groupName, $assignedGroupIds) || !$this->hasSamlBackend($group)) {
+			if ($group === null) {
+				throw new GroupNotFoundException();
+			}
+			// if the provided group has a non SAML backend
+			if (!$this->hasSamlBackend($group)) {
 				$groupsToAdd[] = $groupName;
 			} elseif ($this->mayModifyGroup($group)) {
 				$groupsToAdd[] = $group->getGID();
@@ -126,15 +136,14 @@ class GroupManager {
 		}
 
 		// keep empty groups if general-keep_groups is set to 1
-		$keepEmptyGroups = $this->config->getAppValue(
-			'user_saml',
+		$keepEmptyGroups = $this->appConfig->getAppValueInt(
 			'general-keep_groups',
-			'0',
+			0,
 		);
 
 		if ($this->hasSamlBackend($group)) {
 			$this->ownGroupBackend->removeFromGroup($user->getUID(), $group->getGID());
-			if ($keepEmptyGroups !== '1' && $this->ownGroupBackend->countUsersInGroup($gid) === 0) {
+			if ($keepEmptyGroups !== 1 && $this->ownGroupBackend->countUsersInGroup($gid) === 0) {
 				$this->dispatcher->dispatchTyped(new BeforeGroupDeletedEvent($group));
 				$this->ownGroupBackend->deleteGroup($group->getGID());
 				$this->dispatcher->dispatchTyped(new GroupDeletedEvent($group));
@@ -158,6 +167,9 @@ class GroupManager {
 			$settings = $this->settings->get($providerId);
 			$groupPrefix = $settings['saml-attribute-mapping-group_mapping_prefix'] ?? SAMLSettings::DEFAULT_GROUP_PREFIX;
 			$group = $this->createGroupInBackend($groupPrefix . $gid, $gid);
+			if ($group === null) {
+				throw new \RuntimeException('Could not create group ' . $groupPrefix . $gid);
+			}
 		}
 
 		$group->addUser($user);
@@ -170,6 +182,9 @@ class GroupManager {
 		}
 
 		$group = $this->groupManager->get($gid);
+		if ($group === null) {
+			throw new GroupNotFoundException('Could not found group ' . $gid);
+		}
 		$this->dispatcher->dispatchTyped(new GroupCreatedEvent($group));
 
 		return $group;
@@ -179,30 +194,26 @@ class GroupManager {
 	 * @throws GroupNotFoundException|NonMigratableGroupException
 	 */
 	protected function findGroup(string $gid): IGroup {
-		$migrationAllowListRaw = $this->config->getAppValue(
-			'user_saml',
+		$migrationAllowListRaw = $this->appConfig->getAppValueString(
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
-			''
 		);
 		$strictBackendCheck = $migrationAllowListRaw === '';
 
 		$migrationAllowList = null;
-		if ($migrationAllowListRaw !== '' || $migrationAllowListRaw !== self::STATE_MIGRATION_PHASE_EXPIRED) {
+		if ($migrationAllowListRaw !== '' && $migrationAllowListRaw !== self::STATE_MIGRATION_PHASE_EXPIRED) {
 			/** @var array{dropAfter: int, groups: string[]} $migrationAllowList */
 			$migrationAllowList = \json_decode($migrationAllowListRaw, true);
 		}
 
-		if (!$strictBackendCheck && in_array($gid, $migrationAllowList['groups'] ?? [], true)) {
-			$group = $this->groupManager->get($gid);
-			if ($group === null) {
-				throw new GroupNotFoundException();
-			}
-			return $group;
-		}
 		$group = $this->groupManager->get($gid);
 		if ($group === null) {
 			throw new GroupNotFoundException();
 		}
+
+		if (!$strictBackendCheck && in_array($gid, $migrationAllowList['groups'] ?? [], true)) {
+			return $group;
+		}
+
 		if ($this->hasSamlBackend($group)) {
 			return $group;
 		}
@@ -244,14 +255,14 @@ class GroupManager {
 	 * @return array{dropAfter: int, groups: string[]}|null
 	 */
 	public function getCandidateInfoIfValid(): ?array {
-		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+		$candidateInfo = $this->appConfig->getAppValueString(self::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
 		if ($candidateInfo === '' || $candidateInfo === self::STATE_MIGRATION_PHASE_EXPIRED) {
 			return null;
 		}
-		/** @var array{dropAfter: int, groups: string[]} $candidateInfo */
 		$candidateInfo = \json_decode($candidateInfo, true);
+		/** @var array{dropAfter: int, groups: string[]} $candidateInfo */
 		if (!isset($candidateInfo['dropAfter']) || $candidateInfo['dropAfter'] < time()) {
-			$this->config->setAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, self::STATE_MIGRATION_PHASE_EXPIRED);
+			$this->appConfig->setAppValueString(self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, self::STATE_MIGRATION_PHASE_EXPIRED);
 			return null;
 		}
 
@@ -279,19 +290,21 @@ class GroupManager {
 			&& in_array('Database', $group->getBackendNames())
 			&& $this->isGroupInTransitionList($group->getGID());
 
-		if ($isInTransition) {
-			Server::get(LoggerInterface::class)->debug('Checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
-			$hasOnlySamlUsers = !$this->hasGroupForeignMembers($group);
-			Server::get(LoggerInterface::class)->debug('Completed checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
-			if (!$hasOnlySamlUsers) {
-				$this->updateCandidatePool([$group->getGID()]);
-			}
+		if (!$isInTransition) {
+			return false;
 		}
-		return $isInTransition && $hasOnlySamlUsers;
+
+		$this->logger->debug('Checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
+		$hasOnlySamlUsers = !$this->hasGroupForeignMembers($group);
+		$this->logger->debug('Completed checking group {group} for foreign members', ['app' => 'user_saml', 'group' => $group->getGID()]);
+		if (!$hasOnlySamlUsers) {
+			$this->updateCandidatePool([$group->getGID()]);
+		}
+		return $hasOnlySamlUsers;
 	}
 
 	public function updateCandidatePool(array $migratedGroups): void {
-		$candidateInfo = $this->config->getAppValue('user_saml', self::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+		$candidateInfo = $this->appConfig->getAppValueString(self::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
 		if ($candidateInfo === '' || $candidateInfo === self::STATE_MIGRATION_PHASE_EXPIRED) {
 			return;
 		}
@@ -300,8 +313,7 @@ class GroupManager {
 			return;
 		}
 		$candidateInfo['groups'] = array_diff($candidateInfo['groups'], $migratedGroups);
-		$this->config->setAppValue(
-			'user_saml',
+		$this->appConfig->setAppValueString(
 			self::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
 			json_encode($candidateInfo)
 		);

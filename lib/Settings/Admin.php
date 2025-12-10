@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -9,26 +11,24 @@ namespace OCA\User_SAML\Settings;
 
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\Defaults;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\ISettings;
 use OneLogin\Saml2\Constants;
+use Override;
 
 class Admin implements ISettings {
-
 	public function __construct(
 		private readonly IL10N $l10n,
 		private readonly Defaults $defaults,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly SAMLSettings $samlSettings,
 	) {
 	}
 
-	/**
-	 * @return TemplateResponse
-	 */
-	public function getForm() {
+	#[Override]
+	public function getForm(): TemplateResponse {
 		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
 		foreach ($providerIds as $id => $name) {
@@ -82,11 +82,6 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
 				'type' => 'line',
 				'required' => true,
-			],
-			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
-				'type' => 'checkbox',
-				'global' => true,
 			],
 		];
 		$attributeMappingSettings = [
@@ -188,13 +183,13 @@ class Admin implements ISettings {
 			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
 		}
 
-		$type = $this->config->getAppValue('user_saml', 'type');
+		$type = $this->appConfig->getAppValueString('type');
 
 		$generalSettings['require_provisioned_account'] = [
 			'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 			'type' => 'checkbox',
 			'global' => true,
-			'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
+			'value' => $this->appConfig->getAppValueInt('general-require_provisioned_account'),
 		];
 		if ($type === 'saml') {
 			$generalSettings['idp0_display_name'] = [
@@ -213,7 +208,7 @@ class Admin implements ISettings {
 				'type' => 'checkbox',
 				'hideForEnv' => true,
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0')
+				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends')
 			];
 		}
 
@@ -234,21 +229,13 @@ class Admin implements ISettings {
 		return new TemplateResponse('user_saml', 'admin', $params);
 	}
 
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 */
-	public function getSection() {
+	#[Override]
+	public function getSection(): string {
 		return 'saml';
 	}
 
-	/**
-	 * @return int whether the form should be rather on the top or bottom of
-	 *             the admin section. The forms are arranged in ascending order of the
-	 *             priority values. It is required to return a value between 0 and 100.
-	 *
-	 * keep the server setting at the top, right after "server settings"
-	 */
-	public function getPriority() {
+	#[Override]
+	public function getPriority(): int {
 		return 0;
 	}
 }

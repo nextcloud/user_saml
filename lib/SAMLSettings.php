@@ -9,6 +9,7 @@ namespace OCA\User_SAML;
 
 use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
 use OCP\IConfig;
 use OCP\ISession;
@@ -70,13 +71,14 @@ class SAMLSettings {
 	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
 	/** @var array<int, array<string, string>> */
-	private $configurations = [];
-	/** @var int */
-	private $configurationsLoadedState = self::LOADED_NONE;
+	private array $configurations = [];
+	/** @var self::LOADED_* $configurationsLoadedState */
+	private int $configurationsLoadedState = self::LOADED_NONE;
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,
 		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly ISession $session,
 		private readonly ConfigurationsMapper $mapper,
 	) {
@@ -104,9 +106,9 @@ class SAMLSettings {
 	 * Check if multiple user back ends are allowed
 	 */
 	public function allowMultipleUserBackEnds(): bool {
-		$type = $this->config->getAppValue('user_saml', 'type');
-		$setting = $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
-		return ($setting === '1' && $type === 'saml');
+		$type = $this->appConfig->getAppValueString('type');
+		$setting = $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends');
+		return $setting === 1 && $type === 'saml';
 	}
 
 	public function usesSloWebServerDecode(int $idp): bool {
@@ -124,7 +126,7 @@ class SAMLSettings {
 
 		$settings = [
 			'strict' => true,
-			'debug' => $this->config->getSystemValueBool('debug', false),
+			'debug' => $this->config->getSystemValueBool('debug'),
 			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
 			'security' => [
 				'nameIdEncrypted' => ($this->configurations[$idp]['security-nameIdEncrypted'] ?? '0') === '1',

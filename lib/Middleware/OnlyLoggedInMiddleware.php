@@ -12,6 +12,7 @@ use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use Override;
 
 /**
  * Class OnlyLoggedInMiddleware prevents access to a controller method if the user
@@ -33,7 +34,8 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @param string $methodName
 	 * @throws \Exception
 	 */
-	public function beforeController($controller, $methodName) {
+	#[Override]
+	public function beforeController($controller, $methodName): void {
 		if ($this->reflector->hasAnnotation('OnlyUnauthenticatedUsers') && $this->userSession->isLoggedIn()) {
 			throw new \Exception('User is already logged-in');
 		}
@@ -43,10 +45,10 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @param \OCP\AppFramework\Controller $controller
 	 * @param string $methodName
 	 * @param \Exception $exception
-	 * @return RedirectResponse
 	 * @throws \Exception
 	 */
-	public function afterException($controller, $methodName, \Exception $exception) {
+	#[Override]
+	public function afterException($controller, $methodName, \Exception $exception): RedirectResponse {
 		if ($exception->getMessage() === 'User is already logged-in') {
 			return new RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
