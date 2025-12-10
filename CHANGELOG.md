@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.1
+
+### Fixed
+
+* [Fix\(settings\): Fix missing global attribute (user_saml#1002)](https://github.com/nextcloud/user_saml/pull/1002)
+
+### Dependencies
+
+* [Build\(deps\): bump robrichards/xmlseclibs from 3.1.3 to 3.1.4 (user_saml#1004)](https://github.com/nextcloud/user_saml/pull/1004)
+* [Build\(deps\): bump onelogin/php\-saml from 4.3.0 to 4.3.1 (user_saml#1005)](https://github.com/nextcloud/user_saml/pull/1005)
+
 ## 7.1.0
 
 ### Added
