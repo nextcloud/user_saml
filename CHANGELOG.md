@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 5.1.4.1
+## 5.1.4-1
 
 ### Dependencies
 
