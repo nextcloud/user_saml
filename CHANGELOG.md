@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 5.1.4.1
+
+### Dependencies
+
+* [build\(deps\): bump onelogin/php\-saml to 4.3.1 (user_saml#1009)](https://github.com/nextcloud/user_saml/pull/1009)
+
 ## 5.1.4
 
 ### Fixed
