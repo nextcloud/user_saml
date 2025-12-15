@@ -8,6 +8,7 @@
 namespace OCA\User_SAML;
 
 use OC\Security\CSRF\CsrfTokenManager;
+use OCA\User_SAML\Model\SessionData;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
@@ -287,7 +288,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 6.0.0
 	 */
 	public function isSessionActive() {
-		return $this->session->get('user_saml.samlUserData') !== null;
+		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
 	}
 
 	/**

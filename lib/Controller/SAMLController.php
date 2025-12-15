@@ -17,6 +17,7 @@ use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
@@ -57,6 +58,7 @@ class SAMLController extends Controller {
 		private UserData $userData,
 		private ICrypto $crypto,
 		private ITrustedDomainHelper $trustedDomainHelper,
+		private SessionService $sessionService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -232,7 +234,7 @@ class SAMLController extends Controller {
 				if (empty($ssoUrl)) {
 					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
 				}
-				$this->session->set('user_saml.samlUserData', $_SERVER);
+				$this->sessionService->prepareEnvironmentBasedSession($_SERVER);
 				try {
 					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
 					$this->autoprovisionIfPossible();
@@ -335,8 +337,8 @@ class SAMLController extends Controller {
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
 		// need to keep the IdP config ID during session lifetime (SAMLSettings::getPrefix)
-		$this->session->set('user_saml.Idp', $idp);
-		if (is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
+		$this->sessionService->storeIdentityProviderInSession($idp);
+		if (is_null($AuthNRequestID) || $AuthNRequestID === '') {
 			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
@@ -383,14 +385,8 @@ class SAMLController extends Controller {
 			return $response;
 		}
 
-		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
-		$this->session->set('user_saml.samlNameId', $auth->getNameId());
-		$this->session->set('user_saml.samlNameIdFormat', $auth->getNameIdFormat());
-		$this->session->set('user_saml.samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
-		$this->session->set('user_saml.samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
-		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
-		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
-		$this->logger->debug('Session values set', ['app' => 'user_saml']);
+		$this->sessionService->storeAuthDataInSession($auth);
+
 		try {
 			$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
 			$firstLogin = $user->updateLastLoginTimestamp();
@@ -510,14 +506,14 @@ class SAMLController extends Controller {
 	 */
 	private function tryProcessSLOResponse(?int $idp): array {
 		$idps = ($idp !== null) ? [$idp] : array_keys($this->samlSettings->getListOfIdps());
-		foreach ($idps as $idp) {
+		foreach ($idps as $identityProviderId) {
 			try {
-				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
+				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($identityProviderId));
 				// validator (called with processSLO()) needs an XML entity loader
 				$targetUrl = $this->callWithXmlEntityLoader(fn (): string => $auth->processSLO(
 					true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
 					null,
-					$this->samlSettings->usesSloWebServerDecode($idp),
+					$this->samlSettings->usesSloWebServerDecode($identityProviderId),
 					null,
 					true
 				));

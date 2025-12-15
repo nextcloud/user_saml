@@ -16,10 +16,13 @@ use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\Listener\CookieLoginEventListener;
 use OCA\User_SAML\Listener\LoadAdditionalScriptsListener;
+use OCA\User_SAML\Listener\LoginEventListener;
 use OCA\User_SAML\Listener\SabrePluginEventListener;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -38,6 +41,9 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Server;
+use OCP\User\Events\BeforeUserLoggedInWithCookieEvent;
+use OCP\User\Events\UserLoggedInEvent;
+use OCP\User\Events\UserLoggedInWithCookieEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -53,11 +59,15 @@ class Application extends App implements IBootstrap {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginEventListener::class);
+		$context->registerEventListener(BeforeUserLoggedInWithCookieEvent::class, CookieLoginEventListener::class);
+		$context->registerEventListener(UserLoggedInWithCookieEvent::class, CookieLoginEventListener::class);
+		$context->registerEventListener(UserLoggedInEvent::class, LoginEventListener::class);
 		$context->registerService(DavPlugin::class, fn (ContainerInterface $c) => new DavPlugin(
 			$c->get(ISession::class),
 			$c->get(IConfig::class),
 			$_SERVER,
-			$c->get(SAMLSettings::class)
+			$c->get(SAMLSettings::class),
+			$c->get(SessionService::class),
 		));
 	}
 
