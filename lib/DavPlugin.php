@@ -9,7 +9,7 @@ namespace OCA\User_SAML;
 
 use OCA\DAV\Connector\Sabre\Auth;
 use OCA\User_SAML\Service\SessionService;
-use OCP\AppFramework\Services\IAppConfig;
+use OCP\IAppConfig;
 use OCP\ISession;
 use Sabre\DAV\Server;
 use Sabre\DAV\ServerPlugin;
@@ -36,7 +36,7 @@ class DavPlugin extends ServerPlugin {
 
 	public function beforeMethod(RequestInterface $request, ResponseInterface $response): void {
 		if (
-			$this->config->getAppValueString('type', 'unset') === 'environment-variable'
+			$this->config->getValueString('type', 'unset') === 'environment-variable'
 			&& !$this->session->exists('user_saml.samlUserData')
 		) {
 			$uidMapping = $this->samlSettings->get(1)['general-uid_mapping'];
