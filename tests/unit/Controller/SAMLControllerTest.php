@@ -12,6 +12,7 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
@@ -58,6 +59,7 @@ class SAMLControllerTest extends TestCase {
 	/** @var SAMLController */
 	private $samlController;
 	private ITrustedDomainHelper|MockObject $trustedDomainController;
+	private SessionService|MockObject $sessionService;
 
 	protected function setUp(): void {
 		parent::setUp();
@@ -75,6 +77,7 @@ class SAMLControllerTest extends TestCase {
 		$this->userData = $this->createMock(UserData::class);
 		$this->crypto = $this->createMock(ICrypto::class);
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
+		$this->sessionService = $this->createMock(SessionService::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			fn ($param) => $param
@@ -97,7 +100,8 @@ class SAMLControllerTest extends TestCase {
 			$this->userResolver,
 			$this->userData,
 			$this->crypto,
-			$this->trustedDomainController
+			$this->trustedDomainController,
+			$this->sessionService
 		);
 	}
 

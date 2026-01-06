@@ -3,7 +3,7 @@
  - SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<info>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>user_saml</id>
 	<name>SSO &amp; SAML authentication</name>
 	<summary>Authenticate using single sign-on</summary>
@@ -20,7 +20,7 @@ The following providers are supported and tested at the moment:
 	* Any other provider that authenticates using the environment variable
 
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.]]></description>
-	<version>7.1.1</version>
+	<version>7.1.2-beta.1</version>
 	<licence>agpl</licence>
 	<author>Lukas Reschke</author>
 	<namespace>User_SAML</namespace>
@@ -39,6 +39,9 @@ While theoretically any other authentication provider implementing either one of
 	<dependencies>
 		<nextcloud min-version="30" max-version="33" />
 	</dependencies>
+	<background-jobs>
+		<job>OCA\User_SAML\Jobs\CleanSessionData</job>
+	</background-jobs>
 	<repair-steps>
 		<post-migration>
 			<step>OCA\User_SAML\Migration\RememberLocalGroupsForPotentialMigrations</step>
