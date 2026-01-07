@@ -29,6 +29,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -64,7 +65,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserLoggedInEvent::class, LoginEventListener::class);
 		$context->registerService(DavPlugin::class, fn (ContainerInterface $c) => new DavPlugin(
 			$c->get(ISession::class),
-			$c->get(IConfig::class),
+			$c->get(IAppConfig::class),
 			$_SERVER,
 			$c->get(SAMLSettings::class),
 			$c->get(SessionService::class),
