@@ -22,8 +22,6 @@ class UserResolver {
 
 	/**
 	 * @throws NoUserFoundException
-	 *
-	 * @return null|string
 	 */
 	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): ?string {
 		if ($force) {
@@ -104,14 +102,12 @@ class UserResolver {
 		}
 	}
 
-	protected function ensureUser(string $search) {
+	protected function ensureUser(string $search): void {
 		$this->userManager->search($search);
 	}
 
 	/**
 	 * @throws \InvalidArgumentException
-	 *
-	 * @return null|string
 	 */
 	protected function sanitizeUserIdCandidate(string $rawUidCandidate): ?string {
 		//FIXME: adjusted copy of LDAP's Access::sanitizeUsername(), should go to API
