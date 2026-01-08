@@ -56,6 +56,7 @@ class Application extends App implements IBootstrap {
 		parent::__construct('user_saml', $urlParams);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
@@ -72,6 +73,7 @@ class Application extends App implements IBootstrap {
 		));
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		try {
 			$context->injectFn(function (

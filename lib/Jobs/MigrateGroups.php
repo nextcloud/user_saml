@@ -45,6 +45,7 @@ class MigrateGroups extends QueuedJob {
 		parent::__construct($timeFactory);
 	}
 
+	#[\Override]
 	protected function run($argument) {
 		try {
 			$candidates = $this->getMigratableGroups();

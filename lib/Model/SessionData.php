@@ -45,6 +45,7 @@ class SessionData implements \JsonSerializable, \Stringable {
 		}
 	}
 
+	#[\Override]
 	public function jsonSerialize(): array {
 		return [
 			self::KEY_IDENTITY_PROVIDER_ID => $this->identityProviderId,
@@ -83,7 +84,8 @@ class SessionData implements \JsonSerializable, \Stringable {
 		return self::fromInputArray($retrievedData);
 	}
 
+	#[\Override]
 	public function __toString(): string {
-		return \json_encode($this);
+		return \json_encode($this, \JSON_THROW_ON_ERROR);
 	}
 }

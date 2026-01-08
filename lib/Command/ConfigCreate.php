@@ -20,6 +20,7 @@ class ConfigCreate extends Base {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('saml:config:create');
 		$this->setDescription('Creates a new config and prints the new provider ID');

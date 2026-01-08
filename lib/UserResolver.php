@@ -23,7 +23,7 @@ class UserResolver {
 	/**
 	 * @throws NoUserFoundException
 	 */
-	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): string {
+	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): ?string {
 		if ($force) {
 			if ($isActiveDirectory) {
 				$this->ensureUser($this->formatGuid2ForFilterUser($rawUidCandidate));
@@ -102,14 +102,14 @@ class UserResolver {
 		}
 	}
 
-	protected function ensureUser($search) {
+	protected function ensureUser(string $search): void {
 		$this->userManager->search($search);
 	}
 
 	/**
 	 * @throws \InvalidArgumentException
 	 */
-	protected function sanitizeUserIdCandidate(string $rawUidCandidate): string {
+	protected function sanitizeUserIdCandidate(string $rawUidCandidate): ?string {
 		//FIXME: adjusted copy of LDAP's Access::sanitizeUsername(), should go to API
 		$sanitized = trim($rawUidCandidate);
 

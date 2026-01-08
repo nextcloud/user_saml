@@ -144,7 +144,10 @@ class GroupManager {
 		}
 	}
 
-	protected function handleUserAssignedToGroups(IUser $user, $groupIds): void {
+	/**
+	 * @param array<string> $groupIds
+	 */
+	protected function handleUserAssignedToGroups(IUser $user, array $groupIds): void {
 		foreach ($groupIds as $gid) {
 			$this->assignUserToGroup($user, $gid);
 		}

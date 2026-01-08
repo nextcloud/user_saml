@@ -21,10 +21,12 @@ class TransferGroupMembers implements IRepairStep {
 	) {
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'Move potential left members from old local groups to SAML groups';
 	}
 
+	#[\Override]
 	public function run(IOutput $output): void {
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
 		if (empty($groupsToTreat)) {

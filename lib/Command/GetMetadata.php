@@ -24,6 +24,7 @@ class GetMetadata extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('saml:metadata')
@@ -45,6 +46,7 @@ EOT
 		;
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$idp = (int)$input->getArgument('idp');
 		$settingsArray = $this->samlSettings->getOneLoginSettingsArray($idp);

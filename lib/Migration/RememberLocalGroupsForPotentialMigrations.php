@@ -24,6 +24,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 	) {
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'Remember local groups that might belong to SAML';
 	}
@@ -36,6 +37,7 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 	 * @throws \Exception in case of failure
 	 * @since 9.1.0
 	 */
+	#[\Override]
 	public function run(IOutput $output) {
 		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
 		if ($candidateInfo !== '') {

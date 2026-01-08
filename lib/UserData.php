@@ -55,7 +55,7 @@ class UserData {
 		} catch (NoUserFoundException) {
 			return '';
 		}
-		return $uid;
+		return $uid ?? '';
 	}
 
 	public function getGroups(): array {
@@ -109,8 +109,8 @@ class UserData {
 	/**
 	 * @see \OCA\User_LDAP\Access::convertObjectGUID2Str
 	 */
-	protected function convertObjectGUID2Str($oguid): string {
-		$hex_guid = bin2hex((string)$oguid);
+	protected function convertObjectGUID2Str(string $oguid): string {
+		$hex_guid = bin2hex($oguid);
 		$hex_guid_to_guid_str = '';
 		for ($k = 1; $k <= 4; ++$k) {
 			$hex_guid_to_guid_str .= substr($hex_guid, 8 - 2 * $k, 2);
