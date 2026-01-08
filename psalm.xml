@@ -33,10 +33,5 @@
 		<DeprecatedProperty errorLevel="info" />
 		<DeprecatedFunction errorLevel="info" />
 		<DeprecatedConstant errorLevel="info" />
-		<UndefinedClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Symfony\Component\Console\Command\Command"/>
-			</errorLevel>
-		</UndefinedClass>
 	</issueHandlers>
 </psalm>

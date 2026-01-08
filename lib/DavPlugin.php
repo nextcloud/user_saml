@@ -29,6 +29,7 @@ class DavPlugin extends ServerPlugin {
 	) {
 	}
 
+	#[\Override]
 	public function initialize(Server $server): void {
 		$server->on('beforeMethod:*', $this->beforeMethod(...), 9);
 		$this->server = $server;

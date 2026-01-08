@@ -82,6 +82,7 @@ class SessionService {
 		$sessionDataModel = SessionDataModel::fromSession($this->session);
 
 		$sessionData = new SessionData();
+		/** @psalm-suppress InvalidArgument setId requires a string not an int */
 		$sessionData->setId($this->hashSessionId($this->session->getId()));
 		$sessionData->setTokenId($this->tokenProvider->getToken($this->session->getId())->getId());
 		$sessionData->setData($sessionDataModel);

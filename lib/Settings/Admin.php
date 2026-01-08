@@ -28,6 +28,7 @@ class Admin implements ISettings {
 	/**
 	 * @return TemplateResponse
 	 */
+	#[\Override]
 	public function getForm() {
 		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
@@ -237,6 +238,7 @@ class Admin implements ISettings {
 	/**
 	 * @return string the section ID, e.g. 'sharing'
 	 */
+	#[\Override]
 	public function getSection() {
 		return 'saml';
 	}
@@ -248,6 +250,7 @@ class Admin implements ISettings {
 	 *
 	 * keep the server setting at the top, right after "server settings"
 	 */
+	#[\Override]
 	public function getPriority() {
 		return 0;
 	}

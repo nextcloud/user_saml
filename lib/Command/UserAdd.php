@@ -24,6 +24,7 @@ class UserAdd extends Base {
 	) {
 		parent::__construct();
 	}
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('saml:user:add')

@@ -21,6 +21,7 @@ class CleanupRemovedConfig implements IRepairStep {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function getName() {
 		return 'Cleans up config keys that are not used anymore';
 	}
@@ -28,6 +29,7 @@ class CleanupRemovedConfig implements IRepairStep {
 	/**
 	 * @inheritDoc
 	 */
+	#[\Override]
 	public function run(IOutput $output) {
 		$this->config->deleteAppValue('user_saml', 'general-use_saml_auth_for_desktop');
 	}

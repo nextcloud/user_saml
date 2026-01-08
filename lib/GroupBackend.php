@@ -35,6 +35,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	) {
 	}
 
+	#[\Override]
 	public function inGroup($uid, $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
 		$stmt = $qb->select('gid')
@@ -52,6 +53,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @return list<string> Group names
 	 */
+	#[\Override]
 	public function getUserGroups($uid): array {
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
@@ -71,7 +73,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @return string[] Group names
 	 */
-	public function getGroups($search = '', $limit = null, $offset = null): array {
+	#[\Override]
+	public function getGroups(string $search = '', $limit = null, $offset = null): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)
@@ -108,6 +111,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 * @param string $gid
 	 * @return bool
 	 */
+	#[\Override]
 	public function groupExists($gid): bool {
 		if (isset($this->groupCache[$gid])) {
 			return true;
@@ -151,6 +155,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 * @param int $offset
 	 * @return array<int,string> User ids
 	 */
+	#[\Override]
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('uid')
@@ -182,6 +187,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $users;
 	}
 
+	#[\Override]
 	public function createGroup(string $gid, ?string $samlGid = null): bool {
 		try {
 			// Add group
@@ -213,6 +219,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @throws Exception
 	 */
+	#[\Override]
 	public function addToGroup(string $uid, string $gid): bool {
 		if ($this->inGroup($uid, $gid)) {
 			return true;
@@ -226,6 +233,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return true;
 	}
 
+	#[\Override]
 	public function removeFromGroup(string $uid, string $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
 		$rows = $qb->delete(self::TABLE_MEMBERS)
@@ -236,6 +244,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $rows > 0;
 	}
 
+	#[\Override]
 	public function countUsersInGroup(string $gid, string $search = ''): int {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select($query->func()->count('*', 'num_users'))
@@ -261,6 +270,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $count;
 	}
 
+	#[\Override]
 	public function deleteGroup(string $gid): bool {
 		$query = $this->dbc->getQueryBuilder();
 
@@ -287,10 +297,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return true;
 	}
 
+	#[\Override]
 	public function getBackendName(): string {
 		return 'user_saml';
 	}
 
+	#[\Override]
 	public function getDisplayName(string $gid): string {
 		if (!isset($this->groupCache[$gid])) {
 			$this->getGroups($gid);
@@ -299,6 +311,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $this->groupCache[$gid] ?? $gid;
 	}
 
+	#[\Override]
 	public function setDisplayName(string $gid, string $displayName): bool {
 		if (!$this->groupExists($gid)) {
 			return false;

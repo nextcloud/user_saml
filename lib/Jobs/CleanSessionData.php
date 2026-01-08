@@ -28,6 +28,7 @@ class CleanSessionData extends TimedJob {
 		$this->setAllowParallelRuns(false);
 	}
 
+	#[\Override]
 	protected function run(mixed $argument): void {
 		$missingSessionIds = $this->findInvalidatedSessions();
 		$this->deleteInvalidatedSessions($missingSessionIds);

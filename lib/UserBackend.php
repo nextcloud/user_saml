@@ -136,6 +136,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return bool
 	 * @since 4.5.0
 	 */
+	#[\Override]
 	public function deleteUser($uid) {
 		$qb = $this->db->getQueryBuilder();
 		$affected = $qb->delete('user_saml_users')
@@ -150,6 +151,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @param string $uid the username
 	 * @return string|bool
 	 */
+	#[\Override]
 	public function getHome(string $uid) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('home')
@@ -171,6 +173,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return string[] an array of all uids
 	 * @since 4.5.0
 	 */
+	#[\Override]
 	public function getUsers($search = '', $limit = null, $offset = null) {
 		// shamelessly duplicated from \OC\User\Database
 		$users = $this->getDisplayNames($search, $limit, $offset);
@@ -185,6 +188,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return boolean
 	 * @since 4.5.0
 	 */
+	#[\Override]
 	public function userExists($uid) {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->userExists($uid);
@@ -193,7 +197,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 	}
 
-	public function setDisplayName($uid, $displayName) {
+	public function setDisplayName(string $uid, $displayName) {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->setDisplayName($uid, $displayName);
 		}
@@ -213,6 +217,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return string display name
 	 * @since 14.0.0
 	 */
+	#[\Override]
 	public function getDisplayName($uid): string {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->getDisplayName($uid);
@@ -238,6 +243,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return array an array of all displayNames (value) and the corresponding uids (key)
 	 * @since 4.5.0
 	 */
+	#[\Override]
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
 		// shamelessly duplicate from \OC\User\Database
 		$query = $this->db->getQueryBuilder();
@@ -273,6 +279,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return boolean if users can be listed or not
 	 * @since 4.5.0
 	 */
+	#[\Override]
 	public function hasUserListings() {
 		if ($this->autoprovisionAllowed()) {
 			return true;
@@ -287,6 +294,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return boolean whether Apache reports a user as currently logged in.
 	 * @since 6.0.0
 	 */
+	#[\Override]
 	public function isSessionActive() {
 		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
 	}
@@ -294,6 +302,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\Override]
 	public function getLogoutUrl() {
 		$id = $this->settings->getProviderId();
 		$settings = $this->settings->get($id);
@@ -377,6 +386,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return string
 	 * @since 6.0.0
 	 */
+	#[\Override]
 	public function getCurrentUserId() {
 		$user = Server::get(IUserSession::class)->getUser();
 
@@ -400,6 +410,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @return string the name of the backend to be shown
 	 * @since 8.0.0
 	 */
+	#[\Override]
 	public function getBackendName() {
 		return 'user_saml';
 	}
@@ -440,7 +451,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	/**
 	 * @throws \OCP\DB\Exception
 	 */
-	private function getAttributeKeys($name) {
+	private function getAttributeKeys(string $name) {
 		$settings = $this->settings->get($this->settings->getProviderId());
 		$keys = explode(' ', $settings[$name] ?? $this->config->getAppValue('user_saml', $name, ''));
 
@@ -450,7 +461,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $keys;
 	}
 
-	private function getAttributeValue($name, array $attributes) {
+	private function getAttributeValue(string $name, array $attributes) {
 		$keys = $this->getAttributeKeys($name);
 
 		$value = '';
@@ -561,6 +572,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 	}
 
+	#[\Override]
 	public function countUsers() {
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))

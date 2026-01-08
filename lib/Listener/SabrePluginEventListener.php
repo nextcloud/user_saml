@@ -17,6 +17,7 @@ use OCP\Server;
 
 /** @template-implements IEventListener<SabrePluginAddEvent|Event> */
 class SabrePluginEventListener implements IEventListener {
+	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof SabrePluginAddEvent) {
 			return;

@@ -21,6 +21,7 @@ class GroupMigrationCopyIncomplete extends Base {
 	) {
 		parent::__construct();
 	}
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('saml:group-migration:copy-incomplete-members');
 		$this->setDescription('Transfers remaining group members from old local to current SAML groups');
