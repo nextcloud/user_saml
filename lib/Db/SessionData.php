@@ -12,12 +12,12 @@ use OCP\AppFramework\Db\Entity;
 use OCP\DB\Types;
 
 /**
+ * @method getId(): string
+ * @method setId(string $id): void
  * @method setTokenId(int $tokenId): void
  * @method getTokenId(): int
  */
 class SessionData extends Entity {
-	/** @var string */
-	public $id;
 	public ?string $data = null;
 	protected ?int $tokenId = null;
 
@@ -27,11 +27,6 @@ class SessionData extends Entity {
 		// It can be set to BIGINT once dropping NC 30 support.
 		$this->addType('tokenId', Types::INTEGER);
 		$this->addType('data', Types::TEXT);
-	}
-
-	public function setId(string $id): void {
-		$this->id = $id;
-		$this->markFieldUpdated('id');
 	}
 
 	public function setData(SessionDataModel $input): void {
