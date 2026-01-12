@@ -87,3 +87,9 @@ class OC_User {
 	public static function useBackend($userBackend): void;
 	public static function handleApacheAuth(): void;
 }
+
+namespace OC\User {
+	class LazyUser implements \OCP\IUser {
+		public function __construct(string $uid, \OCP\IUserManager $userManager, ?string $displayName = null, ?\OCP\UserInterface $backend = null) {}
+	}
+}
