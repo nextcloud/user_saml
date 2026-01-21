@@ -26,19 +26,27 @@ class GroupMigrationCopyIncomplete extends Base {
 	protected function configure(): void {
 		$this->setName('saml:group-migration:copy-incomplete-members')
 			->setDescription('Transfers remaining group members from old local to current SAML groups')
-			->addOption('dry-run', null, InputOption::VALUE_NONE, 'Output the SQL queries instead of running them.');
+			->addOption('dry-run', null, InputOption::VALUE_NONE, 'Output the SQL queries instead of running them.')
+			->addOption('group', null, InputOption::VALUE_OPTIONAL, 'Group filter');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$dryRun = $input->getOption('dry-run');
 
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
+		$group = $input->getOption('group');
+		if ($group) {
+			$groupsToTreat = array_filter($groupsToTreat, function (string $groupToTreat) use ($group): bool {
+				return $groupToTreat === $group;
+			});
+		}
 		if (empty($groupsToTreat)) {
 			if ($output->isVerbose() || $dryRun) {
 				$output->writeln('<info>No pending group member transfer</info>');
 			}
 			return 0;
 		}
+
 
 		if ($dryRun) {
 			$output->writeln('<info>Found the following SAML group with a corresponding local group:</info>');
