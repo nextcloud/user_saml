@@ -43,9 +43,12 @@ jobs:
       matrix:
         php-versions: [ "8.1", "8.2", "8.3", "8.4" ]
         databases: [ "mysql" ]
-        server-versions: [ "stable30", "stable31", "stable32", "master" ]
+        server-versions: [ "stable30", "stable31", "stable32", "stable33", "master" ]
         exclude:
           - server-versions: "master"
+            php-versions: "8.1"
+            databases: "mysql"
+          - server-versions: "stable33"
             php-versions: "8.1"
             databases: "mysql"
           - server-versions: "stable30"
@@ -60,6 +63,9 @@ jobs:
             databases: "sqlite"
           - server-versions: "stable30"
             php-versions: "8.3"
+            databases: "pgsql"
+          - server-versions: "master"
+            php-versions: "8.5"
             databases: "pgsql"
 
     name: Integration php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
