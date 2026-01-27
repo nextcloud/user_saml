@@ -126,14 +126,14 @@ class SAMLController extends Controller {
 		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp') ?? 1);
 
 		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
-		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
+		$rejectGroups = array_map(trim(...), explode(',', $rejectGroupsString));
 
 		if (!empty(array_intersect($groups, $rejectGroups))) {
 			throw new UserFilterViolationException('User is member of a rejection group.');
 		}
 
 		$requireGroupsString = trim($settings['saml-user-filter-require_groups'] ?? '');
-		$requireGroups = array_map('trim', explode(',', $requireGroupsString));
+		$requireGroups = array_map(trim(...), explode(',', $requireGroupsString));
 		if (!empty($requireGroupsString) && empty(array_intersect($groups, $requireGroups))) {
 			throw new UserFilterViolationException('User is not member of a required group.');
 		}
@@ -159,7 +159,7 @@ class SAMLController extends Controller {
 				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
 				$auth = new Auth($settings);
 				$passthroughParamsString = trim($settings['idp']['passthroughParameters'] ?? '') ;
-				$passthroughParams = array_map('trim', explode(',', $passthroughParamsString));
+				$passthroughParams = array_map(trim(...), explode(',', $passthroughParamsString));
 
 				$passthroughValues = [];
 				foreach ($passthroughParams as $passthroughParam) {

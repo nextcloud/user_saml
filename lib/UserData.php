@@ -67,7 +67,7 @@ class UserData {
 
 		return is_array($this->attributes[$mapping])
 			? $this->attributes[$mapping]
-			: array_map('trim', explode(',', (string)$this->attributes[$mapping]));
+			: array_map(trim(...), explode(',', (string)$this->attributes[$mapping]));
 	}
 
 	protected function extractSamlUserId(): string {
