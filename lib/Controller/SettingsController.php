@@ -61,12 +61,12 @@ class SettingsController extends Controller {
 			}
 			foreach ($content as $setting => $details) {
 				/* use security as category instead of security-* */
-				if (str_starts_with((string) $category, 'security-')) {
+				if (str_starts_with((string)$category, 'security-')) {
 					$category = 'security';
 				}
 				// make sure we properly fetch the attribute mapping
 				// as this is the only category that has the saml- prefix on config keys
-				if (str_starts_with((string) $category, 'attribute-mapping')) {
+				if (str_starts_with((string)$category, 'attribute-mapping')) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
 				} elseif ($category === 'name-id-formats') {
