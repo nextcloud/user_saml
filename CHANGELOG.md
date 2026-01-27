@@ -5,6 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.2
+
+### Fixed
+
+* [Fix\(Session\): restore session data after cookie login (user_saml#1022)](https://github.com/nextcloud/user_saml/pull/1022)
+
+### Dependencies
+
+* [Build\(deps\): bump firebase/php\-jwt from 6.11.1 to 7.0.2 (user_saml#1024)](https://github.com/nextcloud/user_saml/pull/1024)
+
 ## 7.1.1
 
 ### Fixed
