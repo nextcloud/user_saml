@@ -10,6 +10,11 @@
 			"bamarni/composer-bin-plugin": true
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCP\\": "vendor/nextcloud/ocp/OCP"
+		}
+	},
 	"extra": {
 		"bamarni-bin": {
 			"bin-links": true,
