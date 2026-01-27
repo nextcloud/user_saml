@@ -119,9 +119,9 @@ class UserResolver {
 		// Remove accents
 		$sanitized = preg_replace('#&([A-Za-z])(?:acute|cedil|caron|circ|grave|orn|ring|slash|th|tilde|uml);#', '\1', $sanitized);
 		// Remove ligatures
-		$sanitized = preg_replace('#&([A-Za-z]{2})(?:lig);#', '\1', $sanitized);
+		$sanitized = preg_replace('#&([A-Za-z]{2})(?:lig);#', '\1', (string) $sanitized);
 		// Remove unknown leftover entities
-		$sanitized = preg_replace('#&[^;]+;#', '', $sanitized);
+		$sanitized = preg_replace('#&[^;]+;#', '', (string) $sanitized);
 
 		// Replacements
 		$sanitized = str_replace(' ', '_', $sanitized);

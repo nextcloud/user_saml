@@ -35,7 +35,7 @@ class SessionData extends Entity {
 	}
 
 	public function getData(): SessionDataModel {
-		$deserialized = json_decode($this->data, true);
+		$deserialized = json_decode((string) $this->data, true);
 		return SessionDataModel::fromInputArray($deserialized);
 	}
 }

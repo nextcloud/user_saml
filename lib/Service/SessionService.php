@@ -47,7 +47,7 @@ class SessionService {
 			$this->storeSessionDataInDatabase();
 			$this->logger->debug('SAML session successfully restored');
 			// we do not delete the old session automatically to avoid race conditions
-		} catch (DoesNotExistException|MultipleObjectsReturnedException|Exception $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException|Exception) {
 			return;
 		}
 	}

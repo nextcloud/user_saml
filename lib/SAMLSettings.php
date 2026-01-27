@@ -197,9 +197,7 @@ class SAMLSettings {
 	 * @throws InvalidArgumentException
 	 */
 	public function set(int $id, array $settings): void {
-		$settings = array_filter($settings, static function (string $configKey): bool {
-			return in_array($configKey, self::IDP_CONFIG_KEYS, true);
-		}, ARRAY_FILTER_USE_KEY);
+		$settings = array_filter($settings, static fn(string $configKey): bool => in_array($configKey, self::IDP_CONFIG_KEYS, true), ARRAY_FILTER_USE_KEY);
 
 		$this->mapper->set($id, $settings);
 	}

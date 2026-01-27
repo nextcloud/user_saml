@@ -58,7 +58,7 @@ class MigrateGroups extends QueuedJob {
 	}
 
 	protected function migrateGroups(array $toMigrate): array {
-		return array_filter($toMigrate, fn ($gid) => $this->migrateGroup($gid));
+		return array_filter($toMigrate, $this->migrateGroup(...));
 	}
 
 	protected function migrateGroup(string $gid): bool {
