@@ -11,6 +11,7 @@ use OC\Core\Command\Base;
 use OCA\User_SAML\Service\GroupMigration;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
@@ -23,20 +24,38 @@ class GroupMigrationCopyIncomplete extends Base {
 	}
 	#[\Override]
 	protected function configure(): void {
-		$this->setName('saml:group-migration:copy-incomplete-members');
-		$this->setDescription('Transfers remaining group members from old local to current SAML groups');
+		$this->setName('saml:group-migration:copy-incomplete-members')
+			->setDescription('Transfers remaining group members from old local to current SAML groups')
+			->addOption('dry-run', null, InputOption::VALUE_NONE, 'Output the SQL queries instead of running them.')
+			->addOption('group', null, InputOption::VALUE_OPTIONAL, 'Group filter');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
+		$dryRun = $input->getOption('dry-run');
+
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
+		$group = $input->getOption('group');
+		if ($group) {
+			$groupsToTreat = array_filter($groupsToTreat, function (string $groupToTreat) use ($group): bool {
+				return $groupToTreat === $group;
+			});
+		}
 		if (empty($groupsToTreat)) {
-			if ($output->isVerbose()) {
+			if ($output->isVerbose() || $dryRun) {
 				$output->writeln('<info>No pending group member transfer</info>');
 			}
 			return 0;
 		}
 
-		if (!$this->doMemberTransfer($groupsToTreat, $output)) {
+
+		if ($dryRun) {
+			$output->writeln('<info>Found the following SAML group with a corresponding local group:</info>');
+			foreach ($groupsToTreat as $group) {
+				$output->writeln('<info>- ' . $group . '</info>');
+			}
+		}
+
+		if (!$this->doMemberTransfer($groupsToTreat, $output, $dryRun)) {
 			if (!$output->isQuiet()) {
 				$output->writeln('<comment>Not all group members could be transferred completely. Rerun this command or check the Nextcloud log.</comment>');
 			}
@@ -54,16 +73,16 @@ class GroupMigrationCopyIncomplete extends Base {
 	 * @param OutputInterface $output
 	 * @return bool
 	 */
-	protected function doMemberTransfer(array $groups, OutputInterface $output): bool {
+	protected function doMemberTransfer(array $groups, OutputInterface $output, bool $dryRun): bool {
 		$errorOccurred = false;
 		for ($i = 0; $i < 2; $i++) {
 			$retry = [];
 			foreach ($groups as $gid) {
 				try {
-					$isComplete = $this->groupMigration->migrateGroupUsers($gid);
+					$isComplete = $this->groupMigration->migrateGroupUsers($gid, $output, $dryRun);
 					if (!$isComplete) {
 						$retry[] = $gid;
-					} else {
+					} elseif (!$dryRun) {
 						$this->groupMigration->cleanUpOldGroupUsers($gid);
 						if ($output->isVerbose()) {
 							$output->writeln(sprintf('<info>Members transferred successfully for group %s</info>', $gid));
