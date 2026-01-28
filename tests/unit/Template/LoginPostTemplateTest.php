@@ -13,6 +13,10 @@ use Test\TestCase;
 
 class LoginPostTemplateTest extends TestCase {
 	public function testLoginPostTemplateEscapesValues(): void {
+		if (!function_exists('p')) {
+			require_once \OC::$SERVERROOT . '/lib/private/Template/functions.php';
+		}
+
 		$l = $this->createMock(IL10N::class);
 		$l->method('t')->willReturnCallback(static fn (string $text): string => $text);
 
