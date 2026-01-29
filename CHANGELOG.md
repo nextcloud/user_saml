@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.3
+
+### Fixed
+
+* [Fix HTML injection in SAML POST login (user_saml#1037)](https://github.com/nextcloud/user_saml/pull/1037)
+
 ## 7.1.2
 
 ### Fixed
