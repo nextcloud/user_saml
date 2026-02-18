@@ -423,7 +423,7 @@ class FeatureContext implements Context {
 		if (is_array($actualValue)) {
 			// transform array to string, ensuring values are in the same order
 			$value = explode(',', $value);
-			$value = array_map('trim', $value);
+			$value = array_map(trim(...), $value);
 			sort($value);
 			$value = implode(',', $value);
 
@@ -469,8 +469,8 @@ class FeatureContext implements Context {
 			throw new UnexpectedValueException(sprintf('Expected 200 status code but got %d', $responseArray['meta']['statusCode']));
 		}
 
-		$expectedMembers = array_map('trim', explode(',', $memberList));
-		$actualMembers = array_map('trim', $responseArray['data']['users']);
+		$expectedMembers = array_map(trim(...), explode(',', $memberList));
+		$actualMembers = array_map(trim(...), $responseArray['data']['users']);
 
 		sort($expectedMembers);
 		sort($actualMembers);
@@ -563,7 +563,7 @@ class FeatureContext implements Context {
 		);
 
 		$groupsActual = json_decode(trim($response), true)['groups'];
-		$groupsExpected = array_map('trim', explode(',', $groups));
+		$groupsExpected = array_map(trim(...), explode(',', $groups));
 
 		foreach ($groupsExpected as $expectedGroup) {
 			if (!in_array($expectedGroup, $groupsActual)) {

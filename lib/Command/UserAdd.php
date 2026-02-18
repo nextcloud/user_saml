@@ -20,7 +20,7 @@ class UserAdd extends Base {
 	public function __construct(
 		protected IUserManager $userManager,
 		protected UserBackend $backend,
-		private LoggerInterface $logger,
+		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct();
 	}

@@ -223,7 +223,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		if ($prefixes === false) {
 			return [1]; // 1 is the default value for providerIds
 		}
-		return array_map('intval', explode(',', (string)$prefixes));
+		return array_map(intval(...), explode(',', (string)$prefixes));
 	}
 
 	protected function deletePrefixes(): void {
