@@ -30,6 +30,10 @@ class GroupMigration {
 	) {
 	}
 
+	public function setLogger(LoggerInterface $logger): void {
+		$this->logger = $logger;
+	}
+
 	/**
 	 * @return string[] group ids
 	 */
@@ -98,4 +102,44 @@ class GroupMigration {
 		$cleanup->executeStatement();
 	}
 
+	public function migrateGroup(string $gid): bool {
+		$isMigrated = false;
+		$allUsersInserted = false;
+		try {
+			$allUsersInserted = $this->migrateGroupUsers($gid);
+
+			$this->dbc->beginTransaction();
+
+			$qb = $this->dbc->getQueryBuilder();
+			$affected = $qb->delete('groups')
+				->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+				->executeStatement();
+			if ($affected === 0) {
+				throw new \RuntimeException('Could not delete group from local backend');
+			}
+			if (!$this->ownGroupBackend->createGroup($gid)) {
+				throw new \RuntimeException('Could not create group in SAML backend');
+			}
+
+			$this->dbc->commit();
+			$isMigrated = true;
+		} catch (Throwable $e) {
+			$this->dbc->rollBack();
+			$this->logger->warning($e->getMessage(), ['app' => 'user_saml', 'exception' => $e]);
+		}
+
+		if ($allUsersInserted && $isMigrated) {
+			try {
+				$this->cleanUpOldGroupUsers($gid);
+			} catch (Exception $e) {
+				$this->logger->warning('Error while cleaning up group members in (oc_)group_user of group (gid) {gid}', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+					'exception' => $e,
+				]);
+			}
+		}
+
+		return $isMigrated;
+	}
 }

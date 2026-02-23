@@ -34,6 +34,7 @@ class ConfigGet extends Base {
 		parent::configure();
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$providerId = (int)$input->getOption('providerId');
 		if (!empty($providerId)) {
