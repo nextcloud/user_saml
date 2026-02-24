@@ -47,7 +47,7 @@ class MigrateGroups extends QueuedJob {
 	protected function run($argument) {
 		try {
 			$candidates = $this->getMigratableGroups();
-			$toMigrate = $this->getGroupsToMigrate($argument['gids'], $candidates);
+			$toMigrate = $this->groupMigration->getGroupsToMigrate($argument['gids'], $candidates);
 			$migrated = $this->migrateGroups($toMigrate);
 			$this->ownGroupManager->updateCandidatePool($migrated);
 		} catch (\RuntimeException) {
@@ -57,47 +57,6 @@ class MigrateGroups extends QueuedJob {
 
 	protected function migrateGroups(array $toMigrate): array {
 		return array_filter($toMigrate, fn ($gid) => $this->groupMigration->migrateGroup($gid));
-	}
-
-	protected function getGroupsToMigrate(array $samlGroups, array $pool): array {
-		return array_filter($samlGroups, function (string $gid) use ($pool) {
-			if (!in_array($gid, $pool)) {
-				return false;
-			}
-
-			$group = $this->groupManager->get($gid);
-			if ($group === null) {
-				$this->logger->debug('Not migrating group "{gid}": not found by the group manager', [
-					'app' => 'user_saml',
-					'gid' => $gid,
-				]);
-				return false;
-			}
-
-			$backendNames = $group->getBackendNames();
-			if (!in_array('Database', $backendNames, true)) {
-				$this->logger->debug('Not migrating group "{gid}": not belonging to local database backend', [
-					'app' => 'user_saml',
-					'gid' => $gid,
-					'backends' => $backendNames,
-				]);
-				return false;
-			}
-
-			foreach ($group->getUsers() as $user) {
-				if ($user->getBackendClassName() !== 'user_saml') {
-					$this->logger->debug('Not migrating group "{gid}": user "{userId}" from a different backend "{userBackend}"', [
-						'app' => 'user_saml',
-						'gid' => $gid,
-						'userId' => $user->getUID(),
-						'userBackend' => $user->getBackendClassName(),
-					]);
-					return false;
-				}
-			}
-
-			return true;
-		});
 	}
 
 	protected function getMigratableGroups(): array {

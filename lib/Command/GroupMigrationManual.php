@@ -41,7 +41,7 @@ class GroupMigrationManual extends Base implements LoggerInterface {
 		try {
 			$backend = $this->findBackend();
 			$groupsToTreat = $this->findGroupIds($backend);
-			$groupsToTreat = $this->getGroupsToMigrate($groupsToTreat);
+			$groupsToTreat = $this->groupMigration->getGroupsToMigrate($groupsToTreat, $groupsToTreat);
 		} catch (\UnexpectedValueException) {
 			$output->writeln('<error>Failed to find database group backend</error>');
 			return self::FAILURE;
@@ -79,43 +79,6 @@ class GroupMigrationManual extends Base implements LoggerInterface {
 			unset($groupIds[$adminGroupIndex]);
 		}
 		return array_values($groupIds);
-	}
-
-	private function getGroupsToMigrate(array $groups): array {
-		return array_filter($groups, function (string $gid) {
-			$group = $this->groupManager->get($gid);
-			if ($group === null) {
-				$this->debug('Not migrating group "{gid}": not found by the group manager', [
-					'app' => 'user_saml',
-					'gid' => $gid,
-				]);
-				return false;
-			}
-
-			$backendNames = $group->getBackendNames();
-			if (!in_array('Database', $backendNames, true)) {
-				$this->debug('Not migrating group "{gid}": not belonging to local database backend', [
-					'app' => 'user_saml',
-					'gid' => $gid,
-					'backends' => $backendNames,
-				]);
-				return false;
-			}
-
-			foreach ($group->getUsers() as $user) {
-				if ($user->getBackendClassName() !== 'user_saml') {
-					$this->debug('Not migrating group "{gid}": user "{userId}" from a different backend "{userBackend}"', [
-						'app' => 'user_saml',
-						'gid' => $gid,
-						'userId' => $user->getUID(),
-						'userBackend' => $user->getBackendClassName(),
-					]);
-					return false;
-				}
-			}
-
-			return true;
-		});
 	}
 
 	/*
