@@ -44,6 +44,7 @@ class ConfigSet extends Base {
 		parent::configure();
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pId = (int)$input->getArgument('providerId');
 

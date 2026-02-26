@@ -26,6 +26,7 @@ class ConfigCreate extends Base {
 		$this->setDescription('Creates a new config and prints the new provider ID');
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->writeln((string)$this->samlSettings->getNewProviderId());
 		return 0;

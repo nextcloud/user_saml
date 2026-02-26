@@ -27,6 +27,7 @@ class GroupMigrationCopyIncomplete extends Base {
 		$this->setDescription('Transfers remaining group members from old local to current SAML groups');
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
 		if (empty($groupsToTreat)) {
