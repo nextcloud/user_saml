@@ -29,24 +29,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 			<!-- General (per-provider) -->
 			<NcSettingsSection :name="t('user_saml', 'General')" :level="3">
-				<template v-for="(attribute, key) in generalSettings" :key="key">
-					<p v-if="attribute.type === 'checkbox' && !attribute.global">
-						<NcCheckboxRadioSwitch
-							:checked="draft.general?.[key] === '1'"
-							@update:checked="(val) => setDraft('general', key, val ? '1' : '0')">
-							{{ attribute.text }}
-						</NcCheckboxRadioSwitch>
-						<NcNoteCard v-if="key === 'is_saml_request_using_post'" type="warning">
-							{{ t('user_saml', 'This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests.') }}
-						</NcNoteCard>
-					</p>
-					<NcInputField v-else-if="attribute.type === 'line' && attribute.global === undefined"
-								  :id="'user-saml-general-' + key"
-								  :label="attribute.text"
-								  :model-value="draft.general?.[key] ?? ''"
-								  :required="attribute.required"
-								  @update:model-value="(val) => setDraft('general', key, val)" />
-				</template>
+				<ProviderGeneralSection
+					:general-settings="generalSettings"
+					:model-value="draft.general ?? {}"
+					@update:model-value="(val) => { draft.general = val }"
+					@field-change="(key, value) => setDraft('general', key, value)" />
 			</NcSettingsSection>
 
 			<!-- Service Provider Data -->
@@ -204,6 +191,7 @@ import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import NcTextArea from '@nextcloud/vue/components/NcTextArea'
+import ProviderGeneralSection from './ProviderGeneralSection.vue'
 import type {
 	DraftIdp,
 	NameIdFormatsMap,
@@ -238,7 +226,11 @@ const props = withDefaults(defineProps<{
 	showAttributeMapping: true,
 })
 
-const emit = defineEmits(['update:open', 'provider-name-changed', 'close'])
+const emit = defineEmits<{
+	'update:open': [value: boolean]
+	'provider-name-changed': [payload: { id: Provider['id'], name: string }]
+	'close': []
+}>()
 
 const providerConfig = ref<ProviderConfig>({})
 const metadataValid = ref<boolean | null>(null) // null | true | false

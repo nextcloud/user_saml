@@ -85,15 +85,37 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
 				'type' => 'line',
 				'required' => true,
+				'provider_type' => '',
 			],
 			'require_provisioned_account' => [
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
+				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0'),
+				'provider_type' => '',
 			],
-
+			'idp0_display_name' => [
+				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
+				'type' => 'line',
+				'required' => false,
+				'provider_type' => '',
+			],
+			'is_saml_request_using_post' => [
+				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
+				'type' => 'checkbox',
+				'required' => false,
+				'global' => false,
+				'provider_type' => 'saml',
+			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
+				'type' => 'checkbox',
+				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0'),
+				'provider_type' => '',
+			],
 		];
+
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the displayname to.'),
@@ -194,27 +216,6 @@ class Admin implements ISettings {
 		}
 
 		$type = $this->config->getAppValue('user_saml', 'type');
-
-		if ($type === 'saml') {
-			$generalSettings['idp0_display_name'] = [
-				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
-				'type' => 'line',
-				'required' => false,
-			];
-			$generalSettings['is_saml_request_using_post'] = [
-				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
-				'type' => 'checkbox',
-				'required' => false,
-				'global' => false,
-			];
-			$generalSettings['allow_multiple_user_back_ends'] = [
-				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
-				'type' => 'checkbox',
-				'hideForEnv' => true,
-				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0')
-			];
-		}
 
 		$globalConfig = [];
 		foreach ($generalSettings as $key => $attribute) {
