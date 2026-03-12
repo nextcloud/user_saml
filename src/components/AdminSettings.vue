@@ -114,14 +114,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	</NcSettingsSection>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 import { translate as t } from '@nextcloud/l10n'
 import { confirmPassword } from '@nextcloud/password-confirmation'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import logger from '../logger.js'
+import logger from '../logger.ts'
 import IconDelete from 'vue-material-design-icons/Delete.vue'
 import IconPlus from 'vue-material-design-icons/Plus.vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -130,65 +130,52 @@ import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import ProviderSettingsDialog from './ProviderSettingsDialog.vue'
+import type {
+	GlobalConfig,
+	NameIdFormatsMap,
+	Provider,
+	SecurityGeneralMap,
+	SecurityMap,
+	SettingsMap,
+} from '../types.ts'
 
-const props = defineProps({
-	initialType: {
-		type: String,
-		default: '',
-	},
-	initialProviders: {
-		type: Array,
-		default: () => [],
-	},
-	generalSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	spSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	nameIdFormats: {
-		type: Object,
-		default: () => ({}),
-	},
-	attributeMappingSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityOffer: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityRequired: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityGeneral: {
-		type: Object,
-		default: () => ({}),
-	},
-	userFilterSettings: {
-		type: Object,
-		default: () => ({}),
-	},
+const props = withDefaults(defineProps<{
+	initialType: string
+	initialProviders: Provider[]
+	generalSettings: SettingsMap
+	spSettings: SettingsMap
+	nameIdFormats: NameIdFormatsMap
+	attributeMappingSettings: SettingsMap
+	securityOffer: SecurityMap
+	securityRequired: SecurityMap
+	securityGeneral: SecurityGeneralMap
+	userFilterSettings: SettingsMap
 	/** Global config values stored in oc_appconfig (not per-provider) */
-	initialGlobalConfig: {
-		type: Object,
-		default: () => ({}),
-	},
+	initialGlobalConfig: GlobalConfig
+}>(), {
+	initialType: '',
+	initialProviders: () => [],
+	generalSettings: () => ({}),
+	spSettings: () => ({}),
+	nameIdFormats: () => ({}),
+	attributeMappingSettings: () => ({}),
+	securityOffer: () => ({}),
+	securityRequired: () => ({}),
+	securityGeneral: () => ({}),
+	userFilterSettings: () => ({}),
+	initialGlobalConfig: () => ({}),
 })
 
-const type = ref(props.initialType)
-const providers = ref([...props.initialProviders])
-const currentProviderId = ref(props.initialProviders[0]?.id ?? null)
+const type = ref<string>(props.initialType)
+const providers = ref<Provider[]>([...props.initialProviders])
+const currentProviderId = ref<Provider['id'] | null>(props.initialProviders[0]?.id ?? null)
 
 /** Global config stored in oc_appconfig, shared across all providers */
-const globalConfig = ref({ ...props.initialGlobalConfig })
+const globalConfig = ref<GlobalConfig>({ ...props.initialGlobalConfig })
 
 /** Dialog state */
-const dialogOpen = ref(false)
-const dialogProvider = ref(null)
+const dialogOpen = ref<boolean>(false)
+const dialogProvider = ref<Provider | null>(null)
 
 const showAttributeMapping = computed(() =>
 	globalConfig.value.require_provisioned_account !== '1'
@@ -214,13 +201,13 @@ onMounted(() => {
 	}
 })
 
-function openProviderDialog(provider) {
+function openProviderDialog(provider: Provider): void {
 	currentProviderId.value = provider.id
 	dialogProvider.value = provider
 	dialogOpen.value = true
 }
 
-function onProviderNameChanged({ id, name }) {
+function onProviderNameChanged({ id, name }: { id: Provider['id'], name: string }): void {
 	const provider = providers.value.find(p => p.id === id)
 	if (provider) {
 		provider.name = name
@@ -231,7 +218,7 @@ function onProviderNameChanged({ id, name }) {
 	}
 }
 
-async function updateAppConfig(key, value) {
+async function updateAppConfig(key: string, value: string): Promise<void> {
 	await confirmPassword()
 
 	const url = generateOcsUrl('/apps/provisioning_api/api/v1/config/apps/{appId}/{key}', {
@@ -284,7 +271,7 @@ async function addProvider() {
 	}
 }
 
-async function removeProvider(providerId) {
+async function removeProvider(providerId: Provider['id']): Promise<void> {
 	if (providers.value.length <= 1) return
 	try {
 		await axios.delete(
@@ -303,7 +290,7 @@ async function removeProvider(providerId) {
 	}
 }
 
-async function onGlobalCheckboxChange(key, checked) {
+async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<void> {
 	const value = checked ? '1' : '0'
 	try {
 		await updateAppConfig(`general-${key}`, value)
@@ -314,7 +301,7 @@ async function onGlobalCheckboxChange(key, checked) {
 	}
 }
 
-async function onGlobalInputChange(key, value) {
+async function onGlobalInputChange(key: string, value: string): Promise<void> {
 	try {
 		await updateAppConfig(`general-${key}`, value.trim())
 		showSuccess(t('user_saml', 'Saved'))
