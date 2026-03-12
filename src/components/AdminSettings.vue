@@ -33,19 +33,21 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div v-if="type !== ''" class="global-settings">
 			<h3>{{ t('user_saml', 'Global settings') }}</h3>
 			<template v-for="(attribute, key) in generalSettings" :key="key">
-				<p v-if="attribute.type === 'checkbox' && attribute.global">
+				<div v-if="attribute.provider_type === '' || attribute.provider_type === type">
+				<div v-if="attribute.type === 'checkbox' && attribute.global">
 					<NcCheckboxRadioSwitch
 						:model-value="globalConfig[key] === '1'"
 						@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
 						{{ attribute.text }}
 					</NcCheckboxRadioSwitch>
-				</p>
-				<p v-else-if="attribute.type === 'line' && attribute.global !== undefined">
+				</div>
+				<div v-else-if="attribute.type === 'line' && attribute.global !== undefined">
 					<NcInputField :label="attribute.text"
 								  v-model="globalConfig[key]"
 								  :required="attribute.required"
 								  @update:modelValue="onGlobalInputChange(key, globalConfig[key])" />
-				</p>
+				</div>
+				</div>
 			</template>
 		</div>
 
@@ -81,11 +83,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</NcButton>
 		</div>
 
-		<!-- Environment-variable mode: open settings directly (no provider tabs) -->
-		<div v-if="type === 'environment-variable'" class="settings-actions">
-			<NcButton variant="secondary" @click="openProviderDialog(providers[0])">
-				{{ t('user_saml', 'Configure') }}
-			</NcButton>
+		<!-- Environment-variable mode: per-provider general settings inline -->
+		<div v-if="type === 'environment-variable' && providers.length > 0" class="env-var-settings">
+			<h3>{{ t('user_saml', 'Environment variable provider settings') }}</h3>
+			<ProviderGeneralSection
+				:general-settings="generalSettings"
+				v-model="envVarGeneralConfig"
+				@field-change="onEnvVarFieldChange" />
 		</div>
 
 		<!-- Actions row (reset) -->
@@ -95,8 +99,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</NcButton>
 		</div>
 
-		<!-- Per-provider settings dialog -->
-		<ProviderSettingsDialog v-if="dialogProvider !== null"
+		<!-- Per-provider settings dialog (SAML mode only) -->
+		<ProviderSettingsDialog v-if="type === 'saml' && dialogProvider !== null"
 								:open="dialogOpen"
 								:provider="dialogProvider"
 								:general-settings="generalSettings"
@@ -129,6 +133,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
+import ProviderGeneralSection from './ProviderGeneralSection.vue'
 import ProviderSettingsDialog from './ProviderSettingsDialog.vue'
 import type {
 	GlobalConfig,
@@ -173,9 +178,12 @@ const currentProviderId = ref<Provider['id'] | null>(props.initialProviders[0]?.
 /** Global config stored in oc_appconfig, shared across all providers */
 const globalConfig = ref<GlobalConfig>({ ...props.initialGlobalConfig })
 
-/** Dialog state */
+/** Dialog state (SAML mode only) */
 const dialogOpen = ref<boolean>(false)
 const dialogProvider = ref<Provider | null>(null)
+
+/** General config for the single env-var provider, loaded on mount */
+const envVarGeneralConfig = ref<Record<string, string>>({})
 
 const showAttributeMapping = computed(() =>
 	globalConfig.value.require_provisioned_account !== '1'
@@ -193,13 +201,54 @@ const adminWarningText = computed(() => {
 	)
 })
 
-onMounted(() => {
-	// In env-variable mode there is exactly one implicit provider — open its
-	// dialog automatically so the user lands directly in the settings.
-	if (type.value === 'environment-variable' && providers.value.length > 0) {
-		openProviderDialog(providers.value[0])
+onMounted(async () => {
+	if (type.value === 'environment-variable') {
+		await ensureEnvVarProvider()
+		await loadEnvVarConfig()
 	}
 })
+
+async function ensureEnvVarProvider(): Promise<void> {
+	if (providers.value.length > 0) return
+	try {
+		const { data } = await axios.post(
+			generateUrl('/apps/user_saml/settings/providerSettings')
+		)
+		providers.value.push({ id: data.id, name: t('user_saml', 'Provider {id}', { id: data.id }) })
+	} catch (error) {
+		logger.error('Could not create implicit provider for environment-variable mode', { error })
+		showError(t('user_saml', 'Could not create provider configuration'))
+	}
+}
+
+async function loadEnvVarConfig(): Promise<void> {
+	const provider = providers.value[0]
+	if (!provider) return
+	try {
+		const { data } = await axios.get(
+			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`)
+		)
+		envVarGeneralConfig.value = data.general ?? {}
+	} catch (error) {
+		logger.error('Could not load provider settings', { error })
+		showError(t('user_saml', 'Could not load provider settings'))
+	}
+}
+
+async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
+	const provider = providers.value[0]
+	if (!provider) return
+	try {
+		await axios.put(
+			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`),
+			{ configKey: `general-${key}`, configValue: value.trim() },
+		)
+		showSuccess(t('user_saml', 'Saved'))
+	} catch (error) {
+		logger.error('Could not save provider setting', { error })
+		showError(t('user_saml', 'Could not save configuration'))
+	}
+}
 
 function openProviderDialog(provider: Provider): void {
 	currentProviderId.value = provider.id
@@ -247,9 +296,11 @@ async function chooseSaml() {
 	type.value = 'saml'
 }
 
-async function chooseEnv() {
+async function chooseEnv(): Promise<void> {
 	await updateAppConfig('type', 'environment-variable')
 	type.value = 'environment-variable'
+	await ensureEnvVarProvider()
+	await loadEnvVarConfig()
 }
 
 async function resetSettings() {
@@ -321,7 +372,8 @@ async function onGlobalInputChange(key: string, value: string): Promise<void> {
 }
 
 .global-settings,
-.provider-list {
+.provider-list,
+.env-var-settings {
 	margin-block-start: calc(var(--default-grid-baseline, 4px) * 4);
 }
 
@@ -342,7 +394,6 @@ async function onGlobalInputChange(key: string, value: string): Promise<void> {
 }
 
 .provider-list__item-btn {
-	/* Stretch the provider name button to fill available width */
 	flex: 1;
 	justify-content: flex-start;
 }
