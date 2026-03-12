@@ -9,7 +9,7 @@ declare const __dirname: string
 const isProduction = process.env.NODE_ENV === 'production'
 
 export default createAppConfig({
-	admin: join(__dirname, 'src', 'admin.js'),
+	admin: join(__dirname, 'src', 'admin.ts'),
 }, {
 	minify: isProduction,
 	thirdPartyLicense: false,

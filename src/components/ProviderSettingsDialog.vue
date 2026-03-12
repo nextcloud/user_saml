@@ -189,13 +189,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 	</NcDialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { translate as t } from '@nextcloud/l10n'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import logger from '../logger.js'
+import logger from '../logger.ts'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
@@ -204,62 +204,48 @@ import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import NcTextArea from '@nextcloud/vue/components/NcTextArea'
+import type {
+	DraftIdp,
+	NameIdFormatsMap,
+	Provider,
+	ProviderConfig,
+	SecurityGeneralMap,
+	SecurityMap,
+	SettingsMap,
+} from '../types.ts'
 
-const props = defineProps({
-	open: {
-		type: Boolean,
-		required: true,
-	},
-	provider: {
-		type: Object,
-		required: true,
-	},
-	generalSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	spSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	nameIdFormats: {
-		type: Object,
-		default: () => ({}),
-	},
-	attributeMappingSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityOffer: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityRequired: {
-		type: Object,
-		default: () => ({}),
-	},
-	securityGeneral: {
-		type: Object,
-		default: () => ({}),
-	},
-	userFilterSettings: {
-		type: Object,
-		default: () => ({}),
-	},
-	showAttributeMapping: {
-		type: Boolean,
-		default: true,
-	},
+const props = withDefaults(defineProps<{
+	open: boolean
+	provider: Provider
+	generalSettings: SettingsMap
+	spSettings: SettingsMap
+	nameIdFormats: NameIdFormatsMap
+	attributeMappingSettings: SettingsMap
+	securityOffer: SecurityMap
+	securityRequired: SecurityMap
+	securityGeneral: SecurityGeneralMap
+	userFilterSettings: SettingsMap
+	showAttributeMapping: boolean
+}>(), {
+	generalSettings: () => ({}),
+	spSettings: () => ({}),
+	nameIdFormats: () => ({}),
+	attributeMappingSettings: () => ({}),
+	securityOffer: () => ({}),
+	securityRequired: () => ({}),
+	securityGeneral: () => ({}),
+	userFilterSettings: () => ({}),
+	showAttributeMapping: true,
 })
 
 const emit = defineEmits(['update:open', 'provider-name-changed', 'close'])
 
-const providerConfig = ref({})
-const metadataValid = ref(null) // null | true | false
-const isSaving = ref(false)
+const providerConfig = ref<ProviderConfig>({})
+const metadataValid = ref<boolean | null>(null) // null | true | false
+const isSaving = ref<boolean>(false)
 
 /** Flat object for IDP fields (dotted API keys mapped to friendly names) */
-const draftIdp = ref({
+const draftIdp = ref<DraftIdp>({
 	entityId: '',
 	ssoUrl: '',
 	sloUrl: '',
@@ -269,10 +255,10 @@ const draftIdp = ref({
 })
 
 /** Deep clone of providerConfig (all non-IDP categories), mutated by setDraft() */
-const draft = ref({})
+const draft = ref<ProviderConfig>({})
 
 // Map draftIdp property names to the API keys used in providerConfig.idp
-const IDP_FIELD_MAP = {
+const IDP_FIELD_MAP: Readonly<Record<keyof DraftIdp, string>> = {
 	entityId: 'entityId',
 	ssoUrl: 'singleSignOnService.url',
 	sloUrl: 'singleLogoutService.url',
@@ -281,11 +267,11 @@ const IDP_FIELD_MAP = {
 	passthroughParameters: 'passthroughParameters',
 }
 
-const isDirty = computed(() => {
+const isDirty = computed<boolean>(() => {
 	if (JSON.stringify(draft.value) !== JSON.stringify(providerConfig.value)) return true
 	const idpCfg = providerConfig.value?.idp ?? {}
 	return Object.entries(IDP_FIELD_MAP).some(
-		([draftKey, apiKey]) => (draftIdp.value[draftKey] ?? '') !== (idpCfg[apiKey] ?? '')
+		([draftKey, apiKey]) => (draftIdp.value[draftKey as keyof DraftIdp] ?? '') !== (idpCfg[apiKey] ?? '')
 	)
 })
 
@@ -293,7 +279,12 @@ const metadataUrl = computed(() =>
 	generateUrl('/apps/user_saml/saml/metadata') + '?idp=' + props.provider.id
 )
 
-const nameIdFormatOptions = computed(() =>
+interface NameIdFormatOption {
+	id: string
+	label: string
+}
+
+const nameIdFormatOptions = computed<NameIdFormatOption[]>(() =>
 	Object.entries(props.nameIdFormats).map(([id, format]) => ({ id, label: format.label }))
 )
 
@@ -301,13 +292,13 @@ const nameIdFormatOptions = computed(() =>
  * v-model for NcSelect — reads from draft, writes to draft immediately.
  * (Format changes are low-risk and have no dependent fields.)
  */
-const nameIdFormatModel = computed({
+const nameIdFormatModel = computed<NameIdFormatOption | null>({
 	get() {
 		const currentId = draft.value?.sp?.['name-id-format']
 			?? Object.keys(props.nameIdFormats).find(k => props.nameIdFormats[k].selected)
 		return nameIdFormatOptions.value.find(opt => opt.id === currentId) ?? null
 	},
-	set(opt) {
+	set(opt: NameIdFormatOption | null) {
 		if (opt) setDraft('sp', 'name-id-format', opt.id)
 	},
 })
@@ -333,27 +324,27 @@ async function loadProviderConfig() {
 }
 
 /** Populate draft and draftIdp from the last loaded providerConfig. */
-function syncDraftFromConfig() {
+function syncDraftFromConfig(): void {
 	draft.value = JSON.parse(JSON.stringify(providerConfig.value))
 	const idpCfg = providerConfig.value?.idp ?? {}
 	draftIdp.value = Object.fromEntries(
 		Object.entries(IDP_FIELD_MAP).map(([draftKey, apiKey]) => [draftKey, idpCfg[apiKey] ?? ''])
-	)
+	) as DraftIdp
 }
 
 /** Update one field in the local draft without touching the server. */
-function setDraft(category, key, value) {
+function setDraft(category: keyof ProviderConfig, key: string, value: string): void {
 	if (!draft.value[category]) {
-		draft.value[category] = {}
+		(draft.value as Record<string, Record<string, string>>)[category] = {}
 	}
-	draft.value[category][key] = value
+	;(draft.value as Record<string, Record<string, string>>)[category][key] = value
 }
 
 /**
  * Send all changed fields to the server in parallel, then commit the draft as
  * the new baseline so isDirty resets to false.
  */
-async function saveAll() {
+async function saveAll(): Promise<void> {
 	console.log('saveAll')
 	isSaving.value = true
 	try {
@@ -423,7 +414,7 @@ async function saveAll() {
 }
 
 /** Discard all unsaved edits by re-syncing draft from the last saved config. */
-function cancelChanges() {
+function cancelChanges(): void {
 	syncDraftFromConfig()
 	emit('close')
 }
@@ -432,12 +423,12 @@ function cancelChanges() {
  * When the dialog close button is clicked, discard unsaved changes before
  * propagating the close event so the parent unmounts cleanly.
  */
-function onDialogClose(val) {
+function onDialogClose(val: boolean): void {
 	if (!val) cancelChanges()
 	emit('update:open', val)
 }
 
-async function testMetaData() {
+async function testMetaData(): Promise<void> {
 	try {
 		await axios.get(generateUrl(`/apps/user_saml/saml/metadata?idp=${props.provider.id}`))
 		metadataValid.value = true
