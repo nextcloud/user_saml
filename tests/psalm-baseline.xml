@@ -3,7 +3,7 @@
  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
   <file src="lib/Controller/SAMLController.php">
     <RedundantCondition>
       <code><![CDATA[!$userExists]]></code>
@@ -43,9 +43,12 @@
       <code><![CDATA[$offset]]></code>
       <code><![CDATA[$offset]]></code>
     </InvalidArgument>
+    <MissingDependency>
+      <code><![CDATA[IRootFolder]]></code>
+    </MissingDependency>
     <UndefinedClass>
       <code><![CDATA[\OC]]></code>
-      <code><![CDATA[\OC]]></code>
+      <code><![CDATA[\OC_Util]]></code>
     </UndefinedClass>
     <UndefinedInterfaceMethod>
       <code><![CDATA[setDisplayName]]></code>

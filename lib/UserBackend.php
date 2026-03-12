@@ -11,6 +11,7 @@ use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Model\SessionData;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -118,7 +119,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	public function initializeHomeDir(string $uid): void {
 		### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
 		//trigger creation of user home and /files folder
-		$userFolder = \OC::$server->getUserFolder($uid);
+		$userFolder = Server::get(IRootFolder::class)->getUserFolder($uid);
 		try {
 			// copy skeleton
 			\OC_Util::copySkeleton($uid, $userFolder);

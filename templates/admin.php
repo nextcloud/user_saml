@@ -7,6 +7,8 @@ script('user_saml', 'admin');
 style('user_saml', 'admin');
 
 /** @var array $_ */
+$urlGenerator = \OCP\Server::get(\OCP\IURLGenerator::class);
+
 ?>
 <form id="user-saml" class="section" action="#" method="post" data-type="<?php p($_['type']) ?>">
 	<h2 class="inlineblock"><?php p($l->t('SSO & SAML authentication')); ?></h2>
@@ -20,7 +22,7 @@ style('user_saml', 'admin');
 
 	<div class="warning hidden" id="user-saml-warning-admin-user">
 		<?php
-		$url = \OC::$server->getURLGenerator()->linkToRouteAbsolute('core.login.showLoginForm') . '?direct=1';
+		$url = $urlGenerator->linkToRouteAbsolute('core.login.showLoginForm') . '?direct=1';
 $url = '<a href="' . $url . '">' . \OCP\Util::sanitizeHTML($url) . '</a>';
 if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 	print_unescaped(
@@ -245,8 +247,8 @@ if (isset($_['general']['allow_multiple_user_back_ends']['text'])) {
 			</div>
 		</div>
 
-		<a id="get-metadata" data-base="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata')); ?>"
-		   href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
+		<a id="get-metadata" data-base="<?php p($urlGenerator->linkToRoute('user_saml.SAML.getMetadata')); ?>"
+		   href="<?php p($urlGenerator->linkToRoute('user_saml.SAML.getMetadata', ['idp' => $_['providers'][0]['id']])) ?>" class="button">
 			<?php p($l->t('Download metadata XML')) ?>
 		</a>
 
