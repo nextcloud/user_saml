@@ -150,7 +150,7 @@ import ProviderGeneralSection from './ProviderGeneralSection.vue'
 import ProviderSettingsDialog from './ProviderSettingsDialog.vue'
 import logger from '../logger.ts'
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
 	initialType: string
 	initialProviders: Provider[]
 	generalSettings: SettingsMap
@@ -163,19 +163,7 @@ const props = withDefaults(defineProps<{
 	userFilterSettings: SettingsMap
 	/** Global config values stored in oc_appconfig (not per-provider) */
 	initialGlobalConfig: GlobalConfig
-}>(), {
-	initialType: '',
-	initialProviders: () => [],
-	generalSettings: () => ({}),
-	spSettings: () => ({}),
-	nameIdFormats: () => ({}),
-	attributeMappingSettings: () => ({}),
-	securityOffer: () => ({}),
-	securityRequired: () => ({}),
-	securityGeneral: () => ({}),
-	userFilterSettings: () => ({}),
-	initialGlobalConfig: () => ({}),
-})
+}>()
 
 const type = ref<string>(props.initialType)
 const providers = ref<Provider[]>([...props.initialProviders])
@@ -216,7 +204,9 @@ onMounted(async () => {
  *
  */
 async function ensureEnvVarProvider(): Promise<void> {
-	if (providers.value.length > 0) { return }
+	if (providers.value.length > 0) {
+		return
+	}
 	try {
 		const { data } = await axios.post(generateUrl('/apps/user_saml/settings/providerSettings'))
 		providers.value.push({ id: data.id, name: t('user_saml', 'Provider {id}', { id: data.id }) })
@@ -231,7 +221,9 @@ async function ensureEnvVarProvider(): Promise<void> {
  */
 async function loadEnvVarConfig(): Promise<void> {
 	const provider = providers.value[0]
-	if (!provider) { return }
+	if (!provider) {
+		return
+	}
 	try {
 		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`))
 		envVarGeneralConfig.value = data.general ?? {}
@@ -243,12 +235,14 @@ async function loadEnvVarConfig(): Promise<void> {
 
 /**
  *
- * @param key
- * @param value
+ * @param key The key that changed
+ * @param value The new value
  */
 async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 	const provider = providers.value[0]
-	if (!provider) { return }
+	if (!provider) {
+		return
+	}
 	try {
 		await axios.put(
 			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`),
@@ -263,7 +257,7 @@ async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 
 /**
  *
- * @param provider
+ * @param provider The provider
  */
 function openProviderDialog(provider: Provider): void {
 	currentProviderId.value = provider.id
@@ -273,9 +267,9 @@ function openProviderDialog(provider: Provider): void {
 
 /**
  *
- * @param root0
- * @param root0.id
- * @param root0.name
+ * @param provider The provide
+ * @param provider.id The provider id
+ * @param provider.name The new provider name
  */
 function onProviderNameChanged({ id, name }: { id: Provider['id'], name: string }): void {
 	const provider = providers.value.find((p) => p.id === id)
@@ -290,8 +284,8 @@ function onProviderNameChanged({ id, name }: { id: Provider['id'], name: string 
 
 /**
  *
- * @param key
- * @param value
+ * @param key The key that changed
+ * @param value The new value
  */
 async function updateAppConfig(key: string, value: string): Promise<void> {
 	await confirmPassword()
@@ -360,10 +354,12 @@ async function addProvider() {
 
 /**
  *
- * @param providerId
+ * @param providerId The provider id
  */
 async function removeProvider(providerId: Provider['id']): Promise<void> {
-	if (providers.value.length <= 1) { return }
+	if (providers.value.length <= 1) {
+		return
+	}
 	try {
 		await axios.delete(generateUrl(`/apps/user_saml/settings/providerSettings/${providerId}`))
 		providers.value = providers.value.filter((p) => p.id !== providerId)
@@ -381,8 +377,8 @@ async function removeProvider(providerId: Provider['id']): Promise<void> {
 
 /**
  *
- * @param key
- * @param checked
+ * @param key The key of the checkbox
+ * @param checked Whether the key is checked or not
  */
 async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<void> {
 	const value = checked ? '1' : '0'
@@ -397,8 +393,8 @@ async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<vo
 
 /**
  *
- * @param key
- * @param value
+ * @param key The key of the input field
+ * @param value The new value of the input field
  */
 async function onGlobalInputChange(key: string, value: string): Promise<void> {
 	try {
