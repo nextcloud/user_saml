@@ -128,22 +128,22 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				:level="3"
 				:description="t('user_saml', 'For increased security we recommend enabling the following settings if supported by your environment.')">
 				<h4>{{ t('user_saml', 'Signatures and encryption offered') }}</h4>
-				<p v-for="(text, key) in securityOffer" :key="key">
-					<NcCheckboxRadioSwitch
-						:modelValue="draft.security?.[key] === '1'"
-						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-						{{ text }}
-					</NcCheckboxRadioSwitch>
-				</p>
+				<NcCheckboxRadioSwitch
+					v-for="(text, key) in securityOffer"
+					:key="key"
+					:modelValue="draft.security?.[key] === '1'"
+					@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+					{{ text }}
+				</NcCheckboxRadioSwitch>
 
 				<h4>{{ t('user_saml', 'Signatures and encryption required') }}</h4>
-				<p v-for="(text, key) in securityRequired" :key="key">
-					<NcCheckboxRadioSwitch
-						:modelValue="draft.security?.[key] === '1'"
-						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-						{{ text }}
-					</NcCheckboxRadioSwitch>
-				</p>
+				<NcCheckboxRadioSwitch
+					v-for="(text, key) in securityRequired"
+					:key="key"
+					:modelValue="draft.security?.[key] === '1'"
+					@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+					{{ text }}
+				</NcCheckboxRadioSwitch>
 
 				<h4>{{ t('user_saml', 'General') }}</h4>
 				<template v-for="(attribute, key) in securityGeneral" :key="key">
@@ -155,13 +155,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:required="attribute.required"
 						placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
 						@update:modelValue="(val) => setDraft('security', key, val)" />
-					<p v-else>
-						<NcCheckboxRadioSwitch
-							:modelValue="draft.security?.[key] === '1'"
-							@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-							{{ attribute }}
-						</NcCheckboxRadioSwitch>
-					</p>
+					<NcCheckboxRadioSwitch v-else
+						:modelValue="draft.security?.[key] === '1'"
+						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+						{{ attribute }}
+					</NcCheckboxRadioSwitch>
 				</template>
 			</NcSettingsSection>
 
@@ -182,14 +180,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						@update:modelValue="(val) => setDraft('user-filter', key, val)" />
 				</template>
 			</NcSettingsSection>
-		</div>
 
-		<NcNoteCard v-if="metadataValid === true" type="success" class="dialog-status">
-			{{ t('user_saml', 'Metadata valid') }}
-		</NcNoteCard>
-		<NcNoteCard v-else-if="metadataValid === false" type="error" class="dialog-status">
-			{{ t('user_saml', 'Metadata invalid') }}
-		</NcNoteCard>
+			<NcNoteCard v-if="metadataValid === true" type="success" class="dialog-status">
+				{{ t('user_saml', 'Metadata valid') }}
+			</NcNoteCard>
+
+			<NcNoteCard v-else-if="metadataValid === false" type="error" class="dialog-status">
+				{{ t('user_saml', 'Metadata invalid') }}
+			</NcNoteCard>
+		</div>
 	</NcDialog>
 </template>
 
@@ -311,7 +310,7 @@ watch(() => [props.open, props.provider.id], async ([isOpen]) => {
 /**
  *
  */
-async function loadProviderConfig() {
+async function loadProviderConfig(): Promise<void> {
 	try {
 		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`))
 		providerConfig.value = data
@@ -452,7 +451,6 @@ async function testMetaData(): Promise<void> {
 .provider-settings {
 	display: flex;
 	flex-direction: column;
-	gap: calc(var(--default-grid-baseline, 4px) * 4);
 	padding-block-end: calc(var(--default-grid-baseline, 4px) * 2);
 }
 
