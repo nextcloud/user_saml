@@ -10,3 +10,4 @@ vendor/
 .ackrc
 css
 js
+node_modules
