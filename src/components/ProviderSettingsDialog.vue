@@ -9,7 +9,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		:closeOnClickOutside="false"
 		isForm
 		size="large"
-		@update:open="onDialogClose"
+		@update:open="onOpenChanged"
 		@submit="saveAll">
 		<template #actions>
 			<NcButton
@@ -220,7 +220,7 @@ import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import ProviderGeneralSection from './ProviderGeneralSection.vue'
 import logger from '../logger.ts'
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
 	open: boolean
 	provider: Provider
 	generalSettings: SettingsMap
@@ -232,21 +232,11 @@ const props = withDefaults(defineProps<{
 	securityGeneral: SecurityGeneralMap
 	userFilterSettings: SettingsMap
 	showAttributeMapping: boolean
-}>(), {
-	generalSettings: () => ({}),
-	spSettings: () => ({}),
-	nameIdFormats: () => ({}),
-	attributeMappingSettings: () => ({}),
-	securityOffer: () => ({}),
-	securityRequired: () => ({}),
-	securityGeneral: () => ({}),
-	userFilterSettings: () => ({}),
-	showAttributeMapping: true,
-})
+}>()
 
 const emit = defineEmits<{
 	'update:open': [value: boolean]
-	'provider-name-changed': [payload: { id: Provider['id'], name: string }]
+	providerNameChanged: [payload: { id: Provider['id'], name: string }]
 	close: []
 }>()
 
@@ -278,7 +268,9 @@ const IDP_FIELD_MAP: Readonly<Record<keyof DraftIdp, string>> = {
 }
 
 const isDirty = computed<boolean>(() => {
-	if (JSON.stringify(draft.value) !== JSON.stringify(providerConfig.value)) { return true }
+	if (JSON.stringify(draft.value) !== JSON.stringify(providerConfig.value)) {
+		return true
+	}
 	const idpCfg = providerConfig.value?.idp ?? {}
 	return Object.entries(IDP_FIELD_MAP).some(([draftKey, apiKey]) => (draftIdp.value[draftKey as keyof DraftIdp] ?? '') !== (idpCfg[apiKey] ?? ''))
 })
@@ -290,7 +282,8 @@ interface NameIdFormatOption {
 	label: string
 }
 
-const nameIdFormatOptions = computed<NameIdFormatOption[]>(() => Object.entries(props.nameIdFormats).map(([id, format]) => ({ id, label: format.label })))
+const nameIdFormatOptions = computed<NameIdFormatOption[]>(() => Object.entries(props.nameIdFormats)
+	.map(([id, format]) => ({ id, label: format.label })))
 
 /**
  * v-model for NcSelect — reads from draft, writes to draft immediately.
@@ -303,7 +296,9 @@ const nameIdFormatModel = computed<NameIdFormatOption | null>({
 		return nameIdFormatOptions.value.find((opt) => opt.id === currentId) ?? null
 	},
 	set(opt: NameIdFormatOption | null) {
-		if (opt) { setDraft('sp', 'name-id-format', opt.id) }
+		if (opt) {
+			setDraft('sp', 'name-id-format', opt.id)
+		}
 	},
 })
 
@@ -338,9 +333,9 @@ function syncDraftFromConfig(): void {
 /**
  * Update one field in the local draft without touching the server.
  *
- * @param category
- * @param key
- * @param value
+ * @param category The category that changed
+ * @param key The key that chaned
+ * @param value The new value
  */
 function setDraft(category: keyof ProviderConfig, key: string, value: string): void {
 	if (!draft.value[category]) {
@@ -354,14 +349,15 @@ function setDraft(category: keyof ProviderConfig, key: string, value: string): v
  * the new baseline so isDirty resets to false.
  */
 async function saveAll(): Promise<void> {
-	console.log('saveAll')
 	isSaving.value = true
 	try {
 		const puts = []
 
 		// All non-IDP categories
 		for (const [category, settings] of Object.entries(draft.value)) {
-			if (category === 'idp') { continue }
+			if (category === 'idp') {
+				continue
+			}
 			const savedSettings = providerConfig.value[category] ?? {}
 			for (const [key, value] of Object.entries(settings ?? {})) {
 				if ((value ?? '') !== (savedSettings[key] ?? '')) {
@@ -393,7 +389,9 @@ async function saveAll(): Promise<void> {
 
 		// Commit draft → providerConfig
 		providerConfig.value = JSON.parse(JSON.stringify(draft.value))
-		if (!providerConfig.value.idp) { providerConfig.value.idp = {} }
+		if (!providerConfig.value.idp) {
+			providerConfig.value.idp = {}
+		}
 		for (const [draftKey, apiKey] of Object.entries(IDP_FIELD_MAP)) {
 			providerConfig.value.idp[apiKey] = draftIdp.value[draftKey] ?? ''
 		}
@@ -401,7 +399,7 @@ async function saveAll(): Promise<void> {
 		// Notify parent if the provider display name changed
 		const newName = draft.value?.general?.idp0_display_name
 		if (newName !== undefined) {
-			emit('provider-name-changed', {
+			emit('providerNameChanged', {
 				id: props.provider.id,
 				name: newName || t('user_saml', 'Provider {id}', { id: props.provider.id }),
 			})
@@ -428,11 +426,13 @@ function cancelChanges(): void {
  * When the dialog close button is clicked, discard unsaved changes before
  * propagating the close event so the parent unmounts cleanly.
  *
- * @param val
+ * @param open Whether the dialog is open.
  */
-function onDialogClose(val: boolean): void {
-	if (!val) { cancelChanges() }
-	emit('update:open', val)
+function onOpenChanged(open: boolean): void {
+	if (!open) {
+		cancelChanges()
+	}
+	emit('update:open', open)
 }
 
 /**
