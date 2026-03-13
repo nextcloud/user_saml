@@ -201,7 +201,7 @@ onMounted(async () => {
 })
 
 /**
- *
+ * Ensure environment variable configuration are created.
  */
 async function ensureEnvVarProvider(): Promise<void> {
 	if (providers.value.length > 0) {
@@ -217,7 +217,7 @@ async function ensureEnvVarProvider(): Promise<void> {
 }
 
 /**
- *
+ * Load environment variable configuration.
  */
 async function loadEnvVarConfig(): Promise<void> {
 	const provider = providers.value[0]
@@ -383,8 +383,8 @@ async function removeProvider(providerId: Provider['id']): Promise<void> {
 async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<void> {
 	const value = checked ? '1' : '0'
 	try {
-		await updateAppConfig(`general-${key}`, value)
 		globalConfig.value[key] = value
+		await updateAppConfig(`general-${key}`, value)
 		showSuccess(t('user_saml', 'Saved'))
 	} catch {
 		// updateAppConfig already called showError
