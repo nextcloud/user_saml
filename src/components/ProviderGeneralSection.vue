@@ -39,16 +39,16 @@ const props = defineProps<{
 
 const emit = defineEmits<{
 	'update:modelValue': [value: Record<string, string>]
-	'field-change': [key: string, value: string]
+	fieldChange: [key: string, value: string]
 }>()
 
 /**
  *
- * @param key
- * @param value
+ * @param key The key that changed
+ * @param value The new value
  */
 function onChange(key: string, value: string): void {
 	emit('update:modelValue', { ...props.modelValue, [key]: value })
-	emit('field-change', key, value)
+	emit('fieldChange', key, value)
 }
 </script>
