@@ -3,11 +3,11 @@ SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcSettingsSection :name="t('user_saml', 'SSO & SAML authentication')"
-					   :description="t('user_saml', 'Single sign-on and SAML authentication settings')"
-					   :data-type="type"
-					   doc-url="https://portal.nextcloud.com/article/configuring-single-sign-on-10.html">
-
+	<NcSettingsSection
+		:name="t('user_saml', 'SSO & SAML authentication')"
+		:description="t('user_saml', 'Single sign-on and SAML authentication settings')"
+		:data-type="type"
+		docUrl="https://portal.nextcloud.com/article/configuring-single-sign-on-10.html">
 		<!-- Warning: admin user -->
 		<NcNoteCard v-if="type !== ''" type="warning">
 			<!-- eslint-disable-next-line vue/no-v-html -->
@@ -20,10 +20,10 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{{ t('user_saml', 'Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable.') }}
 			</p>
 			<div class="choose-type__buttons">
-				<NcButton type="primary" @click="chooseSaml">
+				<NcButton variant="primary" @click="chooseSaml">
 					{{ t('user_saml', 'Use built-in SAML authentication') }}
 				</NcButton>
-				<NcButton type="secondary" @click="chooseEnv">
+				<NcButton variant="secondary" @click="chooseEnv">
 					{{ t('user_saml', 'Use environment variable') }}
 				</NcButton>
 			</div>
@@ -34,19 +34,20 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<h3>{{ t('user_saml', 'Global settings') }}</h3>
 			<template v-for="(attribute, key) in generalSettings" :key="key">
 				<div v-if="attribute.provider_type === '' || attribute.provider_type === type">
-				<div v-if="attribute.type === 'checkbox' && attribute.global">
-					<NcCheckboxRadioSwitch
-						:model-value="globalConfig[key] === '1'"
-						@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
-						{{ attribute.text }}
-					</NcCheckboxRadioSwitch>
-				</div>
-				<div v-else-if="attribute.type === 'line' && attribute.global !== undefined">
-					<NcInputField :label="attribute.text"
-								  v-model="globalConfig[key]"
-								  :required="attribute.required"
-								  @update:modelValue="onGlobalInputChange(key, globalConfig[key])" />
-				</div>
+					<div v-if="attribute.type === 'checkbox' && attribute.global">
+						<NcCheckboxRadioSwitch
+							:modelValue="globalConfig[key] === '1'"
+							@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
+							{{ attribute.text }}
+						</NcCheckboxRadioSwitch>
+					</div>
+					<div v-else-if="attribute.type === 'line' && attribute.global !== undefined">
+						<NcInputField
+							v-model="globalConfig[key]"
+							:label="attribute.text"
+							:required="attribute.required"
+							@update:modelValue="onGlobalInputChange(key, globalConfig[key])" />
+					</div>
 				</div>
 			</template>
 		</div>
@@ -55,20 +56,23 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div v-if="type === 'saml'" class="provider-list">
 			<h3>{{ t('user_saml', 'Identity providers') }}</h3>
 			<ul class="provider-list__items">
-				<li v-for="provider in providers"
+				<li
+					v-for="provider in providers"
 					:key="provider.id"
 					class="provider-list__item">
 					<!-- Provider name / configure button -->
-					<NcButton class="provider-list__item-btn"
-							  :type="currentProviderId === provider.id ? 'primary' : 'secondary'"
-							  @click="openProviderDialog(provider)">
+					<NcButton
+						class="provider-list__item-btn"
+						:variant="currentProviderId === provider.id ? 'primary' : 'secondary'"
+						@click="openProviderDialog(provider)">
 						{{ provider.name }}
 					</NcButton>
 					<!-- Per-provider delete button -->
-					<NcButton v-if="providers.length > 1"
-							  variant="error"
-							  :aria-label="t('user_saml', 'Remove {name}', { name: provider.name })"
-							  @click="removeProvider(provider.id)">
+					<NcButton
+						v-if="providers.length > 1"
+						variant="error"
+						:aria-label="t('user_saml', 'Remove {name}', { name: provider.name })"
+						@click="removeProvider(provider.id)">
 						<template #icon>
 							<IconDelete :size="20" />
 						</template>
@@ -87,9 +91,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<div v-if="type === 'environment-variable' && providers.length > 0" class="env-var-settings">
 			<h3>{{ t('user_saml', 'Environment variable provider settings') }}</h3>
 			<ProviderGeneralSection
-				:general-settings="generalSettings"
 				v-model="envVarGeneralConfig"
-				@field-change="onEnvVarFieldChange" />
+				:generalSettings="generalSettings"
+				@fieldChange="onEnvVarFieldChange" />
 		</div>
 
 		<!-- Actions row (reset) -->
@@ -100,41 +104,26 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		</div>
 
 		<!-- Per-provider settings dialog (SAML mode only) -->
-		<ProviderSettingsDialog v-if="type === 'saml' && dialogProvider !== null"
-								:open="dialogOpen"
-								:provider="dialogProvider"
-								:general-settings="generalSettings"
-								:sp-settings="spSettings"
-								:name-id-formats="nameIdFormats"
-								:attribute-mapping-settings="attributeMappingSettings"
-								:security-offer="securityOffer"
-								:security-required="securityRequired"
-								:security-general="securityGeneral"
-								:user-filter-settings="userFilterSettings"
-								:show-attribute-mapping="showAttributeMapping"
-								@update:open="dialogOpen = $event"
-								@provider-name-changed="onProviderNameChanged"
-								@close="dialogOpen = false"/>
+		<ProviderSettingsDialog
+			v-if="type === 'saml' && dialogProvider !== null"
+			:open="dialogOpen"
+			:provider="dialogProvider"
+			:generalSettings="generalSettings"
+			:spSettings="spSettings"
+			:nameIdFormats="nameIdFormats"
+			:attributeMappingSettings="attributeMappingSettings"
+			:securityOffer="securityOffer"
+			:securityRequired="securityRequired"
+			:securityGeneral="securityGeneral"
+			:userFilterSettings="userFilterSettings"
+			:showAttributeMapping="showAttributeMapping"
+			@update:open="dialogOpen = $event"
+			@providerNameChanged="onProviderNameChanged"
+			@close="dialogOpen = false" />
 	</NcSettingsSection>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import axios from '@nextcloud/axios'
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-import { translate as t } from '@nextcloud/l10n'
-import { confirmPassword } from '@nextcloud/password-confirmation'
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import logger from '../logger.ts'
-import IconDelete from 'vue-material-design-icons/Delete.vue'
-import IconPlus from 'vue-material-design-icons/Plus.vue'
-import NcButton from '@nextcloud/vue/components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import NcInputField from '@nextcloud/vue/components/NcInputField'
-import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
-import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
-import ProviderGeneralSection from './ProviderGeneralSection.vue'
-import ProviderSettingsDialog from './ProviderSettingsDialog.vue'
 import type {
 	GlobalConfig,
 	NameIdFormatsMap,
@@ -143,6 +132,23 @@ import type {
 	SecurityMap,
 	SettingsMap,
 } from '../types.ts'
+
+import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { translate as t } from '@nextcloud/l10n'
+import { confirmPassword } from '@nextcloud/password-confirmation'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+import { computed, onMounted, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcInputField from '@nextcloud/vue/components/NcInputField'
+import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
+import IconDelete from 'vue-material-design-icons/Delete.vue'
+import IconPlus from 'vue-material-design-icons/Plus.vue'
+import ProviderGeneralSection from './ProviderGeneralSection.vue'
+import ProviderSettingsDialog from './ProviderSettingsDialog.vue'
+import logger from '../logger.ts'
 
 const props = withDefaults(defineProps<{
 	initialType: string
@@ -185,9 +191,7 @@ const dialogProvider = ref<Provider | null>(null)
 /** General config for the single env-var provider, loaded on mount */
 const envVarGeneralConfig = ref<Record<string, string>>({})
 
-const showAttributeMapping = computed(() =>
-	globalConfig.value.require_provisioned_account !== '1'
-)
+const showAttributeMapping = computed(() => globalConfig.value.require_provisioned_account !== '1')
 
 const adminWarningText = computed(() => {
 	const loginUrl = generateUrl('/login') + '?direct=1'
@@ -208,12 +212,13 @@ onMounted(async () => {
 	}
 })
 
+/**
+ *
+ */
 async function ensureEnvVarProvider(): Promise<void> {
-	if (providers.value.length > 0) return
+	if (providers.value.length > 0) { return }
 	try {
-		const { data } = await axios.post(
-			generateUrl('/apps/user_saml/settings/providerSettings')
-		)
+		const { data } = await axios.post(generateUrl('/apps/user_saml/settings/providerSettings'))
 		providers.value.push({ id: data.id, name: t('user_saml', 'Provider {id}', { id: data.id }) })
 	} catch (error) {
 		logger.error('Could not create implicit provider for environment-variable mode', { error })
@@ -221,13 +226,14 @@ async function ensureEnvVarProvider(): Promise<void> {
 	}
 }
 
+/**
+ *
+ */
 async function loadEnvVarConfig(): Promise<void> {
 	const provider = providers.value[0]
-	if (!provider) return
+	if (!provider) { return }
 	try {
-		const { data } = await axios.get(
-			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`)
-		)
+		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`))
 		envVarGeneralConfig.value = data.general ?? {}
 	} catch (error) {
 		logger.error('Could not load provider settings', { error })
@@ -235,9 +241,14 @@ async function loadEnvVarConfig(): Promise<void> {
 	}
 }
 
+/**
+ *
+ * @param key
+ * @param value
+ */
 async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 	const provider = providers.value[0]
-	if (!provider) return
+	if (!provider) { return }
 	try {
 		await axios.put(
 			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`),
@@ -250,14 +261,24 @@ async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 	}
 }
 
+/**
+ *
+ * @param provider
+ */
 function openProviderDialog(provider: Provider): void {
 	currentProviderId.value = provider.id
 	dialogProvider.value = provider
 	dialogOpen.value = true
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.id
+ * @param root0.name
+ */
 function onProviderNameChanged({ id, name }: { id: Provider['id'], name: string }): void {
-	const provider = providers.value.find(p => p.id === id)
+	const provider = providers.value.find((p) => p.id === id)
 	if (provider) {
 		provider.name = name
 		// Keep dialogProvider in sync so the dialog title updates immediately
@@ -267,6 +288,11 @@ function onProviderNameChanged({ id, name }: { id: Provider['id'], name: string 
 	}
 }
 
+/**
+ *
+ * @param key
+ * @param value
+ */
 async function updateAppConfig(key: string, value: string): Promise<void> {
 	await confirmPassword()
 
@@ -291,11 +317,17 @@ async function updateAppConfig(key: string, value: string): Promise<void> {
 	}
 }
 
+/**
+ *
+ */
 async function chooseSaml() {
 	await updateAppConfig('type', 'saml')
 	type.value = 'saml'
 }
 
+/**
+ *
+ */
 async function chooseEnv(): Promise<void> {
 	await updateAppConfig('type', 'environment-variable')
 	type.value = 'environment-variable'
@@ -303,16 +335,20 @@ async function chooseEnv(): Promise<void> {
 	await loadEnvVarConfig()
 }
 
+/**
+ *
+ */
 async function resetSettings() {
 	await updateAppConfig('type', '')
 	type.value = ''
 }
 
+/**
+ *
+ */
 async function addProvider() {
 	try {
-		const { data } = await axios.post(
-			generateUrl('/apps/user_saml/settings/providerSettings')
-		)
+		const { data } = await axios.post(generateUrl('/apps/user_saml/settings/providerSettings'))
 		const newProvider = { id: data.id, name: t('user_saml', 'Provider {id}', { id: data.id }) }
 		providers.value.push(newProvider)
 		openProviderDialog(newProvider)
@@ -322,13 +358,15 @@ async function addProvider() {
 	}
 }
 
+/**
+ *
+ * @param providerId
+ */
 async function removeProvider(providerId: Provider['id']): Promise<void> {
-	if (providers.value.length <= 1) return
+	if (providers.value.length <= 1) { return }
 	try {
-		await axios.delete(
-			generateUrl(`/apps/user_saml/settings/providerSettings/${providerId}`)
-		)
-		providers.value = providers.value.filter(p => p.id !== providerId)
+		await axios.delete(generateUrl(`/apps/user_saml/settings/providerSettings/${providerId}`))
+		providers.value = providers.value.filter((p) => p.id !== providerId)
 		// If we just removed the currently open provider, close the dialog
 		if (dialogProvider.value?.id === providerId) {
 			dialogOpen.value = false
@@ -341,6 +379,11 @@ async function removeProvider(providerId: Provider['id']): Promise<void> {
 	}
 }
 
+/**
+ *
+ * @param key
+ * @param checked
+ */
 async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<void> {
 	const value = checked ? '1' : '0'
 	try {
@@ -352,6 +395,11 @@ async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<vo
 	}
 }
 
+/**
+ *
+ * @param key
+ * @param value
+ */
 async function onGlobalInputChange(key: string, value: string): Promise<void> {
 	try {
 		await updateAppConfig(`general-${key}`, value.trim())
