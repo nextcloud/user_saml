@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createApp } from 'vue'
-import { loadState } from '@nextcloud/initial-state'
-import AdminSettings from './components/AdminSettings.vue'
 import type { GlobalConfig, NameIdFormatsMap, Provider, SecurityGeneralMap, SecurityMap, SettingsMap } from './types.ts'
+
+import { loadState } from '@nextcloud/initial-state'
+import { createApp } from 'vue'
+import AdminSettings from './components/AdminSettings.vue'
 
 const app = createApp(AdminSettings, {
 	initialType: loadState<string>('user_saml', 'type', ''),

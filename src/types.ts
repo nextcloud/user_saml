@@ -13,8 +13,8 @@ export interface SettingAttribute {
 	text: string
 	required?: boolean
 	global?: boolean
-	placeholder?: string,
-	provider_type: string,
+	placeholder?: string
+	provider_type: string
 }
 
 export interface NameIdFormat {
