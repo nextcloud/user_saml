@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -17,10 +18,10 @@ use OCP\ISession;
 class TimezoneController extends Controller {
 
 	public function __construct(
-		$appName,
+		string $appName,
 		IRequest $request,
 		private readonly IConfig $config,
-		private $userId,
+		private ?string $userId,
 		private readonly ISession $session,
 	) {
 		parent::__construct($appName, $request);
@@ -30,8 +31,12 @@ class TimezoneController extends Controller {
 	 * @NoAdminRequired
 	 * @UseSession
 	 * @throws \OCP\PreConditionNotMetException
+	 * @throws \InvalidArgumentException
 	 */
 	public function setTimezone(string $timezone, int $timezoneOffset): JSONResponse {
+		if (!in_array($timezone, \DateTimeZone::listIdentifiers())) {
+			throw new \InvalidArgumentException('Invalid timezone');
+		}
 		$this->config->setUserValue($this->userId, 'core', 'timezone', $timezone);
 		$this->session->set('timezone', $timezoneOffset);
 
