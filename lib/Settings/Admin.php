@@ -9,6 +9,7 @@ namespace OCA\User_SAML\Settings;
 
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -22,6 +23,7 @@ class Admin implements ISettings {
 		private readonly Defaults $defaults,
 		private readonly IConfig $config,
 		private readonly SAMLSettings $samlSettings,
+		private readonly IInitialState $initialState,
 	) {
 	}
 
@@ -83,13 +85,37 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Attribute to map the UID to.'),
 				'type' => 'line',
 				'required' => true,
+				'provider_type' => '',
 			],
 			'require_provisioned_account' => [
-				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).'),
+				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0'),
+				'provider_type' => '',
+			],
+			'idp0_display_name' => [
+				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
+				'type' => 'line',
+				'required' => false,
+				'provider_type' => '',
+			],
+			'is_saml_request_using_post' => [
+				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
+				'type' => 'checkbox',
+				'required' => false,
+				'global' => false,
+				'provider_type' => 'saml',
+			],
+			'allow_multiple_user_back_ends' => [
+				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
+				'type' => 'checkbox',
+				'global' => true,
+				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0'),
+				'provider_type' => '',
 			],
 		];
+
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the displayname to.'),
@@ -99,7 +125,7 @@ class Admin implements ISettings {
 			'email_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the email address to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'quota_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the quota to.'),
@@ -109,12 +135,12 @@ class Admin implements ISettings {
 			'home_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users home to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'group_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users groups to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'mfa_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users MFA login status'),
@@ -124,7 +150,7 @@ class Admin implements ISettings {
 			'group_mapping_prefix' => [
 				'text' => $this->l10n->t('Group Mapping Prefix, default: %s', [SAMLSettings::DEFAULT_GROUP_PREFIX]),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 		];
 
@@ -133,13 +159,13 @@ class Admin implements ISettings {
 				'text' => $this->l10n->t('Reject members of these groups. This setting has precedence over required memberships.'),
 				'placeholder' => $this->l10n->t('Group A, Group B, …'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'require_groups' => [
 				'text' => $this->l10n->t('Require membership in these groups, if any.'),
 				'placeholder' => $this->l10n->t('Group A, Group B, …'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 		];
 
@@ -191,32 +217,24 @@ class Admin implements ISettings {
 
 		$type = $this->config->getAppValue('user_saml', 'type');
 
-		$generalSettings['require_provisioned_account'] = [
-			'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
-			'type' => 'checkbox',
-			'global' => true,
-			'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0')
-		];
-		if ($type === 'saml') {
-			$generalSettings['idp0_display_name'] = [
-				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
-				'type' => 'line',
-				'required' => false,
-			];
-			$generalSettings['is_saml_request_using_post'] = [
-				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
-				'type' => 'checkbox',
-				'required' => false,
-				'global' => false,
-			];
-			$generalSettings['allow_multiple_user_back_ends'] = [
-				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
-				'type' => 'checkbox',
-				'hideForEnv' => true,
-				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0')
-			];
+		$globalConfig = [];
+		foreach ($generalSettings as $key => $attribute) {
+			if (isset($attribute['global']) && $attribute['global']) {
+				$globalConfig[$key] = $attribute['value'] ?? '0';
+			}
 		}
+
+		$this->initialState->provideInitialState('type', $type);
+		$this->initialState->provideInitialState('providers', $providers);
+		$this->initialState->provideInitialState('generalSettings', $generalSettings);
+		$this->initialState->provideInitialState('spSettings', $serviceProviderFields);
+		$this->initialState->provideInitialState('nameIdFormats', $nameIdFormats);
+		$this->initialState->provideInitialState('attributeMappingSettings', $attributeMappingSettings);
+		$this->initialState->provideInitialState('securityOffer', $securityOfferFields);
+		$this->initialState->provideInitialState('securityRequired', $securityRequiredFields);
+		$this->initialState->provideInitialState('securityGeneral', $securityGeneral);
+		$this->initialState->provideInitialState('userFilterSettings', $userFilterSettings);
+		$this->initialState->provideInitialState('globalConfig', $globalConfig);
 
 		$params = [
 			'sp' => $serviceProviderFields,
