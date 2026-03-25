@@ -5,6 +5,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.4
+
+### Added
+* [Feat: Add command to manually migrate groups from database (user_saml#1044)](https://github.com/nextcloud/user_saml/pull/1044)
+
+### Fixed
+* [Fix: Only set valid timezone values (user_saml#1049)](https://github.com/nextcloud/user_saml/pull/1049)
+
+### Dependencies
+* [Build\(deps\): bump firebase/php\-jwt from 7.0.2 to 7.0.3 (user_saml#1045)](https://github.com/nextcloud/user_saml/pull/1045)
+* [Build\(deps\): bump robrichards/xmlseclibs from 3.1.4 to 3.1.5 (user_saml#1048)](https://github.com/nextcloud/user_saml/pull/1048)
+
+### Other
+* [Refactor: Port away from deprecated methods (user_saml#1046)](https://github.com/nextcloud/user_saml/pull/1046)
+
+
 ## 7.1.3
 
 ### Fixed
