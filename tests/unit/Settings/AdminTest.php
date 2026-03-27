@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -17,16 +19,11 @@ use OneLogin\Saml2\Constants;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AdminTest extends \Test\TestCase {
-	/** @var SAMLSettings|MockObject */
-	private $settings;
-	/** @var Admin */
-	private $admin;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l10n;
-	/** @var Defaults|\PHPUnit_Framework_MockObject_MockObject */
-	private $defaults;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-	private $config;
+	private SAMLSettings&MockObject $settings;
+	private Admin $admin;
+	private IL10N&MockObject $l10n;
+	private Defaults&MockObject $defaults;
+	private IConfig&MockObject $config;
 
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
@@ -288,5 +285,23 @@ class AdminTest extends \Test\TestCase {
 
 	public function testGetPriority() {
 		$this->assertSame(0, $this->admin->getPriority());
+	}
+
+	public function testGetName(): void {
+		$this->l10n->expects($this->once())
+			->method('t')
+			->with('SSO & SAML authentication')
+			->willReturn('SSO & SAML authentication');
+
+		$this->assertSame('SSO & SAML authentication', $this->admin->getName());
+	}
+
+	public function testGetAuthorizedAppConfig(): void {
+		$this->assertSame([], $this->admin->getAuthorizedAppConfig());
+	}
+
+	public function testImplementsIDelegatedSettings(): void {
+		$this->assertInstanceOf(\OCP\Settings\IDelegatedSettings::class, $this->admin);
+		$this->assertInstanceOf(\OCP\Settings\ISettings::class, $this->admin);
 	}
 }

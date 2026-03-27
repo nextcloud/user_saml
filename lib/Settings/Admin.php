@@ -12,10 +12,10 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Defaults;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\Settings\ISettings;
+use OCP\Settings\IDelegatedSettings;
 use OneLogin\Saml2\Constants;
 
-class Admin implements ISettings {
+class Admin implements IDelegatedSettings {
 
 	public function __construct(
 		private readonly IL10N $l10n,
@@ -253,5 +253,15 @@ class Admin implements ISettings {
 	#[\Override]
 	public function getPriority() {
 		return 0;
+	}
+
+	#[\Override]
+	public function getName(): ?string {
+		return $this->l10n->t('SSO & SAML authentication');
+	}
+
+	#[\Override]
+	public function getAuthorizedAppConfig(): array {
+		return [];
 	}
 }
