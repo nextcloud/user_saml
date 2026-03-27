@@ -297,7 +297,15 @@ class AdminTest extends \Test\TestCase {
 	}
 
 	public function testGetAuthorizedAppConfig(): void {
-		$this->assertSame([], $this->admin->getAuthorizedAppConfig());
+		$config = $this->admin->getAuthorizedAppConfig();
+
+		$this->assertArrayHasKey('user_saml', $config);
+
+		$keys = $config['user_saml'];
+		$this->assertContains('type', $keys);
+		$this->assertContains('general-require_provisioned_account', $keys);
+		$this->assertContains('general-allow_multiple_user_back_ends', $keys);
+		$this->assertContains('directLoginName', $keys);
 	}
 
 	public function testImplementsIDelegatedSettings(): void {

@@ -262,6 +262,13 @@ class Admin implements IDelegatedSettings {
 
 	#[\Override]
 	public function getAuthorizedAppConfig(): array {
-		return [];
+		return [
+			'user_saml' => [
+				'type',
+				'general-require_provisioned_account',
+				'general-allow_multiple_user_back_ends',
+				'directLoginName',
+			],
+		];
 	}
 }

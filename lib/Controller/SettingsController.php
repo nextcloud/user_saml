@@ -10,6 +10,7 @@ namespace OCA\User_SAML\Controller;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\AuthorizedAdminSetting;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
 use OCP\IConfig;
@@ -28,6 +29,7 @@ class SettingsController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function getSamlProviderIds(): DataResponse {
 		$keys = array_keys($this->samlSettings->getListOfIdps());
 		return new DataResponse([ 'providerIds' => implode(',', $keys)]);
@@ -36,6 +38,7 @@ class SettingsController extends Controller {
 	/**
 	 * @return array of categories containing entries for each config parameter with their value
 	 */
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function getSamlProviderSettings(int $providerId): array {
 		/**
 		 * This uses the list of available config parameters from the admin section
@@ -90,11 +93,13 @@ class SettingsController extends Controller {
 		return $settings;
 	}
 
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function deleteSamlProviderSettings($providerId): Response {
 		$this->samlSettings->delete($providerId);
 		return new Response();
 	}
 
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function setProviderSetting(int $providerId, string $configKey, string $configValue): Response {
 		$configuration = $this->samlSettings->get($providerId);
 		$configuration[$configKey] = $configValue;
@@ -102,6 +107,7 @@ class SettingsController extends Controller {
 		return new Response();
 	}
 
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function newSamlProviderSettingsId(): DataResponse {
 		return new DataResponse(['id' => $this->samlSettings->getNewProviderId()]);
 	}
