@@ -219,8 +219,9 @@ import NcTextArea from '@nextcloud/vue/components/NcTextArea'
 import ProviderGeneralSection from './ProviderGeneralSection.vue'
 import logger from '../logger.ts'
 
+const open = defineModel<boolean>('open')
+
 const props = defineProps<{
-	open: boolean
 	provider: Provider
 	generalSettings: SettingsMap
 	spSettings: SettingsMap
@@ -234,7 +235,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-	'update:open': [value: boolean]
 	providerNameChanged: [payload: { id: Provider['id'], name: string }]
 	close: []
 }>()
@@ -431,7 +431,6 @@ function onOpenChanged(open: boolean): void {
 	if (!open) {
 		cancelChanges()
 	}
-	emit('update:open', open)
 }
 
 /**
