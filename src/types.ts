@@ -9,7 +9,7 @@ export interface Provider {
 }
 
 export interface SettingAttribute {
-	type: 'checkbox' | 'line'
+	type: 'checkbox' | 'line' | 'text'
 	text: string
 	required?: boolean
 	global?: boolean

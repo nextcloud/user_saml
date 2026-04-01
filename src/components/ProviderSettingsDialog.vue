@@ -26,12 +26,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</NcButton>
 		</template>
 
-		<div class="provider-settings">
+		<div class="provider-settings" v-if="!isLoading">
 			<!-- General (per-provider) -->
 			<NcSettingsSection :name="t('user_saml', 'General')" :level="3">
 				<ProviderGeneralSection
 					:generalSettings="generalSettings"
 					:modelValue="draft.general ?? {}"
+					type="saml"
 					@update:modelValue="(val) => { draft.general = val }"
 					@fieldChange="(key, value) => setDraft('general', key, value)" />
 			</NcSettingsSection>
@@ -43,7 +44,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				:description="t('user_saml', 'If your Service Provider should use certificates you can optionally specify them here.')">
 				<NcSelect
 					v-model="nameIdFormatModel"
-					:label="t('user_saml', 'Name ID format')"
+					:inputLabel="t('user_saml', 'Name ID format')"
 					:options="nameIdFormatOptions"
 					:clearable="false" />
 
@@ -61,7 +62,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:label="attribute.text"
 						:modelValue="draft.sp?.[key] ?? ''"
 						:required="attribute.required"
-						@update:modelValue="(val) => setDraft('sp', key, val)" />
+						@update:modelValue="(val) => setDraft('sp', key, val + '')" />
 				</template>
 			</NcSettingsSection>
 
@@ -118,7 +119,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:label="attribute.text"
 						:modelValue="draft['attribute-mapping']?.[key] ?? ''"
 						:required="attribute.required"
-						@update:modelValue="(val) => setDraft('attribute-mapping', key, val)" />
+						@update:modelValue="(val) => setDraft('attribute-mapping', key, val + '')" />
 				</template>
 			</NcSettingsSection>
 
@@ -154,7 +155,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:modelValue="draft.security?.[key] ?? ''"
 						:required="attribute.required"
 						placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
-						@update:modelValue="(val) => setDraft('security', key, val)" />
+						@update:modelValue="(val) => setDraft('security', key, val + '')" />
 					<NcCheckboxRadioSwitch v-else
 						:modelValue="draft.security?.[key] === '1'"
 						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
@@ -177,7 +178,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:modelValue="draft['user-filter']?.[key] ?? ''"
 						:required="attribute.required"
 						:placeholder="attribute.placeholder"
-						@update:modelValue="(val) => setDraft('user-filter', key, val)" />
+						@update:modelValue="(val) => setDraft('user-filter', key, val + '')" />
 				</template>
 			</NcSettingsSection>
 
@@ -189,6 +190,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{{ t('user_saml', 'Metadata invalid') }}
 			</NcNoteCard>
 		</div>
+		<p v-else>{{ t('user_saml', 'Loading...')}}</p>
 	</NcDialog>
 </template>
 
@@ -242,6 +244,7 @@ const emit = defineEmits<{
 const providerConfig = ref<ProviderConfig>({})
 const metadataValid = ref<boolean | null>(null) // null | true | false
 const isSaving = ref<boolean>(false)
+const isLoading = ref<boolean>(true)
 
 /** Flat object for IDP fields (dotted API keys mapped to friendly names) */
 const draftIdp = ref<DraftIdp>({
@@ -277,12 +280,12 @@ const isDirty = computed<boolean>(() => {
 const metadataUrl = computed(() => generateUrl('/apps/user_saml/saml/metadata') + '?idp=' + props.provider.id)
 
 interface NameIdFormatOption {
-	id: string
+	value: string
 	label: string
 }
 
 const nameIdFormatOptions = computed<NameIdFormatOption[]>(() => Object.entries(props.nameIdFormats)
-	.map(([id, format]) => ({ id, label: format.label })))
+	.map(([id, format]) => ({ value: id, label: format.label })))
 
 /**
  * v-model for NcSelect — reads from draft, writes to draft immediately.
@@ -292,11 +295,11 @@ const nameIdFormatModel = computed<NameIdFormatOption | null>({
 	get() {
 		const currentId = draft.value?.sp?.['name-id-format']
 			?? Object.keys(props.nameIdFormats).find((k) => props.nameIdFormats[k].selected)
-		return nameIdFormatOptions.value.find((opt) => opt.id === currentId) ?? null
+		return nameIdFormatOptions.value.find((opt) => opt.value === currentId) ?? null
 	},
 	set(opt: NameIdFormatOption | null) {
 		if (opt) {
-			setDraft('sp', 'name-id-format', opt.id)
+			setDraft('sp', 'name-id-format', opt.value)
 		}
 	},
 })
@@ -312,9 +315,12 @@ watch(() => [props.open, props.provider.id], async ([isOpen]) => {
  */
 async function loadProviderConfig(): Promise<void> {
 	try {
+		isLoading.value = true
 		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`))
+		console.log(data)
 		providerConfig.value = data
 		syncDraftFromConfig()
+		isLoading.value = false
 		await testMetaData()
 	} catch (error) {
 		logger.error('Could not load provider settings', { error })
@@ -327,6 +333,7 @@ function syncDraftFromConfig(): void {
 	draft.value = JSON.parse(JSON.stringify(providerConfig.value))
 	const idpCfg = providerConfig.value?.idp ?? {}
 	draftIdp.value = Object.fromEntries(Object.entries(IDP_FIELD_MAP).map(([draftKey, apiKey]) => [draftKey, idpCfg[apiKey] ?? ''])) as DraftIdp
+	console.log(draft.value)
 }
 
 /**
@@ -353,6 +360,7 @@ async function saveAll(): Promise<void> {
 		const puts = []
 
 		// All non-IDP categories
+		const newConfigs: Record<string, string>  = {};
 		for (const [category, settings] of Object.entries(draft.value)) {
 			if (category === 'idp') {
 				continue
@@ -364,10 +372,8 @@ async function saveAll(): Promise<void> {
 					const apiCategory = ['attribute-mapping', 'user-filter'].includes(category)
 						? `saml-${category}`
 						: category
-					puts.push(axios.put(
-						generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`),
-						{ configKey: `${apiCategory}-${key}`, configValue: String(value ?? '').trim() },
-					))
+
+					newConfigs[`${apiCategory}-${key}`] = String(value ?? '').trim();
 				}
 			}
 		}
@@ -377,14 +383,16 @@ async function saveAll(): Promise<void> {
 		for (const [draftKey, apiKey] of Object.entries(IDP_FIELD_MAP)) {
 			const draftVal = draftIdp.value[draftKey] ?? ''
 			if (draftVal !== (savedIdp[apiKey] ?? '')) {
-				puts.push(axios.put(
-					generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`),
-					{ configKey: `idp-${apiKey}`, configValue: draftVal.trim() },
-				))
+				newConfigs[`idp-${apiKey}`] = draftVal.trim();
 			}
 		}
 
-		await Promise.all(puts)
+		if (Object.keys(newConfigs).length > 0) {
+			await axios.put(
+				generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`),
+				{ newConfigs },
+			)
+		}
 
 		// Commit draft → providerConfig
 		providerConfig.value = JSON.parse(JSON.stringify(draft.value))
@@ -406,13 +414,13 @@ async function saveAll(): Promise<void> {
 
 		showSuccess(t('user_saml', 'Saved'))
 		await testMetaData()
+		emit('close')
 	} catch (error) {
 		logger.error('Could not save provider settings', { error })
 		showError(t('user_saml', 'Could not save configuration'))
 	} finally {
 		isSaving.value = false
 	}
-	emit('close')
 }
 
 /** Discard all unsaved edits by re-syncing draft from the last saved config. */

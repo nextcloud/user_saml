@@ -4,7 +4,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
 	<template v-for="(attribute, key) in generalSettings" :key="key">
-		<p v-if="attribute.type === 'checkbox' && !attribute.global && attribute.provider_type === '' || attribute.provider_type === type">
+		<template v-if="attribute.type === 'checkbox' && !attribute.global && attribute.provider_type === '' || attribute.provider_type === type">
 			<NcCheckboxRadioSwitch
 				:modelValue="modelValue[key] === '1'"
 				@update:checked="(val: boolean) => onChange(key, val ? '1' : '0')">
@@ -13,14 +13,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<NcNoteCard v-if="key === 'is_saml_request_using_post'" type="warning">
 				{{ t('user_saml', 'This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests.') }}
 			</NcNoteCard>
-		</p>
+		</template>
 		<NcInputField
 			v-else-if="attribute.type === 'line' && attribute.global === undefined"
 			:id="'user-saml-general-' + key"
 			:label="attribute.text"
 			:modelValue="modelValue[key] ?? ''"
 			:required="attribute.required"
-			@update:modelValue="(val: string) => onChange(key, val)" />
+			@update:modelValue="(val: string|number) => onChange(key, val + '')" />
 	</template>
 </template>
 
@@ -35,6 +35,7 @@ import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 const props = defineProps<{
 	generalSettings: SettingsMap
 	modelValue: Record<string, string>
+	type: 'saml'|'env',
 }>()
 
 const emit = defineEmits<{
