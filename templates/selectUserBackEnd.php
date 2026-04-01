@@ -5,7 +5,7 @@
  */
 use OCP\Util;
 
-style('user_saml', 'selectUserBackEnd');
+Util::addStyle('user_saml', 'selectUserBackEnd');
 Util::addScript('user_saml', 'selectUserBackEnd');
 
 /** @var array $_ */
