@@ -1,15 +1,14 @@
+/**
+ * SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 {
-	"extends": "@vue/tsconfig/tsconfig.json",
-	"include": ["./src"],
+	"extends": "@vue/tsconfig",
+	"include": ["src/**.ts", "*.ts"],
 	"compilerOptions": {
-		"lib": [
-			"DOM",
-			"ES2015"
-		],
-		"rootDir": "src",
-		"noImplicitAny": false
-	},
-	"vueCompilerOptions": {
-		"target": 2.7
+		"allowJs": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Bundler"
 	}
 }
