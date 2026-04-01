@@ -92,6 +92,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			<h3>{{ t('user_saml', 'Environment variable provider settings') }}</h3>
 			<ProviderGeneralSection
 				v-model="envVarGeneralConfig"
+				type="env"
 				:generalSettings="generalSettings"
 				@fieldChange="onEnvVarFieldChange" />
 		</div>
@@ -244,9 +245,11 @@ async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 		return
 	}
 	try {
+		const newConfigs: Record<string, string> = {}
+		newConfigs[`general-${key}`] = value.trim()
 		await axios.put(
 			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`),
-			{ configKey: `general-${key}`, configValue: value.trim() },
+			{ newConfigs },
 		)
 		showSuccess(t('user_saml', 'Saved'))
 	} catch (error) {
@@ -340,7 +343,7 @@ async function resetSettings() {
 /**
  *
  */
-async function addProvider() {
+async function addProvider(): Promise<void> {
 	try {
 		const { data } = await axios.post(generateUrl('/apps/user_saml/settings/providerSettings'))
 		const newProvider = { id: data.id, name: t('user_saml', 'Provider {id}', { id: data.id }) }

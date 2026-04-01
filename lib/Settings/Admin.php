@@ -9,9 +9,9 @@ namespace OCA\User_SAML\Settings;
 
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
-use OCP\IConfig;
 use OCP\IL10N;
 use OCP\Settings\IDelegatedSettings;
 use OneLogin\Saml2\Constants;
@@ -21,7 +21,7 @@ class Admin implements IDelegatedSettings {
 	public function __construct(
 		private readonly IL10N $l10n,
 		private readonly Defaults $defaults,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly SAMLSettings $samlSettings,
 		private readonly IInitialState $initialState,
 	) {
@@ -91,7 +91,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-require_provisioned_account', '0'),
+				'value' => $this->appConfig->getAppValueInt('general-require_provisioned_account'),
 				'provider_type' => '',
 			],
 			'idp0_display_name' => [
@@ -111,7 +111,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0'),
+				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends'),
 				'provider_type' => '',
 			],
 		];
@@ -169,7 +169,6 @@ class Admin implements IDelegatedSettings {
 			],
 		];
 
-		$firstIdPConfig = isset($providers[0]) ? $this->samlSettings->get($providers[0]['id']) : null;
 		$nameIdFormats = [
 			Constants::NAMEID_EMAIL_ADDRESS => [
 				'label' => $this->l10n->t('Email address'),
@@ -208,14 +207,8 @@ class Admin implements IDelegatedSettings {
 				'selected' => false,
 			],
 		];
-		$chosenFormat = $firstIdPConfig['sp-name-id-format'] ?? '';
-		if ($firstIdPConfig !== null && isset($nameIdFormats[$chosenFormat])) {
-			$nameIdFormats[$chosenFormat]['selected'] = true;
-		} else {
-			$nameIdFormats[Constants::NAMEID_UNSPECIFIED]['selected'] = true;
-		}
 
-		$type = $this->config->getAppValue('user_saml', 'type');
+		$type = $this->appConfig->getAppValueString('type');
 
 		$globalConfig = [];
 		foreach ($generalSettings as $key => $attribute) {
@@ -247,29 +240,18 @@ class Admin implements IDelegatedSettings {
 			'name-id-formats' => $nameIdFormats,
 			'type' => $type,
 			'providers' => $providers,
-			'config' => $firstIdPConfig,
 		];
 
 		return new TemplateResponse('user_saml', 'admin', $params);
 	}
 
-	/**
-	 * @return string the section ID, e.g. 'sharing'
-	 */
 	#[\Override]
-	public function getSection() {
+	public function getSection(): string {
 		return 'saml';
 	}
 
-	/**
-	 * @return int whether the form should be rather on the top or bottom of
-	 *             the admin section. The forms are arranged in ascending order of the
-	 *             priority values. It is required to return a value between 0 and 100.
-	 *
-	 * keep the server setting at the top, right after "server settings"
-	 */
 	#[\Override]
-	public function getPriority() {
+	public function getPriority(): int {
 		return 0;
 	}
 
