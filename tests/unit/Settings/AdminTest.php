@@ -12,8 +12,9 @@ namespace OCA\User_SAML\Tests\Settings;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
-use OCP\IConfig;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,25 +24,28 @@ class AdminTest extends \Test\TestCase {
 	private Admin $admin;
 	private IL10N&MockObject $l10n;
 	private Defaults&MockObject $defaults;
-	private IConfig&MockObject $config;
+	private IAppConfig&MockObject $appConfig;
+	private IInitialState&MockObject $initialState;
 
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
+		$this->initialState = $this->createMock(IInitialState::class);
 
 		$this->admin = new Admin(
 			$this->l10n,
 			$this->defaults,
-			$this->config,
-			$this->settings
+			$this->appConfig,
+			$this->settings,
+			$this->initialState,
 		);
 
 		parent::setUp();
 	}
 
-	public function formDataProvider() {
+	public function formDataProvider(): array {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
@@ -92,29 +96,34 @@ class AdminTest extends \Test\TestCase {
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
 				'type' => 'line',
 				'required' => false,
+				'provider_type' => '',
 			],
 			'is_saml_request_using_post' => [
 				'text' => $this->l10n->t('Use POST method for SAML request (default: GET)'),
 				'type' => 'checkbox',
 				'required' => false,
 				'global' => false,
+				'provider_type' => 'saml',
 			],
 			'uid_mapping' => [
 				'text' => 'Attribute to map the UID to.',
 				'type' => 'line',
 				'required' => true,
+				'provider_type' => '',
 			],
 			'require_provisioned_account' => [
 				'text' => 'Only allow authentication if an account exists on some other backend (e.g. LDAP).',
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => '0'
+				'value' => 0,
+				'provider_type' => '',
 			],
 			'allow_multiple_user_back_ends' => [
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
 				'global' => true,
-				'hideForEnv' => true,
+				'value' => 0,
+				'provider_type' => '',
 			],
 		];
 		$attributeMappingSettings = [
@@ -136,12 +145,12 @@ class AdminTest extends \Test\TestCase {
 			'group_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users groups to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'home_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users home to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'mfa_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users MFA login status'),
@@ -151,7 +160,7 @@ class AdminTest extends \Test\TestCase {
 			'group_mapping_prefix' => [
 				'text' => $this->l10n->t('Group Mapping Prefix, default: SAML_'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 		];
 
@@ -160,13 +169,13 @@ class AdminTest extends \Test\TestCase {
 				'text' => 'Reject members of these groups. This setting has precedence over required memberships.',
 				'placeholder' => 'Group A, Group B, …',
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'require_groups' => [
 				'text' => 'Require membership in these groups, if any.',
 				'placeholder' => 'Group A, Group B, …',
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 		];
 
@@ -209,7 +218,7 @@ class AdminTest extends \Test\TestCase {
 			],
 		];
 
-		$params = [
+		return [
 			'sp' => $serviceProviderFields,
 			'security-offer' => $securityOfferFields,
 			'security-required' => $securityRequiredFields,
@@ -222,49 +231,57 @@ class AdminTest extends \Test\TestCase {
 				['id' => 2, 'name' => 'Provider 2']
 			],
 			'name-id-formats' => $nameIdFormats,
-			'config' => [],
 		];
-
-		return $params;
 	}
 
-	public function testGetFormWithoutType() {
+	public function testGetFormWithoutType(): void {
 		$this->settings->expects($this->once())
 			->method('getListOfIdps')
 			->willReturn([
 				1 => 'Provider 1',
 				2 => 'Provider 2',
 			]);
-		$this->config
-			->expects($this->exactly(2)) // 'type' and 'general-require_provisioned_account'
-			->method('getAppValue')
-			->with('user_saml', $this->anything(), $this->anything())
-			->willReturn($this->returnArgument(2));
+		$this->appConfig
+			->expects($this->exactly(1))
+			->method('getAppValueString')
+			->with($this->anything(), $this->anything())
+			->willReturnArgument(1);
+
+		$this->appConfig
+			->expects($this->exactly(2))
+			->method('getAppValueInt')
+			->with($this->anything(), $this->anything())
+			->willReturnArgument(1);
 
 		$params = $this->formDataProvider();
-		unset($params['general']['idp0_display_name'], $params['general']['is_saml_request_using_post'], $params['general']['allow_multiple_user_back_ends']);
 		$params['type'] = '';
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());
 	}
 
-	public function testGetFormWithSaml() {
+	public function testGetFormWithSaml(): void {
 		$this->settings->expects($this->once())
 			->method('getListOfIdps')
 			->willReturn([
 				1 => 'Provider 1',
 				2 => 'Provider 2',
 			]);
-		$this->config
-			->expects($this->exactly(3)) # mode + three global values
-			->method('getAppValue')
+		$this->appConfig
+			->expects($this->exactly(2))
+			->method('getAppValueInt')
 			->withConsecutive(
-				['user_saml', 'type'],
-				['user_saml', 'general-require_provisioned_account'],
-				['user_saml', 'general-allow_multiple_user_back_ends'],
+				['general-require_provisioned_account'],
+				['general-allow_multiple_user_back_ends'],
 			)
-			->willReturnOnConsecutiveCalls('saml', '0', '0');
+			->willReturnOnConsecutiveCalls(0, 0);
+
+		$this->appConfig
+			->expects($this->exactly(1))
+			->method('getAppValueString')
+			->with('type')
+			->willReturn('saml');
+
 		$this->defaults
 			->expects($this->any())
 			->method('getName')
@@ -272,8 +289,8 @@ class AdminTest extends \Test\TestCase {
 
 		$params = $this->formDataProvider();
 		$params['type'] = 'saml';
-		$params['general']['require_provisioned_account']['value'] = '0';
-		$params['general']['allow_multiple_user_back_ends']['value'] = '0';
+		$params['general']['require_provisioned_account']['value'] = 0;
+		$params['general']['allow_multiple_user_back_ends']['value'] = 0;
 
 		$expected = new TemplateResponse('user_saml', 'admin', $params);
 		$this->assertEquals($expected, $this->admin->getForm());

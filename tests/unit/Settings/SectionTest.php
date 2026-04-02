@@ -29,11 +29,11 @@ class SectionTest extends \Test\TestCase {
 		parent::setUp();
 	}
 
-	public function testGetId() {
+	public function testGetId(): void {
 		$this->assertSame('saml', $this->section->getID());
 	}
 
-	public function testGetName() {
+	public function testGetName(): void {
 		$this->l10n
 			->expects($this->once())
 			->method('t')
@@ -43,11 +43,11 @@ class SectionTest extends \Test\TestCase {
 		$this->assertSame('SAML authentication', $this->section->getName());
 	}
 
-	public function testGetPriority() {
+	public function testGetPriority(): void {
 		$this->assertSame(75, $this->section->getPriority());
 	}
 
-	public function testGetIcon() {
+	public function testGetIcon(): void {
 		$this->urlGenerator
 			->expects($this->once())
 			->method('imagePath')

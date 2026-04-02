@@ -125,7 +125,7 @@ class Admin implements IDelegatedSettings {
 			'email_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the email address to.'),
 				'type' => 'line',
-				'required' => false,
+				'required' => true,
 			],
 			'quota_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the quota to.'),
@@ -196,7 +196,7 @@ class Admin implements IDelegatedSettings {
 			],
 			Constants::NAMEID_UNSPECIFIED => [
 				'label' => $this->l10n->t('Unspecified'),
-				'selected' => false,
+				'selected' => true,
 			],
 			Constants::NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME => [
 				'label' => $this->l10n->t('Windows domain qualified name'),
