@@ -37,7 +37,7 @@
 }
 
 .login-option .icon-confirm-white {
-	float: right;
+	float: inline-end;
 	line-height: 40px;
 }
 
