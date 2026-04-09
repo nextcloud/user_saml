@@ -50,6 +50,6 @@ class ConfigGet extends Base {
 
 		$this->writeArrayInOutputFormat($input, $output, $settings);
 
-		return 0;
+		return self::SUCCESS;
 	}
 }

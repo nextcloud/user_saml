@@ -34,20 +34,20 @@ class GroupMigrationCopyIncomplete extends Base {
 			if ($output->isVerbose()) {
 				$output->writeln('<info>No pending group member transfer</info>');
 			}
-			return 0;
+			return self::SUCCESS;
 		}
 
 		if (!$this->doMemberTransfer($groupsToTreat, $output)) {
 			if (!$output->isQuiet()) {
 				$output->writeln('<comment>Not all group members could be transferred completely. Rerun this command or check the Nextcloud log.</comment>');
 			}
-			return 1;
+			return self::FAILURE;
 		}
 
 		if (!$output->isQuiet()) {
 			$output->writeln('<info>All group members could be transferred completely.</info>');
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 
 	/**

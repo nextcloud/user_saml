@@ -44,7 +44,7 @@ class MigrateGroups extends QueuedJob {
 	}
 
 	#[\Override]
-	protected function run($argument) {
+	protected function run(mixed $argument): void {
 		try {
 			$candidates = $this->getMigratableGroups();
 			$toMigrate = $this->groupMigration->getGroupsToMigrate($argument['gids'], $candidates);

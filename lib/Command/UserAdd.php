@@ -54,7 +54,7 @@ class UserAdd extends Base {
 
 		if ($this->userManager->userExists($uid)) {
 			$output->writeln('<error>The account "' . $uid . '" already exists.</error>');
-			return 1;
+			return self::FAILURE;
 		}
 
 		if (!$output->isQuiet()) {
@@ -65,7 +65,7 @@ class UserAdd extends Base {
 			$this->backend->createUserIfNotExists($uid);
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user ' . $e->getMessage() . '</error>');
-			return 1;
+			return self::FAILURE;
 		}
 
 		try {
@@ -77,14 +77,14 @@ class UserAdd extends Base {
 			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');
-			return 1;
+			return self::FAILURE;
 		}
 
 		if (!$output->isQuiet()) {
 			$output->writeln('<info>SAML user "' . $uid . '" added.</info>');
 		}
 
-		return 0;
+		return self::SUCCESS;
 	}
 
 }

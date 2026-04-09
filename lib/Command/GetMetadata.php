@@ -61,6 +61,6 @@ EOT
 				Error::METADATA_SP_INVALID
 			);
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 }

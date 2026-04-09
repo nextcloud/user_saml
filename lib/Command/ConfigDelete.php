@@ -40,15 +40,15 @@ class ConfigDelete extends Base {
 		if ((string)$pId !== $input->getArgument('providerId')) {
 			// Make sure we don't delete provider with id 0 by error
 			$output->writeln('<error>providerId argument needs to be an number. Got: ' . $pId . '</error>');
-			return 1;
+			return self::FAILURE;
 		}
 		try {
 			$this->samlSettings->delete($pId);
 			$output->writeln('Provider deleted.');
 		} catch (Exception) {
 			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
-			return 1;
+			return self::FAILURE;
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 }

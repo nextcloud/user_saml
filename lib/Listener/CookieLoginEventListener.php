@@ -26,12 +26,8 @@ class CookieLoginEventListener implements IEventListener {
 	public function handle(Event $event): void {
 		if ($event instanceof BeforeUserLoggedInWithCookieEvent) {
 			$this->prepareRestoreOfSession();
-			return;
-		}
-
-		if ($event instanceof UserLoggedInWithCookieEvent) {
+		} elseif ($event instanceof UserLoggedInWithCookieEvent) {
 			$this->restoreSession();
-			return;
 		}
 	}
 
