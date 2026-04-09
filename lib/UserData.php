@@ -11,9 +11,8 @@ namespace OCA\User_SAML;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 
 class UserData {
-	private $uid;
-	/** @var array */
-	private $attributes;
+	private ?string $uid = null;
+	private ?array $attributes = null;
 
 	public function __construct(
 		private readonly UserResolver $userResolver,
@@ -83,9 +82,8 @@ class UserData {
 	}
 
 	/**
-	 * returns the plain text UUID if the provided $uid string is a
+	 * Returns the plain text UUID if the provided $uid string is a
 	 * base64-encoded binary string representing e.g. the objectGUID. Otherwise
-	 *
 	 */
 	public function testEncodedObjectGUID(string $uid): string {
 		if (preg_match('/[^a-zA-Z0-9=+\/]/', $uid) !== 0) {
@@ -129,7 +127,7 @@ class UserData {
 		return strtoupper($hex_guid_to_guid_str);
 	}
 
-	protected function assertIsInitialized() {
+	protected function assertIsInitialized(): void {
 		if ($this->attributes === null) {
 			throw new \LogicException('UserData have to be initialized with setAttributes first');
 		}

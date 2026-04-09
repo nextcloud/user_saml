@@ -131,14 +131,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
 	}
 
-	/**
-	 * delete a user
-	 * @param string $uid The username of the user to delete
-	 * @return bool
-	 * @since 4.5.0
-	 */
 	#[\Override]
-	public function deleteUser($uid) {
+	public function deleteUser($uid): bool {
 		$qb = $this->db->getQueryBuilder();
 		$affected = $qb->delete('user_saml_users')
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
@@ -150,10 +144,9 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * Returns the user's home directory, if home directory mapping is set up.
 	 *
 	 * @param string $uid the username
-	 * @return string|bool
 	 */
 	#[\Override]
-	public function getHome(string $uid) {
+	public function getHome(string $uid): string|false {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('home')
 			->from('user_saml_users')
@@ -175,7 +168,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 4.5.0
 	 */
 	#[\Override]
-	public function getUsers($search = '', $limit = null, $offset = null) {
+	public function getUsers($search = '', $limit = null, $offset = null): array {
 		// shamelessly duplicated from \OC\User\Database
 		$users = $this->getDisplayNames($search, $limit, $offset);
 		$userIds = array_map(fn ($uid) => (string)$uid, array_keys($users));
@@ -190,7 +183,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 4.5.0
 	 */
 	#[\Override]
-	public function userExists($uid) {
+	public function userExists($uid): bool {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->userExists($uid);
 		} else {
@@ -198,7 +191,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 	}
 
-	public function setDisplayName(string $uid, $displayName) {
+	public function setDisplayName(string $uid, $displayName): bool {
 		if ($backend = $this->getActualUserBackend($uid)) {
 			return $backend->setDisplayName($uid, $displayName);
 		}
@@ -245,7 +238,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 4.5.0
 	 */
 	#[\Override]
-	public function getDisplayNames($search = '', $limit = null, $offset = null) {
+	public function getDisplayNames($search = '', $limit = null, $offset = null): array {
 		// shamelessly duplicate from \OC\User\Database
 		$query = $this->db->getQueryBuilder();
 
@@ -281,12 +274,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 4.5.0
 	 */
 	#[\Override]
-	public function hasUserListings() {
-		if ($this->autoprovisionAllowed()) {
-			return true;
-		}
-
-		return false;
+	public function hasUserListings(): bool {
+		return $this->autoprovisionAllowed();
 	}
 
 	/**
@@ -296,7 +285,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @since 6.0.0
 	 */
 	#[\Override]
-	public function isSessionActive() {
+	public function isSessionActive(): bool {
 		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
 	}
 
@@ -304,7 +293,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * {@inheritdoc}
 	 */
 	#[\Override]
-	public function getLogoutUrl() {
+	public function getLogoutUrl(): string {
 		$id = $this->settings->getProviderId();
 		$settings = $this->settings->get($id);
 		$slo = $settings['idp-singleLogoutService.url'] ?? '';
@@ -406,13 +395,8 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	}
 
 
-	/**
-	 * Backend name to be shown in user management
-	 * @return string the name of the backend to be shown
-	 * @since 8.0.0
-	 */
 	#[\Override]
-	public function getBackendName() {
+	public function getBackendName(): string {
 		return 'user_saml';
 	}
 
@@ -429,7 +413,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @param string $uid
 	 * @return null|UserInterface
 	 */
-	public function getActualUserBackend($uid) {
+	public function getActualUserBackend(string $uid): ?UserInterface {
 		foreach (self::$backends as $backend) {
 			if ($backend->userExists($uid)) {
 				return $backend;

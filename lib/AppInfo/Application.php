@@ -99,7 +99,11 @@ class Application extends App implements IBootstrap {
 				$userBackend = Server::get(UserBackend::class);
 
 				$userBackend->registerBackends($userManager->getBackends());
-				OC_User::useBackend($userBackend);
+				if (version_compare($config->getSystemValueString('version', '0.0.0'), '32.0.0', '>=')) {
+					$userManager->registerBackend($userBackend);
+				} else {
+					\OC_User::useBackend($userBackend);
+				}
 
 				$params = [];
 
