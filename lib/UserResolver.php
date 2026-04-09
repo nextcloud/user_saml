@@ -13,11 +13,9 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class UserResolver {
-	/** @var IUserManager */
-	private $userManager;
-
-	public function __construct(IUserManager $userManager) {
-		$this->userManager = $userManager;
+	public function __construct(
+		private IUserManager $userManager,
+	) {
 	}
 
 	/**
@@ -60,7 +58,7 @@ class UserResolver {
 			 * login, …) this will not be fired. This occurs only if shares from
 			 * a users are supposed to be mounted who cannot be found. Throwing
 			 * an exception here would kill the experience for a valid, acting
-			 * user. Instead we write a log message.
+			 * user. Instead, we write a log message.
 			 */
 			\OCP\Log\logger()->info(
 				'Passed string does not resemble a valid GUID. Known UUID '

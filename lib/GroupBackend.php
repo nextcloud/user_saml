@@ -107,10 +107,6 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $groups;
 	}
 
-	/**
-	 * @param string $gid
-	 * @return bool
-	 */
 	#[\Override]
 	public function groupExists($gid): bool {
 		if (isset($this->groupCache[$gid])) {
