@@ -15,7 +15,6 @@ use OC_User;
 use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\GroupBackend;
-use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\Listener\CookieLoginEventListener;
 use OCA\User_SAML\Listener\LoadAdditionalScriptsListener;
 use OCA\User_SAML\Listener\LoginEventListener;
@@ -29,10 +28,8 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IAppConfig;
 use OCP\IConfig;
-use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -40,7 +37,6 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use OCP\L10N\IFactory;
 use OCP\Server;
 use OCP\User\Events\BeforeUserLoggedInWithCookieEvent;
 use OCP\User\Events\UserLoggedInEvent;
@@ -82,24 +78,18 @@ class Application extends App implements IBootstrap {
 				IConfig $config,
 				IRequest $request,
 				IUserSession $userSession,
-				ISession $session,
-				IFactory $factory,
 				SAMLSettings $samlSettings,
 				IUserManager $userManager,
-				IDBConnection $connection,
-				LoggerInterface $logger,
-				GroupManager $groupManager,
-				IEventDispatcher $dispatcher,
+				IGroupManager $groupManager,
 				CsrfTokenManager $csrfTokenManager,
+				GroupBackend $groupBackend,
+				UserBackend $userBackend,
 				bool $isCLI,
 			): void {
-				$groupBackend = Server::get(GroupBackend::class);
-				Server::get(IGroupManager::class)->addBackend($groupBackend);
-
-				$userBackend = Server::get(UserBackend::class);
+				$groupManager->addBackend($groupBackend);
 
 				$userBackend->registerBackends($userManager->getBackends());
-				OC_User::useBackend($userBackend);
+				$userManager->registerBackend($userBackend);
 
 				$params = [];
 
