@@ -13,16 +13,16 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\AuthorizedAdminSetting;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IRequest;
 use OneLogin\Saml2\Constants;
 
 class SettingsController extends Controller {
 
 	public function __construct(
-		$appName,
+		string $appName,
 		IRequest $request,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 		private readonly Admin $admin,
 		private readonly SAMLSettings $samlSettings,
 	) {
@@ -72,6 +72,9 @@ class SettingsController extends Controller {
 				if (str_starts_with($category, 'attribute-mapping')) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
+				} elseif (str_starts_with($category, 'user-filter')) {
+					$category = 'user-filter';
+					$key = 'saml-user-filter' . '-' . $setting;
 				} elseif ($category === 'name-id-formats') {
 					if ($setting === $storedSettings['sp-name-id-format']) {
 						$settings['sp']['name-id-format'] = $storedSettings['sp-name-id-format'];
@@ -84,7 +87,7 @@ class SettingsController extends Controller {
 
 				if (isset($details['global']) && $details['global']) {
 					// Read legacy data from oc_appconfig
-					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
+					$settings[$category][$setting] = $this->appConfig->getAppValueString($key);
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';
 				}
@@ -100,9 +103,11 @@ class SettingsController extends Controller {
 	}
 
 	#[AuthorizedAdminSetting(Admin::class)]
-	public function setProviderSetting(int $providerId, string $configKey, string $configValue): Response {
+	public function setProviderSetting(int $providerId, array $newConfigs): Response {
 		$configuration = $this->samlSettings->get($providerId);
-		$configuration[$configKey] = $configValue;
+		foreach ($newConfigs as $configKey => $configValue) {
+			$configuration[$configKey] = $configValue;
+		}
 		$this->samlSettings->set($providerId, $configuration);
 		return new Response();
 	}
