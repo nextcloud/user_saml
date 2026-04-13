@@ -34,7 +34,7 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @throws \Exception
 	 */
 	#[\Override]
-	public function beforeController($controller, $methodName) {
+	public function beforeController($controller, $methodName): void {
 		if ($this->reflector->hasAnnotation('OnlyUnauthenticatedUsers') && $this->userSession->isLoggedIn()) {
 			throw new \Exception('User is already logged-in');
 		}
@@ -44,11 +44,10 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 * @param \OCP\AppFramework\Controller $controller
 	 * @param string $methodName
 	 * @param \Exception $exception
-	 * @return RedirectResponse
 	 * @throws \Exception
 	 */
 	#[\Override]
-	public function afterException($controller, $methodName, \Exception $exception) {
+	public function afterException($controller, $methodName, \Exception $exception): RedirectResponse {
 		if ($exception->getMessage() === 'User is already logged-in') {
 			return new RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}

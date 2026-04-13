@@ -70,9 +70,8 @@ class SAMLSettings {
 	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
 	/** @var array<int, array<string, string>> */
-	private $configurations = [];
-	/** @var int */
-	private $configurationsLoadedState = self::LOADED_NONE;
+	private array $configurations = [];
+	private int $configurationsLoadedState = self::LOADED_NONE;
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,

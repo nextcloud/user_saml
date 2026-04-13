@@ -29,6 +29,6 @@ class ConfigCreate extends Base {
 	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->writeln((string)$this->samlSettings->getNewProviderId());
-		return 0;
+		return self::SUCCESS;
 	}
 }

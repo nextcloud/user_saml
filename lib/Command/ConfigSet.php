@@ -51,13 +51,13 @@ class ConfigSet extends Base {
 		if ((string)$pId !== $input->getArgument('providerId')) {
 			// Make sure we don't delete provider with id 0 by error
 			$output->writeln('<error>providerId argument needs to be an number. Got: ' . $pId . '</error>');
-			return 1;
+			return self::FAILURE;
 		}
 		try {
 			$settings = $this->samlSettings->get($pId);
 		} catch (Exception) {
 			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
-			return 1;
+			return self::FAILURE;
 		}
 
 		foreach ($input->getOptions() as $key => $value) {
@@ -73,6 +73,6 @@ class ConfigSet extends Base {
 		$this->samlSettings->set($pId, $settings);
 		$output->writeln('The provider\'s config was updated.');
 
-		return 0;
+		return self::SUCCESS;
 	}
 }
