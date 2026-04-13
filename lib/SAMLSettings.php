@@ -9,6 +9,7 @@ namespace OCA\User_SAML;
 
 use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
 use OCP\IConfig;
 use OCP\ISession;
@@ -75,6 +76,7 @@ class SAMLSettings {
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,
+		private readonly IAppConfig $appConfig,
 		private readonly IConfig $config,
 		private readonly ISession $session,
 		private readonly ConfigurationsMapper $mapper,
@@ -103,9 +105,9 @@ class SAMLSettings {
 	 * Check if multiple user back ends are allowed
 	 */
 	public function allowMultipleUserBackEnds(): bool {
-		$type = $this->config->getAppValue('user_saml', 'type');
-		$setting = $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
-		return ($setting === '1' && $type === 'saml');
+		$type = $this->appConfig->getAppValueString('type');
+		$setting = $this->appConfig->getAppValueBool('general-allow_multiple_user_back_ends');
+		return $setting && $type === 'saml';
 	}
 
 	public function usesSloWebServerDecode(int $idp): bool {
