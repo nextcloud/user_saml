@@ -115,7 +115,7 @@ class GroupManager {
 	}
 
 	protected function translateGroupToIds(array &$samlGroups): void {
-		array_walk($samlGroups, function (&$gid): void {
+		array_walk($samlGroups, function (string &$gid): void {
 			$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
 			if ($altGid !== null) {
 				$gid = $altGid;
@@ -222,7 +222,7 @@ class GroupManager {
 		}
 
 		$altGid = $this->ownGroupBackend->groupExistsWithDifferentGid($gid);
-		if ($altGid) {
+		if ($altGid !== null && $altGid !== '') {
 			$group = $this->groupManager->get($altGid);
 			if ($group) {
 				return $group;

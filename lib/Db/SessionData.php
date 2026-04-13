@@ -16,6 +16,7 @@ use OCP\DB\Types;
  * @method setId(string $id): void
  * @method setTokenId(int $tokenId): void
  * @method getTokenId(): int
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class SessionData extends Entity {
 	public ?string $data = null;

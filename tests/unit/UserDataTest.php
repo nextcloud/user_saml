@@ -11,30 +11,27 @@ namespace OCA\User_SAML\Tests;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
-use OCP\IConfig;
+use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class UserDataTest extends TestCase {
-	/** @var IConfig|\PHPUnit\Framework\MockObject\MockObject */
-	protected $config;
-	/** @var UserResolver|\PHPUnit\Framework\MockObject\MockObject */
-	protected $resolver;
-	/** @var SAMLSettings|\PHPUnit\Framework\MockObject\MockObject */
-	protected $samlSettings;
-	/** @var UserData */
-	protected $userData;
+	protected UserResolver&MockObject $resolver;
+	protected SAMLSettings&MockObject $samlSettings;
+	protected UserData $userData;
 
+	#[Override]
 	public function setUp(): void {
 		parent::setUp();
 
 		$this->resolver = $this->createMock(UserResolver::class);
 		$this->samlSettings = $this->createMock(SAMLSettings::class);
-		$this->config = $this->createMock(IConfig::class);
 
-		$this->userData = new UserData($this->resolver, $this->samlSettings, $this->config);
+		$this->userData = new UserData($this->resolver, $this->samlSettings);
 	}
 
-	public function objectGuidProvider() {
+	public function objectGuidProvider(): array {
 		return [
 			['Joey No Conversion', 'Joey No Conversion'],
 			['no@convers.ion', 'no@convers.ion'],
@@ -47,10 +44,8 @@ class UserDataTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider objectGuidProvider
-	 */
-	public function testTestEncodedObjectGUID(string $input, string $expectation) {
+	#[DataProvider(methodName: 'objectGuidProvider')]
+	public function testTestEncodedObjectGUID(string $input, string $expectation): void {
 		$uid = $this->invokePrivate($this->userData, 'testEncodedObjectGUID', [$input]);
 		$this->assertSame($expectation, $uid);
 	}

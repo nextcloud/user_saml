@@ -22,6 +22,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\User\Events\UserChangedEvent;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
@@ -40,6 +41,7 @@ class UserBackendTest extends TestCase {
 	private LoggerInterface&MockObject $logger;
 	private IEventDispatcher&MockObject $eventDispatcher;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -57,28 +59,11 @@ class UserBackendTest extends TestCase {
 	}
 
 	/**
-	 * @psalm-assert UserBackend|MockObject $this->userBackend
+	 * @param list<non-empty-string> $mockedFunctions
 	 */
-	public function getMockedBuilder(array $mockedFunctions = []): void {
-		if ($mockedFunctions !== []) {
-			$this->userBackend = $this->getMockBuilder(UserBackend::class)
-				->setConstructorArgs([
-					$this->config,
-					$this->appConfig,
-					$this->urlGenerator,
-					$this->session,
-					$this->db,
-					$this->userManager,
-					$this->groupManager,
-					$this->SAMLSettings,
-					$this->logger,
-					$this->userData,
-					$this->eventDispatcher
-				])
-				->setMethods($mockedFunctions)
-				->getMock();
-		} else {
-			$this->userBackend = new UserBackend(
+	public function getMockedBuilder(array $mockedFunctions = []): UserBackend&MockObject {
+		return $this->getMockBuilder(UserBackend::class)
+			->setConstructorArgs([
 				$this->config,
 				$this->appConfig,
 				$this->urlGenerator,
@@ -90,17 +75,34 @@ class UserBackendTest extends TestCase {
 				$this->logger,
 				$this->userData,
 				$this->eventDispatcher
-			);
-		}
+			])
+			->onlyMethods($mockedFunctions)
+			->getMock();
+	}
+
+	public function getRealUserBackend(): UserBackend {
+		return new UserBackend(
+			$this->config,
+			$this->appConfig,
+			$this->urlGenerator,
+			$this->session,
+			$this->db,
+			$this->userManager,
+			$this->groupManager,
+			$this->SAMLSettings,
+			$this->logger,
+			$this->userData,
+			$this->eventDispatcher
+		);
 	}
 
 	public function testGetBackendName(): void {
-		$this->getMockedBuilder();
+		$this->userBackend = $this->getRealUserBackend();
 		$this->assertSame('user_saml', $this->userBackend->getBackendName());
 	}
 
 	public function testUpdateAttributesWithoutAttributes(): void {
-		$this->getMockedBuilder(['getDisplayName']);
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName']);
 		$user = $this->createMock(IUser::class);
 
 		$this->appConfig->method('getAppValueString')
@@ -138,7 +140,7 @@ class UserBackendTest extends TestCase {
 	}
 
 	public function testUpdateAttributesWithoutValidUser(): void {
-		$this->getMockedBuilder();
+		$this->userBackend = $this->getRealUserBackend();
 
 		$this->config->method('getAppValue')
 			->willReturnCallback(fn (string $appId, string $key, string $default)
@@ -150,12 +152,11 @@ class UserBackendTest extends TestCase {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn(null);
-		$this->userBackend->updateAttributes('ExistingUser', []);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
 	public function testUpdateAttributes(): void {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
 
 		$attributes = [
@@ -217,8 +218,7 @@ class UserBackendTest extends TestCase {
 	}
 
 	public function testUpdateAttributesQuotaDefaultFallback(): void {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
 		$attributes = ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => ''];
 

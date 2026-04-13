@@ -125,7 +125,7 @@ class UserResolver {
 		$sanitized = str_replace(' ', '_', (string)$sanitized);
 
 		// Every remaining disallowed characters will be removed
-		$sanitized = (string)preg_replace('/[^a-zA-Z0-9_.@-]/u', '', (string)$sanitized);
+		$sanitized = (string)preg_replace('/[^a-zA-Z0-9_.@-]/u', '', $sanitized);
 
 		if ($sanitized === '') {
 			throw new \InvalidArgumentException('provided name template for username does not contain any allowed characters');

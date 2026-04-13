@@ -28,6 +28,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -51,6 +52,7 @@ class SAMLControllerTest extends TestCase {
 	private ITrustedDomainHelper|MockObject $trustedDomainController;
 	private SessionService|MockObject $sessionService;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -71,11 +73,11 @@ class SAMLControllerTest extends TestCase {
 		$this->sessionService = $this->createMock(SessionService::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
-			static fn ($param) => $param
+			static fn (string $param): string => $param
 		);
 
 		$this->config->expects($this->any())->method('getSystemValue')
-			->willReturnCallback(static fn ($key, $default) => $default);
+			->willReturnCallback(static fn (string $key, mixed $default): mixed => $default);
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -234,7 +236,7 @@ class SAMLControllerTest extends TestCase {
 		$this->userData
 			->expects($this->any())
 			->method('testEncodedObjectGUID')
-			->willReturnCallback(fn ($uid) => $uid);
+			->willReturnCallback(fn (string $uid): string => $uid);
 		$this->userData
 			->expects($this->any())
 			->method('getEffectiveUid')
@@ -260,7 +262,6 @@ class SAMLControllerTest extends TestCase {
 			->willReturn($userState === 1);
 
 		if (isset($samlUserData['uid']) && !($userState === 0 && $autoProvision === 0)) {
-			/** @var IUser|MockObject $user */
 			$user = $this->createMock(IUser::class);
 			$im = $this->userResolver
 				->expects($this->once())

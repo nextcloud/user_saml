@@ -17,6 +17,7 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AdminTest extends \Test\TestCase {
@@ -26,8 +27,8 @@ class AdminTest extends \Test\TestCase {
 	private Defaults&MockObject $defaults;
 	private IAppConfig&MockObject $appConfig;
 	private IInitialState&MockObject $initialState;
-	private IConfig&MockObject $config;
 
+	#[Override]
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
@@ -50,7 +51,7 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->willReturnCallback(fn ($text, $parameters = []) => vsprintf($text, $parameters));
+			->willReturnCallback(fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));
 
 		$serviceProviderFields = [
 			'x509cert' => [
@@ -276,12 +277,16 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueInt')
-			->withConsecutive(
-				['general-require_provisioned_account'],
-				['general-allow_multiple_user_back_ends'],
-			)
-			->willReturnOnConsecutiveCalls(0, 0);
+			->method('getAppValueBool')
+			->willReturnCallback(function (string $key, bool $default) {
+				static $i = 0;
+				match (++$i) {
+					1 => $this->assertEquals($key, 'general-require_provisioned_account'),
+					2 => $this->assertEquals($key, 'general-allow_multiple_user_back_ends'),
+					default => $this->fail(),
+				};
+				return false;
+			});
 		$this->defaults
 			->expects($this->any())
 			->method('getName')

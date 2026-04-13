@@ -17,7 +17,7 @@ use Sabre\HTTP\RequestInterface;
 use Sabre\HTTP\ResponseInterface;
 
 class DavPlugin extends ServerPlugin {
-	/** @noinspection PhpPropertyOnlyWrittenInspection */
+	/** @psalm-suppress PropertyNotSetInConstructor */
 	private Server $server;
 
 	public function __construct(

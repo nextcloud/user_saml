@@ -68,7 +68,7 @@ class SettingsController extends Controller {
 		$settings['sp']['name-id-format'] = Constants::NAMEID_UNSPECIFIED;
 		$storedSettings = $this->samlSettings->get($providerId);
 		foreach ($params as $category => $content) {
-			if (empty($content) || $category === 'providers' || $category === 'type') {
+			if ($content === '' || $content === null || $category === 'providers' || $category === 'type') {
 				continue;
 			}
 			foreach ($content as $setting => $details) {

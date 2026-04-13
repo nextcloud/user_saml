@@ -289,7 +289,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$userData = $this->formatUserData($userData);
 
 		// make sure that a valid UID is given
-		if (empty($userData['formatted']['uid'])) {
+		if (!isset($userData['formatted']['uid']) || $userData['formatted']['uid'] === '') {
 			$this->logger->error('No valid uid given, please check your attribute mapping. Got uid: {uid}', ['app' => 'user_saml', 'uid' => $userData['formatted']['uid']]);
 			throw new \InvalidArgumentException('No valid uid given, please check your attribute mapping. Got uid: ' . $userData['formatted']['uid']);
 		}
@@ -536,12 +536,11 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	}
 
 	#[\Override]
-	public function countUsers() {
+	public function countUsers(): int {
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))
 			->from('user_saml_users');
-		$result = $query->executeQuery();
-
-		return $result->fetchColumn();
+		$result = $query->executeQuery()->fetchOne();
+		return $result === false ? 0 : (int)$result;
 	}
 }

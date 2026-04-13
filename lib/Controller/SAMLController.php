@@ -439,11 +439,11 @@ class SAMLController extends Controller {
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
-		if (!empty($_POST['SAMLRequest'])) {
+		if (isset($_POST['SAMLRequest']) && $_POST['SAMLRequest'] !== '') {
 			$_GET['SAMLRequest'] = $_POST['SAMLRequest'];
 		}
 
-		$isFromIDP = !$isFromGS && !empty($_GET['SAMLRequest']);
+		$isFromIDP = !$isFromGS && isset($_GET['SAMLRequest']) && $_GET['SAMLRequest'] !== '';
 		$idp = null;
 		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
@@ -494,11 +494,12 @@ class SAMLController extends Controller {
 				try {
 					$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
 				} catch (Error $e) {
+					$targetUrl = null;
 					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
 				}
 			}
-			if (!empty($targetUrl) && $auth && !$auth->getLastErrorReason()) {
+			if ($targetUrl !== '' && $targetUrl !== null && $auth && $auth->getLastErrorReason() !== null) {
 				$this->userSession->logout();
 			}
 		}
@@ -639,10 +640,10 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * return the display name of the SSO identity provider
+	 * Return the display name of the SSO identity provider.
 	 */
 	protected function getSSODisplayName(?string $displayName): string {
-		if (empty($displayName)) {
+		if ($displayName === null || $displayName === '') {
 			$displayName = $this->l->t('SSO & SAML log in');
 		}
 

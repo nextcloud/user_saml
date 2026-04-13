@@ -9,17 +9,12 @@ declare(strict_types=1);
 
 use OCP\App\IAppManager;
 use OCP\Server;
-use PHPUnit\Framework\TestCase;
 
-if (!defined('PHPUNIT_RUN')) {
-	define('PHPUNIT_RUN', 1);
-}
+define('PHPUNIT_RUN', 1);
 
 require_once __DIR__ . '/../../../../lib/base.php';
-require_once __DIR__ . '/../../../../tests/autoload.php';
+
+\OC::$composerAutoloader->addPsr4('Test\\', OC::$SERVERROOT . '/tests/lib/', true);
+\OC::$composerAutoloader->addPsr4('Tests\\', OC::$SERVERROOT . '/tests/', true);
 
 Server::get(IAppManager::class)->loadApp('user_saml');
-
-if (!class_exists(TestCase::class)) {
-	require_once('PHPUnit/Autoload.php');
-}
