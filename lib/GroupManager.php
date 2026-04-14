@@ -186,7 +186,7 @@ class GroupManager {
 
 		$group = $this->groupManager->get($gid);
 		if ($group === null) {
-			throw new GroupNotFoundException('Could not found group ' . $gid);
+			throw new GroupNotFoundException('Could not find group ' . $gid);
 		}
 		$this->dispatcher->dispatchTyped(new GroupCreatedEvent($group));
 

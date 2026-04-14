@@ -24,17 +24,16 @@
     <file name="tests/stubs/oc_hooks_emitter.php" />
     <file name="tests/stubs/oc_core_controller_clientflowloginv2controller.php" />
     <file name="tests/stubs/oc_core_controller_clientflowlogincontroller.php" />
-    <file name="tests/stubs/oc.php" />
   </stubs>
     <projectFiles>
-        <directory name="lib" />
-		<directory name="tests/unit" />
-    <ignoreFiles>
-      <directory name="vendor"/>
-      <directory name="vendor-bin"/>
-      <directory name="tests/stubs"/>
-      <file name="../../lib/base.php"/>
-    </ignoreFiles>
+      <directory name="lib" />
+      <directory name="tests/unit" />
+      <ignoreFiles>
+        <directory name="vendor"/>
+        <directory name="vendor-bin"/>
+        <directory name="tests/stubs"/>
+        <file name="tests/unit/bootstrap.php" />
+      </ignoreFiles>
     </projectFiles>
   <extraFiles>
     <directory name="vendor" />
@@ -45,7 +44,7 @@
     <ClassMustBeFinal errorLevel="info" />
     <MissingConstructor>
       <errorLevel type="info">
-		<directory name="tests/unit" />
+        <directory name="tests/unit" />
       </errorLevel>
     </MissingConstructor>
   </issueHandlers>

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\User_SAML;
 
 use OC\Security\CSRF\CsrfTokenManager;
+use OCA\User_SAML\Model\SessionData;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -52,6 +53,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		private readonly LoggerInterface $logger,
 		private readonly UserData $userData,
 		private readonly IEventDispatcher $eventDispatcher,
+		private readonly string $serverRoot,
 	) {
 	}
 
@@ -96,7 +98,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 				) {
 					$home = $this->config->getSystemValueString('datadirectory',
-						\OC::$SERVERROOT . '/data') . '/' . $home;
+						$this->serverRoot . '/data') . '/' . $home;
 				}
 
 				$values['home'] = $home;
@@ -189,6 +191,9 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $affected > 0;
 	}
 
+	/**
+	 * @param string $uid
+	 */
 	#[Override]
 	public function getDisplayName($uid): string {
 		if ($backend = $this->getActualUserBackend($uid)) {
@@ -247,7 +252,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 	#[Override]
 	public function isSessionActive(): bool {
-		return $this->session->get('user_saml.samlUserData') !== null;
+		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
 	}
 
 	#[Override]

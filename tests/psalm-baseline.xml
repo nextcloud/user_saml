@@ -3,5 +3,30 @@
  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="lib/GroupBackend.php">
+    <DeprecatedInterface>
+      <code><![CDATA[GroupBackend]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
+    <DeprecatedMethod>
+      <code><![CDATA[hasAnnotation]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="lib/UserBackend.php">
+    <DeprecatedInterface>
+      <code><![CDATA[UserBackend]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="lib/UserResolver.php">
+    <DeprecatedMethod>
+      <code><![CDATA[search]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="tests/unit/AppInfo/ApplicationTest.php">
+    <DeprecatedInterface>
+      <code><![CDATA[$this->app->getContainer()]]></code>
+    </DeprecatedInterface>
+  </file>
 </files>

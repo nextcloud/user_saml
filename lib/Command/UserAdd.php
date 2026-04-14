@@ -10,7 +10,6 @@ namespace OCA\User_SAML\Command;
 use OC\Core\Command\Base;
 use OCA\User_SAML\UserBackend;
 use OCP\IUserManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,7 +19,6 @@ class UserAdd extends Base {
 	public function __construct(
 		protected IUserManager $userManager,
 		protected UserBackend $backend,
-		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct();
 	}
@@ -52,8 +50,7 @@ class UserAdd extends Base {
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$uid = $input->getArgument('uid');
 
-		$user = $this->userManager->get($uid);
-		if ($user === null) {
+		if ($this->userManager->userExists($uid)) {
 			$output->writeln('<error>The account "' . $uid . '" already exists.</error>');
 			return self::FAILURE;
 		}
@@ -73,7 +70,10 @@ class UserAdd extends Base {
 			$this->backend->setDisplayName($uid, $input->getOption('display-name'));
 			$email = $input->getOption('email');
 			if (!empty($email)) {
-				$user->setSystemEMailAddress($email);
+				$user = $this->userManager->get($uid);
+				if ($user !== null) {
+					$user->setSystemEMailAddress($email);
+				}
 			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');

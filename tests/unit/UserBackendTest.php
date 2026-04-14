@@ -74,7 +74,8 @@ class UserBackendTest extends TestCase {
 				$this->SAMLSettings,
 				$this->logger,
 				$this->userData,
-				$this->eventDispatcher
+				$this->eventDispatcher,
+				'serverRoot',
 			])
 			->onlyMethods($mockedFunctions)
 			->getMock();
@@ -92,7 +93,8 @@ class UserBackendTest extends TestCase {
 			$this->SAMLSettings,
 			$this->logger,
 			$this->userData,
-			$this->eventDispatcher
+			$this->eventDispatcher,
+			'serverRoot',
 		);
 	}
 

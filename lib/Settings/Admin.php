@@ -90,7 +90,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Only allow authentication if an account exists on some other backend (e.g. LDAP).', [$this->defaults->getName()]),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->appConfig->getAppValueBool('general-require_provisioned_account'),
+				'value' => $this->appConfig->getAppValueInt('general-require_provisioned_account'),
 				'provider_type' => '',
 			],
 			'idp0_display_name' => [
@@ -110,7 +110,7 @@ class Admin implements IDelegatedSettings {
 				'text' => $this->l10n->t('Allow the use of multiple user back-ends (e.g. LDAP)'),
 				'type' => 'checkbox',
 				'global' => true,
-				'value' => $this->appConfig->getAppValueBool('general-allow_multiple_user_back_ends'),
+				'value' => $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends'),
 				'provider_type' => '',
 			],
 		];

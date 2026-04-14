@@ -251,7 +251,7 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueBool')
+			->method('getAppValueInt')
 			->with($this->anything(), $this->anything())
 			->willReturnArgument(1);
 
@@ -277,15 +277,15 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueBool')
-			->willReturnCallback(function (string $key, bool $default) {
+			->method('getAppValueInt')
+			->willReturnCallback(function (string $key, int $default) {
 				static $i = 0;
 				match (++$i) {
 					1 => $this->assertEquals($key, 'general-require_provisioned_account'),
 					2 => $this->assertEquals($key, 'general-allow_multiple_user_back_ends'),
 					default => $this->fail(),
 				};
-				return false;
+				return 0;
 			});
 		$this->defaults
 			->expects($this->any())

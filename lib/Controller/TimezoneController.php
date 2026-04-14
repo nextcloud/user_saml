@@ -42,6 +42,7 @@ class TimezoneController extends Controller {
 		if ($this->userId === null) {
 			throw new \RuntimeException('Unable to set timezone for null user');
 		}
+		/** @psalm-suppress DeprecatedMethod IUserConfig is only available in NC 33 */
 		$this->config->setUserValue($this->userId, 'core', 'timezone', $timezone);
 		$this->session->set('timezone', $timezoneOffset);
 

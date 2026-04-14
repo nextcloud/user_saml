@@ -107,8 +107,8 @@ class SAMLSettings {
 	 */
 	public function allowMultipleUserBackEnds(): bool {
 		$type = $this->appConfig->getAppValueString('type');
-		$setting = $this->appConfig->getAppValueBool('general-allow_multiple_user_back_ends');
-		return $setting && $type === 'saml';
+		$setting = $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends');
+		return $setting === 1 && $type === 'saml';
 	}
 
 	public function usesSloWebServerDecode(int $idp): bool {
