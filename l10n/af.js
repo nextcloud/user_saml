@@ -1,22 +1,19 @@
 OC.L10N.register(
     "user_saml",
     {
-    "Saved" : "Bewaar",
-    "Provider" : "Verskaffer",
     "Private key of the Service Provider" : "Privaatsleutel van die Diensverskaffer",
     "Email address" : "E-posadres",
-    "Open documentation" : "Open dokumentasie",
-    "Remove identity provider" : "Verwyder identiteitsverskaffer",
+    "Saved" : "Bewaar",
     "Add identity provider" : "Voeg identiteitsverskaffer toe",
+    "Download metadata XML" : "Laai metadata XML af",
     "General" : "Algemeen",
     "Service Provider Data" : "Diensverskafferdata",
     "Identity Provider Data" : "Identiteitsverskafferdata",
     "Security settings" : "Sekuriteitsinstellings",
     "Signatures and encryption offered" : "Handtekeninge en enkripsie gebied",
     "Signatures and encryption required" : "Handtekeninge en enkripsie vereis",
-    "Download metadata XML" : "Laai metadata XML af",
-    "Metadata invalid" : "Metadata ongeldig",
     "Metadata valid" : "Metadata geldig",
+    "Metadata invalid" : "Metadata ongeldig",
     "Error" : "Fout"
 },
 "nplurals=2; plural=(n != 1);");
