@@ -3,55 +3,30 @@
  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<files psalm-version="6.14.3@d0b040a91f280f071c1abcb1b77ce3822058725a">
-  <file src="lib/Controller/SAMLController.php">
-    <RedundantCondition>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[!$userExists]]></code>
-      <code><![CDATA[$autoProvisioningAllowed]]></code>
-    </RedundantCondition>
-    <UndefinedClass>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginController]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-      <code><![CDATA[ClientFlowLoginV2Controller]]></code>
-    </UndefinedClass>
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="lib/GroupBackend.php">
+    <DeprecatedInterface>
+      <code><![CDATA[GroupBackend]]></code>
+    </DeprecatedInterface>
   </file>
-  <file src="lib/Db/ConfigurationsMapper.php">
-    <MissingTemplateParam>
-      <code><![CDATA[ConfigurationsMapper]]></code>
-    </MissingTemplateParam>
-    <UndefinedMagicMethod>
-      <code><![CDATA[getConfigurationArray]]></code>
-      <code><![CDATA[getConfigurationArray]]></code>
-    </UndefinedMagicMethod>
+  <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
+    <DeprecatedMethod>
+      <code><![CDATA[hasAnnotation]]></code>
+    </DeprecatedMethod>
   </file>
   <file src="lib/UserBackend.php">
-    <ImplementedParamTypeMismatch>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$offset]]></code>
-    </ImplementedParamTypeMismatch>
-    <InvalidArgument>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$limit]]></code>
-      <code><![CDATA[$offset]]></code>
-      <code><![CDATA[$offset]]></code>
-    </InvalidArgument>
-    <MissingDependency>
-      <code><![CDATA[IRootFolder]]></code>
-    </MissingDependency>
-    <UndefinedClass>
-      <code><![CDATA[\OC]]></code>
-      <code><![CDATA[\OC_Util]]></code>
-    </UndefinedClass>
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[setDisplayName]]></code>
-    </UndefinedInterfaceMethod>
+    <DeprecatedInterface>
+      <code><![CDATA[UserBackend]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="lib/UserResolver.php">
+    <DeprecatedMethod>
+      <code><![CDATA[search]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="tests/unit/AppInfo/ApplicationTest.php">
+    <DeprecatedInterface>
+      <code><![CDATA[$this->app->getContainer()]]></code>
+    </DeprecatedInterface>
   </file>
 </files>

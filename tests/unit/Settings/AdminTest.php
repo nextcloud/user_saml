@@ -17,6 +17,7 @@ use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class AdminTest extends \Test\TestCase {
@@ -27,6 +28,7 @@ class AdminTest extends \Test\TestCase {
 	private IAppConfig&MockObject $appConfig;
 	private IInitialState&MockObject $initialState;
 
+	#[Override]
 	protected function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
@@ -49,7 +51,7 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n
 			->expects($this->any())
 			->method('t')
-			->willReturnCallback(fn ($text, $parameters = []) => vsprintf($text, $parameters));
+			->willReturnCallback(fn (string $text, array $parameters = []): string => vsprintf($text, $parameters));
 
 		$serviceProviderFields = [
 			'x509cert' => [
@@ -268,20 +270,23 @@ class AdminTest extends \Test\TestCase {
 				2 => 'Provider 2',
 			]);
 		$this->appConfig
-			->expects($this->exactly(2))
-			->method('getAppValueInt')
-			->withConsecutive(
-				['general-require_provisioned_account'],
-				['general-allow_multiple_user_back_ends'],
-			)
-			->willReturnOnConsecutiveCalls(0, 0);
-
-		$this->appConfig
 			->expects($this->exactly(1))
 			->method('getAppValueString')
 			->with('type')
 			->willReturn('saml');
 
+		$this->appConfig
+			->expects($this->exactly(2))
+			->method('getAppValueInt')
+			->willReturnCallback(function (string $key, int $default) {
+				static $i = 0;
+				match (++$i) {
+					1 => $this->assertEquals($key, 'general-require_provisioned_account'),
+					2 => $this->assertEquals($key, 'general-allow_multiple_user_back_ends'),
+					default => $this->fail(),
+				};
+				return 0;
+			});
 		$this->defaults
 			->expects($this->any())
 			->method('getName')
@@ -296,11 +301,11 @@ class AdminTest extends \Test\TestCase {
 		$this->assertEquals($expected, $this->admin->getForm());
 	}
 
-	public function testGetSection() {
+	public function testGetSection(): void {
 		$this->assertSame('saml', $this->admin->getSection());
 	}
 
-	public function testGetPriority() {
+	public function testGetPriority(): void {
 		$this->assertSame(0, $this->admin->getPriority());
 	}
 

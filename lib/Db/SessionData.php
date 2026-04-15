@@ -16,6 +16,7 @@ use OCP\DB\Types;
  * @method setId(string $id): void
  * @method setTokenId(int $tokenId): void
  * @method getTokenId(): int
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class SessionData extends Entity {
 	public ?string $data = null;
@@ -30,7 +31,7 @@ class SessionData extends Entity {
 	}
 
 	public function setData(SessionDataModel $input): void {
-		$this->data = json_encode($input);
+		$this->data = json_encode($input, JSON_THROW_ON_ERROR);
 		$this->markFieldUpdated('data');
 	}
 

@@ -12,6 +12,9 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
+/**
+ * @template-extends QBMapper<ConfigurationsEntity>
+ */
 class ConfigurationsMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'user_saml_configurations', ConfigurationsEntity::class);
@@ -36,7 +39,7 @@ class ConfigurationsMapper extends QBMapper {
 			->from('user_saml_configurations')
 			->orderBy('id', 'ASC');
 
-		/** @var ConfigurationsEntity $entity */
+		/** @var list<ConfigurationsEntity> $entities */
 		$entities = $this->findEntities($qb);
 		$result = [];
 		foreach ($entities as $entity) {

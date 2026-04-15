@@ -54,9 +54,12 @@ class UserData {
 		} catch (NoUserFoundException) {
 			return '';
 		}
-		return $uid ?? '';
+		return $uid;
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	public function getGroups(): array {
 		$this->assertIsInitialized();
 		$mapping = $this->getProviderSettings()['saml-attribute-mapping-group_mapping'] ?? null;
@@ -64,9 +67,13 @@ class UserData {
 			return [];
 		}
 
-		return is_array($this->attributes[$mapping])
-			? $this->attributes[$mapping]
-			: array_map(trim(...), explode(',', (string)$this->attributes[$mapping]));
+		if (is_array($this->attributes[$mapping])) {
+			/** @var list<string> $groups */
+			$groups = $this->attributes[$mapping];
+			return $groups;
+		}
+
+		return array_map(trim(...), explode(',', (string)$this->attributes[$mapping]));
 	}
 
 	protected function extractSamlUserId(): string {
@@ -127,6 +134,9 @@ class UserData {
 		return strtoupper($hex_guid_to_guid_str);
 	}
 
+	/**
+	 * @psalm-assert array $this->attributes
+	 */
 	protected function assertIsInitialized(): void {
 		if ($this->attributes === null) {
 			throw new \LogicException('UserData have to be initialized with setAttributes first');

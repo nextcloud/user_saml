@@ -13,15 +13,20 @@ use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\Server;
+use Psr\Container\ContainerInterface;
 
-/** @template-implements IEventListener<SabrePluginAddEvent|Event> */
+/** @template-implements IEventListener<SabrePluginAddEvent> */
 class SabrePluginEventListener implements IEventListener {
+	public function __construct(
+		private readonly ContainerInterface $appContainer,
+	) {
+	}
+
 	#[\Override]
 	public function handle(Event $event): void {
 		if (!$event instanceof SabrePluginAddEvent) {
 			return;
 		}
-		$event->getServer()->addPlugin(Server::get(DavPlugin::class));
+		$event->getServer()->addPlugin($this->appContainer->get(DavPlugin::class));
 	}
 }

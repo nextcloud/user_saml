@@ -9,37 +9,29 @@ namespace OCA\User_SAML\Migration;
 
 use OC\Group\Database;
 use OCA\User_SAML\GroupManager;
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IGroupManager;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
+use Override;
 use UnexpectedValueException;
 use function json_encode;
 
 class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
-
 	public function __construct(
 		private readonly IGroupManager $groupManager,
-		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
 	) {
 	}
 
-	#[\Override]
+	#[Override]
 	public function getName(): string {
 		return 'Remember local groups that might belong to SAML';
 	}
 
-	/**
-	 * Run repair step.
-	 * Must throw exception on error.
-	 *
-	 * @param IOutput $output
-	 * @throws \Exception in case of failure
-	 * @since 9.1.0
-	 */
-	#[\Override]
-	public function run(IOutput $output) {
-		$candidateInfo = $this->config->getAppValue('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '');
+	#[Override]
+	public function run(IOutput $output): void {
+		$candidateInfo = $this->appConfig->getAppValueString(GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION);
 		if ($candidateInfo !== '') {
 			return;
 		}
@@ -51,13 +43,12 @@ class RememberLocalGroupsForPotentialMigrations implements IRepairStep {
 			return;
 		}
 
-		$this->config->setAppValue(
-			'user_saml',
+		$this->appConfig->setAppValueString(
 			GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION,
 			json_encode([
 				'dropAfter' => time() + 86400 * 60, // 60 days
 				'groups' => $groupIds
-			])
+			], JSON_THROW_ON_ERROR)
 		);
 	}
 

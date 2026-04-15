@@ -5,8 +5,8 @@
         "sabre/dav": "4.7.0"
     },
     "config": {
-        "platform": {
-            "php": "8.1.32"
-        }
+		"platform": {
+			"php": "8.1.31"
+		}
     }
 }

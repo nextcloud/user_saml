@@ -7,30 +7,24 @@ declare(strict_types=1);
  */
 namespace OCA\User_SAML\Migration;
 
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class CleanupRemovedConfig implements IRepairStep {
 
 	public function __construct(
-		protected IConfig $config,
+		protected IAppConfig $appConfig,
 	) {
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	#[\Override]
-	public function getName() {
+	public function getName(): string {
 		return 'Cleans up config keys that are not used anymore';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	#[\Override]
-	public function run(IOutput $output) {
-		$this->config->deleteAppValue('user_saml', 'general-use_saml_auth_for_desktop');
+	public function run(IOutput $output): void {
+		$this->appConfig->deleteAppValue('general-use_saml_auth_for_desktop');
 	}
 }

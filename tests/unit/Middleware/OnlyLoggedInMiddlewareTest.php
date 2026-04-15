@@ -14,17 +14,16 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use Override;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
-	/** @var IURLGenerator|\PHPUnit\Framework\MockObject\MockObject */
-	protected $urlGenerator;
-	/** @var IControllerMethodReflector|\PHPUnit_Framework_MockObject_MockObject */
-	private $reflector;
-	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
-	private $userSession;
-	/** @var OnlyLoggedInMiddleware */
-	private $onlyLoggedInMiddleware;
+	protected IURLGenerator&MockObject $urlGenerator;
+	private IControllerMethodReflector&MockObject $reflector;
+	private IUserSession&MockObject $userSession;
+	private OnlyLoggedInMiddleware $onlyLoggedInMiddleware;
 
+	#[Override]
 	protected function setUp(): void {
 		$this->reflector = $this->createMock(IControllerMethodReflector::class);
 		$this->userSession = $this->createMock(IUserSession::class);
@@ -38,7 +37,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 		parent::setUp();
 	}
 
-	public function testBeforeControllerWithoutAnnotation() {
+	public function testBeforeControllerWithoutAnnotation(): void {
 		$this->reflector
 			->expects($this->once())
 			->method('hasAnnotation')
@@ -51,7 +50,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 		$this->onlyLoggedInMiddleware->beforeController($this->createMock(Controller::class), 'bar');
 	}
 
-	public function testBeforeControllerWithAnnotationAndNotLoggedIn() {
+	public function testBeforeControllerWithAnnotationAndNotLoggedIn(): void {
 		$this->reflector
 			->expects($this->once())
 			->method('hasAnnotation')
@@ -65,7 +64,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 		$this->onlyLoggedInMiddleware->beforeController($this->createMock(Controller::class), 'bar');
 	}
 
-	public function testBeforeControllerWithAnnotationAndLoggedIn() {
+	public function testBeforeControllerWithAnnotationAndLoggedIn(): void {
 		$this->reflector
 			->expects($this->once())
 			->method('hasAnnotation')
@@ -82,7 +81,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 		$this->onlyLoggedInMiddleware->beforeController($this->createMock(Controller::class), 'bar');
 	}
 
-	public function testAfterExceptionWithNormalException() {
+	public function testAfterExceptionWithNormalException(): void {
 		$exceptionMsg = 'My Exception';
 		$exception = new Exception($exceptionMsg);
 
@@ -92,7 +91,7 @@ class OnlyLoggedInMiddlewareTest extends \Test\TestCase {
 		$this->onlyLoggedInMiddleware->afterException($this->createMock(Controller::class), 'bar', $exception);
 	}
 
-	public function testAfterExceptionWithAlreadyLoggedInException() {
+	public function testAfterExceptionWithAlreadyLoggedInException(): void {
 		$homeUrl = 'https://my.nxt.cld/';
 		$this->urlGenerator->expects($this->atLeastOnce())
 			->method('getAbsoluteURL')

@@ -7,94 +7,93 @@
 
 namespace OCA\User_SAML\Tests;
 
-use OC\BackgroundJob\JobList;
-use OC\Group\Manager;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\BackgroundJob\IJobList;
+use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\BeforeGroupCreatedEvent;
 use OCP\Group\Events\BeforeGroupDeletedEvent;
 use OCP\Group\Events\GroupCreatedEvent;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class GroupManagerTest extends TestCase {
 
-	/** @var IDBConnection|MockObject */
-	private $db;
-	/** @var IGroupManager|MockObject */
-	private $groupManager;
-	/** @var GroupBackend|MockObject */
-	private $ownGroupBackend;
-	/** @var IConfig|MockObject */
-	private $config;
-	/** @var IEventDispatcher|MockObject */
-	private $eventDispatcher;
-	/** @var JobList|MockObject */
-	private $jobList;
-	/** @var SAMLSettings|MockObject */
-	private $settings;
-	/** @var GroupManager|MockObject */
-	private $ownGroupManager;
+	private IDBConnection&MockObject $db;
+	private IGroupManager&MockObject $groupManager;
+	private GroupBackend&MockObject $ownGroupBackend;
+	private IAppConfig&MockObject $appConfig;
+	private IEventDispatcher&MockObject $eventDispatcher;
+	private IJobList&MockObject $jobList;
+	private SAMLSettings&MockObject $settings;
+	private LoggerInterface&MockObject $logger;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 		$this->db = $this->createMock(IDBConnection::class);
-		$this->groupManager = $this->createMock(Manager::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->ownGroupBackend = $this->createMock(GroupBackend::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
-		$this->jobList = $this->createMock(JobList::class);
+		$this->jobList = $this->createMock(IJobList::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
-		$this->ownGroupManager = $this->createMock(GroupManager::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 	}
 
-	public function getGroupManager(array $mockedFunctions = []) {
-		if (!empty($mockedFunctions)) {
-			$this->ownGroupManager = $this->getMockBuilder(GroupManager::class)
-				->setConstructorArgs([
-					$this->db,
-					$this->groupManager,
-					$this->ownGroupBackend,
-					$this->config,
-					$this->eventDispatcher,
-					$this->jobList,
-					$this->settings
-				])
-				->onlyMethods($mockedFunctions)
-				->getMock();
-		} else {
-			$this->ownGroupManager = new GroupManager(
+	/**
+	 * @param list<non-empty-string> $mockedFunctions
+	 */
+	public function getPartialGroupManager(array $mockedFunctions = []): MockObject&GroupManager {
+		return $this->getMockBuilder(GroupManager::class)
+			->setConstructorArgs([
 				$this->db,
 				$this->groupManager,
 				$this->ownGroupBackend,
-				$this->config,
+				$this->appConfig,
 				$this->eventDispatcher,
 				$this->jobList,
-				$this->settings
-			);
-		}
+				$this->settings,
+				$this->logger,
+			])
+			->onlyMethods($mockedFunctions)
+			->getMock();
+	}
+	public function getRealGroupManager(): GroupManager {
+		return new GroupManager(
+			$this->db,
+			$this->groupManager,
+			$this->ownGroupBackend,
+			$this->appConfig,
+			$this->eventDispatcher,
+			$this->jobList,
+			$this->settings,
+			$this->logger,
+		);
 	}
 
-	public function testUpdateUserGroups() {
+	public function testUpdateUserGroups(): void {
 		// Case: The known memberships of the user are groupA and groupB. The new
 		// memberships are GroupB and GroupC. Hence, the user must be unassigned
 		// from GroupA and assigned to GroupC, while the GroupB association remains
 		// unchanged.
 
-		$this->config->expects($this->any())
-			->method('getAppValue')
-			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
+		$this->appConfig->expects($this->any())
+			->method('getAppValueString')
+			->with(GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION)
 			->willReturn(\json_encode(['groups' => ['groupA'], 'dropAfter' => time() + 2000]));
 
-		$this->getGroupManager(['handleUserUnassignedFromGroups', 'handleUserAssignedToGroups', 'translateGroupToIds', 'hasSamlBackend']);
+		$groupManager = $this->getPartialGroupManager(['handleUserUnassignedFromGroups', 'handleUserAssignedToGroups', 'translateGroupToIds', 'hasSamlBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 		$groupA
@@ -108,7 +107,7 @@ class GroupManagerTest extends TestCase {
 			->willReturn(['Database']);
 		$groupB->method('getGID')
 			->willReturn('groupB');
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->once())
 			->method('translateGroupToIds')
 			->with(['groupB', 'groupC']);
@@ -120,32 +119,32 @@ class GroupManagerTest extends TestCase {
 			->willReturn([$groupA, $groupB]);
 		$this->groupManager
 			->method('get')
-			->willReturnCallback(fn ($groupId): ?IGroup => match ($groupId) {
+			->willReturnCallback(fn (string $groupId): ?IGroup => match ($groupId) {
 				'groupA' => $groupA,
 				'groupB' => $groupB,
 				default => null,
 			});
 		// assert all groups are supplied by SAML backend
-		$this->ownGroupManager
+		$groupManager
 			->method('hasSamlBackend')
 			->willReturn(true);
 		// assert removing membership to groupA
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->once())
 			->method('handleUserUnassignedFromGroups')
 			->with($user, ['groupA']);
 		// assert adding membership to groupC
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->once())
 			->method('handleUserAssignedToGroups')
 			->with($user, ['groupC']);
 
 		// assert SAML provides user groups groupB and groupC
-		$this->invokePrivate($this->ownGroupManager, 'updateUserGroups', [$user, ['groupB', 'groupC']]);
+		$this->invokePrivate($groupManager, 'updateUserGroups', [$user, ['groupB', 'groupC']]);
 	}
 
-	public function testUnassignUserFromGroups() {
-		$this->getGroupManager();
+	public function testUnassignUserFromGroups(): void {
+		$groupManager = $this->getRealGroupManager();
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 		$groupA->method('getBackendNames')
@@ -175,22 +174,26 @@ class GroupManagerTest extends TestCase {
 			->method('deleteGroup');
 		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->withConsecutive(
-				[new BeforeGroupDeletedEvent($groupA)],
-				[new GroupDeletedEvent($groupA)]
-			);
+			->willReturnCallback(function (Event $event) use ($groupA): void {
+				static $i = 0;
+				match (++$i) {
+					1 => $this->assertEquals(new BeforeGroupDeletedEvent($groupA), $event),
+					2 => $this->assertEquals(new GroupDeletedEvent($groupA), $event),
+					default => $this->fail(),
+				};
+			});
 
-		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
+		$this->invokePrivate($groupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
 
-	public function testUnassignUserFromGroupsWithKeepEmpytGroups() {
-		$this->getGroupManager();
+	public function testUnassignUserFromGroupsWithKeepEmpytGroups(): void {
+		$groupManager = $this->getRealGroupManager();
 		// set general-keep_groups to 1 and assert it was read
-		$this->config
+		$this->appConfig
 			->expects($this->exactly(1))
-			->method('getAppValue')
-			->with('user_saml', 'general-keep_groups', '0')
-			->willReturn('1');
+			->method('getAppValueInt')
+			->with('general-keep_groups', 0)
+			->willReturn(1);
 		// create user and group mock
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
@@ -222,18 +225,18 @@ class GroupManagerTest extends TestCase {
 		$this->eventDispatcher->expects($this->exactly(0))
 			->method('dispatchTyped');
 
-		$this->invokePrivate($this->ownGroupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
+		$this->invokePrivate($groupManager, 'handleUserUnassignedFromGroups', [$user, ['groupA']]);
 	}
 
-	public function testAssignUserToGroups() {
-		$this->getGroupManager(['hasSamlBackend', 'createGroupInBackend']);
+	public function testAssignUserToGroups(): void {
+		$groupManager = $this->getPartialGroupManager(['hasSamlBackend', 'createGroupInBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupA = $this->createMock(IGroup::class);
 
-		$this->config->expects($this->any())
-			->method('getAppValue')
-			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
-			->willReturnArgument(2);
+		$this->appConfig->expects($this->any())
+			->method('getAppValueString')
+			->with(GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION)
+			->willReturnArgument(1);
 
 		// assert group already exists
 		$this->groupManager
@@ -242,29 +245,29 @@ class GroupManagerTest extends TestCase {
 			->with('groupA')
 			->willReturn($groupA);
 		// assert SAML group backend
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->once())
 			->method('hasSamlBackend')
 			->willReturn(true);
 		$groupA->expects($this->once())
 			->method('addUser')
 			->with($user);
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->never())
 			->method('createGroupInBackend');
 
-		$this->invokePrivate($this->ownGroupManager, 'handleUserAssignedToGroups', [$user, ['groupA']]);
+		$this->invokePrivate($groupManager, 'handleUserAssignedToGroups', [$user, ['groupA']]);
 	}
 
-	public function testAssignUserToNonExistingGroups() {
-		$this->getGroupManager();
+	public function testAssignUserToNonExistingGroups(): void {
+		$groupManager = $this->getRealGroupManager();
 		$user = $this->createMock(IUser::class);
 		$groupB = $this->createMock(IGroup::class);
 
-		$this->config->expects($this->any())
-			->method('getAppValue')
-			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
-			->willReturnArgument(2);
+		$this->appConfig->expects($this->any())
+			->method('getAppValueString')
+			->with(GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION)
+			->willReturnArgument(1);
 
 		// assert group does not exist
 		$this->groupManager
@@ -278,38 +281,42 @@ class GroupManagerTest extends TestCase {
 			->willReturn(true);
 		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->withConsecutive(
-				[new BeforeGroupCreatedEvent('SAML_groupB')],
-				[new GroupCreatedEvent($groupB)]
-			);
+			->willReturnCallback(function (Event $event) use ($groupB): void {
+				static $i = 0;
+				match (++$i) {
+					1 => $this->assertEquals(new BeforeGroupCreatedEvent('SAML_groupB'), $event),
+					2 => $this->assertEquals(new GroupCreatedEvent($groupB), $event),
+					default => $this->fail(),
+				};
+			});
 		// assert user gets added to group
 		$groupB->expects($this->once())
 			->method('addUser')
 			->with($user);
 
-		$this->invokePrivate($this->ownGroupManager, 'handleUserAssignedToGroups', [$user, ['groupB']]);
+		$this->invokePrivate($groupManager, 'handleUserAssignedToGroups', [$user, ['groupB']]);
 	}
 
-	public function testAssignUserToGroupsWithCollision() {
-		$this->getGroupManager(['hasSamlBackend']);
+	public function testAssignUserToGroupsWithCollision(): void {
+		$groupManager = $this->getPartialGroupManager(['hasSamlBackend']);
 		$user = $this->createMock(IUser::class);
 		$groupC = $this->createMock(IGroup::class);
 
-		$this->config->expects($this->any())
-			->method('getAppValue')
-			->with('user_saml', GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION, '')
-			->willReturnArgument(2);
+		$this->appConfig->expects($this->any())
+			->method('getAppValueString')
+			->with(GroupManager::LOCAL_GROUPS_CHECK_FOR_MIGRATION)
+			->willReturnArgument(1);
 
 		// assert group exists
 		$this->groupManager
 			->method('get')
-			->willReturnCallback(fn ($groupId) => match ($groupId) {
+			->willReturnCallback(fn (string $groupId): ?IGroup => match ($groupId) {
 				'groupC' => $groupC,
 				'SAML_groupC' => $groupC,
 				default => null,
 			});
 		// assert differnt group backend
-		$this->ownGroupManager
+		$groupManager
 			->expects($this->once())
 			->method('hasSamlBackend')
 			->willReturn(false);
@@ -328,15 +335,19 @@ class GroupManagerTest extends TestCase {
 			->willReturn(true);
 		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
-			->withConsecutive(
-				[new BeforeGroupCreatedEvent('SAML_groupC')],
-				[new GroupCreatedEvent($groupC)]
-			);
+			->willReturnCallback(function (Event $event) use ($groupC): void {
+				static $i = 0;
+				match (++$i) {
+					1 => $this->assertEquals(new BeforeGroupCreatedEvent('SAML_groupC'), $event),
+					2 => $this->assertEquals(new GroupCreatedEvent($groupC), $event),
+					default => $this->fail(),
+				};
+			});
 		// assert user gets added to group
 		$groupC->expects($this->once())
 			->method('addUser')
 			->with($user);
 
-		$this->invokePrivate($this->ownGroupManager, 'handleUserAssignedToGroups', [$user, ['groupC']]);
+		$this->invokePrivate($groupManager, 'handleUserAssignedToGroups', [$user, ['groupC']]);
 	}
 }

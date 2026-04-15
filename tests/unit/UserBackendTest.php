@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -11,6 +13,7 @@ use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -19,38 +22,31 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\User\Events\UserChangedEvent;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class UserBackendTest extends TestCase {
-	/** @var UserData|MockObject */
-	private $userData;
-	/** @var IConfig|MockObject */
-	private $config;
-	/** @var IURLGenerator|MockObject */
-	private $urlGenerator;
-	/** @var ISession|MockObject */
-	private $session;
-	/** @var IDBConnection|MockObject */
-	private $db;
-	/** @var IUserManager|MockObject */
-	private $userManager;
-	/** @var GroupManager|MockObject */
-	private $groupManager;
-	/** @var UserBackend|MockObject */
-	private $userBackend;
-	/** @var SAMLSettings|MockObject */
-	private $SAMLSettings;
-	/** @var LoggerInterface|MockObject */
-	private $logger;
-	/** @var IEventDispatcher|MockObject */
-	private $eventDispatcher;
+	private UserData&MockObject $userData;
+	private IConfig&MockObject $config;
+	private IAppConfig&MockObject $appConfig;
+	private IURLGenerator&MockObject $urlGenerator;
+	private ISession&MockObject $session;
+	private IDBConnection&MockObject $db;
+	private IUserManager&MockObject $userManager;
+	private GroupManager&MockObject $groupManager;
+	private UserBackend|MockObject $userBackend;
+	private SAMLSettings&MockObject $SAMLSettings;
+	private LoggerInterface&MockObject $logger;
+	private IEventDispatcher&MockObject $eventDispatcher;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
@@ -62,26 +58,14 @@ class UserBackendTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 	}
 
-	public function getMockedBuilder(array $mockedFunctions = []) {
-		if ($mockedFunctions !== []) {
-			$this->userBackend = $this->getMockBuilder(UserBackend::class)
-				->setConstructorArgs([
-					$this->config,
-					$this->urlGenerator,
-					$this->session,
-					$this->db,
-					$this->userManager,
-					$this->groupManager,
-					$this->SAMLSettings,
-					$this->logger,
-					$this->userData,
-					$this->eventDispatcher
-				])
-				->setMethods($mockedFunctions)
-				->getMock();
-		} else {
-			$this->userBackend = new UserBackend(
+	/**
+	 * @param list<non-empty-string> $mockedFunctions
+	 */
+	public function getMockedBuilder(array $mockedFunctions = []): UserBackend&MockObject {
+		return $this->getMockBuilder(UserBackend::class)
+			->setConstructorArgs([
 				$this->config,
+				$this->appConfig,
 				$this->urlGenerator,
 				$this->session,
 				$this->db,
@@ -90,25 +74,48 @@ class UserBackendTest extends TestCase {
 				$this->SAMLSettings,
 				$this->logger,
 				$this->userData,
-				$this->eventDispatcher
-			);
-		}
+				$this->eventDispatcher,
+				'serverRoot',
+			])
+			->onlyMethods($mockedFunctions)
+			->getMock();
 	}
 
-	public function testGetBackendName() {
-		$this->getMockedBuilder();
+	public function getRealUserBackend(): UserBackend {
+		return new UserBackend(
+			$this->config,
+			$this->appConfig,
+			$this->urlGenerator,
+			$this->session,
+			$this->db,
+			$this->userManager,
+			$this->groupManager,
+			$this->SAMLSettings,
+			$this->logger,
+			$this->userData,
+			$this->eventDispatcher,
+			'serverRoot',
+		);
+	}
+
+	public function testGetBackendName(): void {
+		$this->userBackend = $this->getRealUserBackend();
 		$this->assertSame('user_saml', $this->userBackend->getBackendName());
 	}
 
-	public function testUpdateAttributesWithoutAttributes() {
-		$this->getMockedBuilder(['getDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testUpdateAttributesWithoutAttributes(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName']);
 		$user = $this->createMock(IUser::class);
 
-		$this->config->method('getAppValue')
-			->willReturnCallback(fn (string $appId, string $key, string $default)
+		$this->appConfig->method('getAppValueString')
+			->willReturnCallback(fn (string $key, string $default)
 				// Unused parameters are intentionally kept for clarity
 				=> $default);
+
+		$this->appConfig->method('getAppValueInt')
+			->willReturnCallback(fn (string $key, int $default)
+				// Unused parameters are intentionally kept for clarity
+			=> $default);
 
 		$this->userManager
 			->expects($this->once())
@@ -134,8 +141,8 @@ class UserBackendTest extends TestCase {
 		$this->userBackend->updateAttributes('ExistingUser', []);
 	}
 
-	public function testUpdateAttributesWithoutValidUser() {
-		$this->getMockedBuilder();
+	public function testUpdateAttributesWithoutValidUser(): void {
+		$this->userBackend = $this->getRealUserBackend();
 
 		$this->config->method('getAppValue')
 			->willReturnCallback(fn (string $appId, string $key, string $default)
@@ -147,12 +154,11 @@ class UserBackendTest extends TestCase {
 			->method('get')
 			->with('ExistingUser')
 			->willReturn(null);
-		$this->userBackend->updateAttributes('ExistingUser', []);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
-	public function testUpdateAttributes() {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testUpdateAttributes(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
 
 		$attributes = [
@@ -163,23 +169,16 @@ class UserBackendTest extends TestCase {
 		];
 
 		// Replace at() matcher with willReturnCallback to avoid deprecation warning
-		$this->config
-			->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
-				if ($appId === 'user_saml') {
-					switch ($key) {
-						case 'saml-attribute-mapping-email_mapping':
-							return 'email';
-						case 'saml-attribute-mapping-displayName_mapping':
-							return 'displayname';
-						case 'saml-attribute-mapping-quota_mapping':
-							return 'quota';
-						case 'saml-attribute-mapping-group_mapping':
-							return 'groups';
-					}
-				}
-				return $default;
-			});
+		$this->appConfig
+			->method('getAppValueString')
+			->willReturnCallback(static fn (string $key, string $default)
+				=> match ($key) {
+					'saml-attribute-mapping-email_mapping' => 'email',
+					'saml-attribute-mapping-displayName_mapping' => 'displayname',
+					'saml-attribute-mapping-quota_mapping' => 'quota',
+					'saml-attribute-mapping-group_mapping' => 'groups',
+					default => $default,
+				});
 
 		$this->userManager
 			->expects($this->once())
@@ -220,14 +219,13 @@ class UserBackendTest extends TestCase {
 		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
-	public function testUpdateAttributesQuotaDefaultFallback() {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testUpdateAttributesQuotaDefaultFallback(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
 		$attributes = ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => ''];
 
-		$this->config->method('getAppValue')
-			->willReturnCallback(fn (string $appId, string $key, string $default)
+		$this->appConfig->method('getAppValueString')
+			->willReturnCallback(static fn (string $key, string $default)
 				// Unused $appId parameter is intentionally kept for clarity
 				=> match ($key) {
 					'saml-attribute-mapping-email_mapping' => 'email',

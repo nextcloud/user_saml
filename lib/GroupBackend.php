@@ -51,6 +51,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	/**
+	 * @param string $uid
 	 * @return list<string> Group names
 	 */
 	#[\Override]
@@ -74,7 +75,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 * @return string[] Group names
 	 */
 	#[\Override]
-	public function getGroups(string $search = '', $limit = null, $offset = null): array {
+	public function getGroups(string $search = '', ?int $limit = null, ?int $offset = null): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)

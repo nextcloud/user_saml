@@ -10,7 +10,6 @@ namespace OCA\User_SAML\Command;
 use OC\Core\Command\Base;
 use OCA\User_SAML\UserBackend;
 use OCP\IUserManager;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,7 +19,6 @@ class UserAdd extends Base {
 	public function __construct(
 		protected IUserManager $userManager,
 		protected UserBackend $backend,
-		private readonly LoggerInterface $logger,
 	) {
 		parent::__construct();
 	}
@@ -73,7 +71,9 @@ class UserAdd extends Base {
 			$email = $input->getOption('email');
 			if (!empty($email)) {
 				$user = $this->userManager->get($uid);
-				$user->setSystemEMailAddress($email);
+				if ($user !== null) {
+					$user->setSystemEMailAddress($email);
+				}
 			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user Email and DisplayName ' . $e->getMessage() . '</error>');

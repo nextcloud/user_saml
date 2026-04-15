@@ -28,7 +28,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\IAppConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
@@ -76,6 +76,7 @@ class Application extends App implements IBootstrap {
 				IL10N $l10n,
 				IURLGenerator $urlGenerator,
 				IConfig $config,
+				IAppConfig $appConfig,
 				IRequest $request,
 				IUserSession $userSession,
 				SAMLSettings $samlSettings,
@@ -94,7 +95,7 @@ class Application extends App implements IBootstrap {
 				$params = [];
 
 				// Setting up the one login config may fail, if so, do not catch the requests later.
-				switch ($config->getAppValue('user_saml', 'type')) {
+				switch ($appConfig->getAppValueString('type')) {
 					case 'saml':
 						$type = 'saml';
 						break;

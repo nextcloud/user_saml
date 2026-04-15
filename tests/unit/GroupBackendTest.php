@@ -14,10 +14,8 @@ use Test\TestCase;
  * @group DB
  */
 class GroupBackendTest extends TestCase {
-
-	/** @var GroupBackend */
-	private $groupBackend;
-	private $users = [
+	private GroupBackend $groupBackend;
+	private array $users = [
 		[
 			'uid' => 'user_saml_integration_test_uid1',
 			'groups' => [
@@ -32,7 +30,7 @@ class GroupBackendTest extends TestCase {
 			]
 		]
 	];
-	private $groups = [
+	private array $groups = [
 		[
 			'gid' => 'user_saml_integration_test_gid1',
 			'saml_gid' => 'user_saml_integration_test_gid1',
@@ -58,6 +56,7 @@ class GroupBackendTest extends TestCase {
 		],
 	];
 
+	#[Override]
 	public function setUp(): void {
 		parent::setUp();
 		$this->groupBackend = new GroupBackend(\OCP\Server::get(IDBConnection::class), $this->createMock(LoggerInterface::class));
@@ -71,6 +70,7 @@ class GroupBackendTest extends TestCase {
 		}
 	}
 
+	#[Override]
 	public function tearDown(): void {
 		parent::tearDown();
 		$this->groupBackend = new GroupBackend(\OCP\Server::get(IDBConnection::class), $this->createMock(LoggerInterface::class));
@@ -84,7 +84,7 @@ class GroupBackendTest extends TestCase {
 		}
 	}
 
-	public function testInGroup() {
+	public function testInGroup(): void {
 		foreach ($this->groups as $group) {
 			foreach ($this->users as $user) {
 				$result = $this->groupBackend->inGroup($user['uid'], $group['gid']);
@@ -97,14 +97,14 @@ class GroupBackendTest extends TestCase {
 		}
 	}
 
-	public function testGetGroups() {
+	public function testGetGroups(): void {
 		$groups = $this->groupBackend->getGroups();
 		foreach ($this->groups as $group) {
 			$this->assertContains($group['gid'], $groups, sprintf('Group %s should be retrieved', $group['gid']));
 		}
 	}
 
-	public function testGetUserGroups() {
+	public function testGetUserGroups(): void {
 		foreach ($this->users as $user) {
 			$userGroups = $this->groupBackend->getUserGroups($user['uid']);
 			$this->assertCount(count($user['groups']), $userGroups, 'Should retrieve all user groups');
@@ -114,14 +114,14 @@ class GroupBackendTest extends TestCase {
 		}
 	}
 
-	public function testGroupExists() {
+	public function testGroupExists(): void {
 		foreach ($this->groups as $group) {
 			$result = $this->groupBackend->groupExists($group['saml_gid']);
 			$this->assertSame($group['saml_gid_exists'], $result, sprintf('Group %s should exist', $group['saml_gid']));
 		}
 	}
 
-	public function testUsersInGroups() {
+	public function testUsersInGroups(): void {
 		foreach ($this->groups as $group) {
 			$users = $this->groupBackend->usersInGroup($group['gid']);
 			$this->assertCount(count($group['members']), $users, 'Should retrieve all group members');

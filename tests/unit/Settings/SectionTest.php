@@ -7,21 +7,22 @@
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OCA\User_SAML\Settings\Section;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use Override;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SectionTest extends \Test\TestCase {
-	/** @var \OCA\User_SAML\Settings\Section */
-	private $section;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l10n;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
-	private $urlGenerator;
+	private Section $section;
+	private IL10N&MockObject $l10n;
+	private IURLGenerator&MockObject $urlGenerator;
 
+	#[Override]
 	protected function setUp(): void {
-		$this->l10n = $this->createMock(\OCP\IL10N::class);
+		$this->l10n = $this->createMock(IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->section = new \OCA\User_SAML\Settings\Section(
+		$this->section = new Section(
 			$this->l10n,
 			$this->urlGenerator
 		);

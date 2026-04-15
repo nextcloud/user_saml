@@ -8,36 +8,29 @@ namespace OCA\User_SAML\Tests\AppInfo;
 
 use OCA\User_SAML\AppInfo\Application;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
+use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Container\ContainerInterface;
 
 class ApplicationTest extends \Test\TestCase {
-	/** @var Application */
-	protected $app;
-	/** @var \OCP\AppFramework\IAppContainer */
-	protected $container;
+	protected Application $app;
+	protected ContainerInterface $container;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 		$this->app = new Application();
 		$this->container = $this->app->getContainer();
 	}
 
-	public function testContainerAppName() {
-		$this->app = new Application();
-		$this->assertEquals('user_saml', $this->container->getAppName());
-	}
-
-	public function queryData() {
+	public function queryData(): array {
 		return [
 			[OnlyLoggedInMiddleware::class],
 		];
 	}
 
-	/**
-	 * @dataProvider queryData
-	 * @param string $service
-	 * @param string $expected
-	 */
-	public function testContainerQuery($serviceClass) {
-		$this->assertTrue($this->container->query($serviceClass) instanceof $serviceClass);
+	#[DataProvider(methodName: 'queryData')]
+	public function testContainerQuery(string $serviceClass): void {
+		$this->assertTrue($this->container->get($serviceClass) instanceof $serviceClass);
 	}
 }

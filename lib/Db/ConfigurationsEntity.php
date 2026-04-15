@@ -16,12 +16,11 @@ use function json_encode;
  * @method void setName(string $value)
  * @method void setConfiguration(string $value)
  * @method string getConfiguration()
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class ConfigurationsEntity extends Entity {
-	/** @var string */
-	public $name;
-	/** @var string */
-	public $configuration;
+	public ?string $name = null;
+	public ?string $configuration = null;
 
 	public function __construct() {
 		$this->addType('name', 'string');
@@ -39,7 +38,7 @@ class ConfigurationsEntity extends Entity {
 	}
 
 	public function getConfigurationArray(): array {
-		return json_decode($this->configuration, true) ?? [];
+		return json_decode((string)$this->configuration, true) ?? [];
 	}
 
 	public function asArray(): array {

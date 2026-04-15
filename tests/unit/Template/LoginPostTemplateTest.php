@@ -7,8 +7,8 @@
 
 namespace {
 	if (!function_exists('p')) {
-		function p($string): void {
-			print(htmlspecialchars((string)$string, ENT_QUOTES, 'UTF-8'));
+		function p(string $string): void {
+			print(htmlspecialchars($string, ENT_QUOTES, 'UTF-8'));
 		}
 	}
 }
