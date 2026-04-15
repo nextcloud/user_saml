@@ -12,8 +12,12 @@
     "Use built-in SAML authentication" : "Naudoti įtaisytąjį SAML tapatybės nustatymą",
     "Use environment variable" : "Naudoti aplinkos kintamąjį",
     "Global settings" : "Visuotiniai nustatymai",
+    "Remove {name}" : "Šalinti {name}",
     "Reset settings" : "Atstatyti nustatymus",
     "Download metadata XML" : "Atsisiųsti metaduomenų XML",
+    "Cancel" : "Atsisakyti",
+    "Saving…" : "Įrašoma…",
+    "Edit" : "Taisyti",
     "General" : "Bendra",
     "Service Provider Data" : "Paslaugų teikėjo duomenys",
     "If your Service Provider should use certificates you can optionally specify them here." : "Jeigu jūsų paslaugų teikėjas turėtų naudoti liudijimus, galite čia pasirinktinai juos nurodyti.",
@@ -24,6 +28,7 @@
     "Signatures and encryption required" : "Reikalingi parašai ir šifravimas",
     "Metadata valid" : "Metaduomenys teisingi",
     "Metadata invalid" : "Metaduomenys neteisingi",
+    "Loading..." : "Įkeliama...",
     "Error" : "Klaida",
     "Login options:" : "Prisijungimo parinktys:"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"

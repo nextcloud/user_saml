@@ -25,6 +25,9 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Përdor identifikimin me SAML",
     "Use environment variable" : "Përdor variablin e mjedisit",
     "Download metadata XML" : "Shkarko metadata XML",
+    "Cancel" : "Cancel",
+    "Saving…" : "Duke u ruajtur...",
+    "Edit" : "Përpuno",
     "General" : "Të përgjithshme",
     "Service Provider Data" : "Të dhënat e ofruesit të shërbimit",
     "If your Service Provider should use certificates you can optionally specify them here." : "Nëse Ofruesi i Shërbimit tuaj duhet të përdori çertifikata ju mund ti specifikoni ato këtu.",
@@ -41,6 +44,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Kërkohet firma dhe enkriptimi",
     "Metadata valid" : "Metadata e vlefshme",
     "Metadata invalid" : "Metadata jo e vlefshme",
+    "Loading..." : "Po ngarkohet",
     "Error" : "Error",
     "Account not provisioned." : "Llogaria nuk është e provizionuar",
     "Your account is not provisioned, access to this service is thus not possible." : "Llogaria juaj nuk është e provizionuar, prandaj aksesi në këtë pajisje nuk është i munduar."

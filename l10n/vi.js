@@ -1,0 +1,14 @@
+OC.L10N.register(
+    "user_saml",
+    {
+    "Email address" : "Địa chỉ thư điện tử",
+    "Encrypted" : "Đã mã hóa",
+    "Saved" : "Đã lưu",
+    "Remove {name}" : "Xoá {name}",
+    "Cancel" : "Cancel",
+    "Saving…" : "Đang lưu...",
+    "Edit" : "Chỉnh sửa",
+    "General" : "Tổng hợp",
+    "Error" : "Lỗi"
+},
+"nplurals=1; plural=0;");

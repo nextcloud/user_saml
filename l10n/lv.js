@@ -12,6 +12,9 @@ OC.L10N.register(
     "Global settings" : "Globālie iestatījumi",
     "Reset settings" : "Atiestatīt iestatījumus",
     "Download metadata XML" : "Lejupielādēt metadatu XML",
+    "Cancel" : "Atcelt",
+    "Saving…" : "Saglabā...",
+    "Edit" : "Labot",
     "General" : "Vispārīgi",
     "Service Provider Data" : "Pakalpojumu sniedzēja dati",
     "If your Service Provider should use certificates you can optionally specify them here." : "Ja pakalpojumu sniedzējs izmanto sertifikātus, tos vajadzības gadījumā var norādīt šeit.",
@@ -21,6 +24,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Paraksti un šifrēšana ir nepieciešama",
     "Metadata valid" : "Derīgi metadati",
     "Metadata invalid" : "Nederīgi metadati",
+    "Loading..." : "Notiek ielāde...",
     "Error" : "Kļūda",
     "Account not provisioned." : "Konts nav nodrošināts.",
     "Your account is not provisioned, access to this service is thus not possible." : "Tavs konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."

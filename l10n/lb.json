@@ -1,0 +1,9 @@
+{ "translations": {
+    "Saved" : "Gespäichert",
+    "Cancel" : "Cancel",
+    "Edit" : "Änneren",
+    "General" : "Allgemeng",
+    "Metadata invalid" : "Falsch Metadata",
+    "Error" : "Fehler"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

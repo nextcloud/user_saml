@@ -24,6 +24,9 @@ OC.L10N.register(
     "Use environment variable" : "Usar la variable de ambiente",
     "Add identity provider" : "Añadir proveedor de identidad",
     "Download metadata XML" : "Descargar metadatos XML",
+    "Cancel" : "Cancel",
+    "Saving…" : "Guardando...",
+    "Edit" : "Editar",
     "General" : "General",
     "Service Provider Data" : "Datos del Proveedor de Servicio",
     "If your Service Provider should use certificates you can optionally specify them here." : "Si su Proveedor de Servicio debe usar certificados, usted puede especificarlos opcionalmente desde aquí.",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Firmas y encripción requeridos",
     "Metadata valid" : "Metadatos válidos",
     "Metadata invalid" : "Metadatos inválidos",
+    "Loading..." : "Cargando...",
     "Error" : "Error",
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
     "Your account is not provisioned, access to this service is thus not possible." : "Su cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "

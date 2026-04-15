@@ -1,0 +1,9 @@
+{ "translations": {
+    "Encrypted" : "Kryptert",
+    "Saved" : "Lagra",
+    "Cancel" : "Cancel",
+    "Edit" : "Rediger",
+    "General" : "Generelt",
+    "Error" : "Feil"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

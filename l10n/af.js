@@ -6,6 +6,8 @@ OC.L10N.register(
     "Saved" : "Bewaar",
     "Add identity provider" : "Voeg identiteitsverskaffer toe",
     "Download metadata XML" : "Laai metadata XML af",
+    "Cancel" : "Cancel",
+    "Saving…" : "Bewaar…",
     "General" : "Algemeen",
     "Service Provider Data" : "Diensverskafferdata",
     "Identity Provider Data" : "Identiteitsverskafferdata",

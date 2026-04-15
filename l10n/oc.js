@@ -5,6 +5,10 @@ OC.L10N.register(
     "Encrypted" : "Chifrat",
     "Saved" : "Enregistrat",
     "Global settings" : "Paramètres globals",
+    "Remove {name}" : "Suprimir {name}",
+    "Cancel" : "Cancel",
+    "Saving…" : "Enregistrament…",
+    "Edit" : "Modificar",
     "General" : "Generals",
     "Security settings" : "Paramètres de seguretat",
     "Error" : "Error"

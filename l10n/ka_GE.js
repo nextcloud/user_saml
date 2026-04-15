@@ -24,6 +24,9 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "ჩაშენებული SAML აუტენტიფიკაციის გამოყენება",
     "Use environment variable" : "გარემოში არსებული ცვლადის გამოყენება",
     "Download metadata XML" : "XML მეტა-მონაცემების გადმოწერა",
+    "Cancel" : "Cancel",
+    "Saving…" : "მიმდინარეობს დამახსოვრება...",
+    "Edit" : "შეცვლა",
     "General" : "მთავარი",
     "Service Provider Data" : "სერვისის მომწოდებლის მონაცემები",
     "If your Service Provider should use certificates you can optionally specify them here." : "თუ თქვენი სერვის პროვაიდერი უნდა იყენებდეს სერტიფიკატებს, სურვილისამებრ შეგიძლიათ ისინი აქ ჩამოწეროთ.",
@@ -40,6 +43,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "ხელმოწერები და შიფრაციები აუცილებელია",
     "Metadata valid" : "მეტა-მონაცემი სწორია",
     "Metadata invalid" : "მეტა-მონაცემი არასწორია",
+    "Loading..." : "იტვირთება…",
     "Error" : "შეცდომა",
     "Account not provisioned." : "ანგარიში არაა გათვალისწინებული.",
     "Your account is not provisioned, access to this service is thus not possible." : "თქვენი ანგარიში არაა გათვალისწინებული, ამ სერვისისადმი წვდომა შესაბამისად შეუძლებელია."

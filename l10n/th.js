@@ -4,6 +4,9 @@ OC.L10N.register(
     "This user account is disabled, please contact your administrator." : "บัญชีผู้ใช้นี้ถูกปิดการใช้งาน กรุณาติดต่อผู้ดูแลระบบ",
     "Email address" : "ที่อยู่อีเมล",
     "Saved" : "บันทึกแล้ว",
+    "Remove {name}" : "ลบ {name} ออก",
+    "Cancel" : "Cancel",
+    "Edit" : "แก้ไข",
     "General" : "ทั่วไป",
     "Error" : "ข้อผิดพลาด"
 },
