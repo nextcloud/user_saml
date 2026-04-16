@@ -30,6 +30,7 @@ use OCP\User\Backend\ICountUsersBackend;
 use OCP\User\Backend\ICustomLogout;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
+use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
@@ -37,7 +38,7 @@ use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
@@ -387,6 +388,33 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 */
 	public function autoprovisionAllowed(): bool {
 		return $this->appConfig->getAppValueInt('general-require_provisioned_account') === 0;
+	}
+
+	#[\Override]
+	public function isUserEnabled(string $uid, callable $queryDatabaseValue): bool {
+		$backend = $this->getActualUserBackend($uid);
+		if ($backend instanceof IProvideEnabledStateBackend) {
+			return $backend->isUserEnabled($uid, $queryDatabaseValue);
+		}
+
+		return $queryDatabaseValue();
+	}
+
+	#[\Override]
+	public function setUserEnabled(string $uid, bool $enabled, callable $queryDatabaseValue, callable $setDatabaseValue): bool {
+		$backend = $this->getActualUserBackend($uid);
+		if ($backend instanceof IProvideEnabledStateBackend) {
+			return $backend->setUserEnabled($uid, $enabled, $queryDatabaseValue, $setDatabaseValue);
+		}
+
+		$setDatabaseValue($enabled);
+		return $enabled;
+	}
+
+	#[\Override]
+	public function getDisabledUserList(?int $limit = null, int $offset = 0, string $search = ''): array {
+		// user_saml does not keep a backend-specific disabled-user list beyond the core preference.
+		return [];
 	}
 
 	/**
