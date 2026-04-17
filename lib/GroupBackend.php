@@ -155,15 +155,35 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	#[\Override]
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select('uid')
-			->from(self::TABLE_MEMBERS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->orderBy('uid', 'ASC');
+		$query->selectDistinct('m.uid')
+			->from(self::TABLE_MEMBERS, 'm')
+			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)))
+			->orderBy('m.uid', 'ASC');
 
 		if ($search !== '') {
-			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
-				'%' . $this->dbc->escapeLikeParameter($search) . '%'
-			)));
+			$query->leftJoin('m', 'accounts_data', 'dn',
+				$query->expr()->andX(
+					$query->expr()->eq('dn.uid', 'm.uid'),
+					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
+				)
+			);
+			$query->leftJoin('m', 'accounts_data', 'em',
+				$query->expr()->andX(
+					$query->expr()->eq('em.uid', 'm.uid'),
+					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
+				)
+			);
+
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('m.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			);
 		}
 
 		if ($limit !== -1) {
@@ -174,7 +194,6 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		$result = $query->executeQuery();
-
 		$users = [];
 		while ($row = $result->fetch()) {
 			$users[] = $row['uid'];
@@ -244,14 +263,36 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	#[\Override]
 	public function countUsersInGroup(string $gid, string $search = ''): int {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select($query->func()->count('*', 'num_users'))
-			->from(self::TABLE_MEMBERS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
+		$query->select(
+			$query->createFunction('COUNT(DISTINCT ' . $query->getColumnName('uid', 'm') . ')')
+		)
+			->from(self::TABLE_MEMBERS, 'm')
+			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)));
 
 		if ($search !== '') {
-			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
-				'%' . $this->dbc->escapeLikeParameter($search) . '%'
-			)));
+			$query->leftJoin('m', 'accounts_data', 'dn',
+				$query->expr()->andX(
+					$query->expr()->eq('dn.uid', 'm.uid'),
+					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
+				)
+			);
+			$query->leftJoin('m', 'accounts_data', 'em',
+				$query->expr()->andX(
+					$query->expr()->eq('em.uid', 'm.uid'),
+					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
+				)
+			);
+
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('m.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			);
 		}
 
 		$result = $query->executeQuery();

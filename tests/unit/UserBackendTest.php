@@ -21,11 +21,16 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Events\UserChangedEvent;
+use OCP\UserInterface;
 use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
+
+interface EnabledStateUserInterface extends UserInterface, IProvideEnabledStateBackend {
+}
 
 class UserBackendTest extends TestCase {
 	private UserData&MockObject $userData;
@@ -101,6 +106,88 @@ class UserBackendTest extends TestCase {
 	public function testGetBackendName(): void {
 		$this->userBackend = $this->getRealUserBackend();
 		$this->assertSame('user_saml', $this->userBackend->getBackendName());
+	}
+
+	public function testIsUserEnabledDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var EnabledStateUserInterface&MockObject $backend */
+		$backend = $this->createMock(EnabledStateUserInterface::class);
+		$queryDatabaseValue = static fn (): bool => true;
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend
+			->expects($this->once())
+			->method('isUserEnabled')
+			->with('ExistingUser', $queryDatabaseValue)
+			->willReturn(false);
+
+		$this->assertFalse($this->userBackend->isUserEnabled('ExistingUser', $queryDatabaseValue));
+	}
+
+	public function testIsUserEnabledFallsBackToDatabaseValue(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		$queryDatabaseValue = static fn (): bool => false;
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn(null);
+
+		$this->assertFalse($this->userBackend->isUserEnabled('ExistingUser', $queryDatabaseValue));
+	}
+
+	public function testSetUserEnabledDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var EnabledStateUserInterface&MockObject $backend */
+		$backend = $this->createMock(EnabledStateUserInterface::class);
+		$queryDatabaseValue = static fn (): bool => true;
+		$databaseValues = [];
+		$setDatabaseValue = static function (bool $enabled) use (&$databaseValues): void {
+			$databaseValues[] = $enabled;
+		};
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend
+			->expects($this->once())
+			->method('setUserEnabled')
+			->with('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue)
+			->willReturn(false);
+
+		$this->assertFalse($this->userBackend->setUserEnabled('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue));
+		$this->assertSame([], $databaseValues);
+	}
+
+	public function testSetUserEnabledFallsBackToDatabaseValue(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		$queryDatabaseValue = static fn (): bool => true;
+		$databaseValues = [];
+		$setDatabaseValue = static function (bool $enabled) use (&$databaseValues): void {
+			$databaseValues[] = $enabled;
+		};
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn(null);
+
+		$this->assertFalse($this->userBackend->setUserEnabled('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue));
+		$this->assertSame([false], $databaseValues);
+	}
+
+	public function testGetDisabledUserListReturnsEmptyArray(): void {
+		$this->userBackend = $this->getMockedBuilder();
+
+		$this->assertSame([], $this->userBackend->getDisabledUserList());
 	}
 
 	public function testUpdateAttributesWithoutAttributes(): void {
