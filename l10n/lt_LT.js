@@ -8,6 +8,7 @@ OC.L10N.register(
     "Private key of the Service Provider" : "Paslaugų teikėjo privatusis raktas",
     "Whether the metadata should be signed." : "Ar metaduomenys turėtų būti pasirašyti.",
     "Email address" : "El. pašto adresas",
+    "Encrypted" : "Užšifruota",
     "Entity" : "Esybė",
     "SSO & SAML authentication" : "SSO & SAML tapatybės nustatymas",
     "Saved" : "Įrašyta",
