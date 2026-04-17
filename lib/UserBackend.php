@@ -26,10 +26,10 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Server;
 use OCP\User\Backend\ABackend;
-use OCP\User\Backend\ICountUsersBackend;
 use OCP\User\Backend\ICustomLogout;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
+use OCP\User\Backend\ILimitAwareCountUsersBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
@@ -38,7 +38,7 @@ use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
@@ -569,11 +569,11 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	}
 
 	#[\Override]
-	public function countUsers(): int {
+	public function countUsers(int $limit = 0): int|false {
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))
 			->from('user_saml_users');
 		$result = $query->executeQuery()->fetchOne();
-		return $result === false ? 0 : (int)$result;
+		return $result === false ? false : (int)$result;
 	}
 }
