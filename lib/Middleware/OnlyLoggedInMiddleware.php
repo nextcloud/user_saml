@@ -7,9 +7,9 @@
 
 namespace OCA\User_SAML\Middleware;
 
+use OCA\User_SAML\Attributes\OnlyUnauthenticatedUsers;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Middleware;
-use OCP\AppFramework\Utility\IControllerMethodReflector;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use Override;
@@ -23,7 +23,6 @@ use Override;
 class OnlyLoggedInMiddleware extends Middleware {
 
 	public function __construct(
-		private readonly IControllerMethodReflector $reflector,
 		private readonly IUserSession $userSession,
 		private readonly IURLGenerator $urlGenerator,
 	) {
@@ -36,7 +35,7 @@ class OnlyLoggedInMiddleware extends Middleware {
 	 */
 	#[Override]
 	public function beforeController($controller, $methodName): void {
-		if ($this->reflector->hasAnnotation('OnlyUnauthenticatedUsers') && $this->userSession->isLoggedIn()) {
+		if ($this->hasAttribute($controller, $methodName) && $this->userSession->isLoggedIn()) {
 			throw new \Exception('User is already logged-in');
 		}
 	}
@@ -54,5 +53,10 @@ class OnlyLoggedInMiddleware extends Middleware {
 		}
 
 		throw $exception;
+	}
+
+	protected function hasAttribute(object $controller, string $methodName): bool {
+		$reflectionMethod = new \ReflectionMethod($controller, $methodName);
+		return !empty($reflectionMethod->getAttributes(OnlyUnauthenticatedUsers::class));
 	}
 }
