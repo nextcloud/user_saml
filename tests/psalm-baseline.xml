@@ -9,11 +9,6 @@
       <code><![CDATA[GroupBackend]]></code>
     </DeprecatedInterface>
   </file>
-  <file src="lib/Middleware/OnlyLoggedInMiddleware.php">
-    <DeprecatedMethod>
-      <code><![CDATA[hasAnnotation]]></code>
-    </DeprecatedMethod>
-  </file>
   <file src="lib/UserBackend.php">
     <DeprecatedInterface>
       <code><![CDATA[UserBackend]]></code>

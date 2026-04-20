@@ -13,6 +13,7 @@ use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OC\Security\CSRF\CsrfTokenManager;
+use OCA\User_SAML\Attributes\OnlyUnauthenticatedUsers;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
@@ -145,12 +146,12 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @OnlyUnauthenticatedUsers
 	 * @throws Exception
 	 */
 	#[PublicPage]
 	#[UseSession]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function login(int $idp = 1): Http\RedirectResponse|Http\TemplateResponse {
 		$originalUrl = (string)$this->request->getParam('originalUrl', '');
 		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
@@ -287,6 +288,7 @@ class SAMLController extends Controller {
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function getMetadata(int $idp = 1): Http\DataDownloadResponse {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
@@ -302,7 +304,6 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @OnlyUnauthenticatedUsers
 	 * @NoSameSiteCookieRequired
 	 *
 	 * @return Http\RedirectResponse
@@ -312,6 +313,7 @@ class SAMLController extends Controller {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[UseSession]
+	#[OnlyUnauthenticatedUsers]
 	public function assertionConsumerService(): Http\RedirectResponse {
 		// Fetch and decrypt the cookie
 		$cookie = $this->request->getCookie('saml_data');
@@ -536,29 +538,23 @@ class SAMLController extends Controller {
 		return [null, null];
 	}
 
-	/**
-	 * @OnlyUnauthenticatedUsers
-	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function notProvisioned(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
 	}
 
-	/**
-	 * @OnlyUnauthenticatedUsers
-	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function notPermitted(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notPermitted', [], 'guest');
 	}
 
-	/**
-	 * @OnlyUnauthenticatedUsers
-	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function genericError(string $message): Http\TemplateResponse {
 		if (empty($message)) {
 			$message = $this->l->t('Unknown error, please check the log file for more details.');
@@ -566,11 +562,9 @@ class SAMLController extends Controller {
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 
-	/**
-	 * @OnlyUnauthenticatedUsers
-	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function selectUserBackEnd(string $redirectUrl = ''): Http\TemplateResponse {
 		$attributes = ['loginUrls' => []];
 
