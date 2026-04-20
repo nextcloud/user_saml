@@ -24,6 +24,7 @@ OC.L10N.register(
     "Edit" : "Muuda",
     "General" : "Üldine",
     "Service Provider Data" : "Teenusepakkuja andmed",
+    "Attribute mapping" : "Atribuutide vastendamine",
     "Security settings" : "Turvaseaded",
     "Signatures and encryption offered" : "Allkirjastamine ja krüptimine on saadaval",
     "Signatures and encryption required" : "Allkirjastamine ja krüptimine on nõutavad",
