@@ -5,6 +5,42 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.0.0
+
+### Added
+
+* drop support for NC 30 and 31; add support for upcoming NC 34 by @blizzz in https://github.com/nextcloud/user_saml/pull/1035
+* Port admin settings to vue by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1047
+* feat(settings): implement admin delegation for SSO & SAML authentication by @printminion-co in https://github.com/nextcloud/user_saml/pull/1053
+* search disabled users by display name or email by @hweihwang in https://github.com/nextcloud/user_saml/pull/997
+
+### Fixed
+
+* fix: Use correct color for login screen text on dark background by @come-nc in https://github.com/nextcloud/user_saml/pull/1055
+* fix: Cleanup DI in Application::boot by @come-nc in https://github.com/nextcloud/user_saml/pull/1060
+
+### Dependencies
+
+* build(deps): bump firebase/php-jwt from 7.0.3 to 7.0.4 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1057
+* build(deps): bump firebase/php-jwt from 7.0.4 to 7.0.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1059
+* build(deps): bump axios from 1.13.6 to 1.15.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1063
+* build(deps): bump fast-xml-parser from 5.5.4 to 5.5.12 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1065
+* build(deps): bump picomatch by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1064
+* build(deps-dev): bump brace-expansion from 2.0.2 to 2.1.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1066
+* build(deps-dev): bump vite from 7.3.1 to 7.3.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1067
+* build(deps): bump lodash and @microsoft/api-extractor by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1068
+* build(deps-dev): bump flatted from 3.4.1 to 3.4.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1070
+* build(deps): bump yaml from 2.8.2 to 2.8.3 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1069
+* build(deps): bump follow-redirects from 1.15.11 to 1.16.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1071
+* build(deps): bump dompurify from 3.3.3 to 3.4.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1074
+* build(deps): bump protobufjs from 7.5.4 to 7.5.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1075
+
+### Other
+
+* refactor(backend): Cleanup PHP code a bit by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1061
+* refactor: Fix many psalm issues by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1003
+* refactor: Use modern attribute instead of annotation by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1076
+
 ## 7.1.4
 
 ### Added
