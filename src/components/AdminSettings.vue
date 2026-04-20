@@ -32,29 +32,32 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<!-- Global settings (shown when type is set) -->
 		<div v-if="type !== ''" class="global-settings">
 			<h3>{{ t('user_saml', 'Global settings') }}</h3>
-			<template v-for="(attribute, key) in generalSettings" :key="key">
-				<div v-if="attribute.provider_type === '' || attribute.provider_type === type">
-					<div v-if="attribute.type === 'checkbox' && attribute.global">
-						<NcCheckboxRadioSwitch
-							:modelValue="globalConfig[key] === '1'"
-							@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
-							{{ attribute.text }}
-						</NcCheckboxRadioSwitch>
-					</div>
-					<div v-else-if="attribute.type === 'line' && attribute.global !== undefined">
-						<NcInputField
-							v-model="globalConfig[key]"
-							:label="attribute.text"
-							:required="attribute.required"
-							@update:modelValue="onGlobalInputChange(key, globalConfig[key])" />
-					</div>
-				</div>
-			</template>
+
+			<NcFormBox>
+				<template v-for="(attribute, key) in generalSettings" :key="key">
+					<NcFormBoxSwitch
+						v-if="(attribute.provider_type === '' || attribute.provider_type === type) && (attribute.type === 'checkbox' && attribute.global)"
+						:modelValue="globalConfig[key]"
+						@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
+						{{ attribute.text }}
+					</NcFormBoxSwitch>
+				</template>
+			</NcFormBox>
 		</div>
 
 		<!-- Provider list (saml mode only) -->
 		<div v-if="type === 'saml'" class="provider-list">
-			<h3>{{ t('user_saml', 'Identity providers') }}</h3>
+			<h3 class="register-title">
+				{{ t('user_saml', 'Registered Providers') }}
+				<NcButton
+					variant="secondary"
+					:title="t('user_saml', 'Register new provider')"
+					@click="addProvider">
+					<template #icon>
+						<IconPlus :size="20" />
+					</template>
+				</NcButton>
+			</h3>
 			<ul class="provider-list__items">
 				<li
 					v-for="provider in providers"
@@ -79,12 +82,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</NcButton>
 				</li>
 			</ul>
-			<NcButton variant="primary" @click="addProvider">
-				<template #icon>
-					<IconPlus :size="20" />
-				</template>
-				{{ t('user_saml', 'Add identity provider') }}
-			</NcButton>
 		</div>
 
 		<!-- Environment-variable mode: per-provider general settings inline -->
@@ -141,8 +138,8 @@ import { confirmPassword } from '@nextcloud/password-confirmation'
 import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { computed, onMounted, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import NcInputField from '@nextcloud/vue/components/NcInputField'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 import IconDelete from 'vue-material-design-icons/Delete.vue'
@@ -384,24 +381,10 @@ async function removeProvider(providerId: Provider['id']): Promise<void> {
  * @param checked Whether the key is checked or not
  */
 async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<void> {
-	const value = checked ? '1' : '0'
 	try {
-		globalConfig.value[key] = value
+		globalConfig.value[key] = checked
+		const value = checked ? '1' : '0'
 		await updateAppConfig(`general-${key}`, value)
-		showSuccess(t('user_saml', 'Saved'))
-	} catch {
-		// updateAppConfig already called showError
-	}
-}
-
-/**
- *
- * @param key The key of the input field
- * @param value The new value of the input field
- */
-async function onGlobalInputChange(key: string, value: string): Promise<void> {
-	try {
-		await updateAppConfig(`general-${key}`, value.trim())
 		showSuccess(t('user_saml', 'Saved'))
 	} catch {
 		// updateAppConfig already called showError
@@ -421,7 +404,12 @@ async function onGlobalInputChange(key: string, value: string): Promise<void> {
 .global-settings,
 .provider-list,
 .env-var-settings {
-	margin-block-start: calc(var(--default-grid-baseline, 4px) * 4);
+	padding-block: calc(var(--default-grid-baseline, 4px) * 8);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.global-settings {
+	padding-block-start: 0;
 }
 
 .provider-list__items {
@@ -452,5 +440,13 @@ async function onGlobalInputChange(key: string, value: string): Promise<void> {
 	gap: calc(var(--default-grid-baseline, 4px) * 2);
 	flex-wrap: wrap;
 	margin-block-start: calc(var(--default-grid-baseline, 4px) * 4);
+}
+
+h3.register-title {
+	margin-top: -2px;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+	gap: 8px;
 }
 </style>
