@@ -40,7 +40,7 @@ export interface DraftIdp {
 	passthroughParameters: string
 }
 
-export type GlobalConfig = Record<string, string>
+export type GlobalConfig = Record<string, string | boolean>
 export type SettingsMap = Record<string, SettingAttribute>
 export type SecurityMap = Record<string, string>
 export type SecurityGeneralMap = Record<string, string | SettingAttribute>

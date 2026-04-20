@@ -26,7 +26,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</NcButton>
 		</template>
 
-		<div class="provider-settings" v-if="!isLoading">
+		<div v-if="!isLoading" class="provider-settings">
 			<!-- General (per-provider) -->
 			<NcSettingsSection :name="t('user_saml', 'General')" :level="3">
 				<ProviderGeneralSection
@@ -156,7 +156,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						:required="attribute.required"
 						placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
 						@update:modelValue="(val) => setDraft('security', key, val + '')" />
-					<NcCheckboxRadioSwitch v-else
+					<NcCheckboxRadioSwitch
+						v-else
 						:modelValue="draft.security?.[key] === '1'"
 						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
 						{{ attribute }}
@@ -190,7 +191,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				{{ t('user_saml', 'Metadata invalid') }}
 			</NcNoteCard>
 		</div>
-		<p v-else>{{ t('user_saml', 'Loading...')}}</p>
+		<p v-else>
+			{{ t('user_saml', 'Loading…') }}
+		</p>
 	</NcDialog>
 </template>
 
@@ -317,7 +320,6 @@ async function loadProviderConfig(): Promise<void> {
 	try {
 		isLoading.value = true
 		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${props.provider.id}`))
-		console.log(data)
 		providerConfig.value = data
 		syncDraftFromConfig()
 		isLoading.value = false
@@ -333,7 +335,6 @@ function syncDraftFromConfig(): void {
 	draft.value = JSON.parse(JSON.stringify(providerConfig.value))
 	const idpCfg = providerConfig.value?.idp ?? {}
 	draftIdp.value = Object.fromEntries(Object.entries(IDP_FIELD_MAP).map(([draftKey, apiKey]) => [draftKey, idpCfg[apiKey] ?? ''])) as DraftIdp
-	console.log(draft.value)
 }
 
 /**
@@ -357,10 +358,8 @@ function setDraft(category: keyof ProviderConfig, key: string, value: string): v
 async function saveAll(): Promise<void> {
 	isSaving.value = true
 	try {
-		const puts = []
-
 		// All non-IDP categories
-		const newConfigs: Record<string, string>  = {};
+		const newConfigs: Record<string, string> = {}
 		for (const [category, settings] of Object.entries(draft.value)) {
 			if (category === 'idp') {
 				continue
@@ -373,7 +372,7 @@ async function saveAll(): Promise<void> {
 						? `saml-${category}`
 						: category
 
-					newConfigs[`${apiCategory}-${key}`] = String(value ?? '').trim();
+					newConfigs[`${apiCategory}-${key}`] = String(value ?? '').trim()
 				}
 			}
 		}
@@ -383,7 +382,7 @@ async function saveAll(): Promise<void> {
 		for (const [draftKey, apiKey] of Object.entries(IDP_FIELD_MAP)) {
 			const draftVal = draftIdp.value[draftKey] ?? ''
 			if (draftVal !== (savedIdp[apiKey] ?? '')) {
-				newConfigs[`idp-${apiKey}`] = draftVal.trim();
+				newConfigs[`idp-${apiKey}`] = draftVal.trim()
 			}
 		}
 

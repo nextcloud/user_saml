@@ -98,6 +98,7 @@ class AdminTest extends \Test\TestCase {
 				'text' => $this->l10n->t('Optional display name of the identity provider (default: "SSO & SAML log in")'),
 				'type' => 'line',
 				'required' => false,
+				'global' => false,
 				'provider_type' => '',
 			],
 			'is_saml_request_using_post' => [
@@ -111,6 +112,7 @@ class AdminTest extends \Test\TestCase {
 				'text' => 'Attribute to map the UID to.',
 				'type' => 'line',
 				'required' => true,
+				'global' => false,
 				'provider_type' => '',
 			],
 			'require_provisioned_account' => [
@@ -251,7 +253,7 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueInt')
+			->method('getAppValueBool')
 			->with($this->anything(), $this->anything())
 			->willReturnArgument(1);
 
@@ -277,15 +279,15 @@ class AdminTest extends \Test\TestCase {
 
 		$this->appConfig
 			->expects($this->exactly(2))
-			->method('getAppValueInt')
-			->willReturnCallback(function (string $key, int $default) {
+			->method('getAppValueBool')
+			->willReturnCallback(function (string $key, bool $default): bool {
 				static $i = 0;
 				match (++$i) {
 					1 => $this->assertEquals($key, 'general-require_provisioned_account'),
 					2 => $this->assertEquals($key, 'general-allow_multiple_user_back_ends'),
 					default => $this->fail(),
 				};
-				return 0;
+				return false;
 			});
 		$this->defaults
 			->expects($this->any())
