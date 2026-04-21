@@ -43,7 +43,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "ხელმოწერები და შიფრაციები აუცილებელია",
     "Metadata valid" : "მეტა-მონაცემი სწორია",
     "Metadata invalid" : "მეტა-მონაცემი არასწორია",
-    "Loading..." : "იტვირთება…",
     "Error" : "შეცდომა",
     "Account not provisioned." : "ანგარიში არაა გათვალისწინებული.",
     "Your account is not provisioned, access to this service is thus not possible." : "თქვენი ანგარიში არაა გათვალისწინებული, ამ სერვისისადმი წვდომა შესაბამისად შეუძლებელია."

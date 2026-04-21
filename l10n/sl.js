@@ -47,7 +47,6 @@ OC.L10N.register(
     "Use environment variable" : "Uporabi okoljsko spremenljivko",
     "Global settings" : "Splošne nastavitve",
     "Remove {name}" : "Odstrani {name}",
-    "Add identity provider" : "Dodaj ponudnika istovetnosti",
     "Reset settings" : "Ponastavi nastavitve",
     "Download metadata XML" : "Prejmi datoteko metapodatkov XML",
     "Cancel" : "Prekliči",

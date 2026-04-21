@@ -54,7 +54,6 @@ OC.L10N.register(
     "Use environment variable" : "Use environment variable",
     "Global settings" : "Global settings",
     "Remove {name}" : "Remove {name}",
-    "Add identity provider" : "Add identity provider",
     "Reset settings" : "Reset settings",
     "Download metadata XML" : "Download metadata XML",
     "Cancel" : "გაუქმება",

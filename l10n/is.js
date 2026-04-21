@@ -22,7 +22,6 @@ OC.L10N.register(
     "Use environment variable" : "Nota umhverfisbreytu",
     "Global settings" : "Víðværar stillingar",
     "Remove {name}" : "Fjarlægja {name}",
-    "Add identity provider" : "Bæta við auðkenningarþjónustu",
     "Reset settings" : "Frumstilla stillingar",
     "Download metadata XML" : "Sækja XML-lýsigögn",
     "Cancel" : "Cancel",
@@ -38,7 +37,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "Krafist er undirritunar og dulritununar",
     "Metadata valid" : "Lýsigögn eru gild",
     "Metadata invalid" : "Lýsigögn eru ógild",
-    "Loading..." : "Hleð...",
     "Error" : "Villa",
     "Account not provisioned." : "Aðgangur ekki tilbúinn."
 },

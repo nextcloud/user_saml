@@ -31,7 +31,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "Reikalingi parašai ir šifravimas",
     "Metadata valid" : "Metaduomenys teisingi",
     "Metadata invalid" : "Metaduomenys neteisingi",
-    "Loading..." : "Įkeliama...",
     "Error" : "Klaida",
     "Login options:" : "Prisijungimo parinktys:"
 },

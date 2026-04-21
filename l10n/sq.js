@@ -44,7 +44,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "Kërkohet firma dhe enkriptimi",
     "Metadata valid" : "Metadata e vlefshme",
     "Metadata invalid" : "Metadata jo e vlefshme",
-    "Loading..." : "Po ngarkohet",
     "Error" : "Error",
     "Account not provisioned." : "Llogaria nuk është e provizionuar",
     "Your account is not provisioned, access to this service is thus not possible." : "Llogaria juaj nuk është e provizionuar, prandaj aksesi në këtë pajisje nuk është i munduar."

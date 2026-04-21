@@ -24,7 +24,6 @@ OC.L10N.register(
     "Signatures and encryption required" : "Paraksti un šifrēšana ir nepieciešama",
     "Metadata valid" : "Derīgi metadati",
     "Metadata invalid" : "Nederīgi metadati",
-    "Loading..." : "Notiek ielāde...",
     "Error" : "Kļūda",
     "Account not provisioned." : "Konts nav nodrošināts.",
     "Your account is not provisioned, access to this service is thus not possible." : "Tavs konts netiek nodrošināts, tādējādi piekļuve šim pakalpojumam nav iespējama."

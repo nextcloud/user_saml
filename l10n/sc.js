@@ -48,7 +48,6 @@ OC.L10N.register(
     "Use environment variable" : "Imprea variàbile de ambiente",
     "Global settings" : "Cunfiguratziones globales",
     "Remove {name}" : "Boga•nche {name}",
-    "Add identity provider" : "Agiunghe frunidore de identidade",
     "Reset settings" : "Riprìstina cunfiguratzione",
     "Download metadata XML" : "Iscàrriga XML metadatos",
     "Cancel" : "Cancel",

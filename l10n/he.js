@@ -33,7 +33,6 @@ OC.L10N.register(
     "Use environment variable" : "שימוש במשתני סביבה",
     "Global settings" : "הגדרות גלובליות",
     "Remove {name}" : "להסיר את {name}",
-    "Add identity provider" : "הוספת ספק זהות",
     "Reset settings" : "איפוס הגדרות",
     "Download metadata XML" : "הורדת XML של נתוני העל",
     "Cancel" : "ביטול",

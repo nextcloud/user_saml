@@ -4,7 +4,6 @@ OC.L10N.register(
     "Private key of the Service Provider" : "Privaatsleutel van die Diensverskaffer",
     "Email address" : "E-posadres",
     "Saved" : "Bewaar",
-    "Add identity provider" : "Voeg identiteitsverskaffer toe",
     "Download metadata XML" : "Laai metadata XML af",
     "Cancel" : "Cancel",
     "Saving…" : "Bewaar…",
