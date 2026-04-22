@@ -78,6 +78,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Si voleu restringir opcionalment l'inici de sessió de l'usuari en funció de les dades de l'usuari, configureu-lo aquí.",
     "Metadata valid" : "Les metadades vàlides",
     "Metadata invalid" : "Les metadades no són vàlides",
+    "Loading…" : "S'està carregant…",
     "Error" : "Error",
     "Access denied." : "Accés denegat.",
     "Your account is denied, access to this service is thus not possible." : "El vostre compte està denegat, per tant l'accés a aquest servei no és possible.",

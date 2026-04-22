@@ -51,6 +51,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Firmas y encripción requeridos",
     "Metadata valid" : "Metadatos válidos",
     "Metadata invalid" : "Metadatos inválidos",
+    "Loading…" : "Cargando...",
     "Error" : "Error",
     "Account not provisioned." : "La cuenta no está aprovisionada. ",
     "Your account is not provisioned, access to this service is thus not possible." : "Tu cuenta no ha sido aprovisionada, por lo cual el acceso a este servico no es posible. "

@@ -84,6 +84,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Jeśli chcesz opcjonalnie ograniczyć logowanie użytkownika w zależności od danych użytkownika, skonfiguruj to tutaj.",
     "Metadata valid" : "Prawidłowe metadane",
     "Metadata invalid" : "Nieprawidłowe metadane",
+    "Loading…" : "Wczytywanie…",
     "Error" : "Błąd",
     "Please wait while you are redirected to the SSO server." : "Proszę czekać, trwa przekierowanie do serwera SSO.",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript jest wyłączony w Twojej przeglądarce. Proszę włączyć go, aby kontynuować.",

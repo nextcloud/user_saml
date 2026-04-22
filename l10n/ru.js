@@ -79,6 +79,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Если вы хотите дополнительно ограничить вход пользователей в зависимости от пользовательских данных, настройте это здесь.",
     "Metadata valid" : "Метаданные верны",
     "Metadata invalid" : "Метаданные не верны",
+    "Loading…" : "Загрузка…",
     "Error" : "Ошибка",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript выключен в вашем браузере. Пожалуйста, включите его чтобы продолжить.",
     "Access denied." : "Доступ запрещен.",

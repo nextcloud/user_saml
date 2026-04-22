@@ -74,6 +74,7 @@ OC.L10N.register(
     "User filtering" : "Erabiltzaileen iragazketa",
     "Metadata valid" : "Baliozko metadatuak",
     "Metadata invalid" : "Baliogabeko metadatuak",
+    "Loading…" : "Kargatzen…",
     "Error" : "Errorea",
     "Access denied." : "Sarbidea ukatua.",
     "Account not provisioned." : "Ez da kontua eman.",

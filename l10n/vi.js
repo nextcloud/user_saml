@@ -9,6 +9,7 @@ OC.L10N.register(
     "Saving…" : "Đang lưu...",
     "Edit" : "Chỉnh sửa",
     "General" : "Tổng hợp",
+    "Loading…" : "Đang tải…",
     "Error" : "Lỗi"
 },
 "nplurals=1; plural=0;");

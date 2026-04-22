@@ -78,6 +78,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Ha felhasználói adatoktól függővé akarja tenni a bejelentkezést, akkor állítsa be itt.",
     "Metadata valid" : "Érvényes metaadatok",
     "Metadata invalid" : "Érvénytelen metaadatok",
+    "Loading…" : "Betöltés…",
     "Error" : "Hiba",
     "Access denied." : "Hozzáférés megtagadva.",
     "Your account is denied, access to this service is thus not possible." : "A fiókja hozzáférése megtagadva, így ehhez a szolgáltatáshoz nem férhet hozzá.",

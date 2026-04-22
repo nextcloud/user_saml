@@ -71,6 +71,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Firmas e tzifradura rechertas",
     "Metadata valid" : "Metadatos bàlidos",
     "Metadata invalid" : "Metadatos non bàlidos",
+    "Loading…" : "Carrighende…",
     "Error" : "Errore",
     "Access denied." : "Atzessu denegadu.",
     "Account not provisioned." : "Contu non generadu.",

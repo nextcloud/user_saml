@@ -71,6 +71,7 @@
     "User filtering" : "用户过滤器",
     "Metadata valid" : "元数据有效",
     "Metadata invalid" : "元数据无效",
+    "Loading…" : "正在加载 ...",
     "Error" : "错误",
     "Access denied." : "拒绝访问。",
     "Account not provisioned." : "账号未配置。",

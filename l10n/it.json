@@ -81,6 +81,7 @@
     "If you want to optionally restrict user login depending on user data, configure it here." : "Se si desidera limitare facoltativamente l'accesso degli utenti in base ai dati utente, è possibile configurarlo qui.",
     "Metadata valid" : "Metadati validi",
     "Metadata invalid" : "Metadati non validi",
+    "Loading…" : "Caricamento…",
     "Error" : "Errore",
     "Please wait while you are redirected to the SSO server." : "Ti preghiamo di attendere mentre verrai reindirizzato al server SSO.",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript è disabilitato nel tuo browser. Abilitalo per continuare.",

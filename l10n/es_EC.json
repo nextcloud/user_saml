@@ -76,6 +76,7 @@
     "If you want to optionally restrict user login depending on user data, configure it here." : "Si deseas restringir opcionalmente el inicio de sesión de los usuarios en función de los datos del usuario, configúralo aquí.",
     "Metadata valid" : "Metadatos válidos",
     "Metadata invalid" : "Metadatos inválidos",
+    "Loading…" : "Cargando",
     "Error" : "Error",
     "Access denied." : "Acceso denegado.",
     "Your account is denied, access to this service is thus not possible." : "Tu cuenta ha sido denegada, por lo tanto, no es posible acceder a este servicio.",

@@ -4,6 +4,7 @@
     "Cancel" : "Cancel",
     "Edit" : "Rediger",
     "General" : "Generelt",
+    "Loading…" : "Lastar...",
     "Error" : "Feil"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

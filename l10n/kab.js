@@ -6,6 +6,7 @@ OC.L10N.register(
     "Cancel" : "Semmet",
     "Edit" : "Ẓreg",
     "General" : "Amatu",
+    "Loading…" : "Asali...",
     "Error" : "Erreur"
 },
 "nplurals=2; plural=(n != 1);");

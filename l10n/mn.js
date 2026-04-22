@@ -8,6 +8,7 @@ OC.L10N.register(
     "Saving…" : "хадгалж байна",
     "Edit" : "”®”©—Ä—á–ª”©—Ö",
     "General" : "ерөнхий",
+    "Loading…" : "уншиж байна",
     "Error" : "Алдаа"
 },
 "nplurals=2; plural=(n != 1);");

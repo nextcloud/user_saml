@@ -79,6 +79,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Hvis du eventuelt vil begrense brukerpålogging avhengig av brukerdata, konfigurerer du det her.",
     "Metadata valid" : "Gyldige metadata",
     "Metadata invalid" : "Ugyldige metadata",
+    "Loading…" : "Laster...",
     "Error" : "Feil",
     "Access denied." : "Tilgang nektet.",
     "Your account is denied, access to this service is thus not possible." : "Kontoen din er nektet, tilgang til denne tjenesten er dermed ikke mulig.",

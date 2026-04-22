@@ -78,6 +78,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Ако искате по избор да ограничите влизането на потребителите в зависимост от техните данни, конфигурирайте го тук.",
     "Metadata valid" : "Метаданните са валидни",
     "Metadata invalid" : "Метаданните са невалидни",
+    "Loading…" : "Зареждане…",
     "Error" : "Грешка",
     "Access denied." : "Отказан достъп.",
     "Your account is denied, access to this service is thus not possible." : "Вашият профил е отказан, следователно не е възможен достъп до тази услуга.",

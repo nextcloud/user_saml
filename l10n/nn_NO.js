@@ -6,6 +6,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Edit" : "Rediger",
     "General" : "Generelt",
+    "Loading…" : "Lastar...",
     "Error" : "Feil"
 },
 "nplurals=2; plural=(n != 1);");

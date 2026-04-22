@@ -37,6 +37,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Krafist er undirritunar og dulritununar",
     "Metadata valid" : "Lýsigögn eru gild",
     "Metadata invalid" : "Lýsigögn eru ógild",
+    "Loading…" : "Hleð inn…",
     "Error" : "Villa",
     "Account not provisioned." : "Aðgangur ekki tilbúinn."
 },

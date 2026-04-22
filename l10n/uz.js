@@ -9,6 +9,7 @@ OC.L10N.register(
     "Saving…" : "Saqlanmoqda...",
     "Edit" : "Tahrirlash",
     "General" : "Umumiy",
+    "Loading…" : "Yuklanmoqda...",
     "Error" : "Xatolik"
 },
 "nplurals=1; plural=0;");

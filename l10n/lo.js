@@ -84,6 +84,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "If you want to optionally restrict user login depending on user data, configure it here.",
     "Metadata valid" : "Metadata valid",
     "Metadata invalid" : "Metadata invalid",
+    "Loading…" : "ກຳລັງໂຫຼດ…",
     "Error" : "ຜິດພາດ",
     "Please wait while you are redirected to the SSO server." : "Please wait while you are redirected to the SSO server.",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript is disabled in your browser. Please enable it to continue.",

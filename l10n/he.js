@@ -48,6 +48,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "נדרשו חתימות והצפנה",
     "Metadata valid" : "נתוני העל תקינים",
     "Metadata invalid" : "נתוני העל שגויים",
+    "Loading…" : "בטעינה…",
     "Error" : "שגיאה",
     "Account not provisioned." : "החשבון לא מנוהל.",
     "Your account is not provisioned, access to this service is thus not possible." : "החשבון שלך לא מנוהל, לכן הגישה לשירות הזה אינה אפשרות."

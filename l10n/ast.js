@@ -39,6 +39,7 @@ OC.L10N.register(
     "User filtering" : "Peñera d'usuarios",
     "Metadata valid" : "Los metadatos son válidos",
     "Metadata invalid" : "Los meta datos son inválidos",
+    "Loading…" : "Cargando…",
     "Error" : "Error",
     "Access denied." : "Negóse l'accesu.",
     "Login options:" : "Opciones de l'aniciu de la sesión:",

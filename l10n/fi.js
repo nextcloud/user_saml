@@ -24,6 +24,7 @@ OC.L10N.register(
     "Edit" : "Muokkaa",
     "General" : "Yleiset",
     "Security settings" : "Turvallisuusasetukset",
+    "Loading…" : "Ladataan…",
     "Error" : "Virhe",
     "Login options:" : "Kirjautumisvalinnat:"
 },

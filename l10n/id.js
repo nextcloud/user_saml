@@ -84,6 +84,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "Jika Anda ingin membatasi login pengguna secara opsional bergantung pada data pengguna, konfigurasikan di sini.",
     "Metadata valid" : "Metadata valid",
     "Metadata invalid" : "Metadata tidak valid",
+    "Loading…" : "Memuat…",
     "Error" : "Kesalahan",
     "Please wait while you are redirected to the SSO server." : "Silakan tunggu sementara Anda dialihkan ke server SSO.",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript dinonaktifkan di peramban Anda. Silakan aktifkan untuk melanjutkan.",

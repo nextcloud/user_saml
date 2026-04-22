@@ -79,6 +79,7 @@ OC.L10N.register(
     "If you want to optionally restrict user login depending on user data, configure it here." : "If you want to optionally restrict user login depending on user data, configure it here.",
     "Metadata valid" : "Metadata valid",
     "Metadata invalid" : "Metadata invalid",
+    "Loading…" : "Loading…",
     "Error" : "Error",
     "Access denied." : "Access denied.",
     "Your account is denied, access to this service is thus not possible." : "Your account is denied, access to this service is thus not possible.",

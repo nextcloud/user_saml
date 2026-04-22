@@ -11,6 +11,7 @@ OC.L10N.register(
     "Edit" : "Modificar",
     "General" : "Generals",
     "Security settings" : "Paramètres de seguretat",
+    "Loading…" : "Telecargament…",
     "Error" : "Error"
 },
 "nplurals=2; plural=(n > 1);");

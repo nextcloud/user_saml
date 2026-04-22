@@ -22,6 +22,7 @@
     "Edit" : "Muokkaa",
     "General" : "Yleiset",
     "Security settings" : "Turvallisuusasetukset",
+    "Loading…" : "Ladataan…",
     "Error" : "Virhe",
     "Login options:" : "Kirjautumisvalinnat:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

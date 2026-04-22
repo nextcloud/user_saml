@@ -70,6 +70,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Zahtevano podpisovanje in šifriranje",
     "Metadata valid" : "Veljavni metapodatki",
     "Metadata invalid" : "Neveljavni metapodatki",
+    "Loading…" : "Poteka nalaganje …",
     "Error" : "Napaka",
     "Account not provisioned." : "Račun ni povezan.",
     "Your account is not provisioned, access to this service is thus not possible." : "Naveden račun ni povezan, zato dostop do te storitve ni mogoč.",

@@ -15,6 +15,7 @@ OC.L10N.register(
     "Signatures and encryption required" : "Handtekeninge en enkripsie vereis",
     "Metadata valid" : "Metadata geldig",
     "Metadata invalid" : "Metadata ongeldig",
+    "Loading…" : "Laai…",
     "Error" : "Fout"
 },
 "nplurals=2; plural=(n != 1);");

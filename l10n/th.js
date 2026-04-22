@@ -8,6 +8,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Edit" : "แก้ไข",
     "General" : "ทั่วไป",
+    "Loading…" : "กำลังโหลด…",
     "Error" : "ข้อผิดพลาด"
 },
 "nplurals=1; plural=0;");
