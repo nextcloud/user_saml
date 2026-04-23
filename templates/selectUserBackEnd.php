@@ -5,8 +5,8 @@
  */
 use OCP\Util;
 
-Util::addStyle('user_saml', 'selectUserBackEnd');
-Util::addScript('user_saml', 'selectUserBackEnd');
+Util::addStyle('user_saml', 'user_saml-selectUserBackEnd');
+Util::addScript('user_saml', 'user_saml-selectUserBackEnd');
 
 /** @var array $_ */
 /** @var \OCP\IL10N $l */

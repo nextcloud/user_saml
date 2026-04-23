@@ -11,6 +11,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 export default createAppConfig({
 	admin: join(import.meta.dirname, 'src', 'admin.ts'),
 	selectUserBackEnd: join(import.meta.dirname, 'src', 'selectUserBackEnd.ts'),
+	timezone: join(import.meta.dirname, 'src', 'timezone.ts'),
 }, {
 	minify: isProduction,
 	thirdPartyLicense: false,
