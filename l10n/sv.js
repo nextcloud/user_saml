@@ -61,20 +61,26 @@ OC.L10N.register(
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Webbadressmål av IdP där SP skickar autentiseringsförfrågningsmeddelandet",
     "URL Location of the IdP where the SP will send the SLO Request" : "Webbadressplatsen för IdP där SP skickar SLO-förfrågan",
     "Public X.509 certificate of the IdP" : "Publikt X.509-certifikat av IdP'n",
+    "Request parameters to pass-through to IdP (comma separated list)" : "Parametrar som ska vidarebefordras till IdP (kommaseparerad lista)",
     "Attribute mapping" : "Attributmappning",
     "If you want to optionally map attributes to the user you can configure these here." : "Om du vill mappa attributen till användaren kan du konfigurera dessa här",
     "Security settings" : "Säkerhetsinställningar",
     "For increased security we recommend enabling the following settings if supported by your environment." : "För ökad säkerhet rekommenderar vi att följande inställningar aktiveras om de stöds av din miljö.",
     "Signatures and encryption offered" : "Signatur och kryptering erbjuden",
     "Signatures and encryption required" : "Signaturer och kryptering krävs",
+    "User filtering" : "Användarfiltrering",
+    "If you want to optionally restrict user login depending on user data, configure it here." : "Om du vill begränsa användarinloggningen utifrån användardata kan du ställa in det här.",
     "Metadata valid" : "Metadata giltig",
     "Metadata invalid" : "Metadata ogiltig",
     "Loading…" : "Laddar...",
     "Error" : "Fel",
+    "Please wait while you are redirected to the SSO server." : "Vänligen vänta medan du omdirigeras till SSO-servern.",
+    "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript är inaktiverat i din webbläsare. Aktivera det för att fortsätta.",
     "Access denied." : "Åtkomst nekad.",
     "Your account is denied, access to this service is thus not possible." : "Ditt konto nekas, tillgång till denna tjänst är därför inte möjlig.",
     "Account not provisioned." : "Konto inte förberett",
     "Your account is not provisioned, access to this service is thus not possible." : "Ditt konto tillhandahålls inte, åtkomst till den här tjänsten är därför inte möjligt.",
-    "Login options:" : "Inloggningsalternativ:"
+    "Login options:" : "Inloggningsalternativ:",
+    "Choose an authentication provider" : "Välj en autentiseringsleverantör"
 },
 "nplurals=2; plural=(n != 1);");
