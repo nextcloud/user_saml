@@ -43,8 +43,7 @@ class LoadAdditionalScriptsListener implements IEventListener {
 		$timezoneDB = $this->userConfig->getValueString($user->getUID(), 'core', 'timezone');
 
 		if ($timezoneDB === '' || !$this->session->exists('timezone')) {
-			Util::addScript('user_saml', 'vendor/jstz.min');
-			Util::addScript('user_saml', 'timezone');
+			Util::addScript('user_saml', 'user_saml-timezone');
 		}
 	}
 }
