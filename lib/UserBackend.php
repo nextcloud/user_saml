@@ -102,6 +102,18 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 						$this->serverRoot . '/data') . '/' . $home;
 				}
 
+				// Reject paths containing directory traversal sequences
+				$normalizedHome = str_replace('\\', '/', $home);
+				if (str_contains($normalizedHome, '/../') || str_ends_with($normalizedHome, '/..')) {
+					$this->logger->warning(
+						'Rejecting home path from SAML attribute containing directory traversal sequence',
+						['app' => 'user_saml', 'home' => $home]
+					);
+					$home = '';
+				}
+			}
+
+			if ($home !== '') {
 				$values['home'] = $home;
 			}
 
