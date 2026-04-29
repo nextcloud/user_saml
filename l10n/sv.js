@@ -73,7 +73,7 @@ OC.L10N.register(
     "Metadata invalid" : "Metadata ogiltig",
     "Loading…" : "Laddar...",
     "Error" : "Fel",
-    "Please wait while you are redirected to the SSO server." : "Vänligen vänta medan du omdirigeras till SSO-servern.",
+    "Please wait while you are redirected to the SSO server." : "Vänta medan du omdirigeras till SSO-servern.",
     "JavaScript is disabled in your browser. Please enable it to continue." : "JavaScript är inaktiverat i din webbläsare. Aktivera det för att fortsätta.",
     "Access denied." : "Åtkomst nekad.",
     "Your account is denied, access to this service is thus not possible." : "Ditt konto nekas, tillgång till denna tjänst är därför inte möjlig.",
