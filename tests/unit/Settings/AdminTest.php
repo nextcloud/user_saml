@@ -134,12 +134,12 @@ class AdminTest extends \Test\TestCase {
 			'displayName_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the displayname to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'email_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the email address to.'),
 				'type' => 'line',
-				'required' => true,
+				'required' => false,
 			],
 			'quota_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the quota to.'),
