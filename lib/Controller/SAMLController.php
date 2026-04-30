@@ -501,7 +501,7 @@ class SAMLController extends Controller {
 					$this->userSession->logout();
 				}
 			}
-			if ($targetUrl !== '' && $targetUrl !== null && $auth && $auth->getLastErrorReason() !== null) {
+			if ($targetUrl !== '' && $targetUrl !== null && $auth && $auth->getLastErrorReason() === null) {
 				$this->userSession->logout();
 			}
 		}
