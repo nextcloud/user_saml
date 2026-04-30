@@ -90,11 +90,17 @@ class SAMLSettings {
 	 * @return array<int, string>
 	 * @throws Exception
 	 */
-	public function getListOfIdps(): array {
+	public function getListOfIdps(bool $onlyComplete = false): array {
 		$this->ensureConfigurationsLoaded();
 
 		$result = [];
 		foreach ($this->configurations as $configID => $config) {
+			if ($onlyComplete
+				&& (trim(($config['idp-entityId'] ?? '')) === ''
+				|| trim(($config['idp-singleSignOnService.url'] ?? '')) === '')
+			) {
+				continue;
+			}
 			// no fancy array_* method, because there might be thousands
 			$result[$configID] = $config['general-idp0_display_name'] ?? '';
 		}
