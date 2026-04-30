@@ -5,6 +5,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.0.1
+
+### Added
+
+* Propagate exception from saml library to our logs by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1089
+
+### Fixed
+
+* Fix dialog button wording to be more understandable by @jancborchardt in https://github.com/nextcloud/user_saml/pull/1093
+* Fix logout condition based on last error reason by @foerster-finsternis in https://github.com/nextcloud/user_saml/pull/1092
+* Avoid redirecting to login with an incomplete configuration by @come-nc in https://github.com/nextcloud/user_saml/pull/1091
+
+### Other
+
+* docs: Add development setup steps to readme by @jancborchardt in https://github.com/nextcloud/user_saml/pull/1094
+
 ## 8.0.0
 
 ### Added
