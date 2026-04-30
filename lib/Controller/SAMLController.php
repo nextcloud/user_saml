@@ -288,7 +288,6 @@ class SAMLController extends Controller {
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
-	#[OnlyUnauthenticatedUsers]
 	public function getMetadata(int $idp = 1): Http\DataDownloadResponse {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
@@ -305,8 +304,6 @@ class SAMLController extends Controller {
 
 	/**
 	 * @NoSameSiteCookieRequired
-	 *
-	 * @return Http\RedirectResponse
 	 * @throws Error
 	 * @throws ValidationError
 	 */
