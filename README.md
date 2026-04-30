@@ -24,3 +24,13 @@ The following providers are supported and tested at the moment:
 - Any other provider that authenticates using the environment variable
 
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are **not** part of any internal test matrix.
+
+
+## 🚧 Development setup
+
+1. Simply clone this repository into the `apps` folder of your Nextcloud development instance.
+2. Run `composer install` to install PHP dependencies.
+3. Run `npm ci` to install JS/frontend dependencies.
+4. Run `npm run build` for a production build or `npm run watch` for a watch/dev build.
+5. Then activate the app through the apps management.
+6. Make sure to configure the app in "SSO & SAML authentication" in administration settings.
