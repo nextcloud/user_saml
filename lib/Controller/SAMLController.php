@@ -360,14 +360,7 @@ class SAMLController extends Controller {
 
 		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes(), JSON_THROW_ON_ERROR));
 
-		$errors = $auth->getErrors();
-
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				$this->logger->error($error, ['app' => $this->appName]);
-			}
-			$this->logger->error($auth->getLastErrorReason() ?? 'No last error reason found', ['app' => $this->appName]);
-		}
+		$this->handleAuthErrors($auth);
 
 		if (!$auth->isAuthenticated()) {
 			$this->logger->info('Auth failed', ['app' => $this->appName]);
@@ -530,6 +523,8 @@ class SAMLController extends Controller {
 				));
 				if ($auth->getLastErrorReason() === null) {
 					return [$targetUrl, $auth];
+				} else {
+					$this->handleAuthErrors($auth);
 				}
 			} catch (Error) {
 				continue;
@@ -659,5 +654,31 @@ class SAMLController extends Controller {
 	public function base(): Http\TemplateResponse {
 		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
+	}
+
+	private function handleAuthErrors(Auth $auth): void {
+		$errors = $auth->getErrors();
+		$lastReason = $auth->getLastErrorReason();
+
+		if ($errors === []) {
+			return;
+		}
+
+		if ($lastReason === null) {
+			$this->logger->error('SAML errored with no error message: ' . $errors[0] . '.');
+			return;
+		}
+
+		// Only the last error has a corresponding exception and reason
+		$this->logger->error('SAML errored with: ' . $lastReason . ' (code: ' . $errors[count($errors) - 1] . ').', [
+			'exception' => $auth->getLastErrorException(),
+		]);
+
+		if (count($errors) > 1) {
+			// iterate from second last to first one
+			for ($i = count($errors) - 2; $i >= 0; $i--) {
+				$this->logger->error('Additional SAML error code: ' . $errors[$i]);
+			}
+		}
 	}
 }
