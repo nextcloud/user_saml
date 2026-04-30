@@ -12,17 +12,17 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		@update:open="onOpenChanged"
 		@submit="saveAll">
 		<template #actions>
+			<NcButton variant="tertiary" :disabled="!isDirty" @click="cancelChanges">
+				{{ t('user_saml', 'Cancel changes') }}
+			</NcButton>
 			<NcButton
 				variant="secondary"
 				:href="metadataUrl"
 				download>
 				{{ t('user_saml', 'Download metadata XML') }}
 			</NcButton>
-			<NcButton variant="tertiary" :disabled="!isDirty" @click="cancelChanges">
-				{{ t('user_saml', 'Cancel') }}
-			</NcButton>
 			<NcButton variant="primary" type="submit" :disabled="!isDirty || isSaving">
-				{{ isSaving ? t('user_saml', 'Saving…') : t('user_saml', 'Edit') }}
+				{{ isSaving ? t('user_saml', 'Saving changes…') : t('user_saml', 'Save changes') }}
 			</NcButton>
 		</template>
 
