@@ -14,8 +14,11 @@ trait TXmlHelper {
 	 */
 	public function callWithXmlEntityLoader(callable $func): mixed {
 		libxml_set_external_entity_loader(static fn ($public, $system) => $system);
-		$result = $func();
-		libxml_set_external_entity_loader(static fn () => null);
+		try {
+			$result = $func();
+		} finally {
+			libxml_set_external_entity_loader(static fn () => null);
+		}
 		return $result;
 	}
 }
