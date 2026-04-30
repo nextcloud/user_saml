@@ -445,9 +445,11 @@ function onOpenChanged(open: boolean): void {
  */
 async function testMetaData(): Promise<void> {
 	try {
-		await axios.get(generateUrl(`/apps/user_saml/saml/metadata?idp=${props.provider.id}`))
-		metadataValid.value = true
-	} catch {
+		const { data, headers } = await axios.get(generateUrl(`/apps/user_saml/saml/metadata?idp=${props.provider.id}`))
+		const parser = new DOMParser()
+		const xml = parser.parseFromString(data, "application/xml")
+		metadataValid.value = headers["content-type"] === 'text/xml;charset=UTF-8' && xml.documentElement.localName === 'EntityDescriptor'
+	} catch (e) {
 		metadataValid.value = false
 	}
 }
