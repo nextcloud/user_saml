@@ -5,9 +5,7 @@ OC.L10N.register(
     "Encrypted" : "Đã mã hóa",
     "Saved" : "Đã lưu",
     "Remove {name}" : "Xoá {name}",
-    "Cancel" : "Cancel",
-    "Saving…" : "Đang lưu...",
-    "Edit" : "Chỉnh sửa",
+    "Save changes" : "Lưu thay đổi",
     "General" : "Tổng hợp",
     "Loading…" : "Đang tải…",
     "Error" : "Lỗi"

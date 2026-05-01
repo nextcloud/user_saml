@@ -3,8 +3,7 @@ OC.L10N.register(
     {
     "Email address" : "Tansa imayl",
     "Encrypted" : "Yettwawgelhen",
-    "Cancel" : "Semmet",
-    "Edit" : "Ẓreg",
+    "Save changes" : "Sekles asnifel",
     "General" : "Amatu",
     "Loading…" : "Asali...",
     "Error" : "Erreur"

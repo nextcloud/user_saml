@@ -2,9 +2,6 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Salveguardate",
-    "Cancel" : "Cancel",
-    "Saving…" : "Salveguardante...",
-    "Edit" : "Modificar",
     "General" : "General",
     "Security settings" : "Configurationes de securitate",
     "Metadata valid" : "Metadatos valide",

@@ -2,8 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Gespäichert",
-    "Cancel" : "Cancel",
-    "Edit" : "Änneren",
+    "Save changes" : "Ännerunge späicheren",
     "General" : "Allgemeng",
     "Metadata invalid" : "Falsch Metadata",
     "Loading…" : "Et gëtt gelueden",

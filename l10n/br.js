@@ -2,8 +2,6 @@ OC.L10N.register(
     "user_saml",
     {
     "Saved" : "Enrollet",
-    "Cancel" : "Cancel",
-    "Edit" : "Embann",
     "General" : "Hollek",
     "Loading…" : "O kargañ...",
     "Error" : "Fazi"

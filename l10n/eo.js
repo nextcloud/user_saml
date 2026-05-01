@@ -3,9 +3,7 @@ OC.L10N.register(
     {
     "Email address" : "Retpoŝtadreso",
     "Saved" : "Konservita",
-    "Cancel" : "Cancel",
-    "Saving…" : "Konservado...",
-    "Edit" : "Modifi",
+    "Save changes" : "Konservi ŝanĝojn",
     "General" : "Ĝenerala",
     "Loading…" : "Ŝargado...",
     "Error" : "Eraro"

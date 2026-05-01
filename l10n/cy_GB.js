@@ -3,8 +3,6 @@ OC.L10N.register(
     {
     "Email address" : "Cyfeiriad e-bost",
     "Saved" : "Wedi'u cadw",
-    "Cancel" : "Cancel",
-    "Edit" : "Golygu",
     "General" : "Cyffredinol",
     "Loading…" : "Yn llwytho…",
     "Error" : "Gwall"

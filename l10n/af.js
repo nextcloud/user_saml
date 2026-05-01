@@ -5,8 +5,6 @@ OC.L10N.register(
     "Email address" : "E-posadres",
     "Saved" : "Bewaar",
     "Download metadata XML" : "Laai metadata XML af",
-    "Cancel" : "Cancel",
-    "Saving…" : "Bewaar…",
     "General" : "Algemeen",
     "Service Provider Data" : "Diensverskafferdata",
     "Identity Provider Data" : "Identiteitsverskafferdata",

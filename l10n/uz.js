@@ -4,9 +4,7 @@ OC.L10N.register(
     "Email address" : "E-pochta manzili",
     "Saved" : "Saved",
     "Remove {name}" : " {name} ni o'chirish",
-    "Cancel" : "Bekor qilish",
-    "Saving…" : "Saqlanmoqda...",
-    "Edit" : "Tahrirlash",
+    "Save changes" : "Save changes",
     "General" : "Umumiy",
     "Loading…" : "Yuklanmoqda...",
     "Error" : "Xatolik"

@@ -5,8 +5,7 @@ OC.L10N.register(
     "Email address" : "ที่อยู่อีเมล",
     "Saved" : "บันทึกแล้ว",
     "Remove {name}" : "ลบ {name} ออก",
-    "Cancel" : "Cancel",
-    "Edit" : "แก้ไข",
+    "Save changes" : "บันทึกการเปลี่ยนแปลง",
     "General" : "ทั่วไป",
     "Loading…" : "กำลังโหลด…",
     "Error" : "ข้อผิดพลาด"

@@ -4,9 +4,7 @@ OC.L10N.register(
     "Email address" : "Е-пошта адреси",
     "Saved" : "Зачувано",
     "Remove {name}" : "Одстрани {name}",
-    "Cancel" : "Откажи",
-    "Saving…" : "Зачувува ...",
-    "Edit" : "Уреди",
+    "Save changes" : "Зачувај ги промените",
     "General" : "Општо",
     "Loading…" : "Се вчитува…",
     "Error" : "Грешка"
