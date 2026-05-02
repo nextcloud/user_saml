@@ -27,6 +27,7 @@ OC.L10N.register(
     "Remove {name}" : "Quitar «{name}»",
     "Reset settings" : "Reafitar la configuración",
     "Download metadata XML" : "Baxar el XML de los metadatos",
+    "Save changes" : "Guardar los cambeos",
     "General" : "Xeneral",
     "Identity Provider Data" : "Datos del fornidor d'identidaes",
     "Public X.509 certificate of the IdP" : "Certificáu X.509 públicu del forndior d'identidaes",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Saved" : "Захавана",
     "Remove {name}" : "Выдаліць {name}",
     "Reset settings" : "Скінуць налады",
+    "Save changes" : "Захаваць змены",
     "General" : "Агульныя",
     "Security settings" : "Налады бяспекі",
     "Loading…" : "Загрузка…",

@@ -54,6 +54,7 @@ OC.L10N.register(
     "Remove {name}" : "Премахване на {name}",
     "Reset settings" : "Нулиране на настройките",
     "Download metadata XML" : "Изтегляне на мета данни XML",
+    "Save changes" : "Запиши промените",
     "General" : "Общи",
     "Service Provider Data" : "Данни на доставчика на услуги",
     "If your Service Provider should use certificates you can optionally specify them here." : "Ако вашият доставчик на услуги трябва да използва сертификати, можете да ги посочите тук по желание.",

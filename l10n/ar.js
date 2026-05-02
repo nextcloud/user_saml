@@ -57,6 +57,7 @@ OC.L10N.register(
     "Remove {name}" : "إزالة {name}",
     "Reset settings" : "اعادة ضبط الإعدادات",
     "Download metadata XML" : "تنزيل بيانات التعريف الوصفية بتسيق XML",
+    "Save changes" : "حفظ التعديلات",
     "General" : "العامة",
     "Service Provider Data" : "بيانات مزود الخدمة",
     "If your Service Provider should use certificates you can optionally specify them here." : "إذا كان يجب على مزود الخدمة الخاص بك استخدام الشهادات فيمكنك تحديدها اختياريًا هنا.",
