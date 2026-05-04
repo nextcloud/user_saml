@@ -92,16 +92,22 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			}
 
 			if ($home !== '') {
-				//if attribute's value is an absolute path take this, otherwise append it to data dir
-				//check for / at the beginning or pattern c:\ resp. c:/
+				$dataDir = $this->config->getSystemValueString('datadirectory', $this->serverRoot . '/data');
+
+				// note: Path traversal is allowed because we trust the idp and it allows to do partitioning
+				// of the storage.
+				//
+				// If attribute's value is an absolute path take this, otherwise append it to data dir
+				// check for / at the beginning or pattern c:\ resp. c:/
 				if ($home[0] !== '/'
 				   && !(strlen($home) > 3 && ctype_alpha($home[0])
 					   && $home[1] === ':' && ($home[2] === '\\' || $home[2] === '/'))
 				) {
-					$home = $this->config->getSystemValueString('datadirectory',
-						$this->serverRoot . '/data') . '/' . $home;
+					$home = $dataDir . '/' . $home;
 				}
+			}
 
+			if ($home !== '') {
 				$values['home'] = $home;
 			}
 
