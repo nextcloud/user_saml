@@ -327,7 +327,8 @@ class SAMLControllerTest extends TestCase {
 
 	public static function dataTestGenericError(): \Generator {
 		yield ['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'];
-		yield ['messageSend' => 'test message', 'messageExpected' => 'test message'];
+		yield ['messageSend' => 'userDisabled', 'messageExpected' => 'This user account is disabled, please contact your administrator.'];
+		yield ['messageSend' => 'authFailed', 'messageExpected' => 'Authentication failed.'];
 	}
 
 	#[DataProvider('dataTestGetSSODisplayName')]
