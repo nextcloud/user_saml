@@ -120,6 +120,16 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 * @throws \OCP\Files\NotFoundException
 	 */
 	public function initializeHomeDir(string $uid): void {
+		$user = $this->userManager->get($uid);
+		if ($user === null) {
+			throw new \LogicException('Trying to initialize home dir for a non-existent user');
+		}
+
+		if (version_compare($this->config->getSystemValueString('version', '0.0.0'), '34.0.0', '>=')) {
+			$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
+			return;
+		}
+
 		### Code taken from lib/private/User/Session.php - function prepareUserLogin() ###
 		//trigger creation of user home and /files folder
 		$userFolder = Server::get(IRootFolder::class)->getUserFolder($uid);
@@ -130,10 +140,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			// read only uses
 		}
 		// trigger any other initialization
-		$user = $this->userManager->get($uid);
-		if ($user === null) {
-			throw new \LogicException('Trying to initialize home dir for a non-existent user');
-		}
 		$this->eventDispatcher->dispatchTyped(new UserFirstTimeLoggedInEvent($user));
 	}
 
