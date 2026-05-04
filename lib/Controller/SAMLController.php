@@ -448,10 +448,15 @@ class SAMLController extends Controller {
 
 			try {
 				$key = $this->config->getSystemValueString('gss.jwt.key', '');
-				$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
+				if ($key === '') {
+					$this->logger->error('gss.jwt.key is not configured; refusing GlobalScale SLO request', ['app' => $this->appName]);
+					$pass = false;
+				} else {
+					$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
 
-				$idp = $decoded['idp'] ?? null;
-				$pass = true;
+					$idp = $decoded['idp'] ?? null;
+					$pass = true;
+				}
 			} catch (Exception) {
 			}
 		} else {
