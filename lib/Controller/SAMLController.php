@@ -550,10 +550,13 @@ class SAMLController extends Controller {
 	 * @NoCSRFRequired
 	 * @OnlyUnauthenticatedUsers
 	 */
-	public function genericError(string $message): Http\TemplateResponse {
-		if (empty($message)) {
-			$message = $this->l->t('Unknown error, please check the log file for more details.');
-		}
+	public function genericError(string $reason): Http\TemplateResponse {
+		$allowedMessages = [
+			'userDisabled' => $this->l->t('This user account is disabled, please contact your administrator.'),
+			'authFailed' => $this->l->t('Authentication failed.'),
+		];
+
+		$message = $allowedMessages[$reason] ?? $this->l->t('Unknown error, please check the log file for more details.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 
