@@ -59,6 +59,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
 		'saml-attribute-mapping-mfa_mapping',
+		'saml-attribute-mapping-user_id_ldap_mapping',
 		'saml-attribute-mapping-group_mapping_prefix',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
