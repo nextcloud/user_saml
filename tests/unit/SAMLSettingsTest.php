@@ -14,7 +14,6 @@ use OCA\User_SAML\SAMLSettings;
 use OCP\IConfig;
 use OCP\ISession;
 use OCP\IURLGenerator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -110,7 +109,9 @@ class SAMLSettingsTest extends TestCase {
 		];
 	}
 
-	#[DataProvider('dataGetListOfIdps')]
+	/**
+	 * @dataProvider dataGetListOfIdps
+	 */
 	public function testGetListOfIdps(bool $onlyComplete, array $configs, array $expected): void {
 		$this->mapper->expects($this->once())
 			->method('getAll')
