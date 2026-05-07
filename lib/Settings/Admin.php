@@ -24,6 +24,7 @@ class Admin implements IDelegatedSettings {
 		private readonly IL10N $l10n,
 		private readonly Defaults $defaults,
 		private readonly IAppConfig $appConfig,
+		private readonly IConfig $config,
 		private readonly SAMLSettings $samlSettings,
 		private readonly IInitialState $initialState,
 	) {
@@ -148,12 +149,21 @@ class Admin implements IDelegatedSettings {
 				'type' => 'line',
 				'required' => false,
 			],
+			'user_id_ldap_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users to an existing LDAP user'),
+				'type' => 'line',
+				'required' => false,
+			],
 			'group_mapping_prefix' => [
 				'text' => $this->l10n->t('Group Mapping Prefix, default: %s', [SAMLSettings::DEFAULT_GROUP_PREFIX]),
 				'type' => 'line',
 				'required' => false,
 			],
 		];
+
+		if (version_compare($this->config->getSystemValueString('version', '0.0.0'), '34.0.0', '<')) {
+			unset($attributeMappingSettings['user_id_ldap_mapping']);
+		}
 
 		$userFilterSettings = [
 			'reject_groups' => [

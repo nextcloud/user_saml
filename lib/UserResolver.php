@@ -9,19 +9,52 @@ declare(strict_types=1);
 namespace OCA\User_SAML;
 
 use OCA\User_SAML\Exceptions\NoUserFoundException;
+use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\LDAP\Exceptions\MultipleUsersReturnedException;
+use OCP\LDAP\ILDAPProviderFactory;
+use OCP\Server;
 
 class UserResolver {
 	public function __construct(
-		private IUserManager $userManager,
+		private readonly IUserManager $userManager,
+		private readonly ILDAPProviderFactory $ldapProviderFactory,
+		private readonly IConfig $config,
 	) {
 	}
 
 	/**
 	 * @throws NoUserFoundException
 	 */
-	public function findExistingUserId(string $rawUidCandidate, bool $force = false, bool $isActiveDirectory = false): string {
+	public function findExistingUserId(string $rawUidCandidate, ?array $idpSettings = null, bool $force = false, bool $isActiveDirectory = false): string {
+		// If configured, find the user based on a different LDAP attribute.
+		if ($idpSettings !== null
+			&& version_compare($this->config->getSystemValueString('version', '0.0.0'), '34.0.0', '>=')
+			&& $this->ldapProviderFactory->isAvailable()
+			&& isset($idpSettings['saml-attribute-mapping-user_id_ldap_mapping'])
+			&& $idpSettings['saml-attribute-mapping-user_id_ldap_mapping'] !== null
+			&& $idpSettings['saml-attribute-mapping-user_id_ldap_mapping'] !== '') {
+			$userIdLdapMapping = $idpSettings['saml-attribute-mapping-user_id_ldap_mapping'];
+			try {
+				if ($isActiveDirectory) {
+					/** @psalm-suppress UndefinedInterfaceMethod only in NC 34 or above */
+					$user = $this->ldapProviderFactory->getLDAPProvider()->findOneUserByAttributeValue($userIdLdapMapping, $this->formatGuid2ForFilterUser($rawUidCandidate));
+				} else {
+					/** @psalm-suppress UndefinedInterfaceMethod only in NC 34 or above */
+					$user = $this->ldapProviderFactory->getLDAPProvider()->findOneUserByAttributeValue($userIdLdapMapping, $rawUidCandidate);
+				}
+				/** @psalm-suppress UndefinedClass only in NC 34 or above */
+			} catch (MultipleUsersReturnedException $e) {
+				return '';
+			}
+			if ($user !== null) {
+				return $user->getUID();
+			}
+
+			// continue normal workflow
+		}
+
 		if ($force) {
 			if ($isActiveDirectory) {
 				$this->ensureUser($this->formatGuid2ForFilterUser($rawUidCandidate));
@@ -86,14 +119,14 @@ class UserResolver {
 		$uid = $this->findExistingUserId($rawUidCandidate);
 		$user = $this->userManager->get($uid);
 		if ($user === null) {
-			throw new NoUserFoundException('User' . $rawUidCandidate . ' not valid or not found');
+			throw new NoUserFoundException('User ' . $rawUidCandidate . ' not valid or not found.');
 		}
 		return $user;
 	}
 
-	public function userExists(string $uid, bool $force = false): bool {
+	public function userExists(string $uid, array $idpSettings, bool $force = false): bool {
 		try {
-			$this->findExistingUserId($uid, $force);
+			$this->findExistingUserId($uid, $idpSettings, $force);
 			return true;
 		} catch (NoUserFoundException) {
 			return false;
