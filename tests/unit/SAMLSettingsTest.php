@@ -11,7 +11,6 @@ namespace OCA\User_SAML\Tests;
 
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCA\User_SAML\SAMLSettings;
-use OCP\AppFramework\Services\IAppConfig;
 use OCP\IConfig;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -22,7 +21,6 @@ use Test\TestCase;
 class SAMLSettingsTest extends TestCase {
 	private IURLGenerator&MockObject $urlGenerator;
 	private IConfig&MockObject $config;
-	private IAppConfig&MockObject $appConfig;
 	private ISession&MockObject $session;
 	private ConfigurationsMapper&MockObject $mapper;
 	private SAMLSettings $samlSettings;
@@ -33,14 +31,12 @@ class SAMLSettingsTest extends TestCase {
 
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->mapper = $this->createMock(ConfigurationsMapper::class);
 
 		$this->samlSettings = new SAMLSettings(
 			$this->urlGenerator,
 			$this->config,
-			$this->appConfig,
 			$this->session,
 			$this->mapper,
 		);
