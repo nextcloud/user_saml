@@ -87,7 +87,13 @@ class SessionService {
 		$sessionData->setTokenId($this->tokenProvider->getToken($this->session->getId())->getId());
 		$sessionData->setData($sessionDataModel);
 
-		$this->sessionDataMapper->insert($sessionData);
+		try {
+			$this->sessionDataMapper->insert($sessionData);
+		} catch (Exception $exception) {
+			if ($exception->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				$this->sessionDataMapper->update($sessionData);
+			}
+		}
 	}
 
 	protected function storeSessionDataInSession(SessionData $sessionData): void {
