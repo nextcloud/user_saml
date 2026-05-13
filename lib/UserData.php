@@ -49,7 +49,7 @@ class UserData {
 		try {
 			$providedUid = $this->extractSamlUserId();
 			$uid = $this->testEncodedObjectGUID($providedUid);
-			$uid = $this->userResolver->findExistingUserId($uid, true, $providedUid !== $uid);
+			$uid = $this->userResolver->findExistingUserId($uid, $this->getProviderSettings(), true, $providedUid !== $uid);
 			$this->uid = $uid;
 		} catch (NoUserFoundException) {
 			return '';
