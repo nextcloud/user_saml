@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.5
+
+### Fixed
+
+* [fix: Handle unique constrainst exception related to the session data](https://github.com/nextcloud/user_saml/pull/1104)
+* [fix: Avoid redirecting to login with an incomplete configuration](https://github.com/nextcloud/user_saml/pull/1101)
+
 ## 7.1.4
 
 ### Added
