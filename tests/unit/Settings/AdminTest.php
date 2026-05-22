@@ -15,6 +15,7 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\Defaults;
+use OCP\IConfig;
 use OCP\IL10N;
 use OneLogin\Saml2\Constants;
 use Override;
@@ -26,6 +27,7 @@ class AdminTest extends \Test\TestCase {
 	private IL10N&MockObject $l10n;
 	private Defaults&MockObject $defaults;
 	private IAppConfig&MockObject $appConfig;
+	private IConfig&MockObject $config;
 	private IInitialState&MockObject $initialState;
 
 	#[Override]
@@ -33,6 +35,7 @@ class AdminTest extends \Test\TestCase {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->defaults = $this->createMock(Defaults::class);
 		$this->appConfig = $this->createMock(IAppConfig::class);
+		$this->config = $this->createMock(IConfig::class);
 		$this->settings = $this->createMock(SAMLSettings::class);
 		$this->initialState = $this->createMock(IInitialState::class);
 
@@ -40,6 +43,7 @@ class AdminTest extends \Test\TestCase {
 			$this->l10n,
 			$this->defaults,
 			$this->appConfig,
+			$this->config,
 			$this->settings,
 			$this->initialState,
 		);
@@ -48,6 +52,9 @@ class AdminTest extends \Test\TestCase {
 	}
 
 	public function formDataProvider(): array {
+		$this->config->method('getSystemValueString')->with('version', '0.0.0')
+			->willReturn('34.0.0');
+
 		$this->l10n
 			->expects($this->any())
 			->method('t')
@@ -158,6 +165,11 @@ class AdminTest extends \Test\TestCase {
 			],
 			'mfa_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users MFA login status'),
+				'type' => 'line',
+				'required' => false,
+			],
+			'user_id_ldap_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users to an existing LDAP user'),
 				'type' => 'line',
 				'required' => false,
 			],
