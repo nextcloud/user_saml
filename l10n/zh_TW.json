@@ -33,6 +33,7 @@
     "Attribute to map the users home to." : "對映至使用者家目錄的屬性。",
     "Attribute to map the users groups to." : "對映至使用者群組的屬性。",
     "Attribute to map the users MFA login status" : "對映至使用者 MFA 登入狀態的屬性。",
+    "Attribute to map the users to an existing LDAP user" : "用來將使用者對映至現有 LDAP 使用者的屬性",
     "Group Mapping Prefix, default: %s" : "群組對應前綴，預設值：%s",
     "Reject members of these groups. This setting has precedence over required memberships." : "拒絕這些群組的成員。此設定優先於所需的成員資格。",
     "Group A, Group B, …" : "群組 A, 群組 B……",

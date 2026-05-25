@@ -33,6 +33,7 @@
     "Attribute to map the users home to." : "Tréith chun an teach úsáideoirí a mhapáil.",
     "Attribute to map the users groups to." : "Tréith chun na grúpaí úsáideoirí a mhapáil go.",
     "Attribute to map the users MFA login status" : "Tréith chun stádas logáil isteach MFA na n-úsáideoirí a mhapáil",
+    "Attribute to map the users to an existing LDAP user" : "Tréith chun na húsáideoirí a mhapáil chuig úsáideoir LDAP atá ann cheana féin",
     "Group Mapping Prefix, default: %s" : "Réimír Mhapála Grúpa, réamhshocrú: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Diúltaigh do bhaill na ngrúpaí seo. Tá tosaíocht ag an socrú seo ar bhallraíocht riachtanach.",
     "Group A, Group B, …" : "Grúpa A, Grúpa B, …",
