@@ -35,6 +35,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Atributas, skirtas susieti naudotojų namus.",
     "Attribute to map the users groups to." : "Atributas, su kuriuo reikia susieti vartotojų grupes.",
     "Attribute to map the users MFA login status" : "Atributas, skirtas susieti naudotojų MFA prisijungimo būseną",
+    "Attribute to map the users to an existing LDAP user" : "Atributas, skirtas susieti vartotojus su esamu LDAP vartotoju",
     "Group Mapping Prefix, default: %s" : "Grupės atvaizdavimo prefiksas, numatytasis: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Atmesti šių grupių narius. Šis nustatymas turi pirmenybę prieš privalomas narystes.",
     "Group A, Group B, …" : "A grupė, B grupė, …",

@@ -33,6 +33,7 @@
     "Attribute to map the users home to." : "Attribut att mappa hemkataloger till.",
     "Attribute to map the users groups to." : "Attribut att mappa användargrupper till.",
     "Attribute to map the users MFA login status" : "Attribut för att mappa användarens MFA-inloggningsstatus",
+    "Attribute to map the users to an existing LDAP user" : "Attribut för att mappa användare till en befintlig LDAP-användare",
     "Group Mapping Prefix, default: %s" : "Prefix för gruppmappning, standard: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Avvisa medlemmar i dessa grupper. Den här inställningen har företräde över obligatoriska medlemskap.",
     "Group A, Group B, …" : "Grupp A, Grupp B, …",
