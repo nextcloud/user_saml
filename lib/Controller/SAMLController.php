@@ -666,8 +666,15 @@ class SAMLController extends Controller {
 			return;
 		}
 
+		$hintMap = [
+			ValidationError::INVALID_SIGNATURE => 'Check if the IDP x509 certificate is correctly set and you are using the signing/token-signing certificate of the provider.',
+		];
+
+		$code = end($errors);
+		$hint = isset($hintMap[$code]) ? ' Hint: ' . $hintMap[$code] : '';
+
 		// Only the last error has a corresponding exception and reason
-		$this->logger->error('SAML errored with: ' . $lastReason . ' (code: ' . $errors[count($errors) - 1] . ').', [
+		$this->logger->error('SAML errored with: ' . $lastReason . ' (code: ' . $code . ').' . $hint, [
 			'exception' => $auth->getLastErrorException(),
 		]);
 
