@@ -5,6 +5,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.0
+
+### Added
+
+* feat: Flexible matching between LDAP and SAML user ids by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1103
+* feat: Add some hints when auth error happen by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1100
+
+### Fixed
+
+* fix: Chunk group migration by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1099
+* fix: Handle unique constrainst exception related to the session data by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1102
+* fix: Add comments that homepath is trusted by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1119
+
+### Dependencies
+
+* build(deps): bump protobufjs from 7.5.5 to 7.6.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1117
+* build(deps): bump @protobufjs/utf8 from 1.1.0 to 1.1.1 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1113
+* build(deps): bump postcss from 8.5.8 to 8.5.14 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1112
+* build(deps): bump axios from 1.15.0 to 1.16.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1105
+* build(deps): bump fast-xml-builder from 1.1.5 to 1.2.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1107
+* build(deps): bump fast-uri from 3.1.0 to 3.1.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1108
+* build(deps): bump onelogin/php-saml from 4.3.1 to 4.3.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1110
+* build(deps-dev): bump tmp from 0.2.5 to 0.2.7 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1121
+* build(deps-dev): bump symfony/yaml from 5.4.45 to 5.4.53 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1120
+
 ## 8.0.1
 
 ### Added
