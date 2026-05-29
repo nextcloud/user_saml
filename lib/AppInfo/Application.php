@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\User_SAML\AppInfo;
 
 use OC\Security\CSRF\CsrfTokenManager;
+use OC\User\DisabledUserException;
 use OC\User\LoginException;
 use OC_User;
 use OCA\DAV\Events\SabrePluginAddEvent;
@@ -85,6 +86,7 @@ class Application extends App implements IBootstrap {
 				CsrfTokenManager $csrfTokenManager,
 				GroupBackend $groupBackend,
 				UserBackend $userBackend,
+				LoggerInterface $logger,
 				bool $isCLI,
 			): void {
 				$groupManager->addBackend($groupBackend);
@@ -119,12 +121,14 @@ class Application extends App implements IBootstrap {
 						if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
 							return;
 						}
+						/** @psalm-suppress UndefinedClass */
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
 							'user_saml.SAML.genericError',
 							[
-								'message' => $e->getMessage()
+								'reason' => $e instanceof DisabledUserException ? 'userDisabled' : 'authFailed',
 							]
 						);
+						$logger->error('Login failure', ['exception' => $e]);
 						header('Location: ' . $targetUrl);
 						exit();
 					}
@@ -142,7 +146,7 @@ class Application extends App implements IBootstrap {
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
 							'user_saml.SAML.genericError',
 							[
-								'message' => $l10n->t('This user account is disabled, please contact your administrator.')
+								'reason' => 'userDisabled',
 							]
 						);
 						header('Location: ' . $targetUrl);
