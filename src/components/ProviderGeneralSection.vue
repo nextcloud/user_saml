@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 		<template v-if="attribute.type === 'checkbox' && !attribute.global && attribute.provider_type === '' || attribute.provider_type === type">
 			<NcCheckboxRadioSwitch
 				:modelValue="modelValue[key] === '1'"
-				@update:modelValue="(val: boolean) => onChange(key, val ? '1' : '0')">
+				@update:modelValue="(val: boolean) => update(key, val ? '1' : '0')">
 				{{ attribute.text }}
 			</NcCheckboxRadioSwitch>
 			<NcNoteCard v-if="key === 'is_saml_request_using_post'" type="warning">
@@ -20,7 +20,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			:label="attribute.text"
 			:modelValue="modelValue[key] ?? ''"
 			:required="attribute.required"
-			@update:modelValue="(val: string|number) => type === 'env' ? onChangeDebounced(key, val + '') : onChange(key, val + '')" />
+			:error="isError(key)"
+			:helperText="isError(key) ? t('user_saml', 'Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables') : undefined"
+			@update:modelValue="(val: string|number) => update(key, val + '')" />
 	</template>
 </template>
 
@@ -49,7 +51,9 @@ const emit = defineEmits<{
  * @param value The new value
  */
 function onChange(key: string, value: string): void {
-	emit('update:modelValue', { ...props.modelValue, [key]: value })
+    if (isError(key)) {
+        return
+    }
 	emit('fieldChange', key, value)
 }
 
@@ -62,10 +66,25 @@ const debounceTimers = ref<Record<string, ReturnType<typeof setTimeout>>>({})
  * @param value The new value
  */
 function onChangeDebounced(key: string, value: string): void {
-	emit('update:modelValue', { ...props.modelValue, [key]: value })
 	clearTimeout(debounceTimers.value[key])
 	debounceTimers.value[key] = setTimeout(() => {
+        if (isError(key)) {
+            return
+        }
 		emit('fieldChange', key, value)
 	}, 500)
+}
+
+function update(key: string, value: string): void {
+	emit('update:modelValue', { ...props.modelValue, [key]: value })
+	if (props.type === 'env')  {
+		onChangeDebounced(key, value)
+	} else {
+		onChange(key, value)
+	}
+}
+
+function isError(key: string): boolean {
+	return key === 'uid_mapping' && props.type === 'env' && (props.modelValue[key] ?? '').startsWith('HTTP_')
 }
 </script>
