@@ -35,6 +35,7 @@ OC.L10N.register(
     "Attribute to map the users home to." : "Атрибут для привязки домашней директории пользователей.",
     "Attribute to map the users groups to." : "Атрибут для отображения групп пользователей.",
     "Attribute to map the users MFA login status" : "Атрибут для сопоставления статуса входа пользователей в MFA",
+    "Attribute to map the users to an existing LDAP user" : "Атрибут для сопоставления пользователей с существующим пользователем LDAP",
     "Group Mapping Prefix, default: %s" : "Префикс сопоставления групп, по умолчанию: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Отклоняйте членов этих групп. Этот параметр имеет приоритет над обязательным членством.",
     "Group A, Group B, …" : "Группа А, Группа Б, …",
