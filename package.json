@@ -1,7 +1,7 @@
 {
   "name": "user_saml",
   "description": "Authenticate using single sign-on",
-  "version": "8.1.0-dev.0",
+  "version": "8.1.0",
   "author": "Carl Schwan <carl@carlschwan.eu>",
   "contributors": [
     "Carl Schwan <carl@carlschwan.eu>"
