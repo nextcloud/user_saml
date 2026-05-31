@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "This user account is disabled, please contact your administrator." : "Detta användarkontot är avstängt, kontakta din administratör.",
+    "Authentication failed." : "Autentisering misslyckades.",
     "Unknown error, please check the log file for more details." : "Okänt fel, vänligen kontrollera loggfilen för mer detaljer.",
     "Direct log in" : "Direkt inloggning",
     "SSO & SAML log in" : "SSO & SAML-inloggning",
@@ -72,6 +73,7 @@ OC.L10N.register(
     "Environment variable provider settings" : "Inställningar för miljövariabelleverantör",
     "Reset settings" : "Återställ inställningar",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Den här funktionen kanske inte fungerar med alla identitetsleverantörer. Använd endast om din IdP specifikt kräver POST-bindning för SAML-förfrågningar.",
+    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Miljövariabler som börjar med HTTP_ är inte tillåtna eftersom HTTP-headers sparas i dessa miljövariabler",
     "Configure: {name}" : "Konfigurera: {name}",
     "Cancel changes" : "Avbryt ändringar",
     "Download metadata XML" : "Hämta metadata XML-fil",
