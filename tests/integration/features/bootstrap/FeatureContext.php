@@ -8,6 +8,8 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 class FeatureContext implements Context {
 	/** @var \GuzzleHttp\Message\Response */
@@ -253,7 +255,7 @@ class FeatureContext implements Context {
 	public function iShouldBeRedirectedTo($targetUrl) {
 		$redirectHeader = $this->response->getHeader('X-Guzzle-Redirect-History');
 		$lastUrl = $redirectHeader[count($redirectHeader) - 1];
-		$url = parse_url($lastUrl);
+		$url = parse_url((string)$lastUrl);
 		$targetUrl = parse_url($targetUrl);
 		$paramsToCheck = [
 			'scheme',
@@ -286,7 +288,7 @@ class FeatureContext implements Context {
 	public function iShouldBeRedirectedToWithQueryParams($targetUrl) {
 		$redirectHeader = $this->response->getHeader('X-Guzzle-Redirect-History');
 		$firstUrl = $redirectHeader[0];
-		$firstUrlParsed = parse_url($firstUrl);
+		$firstUrlParsed = parse_url((string)$firstUrl);
 		$targetUrl = parse_url($targetUrl);
 		$paramsToCheck = [
 			'scheme',
@@ -301,7 +303,7 @@ class FeatureContext implements Context {
 		foreach ($paramsToCheck as $param) {
 			if ($param == 'query') {
 				foreach (explode('&', $passthroughParams) as $passthrough) {
-					if (!str_contains($firstUrl, $passthrough)) {
+					if (!str_contains((string)$firstUrl, $passthrough)) {
 						throw new InvalidArgumentException(
 							sprintf(
 								'Expected to find %s for parameter %s',
@@ -393,10 +395,10 @@ class FeatureContext implements Context {
 			]
 		);
 
-		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		$responseArray = (json_decode((string)$this->response->getBody(), true))['ocs'];
 
 		if (!isset($responseArray['data'][$key]) || count((array)$responseArray['data'][$key]) === 0) {
-			if (strpos($key, '.') !== false) {
+			if (str_contains($key, '.')) {
 				// support nested arrays, specify the key seperated by "."s, e.g. quota.total
 				$keys = explode('.', $key);
 				if (isset($responseArray['data'][$keys[0]])) {
@@ -417,11 +419,11 @@ class FeatureContext implements Context {
 			$responseArray['data'][$key] = '';
 		}
 
-		$actualValue = $actualValue ?? $responseArray['data'][$key];
+		$actualValue ??= $responseArray['data'][$key];
 		if (is_array($actualValue)) {
 			// transform array to string, ensuring values are in the same order
 			$value = explode(',', $value);
-			$value = array_map('trim', $value);
+			$value = array_map(trim(...), $value);
 			sort($value);
 			$value = implode(',', $value);
 
@@ -462,13 +464,13 @@ class FeatureContext implements Context {
 			]
 		);
 
-		$responseArray = (json_decode($this->response->getBody(), true))['ocs'];
+		$responseArray = (json_decode((string)$this->response->getBody(), true))['ocs'];
 		if ($responseArray['meta']['statuscode'] !== 200) {
 			throw new UnexpectedValueException(sprintf('Expected 200 status code but got %d', $responseArray['meta']['statusCode']));
 		}
 
-		$expectedMembers = array_map('trim', explode(',', $memberList));
-		$actualMembers = array_map('trim', $responseArray['data']['users']);
+		$expectedMembers = array_map(trim(...), explode(',', $memberList));
+		$actualMembers = array_map(trim(...), $responseArray['data']['users']);
 
 		sort($expectedMembers);
 		sort($actualMembers);
@@ -548,15 +550,44 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then User :userId is part of the groups :groups
+	 */
+	public function theUserIsPartOfTheseGroups(string $userId, string $groups) {
+		$response = shell_exec(
+			sprintf(
+				'%s %s user:info %s --output=json',
+				PHP_BINARY,
+				__DIR__ . '/../../../../../../occ',
+				$userId
+			)
+		);
+
+		$groupsActual = json_decode(trim($response), true)['groups'];
+		$groupsExpected = array_map(trim(...), explode(',', $groups));
+
+		foreach ($groupsExpected as $expectedGroup) {
+			if (!in_array($expectedGroup, $groupsActual)) {
+				$actualGroupStr = implode(', ', $groupsActual);
+				throw new UnexpectedValueException("Expected to find $expectedGroup in '$actualGroupStr'");
+			}
+		}
+	}
+
+	/**
 	 * @Given The environment variable :key is set to :value
 	 */
 	public function theEnvironmentVariableIsSetTo($key, $value) {
-		// Attention, this works currently for one value only. It generates an
-		// extra config file that injects the value to $_SERVER (as used in
-		// `SAMLController::login()`), so that it stays across requests in PHPs
-		// built-in server.
-		$envConfigPhp = <<<EOF
+		// It generates an extra config file that injects the value to $_SERVER
+		// (as used in `SAMLController::login()`), so that it stays across
+		// requests in PHPs built-in server.
+		if (file_exists(self::ENV_CONFIG_FILE)) {
+			$envConfigPhp = file_get_contents(self::ENV_CONFIG_FILE) . PHP_EOL;
+		} else {
+			$envConfigPhp = <<<EOF
 <?php
+EOF . PHP_EOL;
+		}
+		$envConfigPhp .= <<<EOF
 \$_SERVER["$key"] = "$value";
 EOF;
 		file_put_contents(self::ENV_CONFIG_FILE, $envConfigPhp);
@@ -681,10 +712,10 @@ EOF;
 	 */
 	public function iSendAGETRequestWithRequesttokenTo($url) {
 		$requestToken = substr(
-			preg_replace(
+			(string)preg_replace(
 				'/(.*)data-requesttoken="(.*)">(.*)/sm',
 				'\2',
-				$this->response->getBody()->getContents()
+				(string)$this->response->getBody()->getContents()
 			),
 			0,
 			89
@@ -769,6 +800,99 @@ EOF;
 		$responseArray = json_decode($response, true);
 		if (count($responseArray) > 0) {
 			throw new UnexpectedValueException('Background job axctuaslly was enqueued!');
+		}
+	}
+
+	/**
+	 * @Then The form method should be POST
+	 */
+	public function theFormMethodShouldBePost() {
+		$responseBody = (string)$this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+		$formElements = $xpath->query("//form[@method='post' or @method='POST']");
+		if ($formElements->length === 0) {
+			throw new \Exception("Expected form method 'POST' not found in response");
+		}
+	}
+
+	/**
+	 * @Then The response should contain the form with action :action
+	 */
+	public function theResponseShouldContainTheFormWithAction($action) {
+		$responseBody = (string)$this->response->getBody();
+		if (!str_contains($responseBody, 'action="' . $action . '"')) {
+			throw new \Exception("Expected form action '$action' not found in response");
+		}
+	}
+
+	/**
+	 * @Then The form should contain input fields :fields
+	 */
+	public function theFormShouldContainInputFields($fields) {
+		$responseBody = (string)$this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+		$fieldsArray = explode(',', (string)$fields);
+		foreach ($fieldsArray as $field) {
+			$inputElements = $xpath->query("//input[@name='" . trim($field) . "']");
+			if ($inputElements->length === 0) {
+				throw new \Exception("Expected input field '$field' not found in response");
+			}
+		}
+	}
+
+	/**
+	 * @When I submit the SAML form
+	 */
+	public function iSubmitTheSAMLForm() {
+		$responseBody = (string)$this->response->getBody();
+		$domDocument = new DOMDocument();
+		@$domDocument->loadHTML($responseBody);
+		$xpath = new DOMXpath($domDocument);
+
+		// Find the form action
+		$formAction = $xpath->query('//form')->item(0)->getAttribute('action');
+
+		// Get the specified hidden input fields
+		$fields = ['SAMLRequest', 'RelayState', 'SigAlg', 'Signature'];
+		$postData = [];
+		foreach ($fields as $field) {
+			$inputElement = $xpath->query("//input[@type='hidden' and @name='" . $field . "']");
+			if ($inputElement->length === 0) {
+				throw new \Exception("Expected hidden input field '$field' not found in response");
+			}
+			$postData[$field] = $inputElement->item(0)->getAttribute('value');
+		}
+
+		// Send the POST request with the hidden input data
+		try {
+			$this->response = $this->client->request(
+				'POST',
+				$formAction,
+				[
+					'form_params' => $postData,
+					'headers' => [
+						'Content-Type' => 'application/x-www-form-urlencoded',
+						'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+					],
+					'cookies' => $this->cookieJar,
+				]
+			);
+		} catch (RequestException $e) {
+			echo 'RequestException: ' . $e->getMessage() . "\n";
+			if ($e->hasResponse()) {
+				$response = $e->getResponse();
+				echo 'Status Code: ' . $response->getStatusCode() . "\n";
+				echo 'Headers: ' . json_encode($response->getHeaders()) . "\n";
+				echo 'Body: ' . $response->getBody() . "\n";
+				echo 'Request Headers: ' . json_encode($e->getRequest()->getHeaders()) . "\n";
+				echo 'Request Body: ' . $e->getRequest()->getBody() . "\n";
+			}
+		} catch (GuzzleException $e) {
+			echo 'GuzzleException: ' . $e->getMessage() . "\n";
 		}
 	}
 }

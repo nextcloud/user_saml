@@ -4,45 +4,48 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <psalm
-    errorLevel="4"
+    errorLevel="2"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorBaseline="tests/psalm-baseline.xml"
-	findUnusedBaselineEntry="true"
-	findUnusedCode="false"
-	phpVersion="8.0"
+  findUnusedBaselineEntry="true"
+  findUnusedCode="false"
+  phpVersion="8.1"
 >
-	<stubs>
-		<file name="tests/stub.phpstub" preloadClasses="true"/>
-	</stubs>
+  <stubs>
+    <file name="tests/stub.phpstub" preloadClasses="true"/>
+    <file name="tests/stubs/doctrine_dbal_schema_abstractasset.php" />
+    <file name="tests/stubs/doctrine_dbal_schema_column.php" />
+    <file name="tests/stubs/doctrine_dbal_schema_schema.php" />
+    <file name="tests/stubs/doctrine_dbal_schema_table.php" />
+    <file name="tests/stubs/oc_hooks_basicemitter.php" />
+    <file name="tests/stubs/testcase.stub" />
+    <file name="tests/stubs/oc_hooks_emitter.php" />
+    <file name="tests/stubs/oc_core_controller_clientflowloginv2controller.php" />
+    <file name="tests/stubs/oc_core_controller_clientflowlogincontroller.php" />
+  </stubs>
     <projectFiles>
-        <directory name="lib" />
+      <directory name="lib" />
+      <directory name="tests/unit" />
+      <ignoreFiles>
+        <directory name="vendor"/>
+        <directory name="vendor-bin"/>
+        <directory name="tests/stubs"/>
+        <file name="tests/unit/bootstrap.php" />
+      </ignoreFiles>
     </projectFiles>
-	<extraFiles>
-		<directory name="vendor" />
-		<directory name="vendor-bin/psalm/vendor" />
-	</extraFiles>
-	<issueHandlers>
-		<DeprecatedClass errorLevel="info" />
-		<DeprecatedMethod errorLevel="info" />
-		<DeprecatedProperty errorLevel="info" />
-		<DeprecatedFunction errorLevel="info" />
-		<DeprecatedConstant errorLevel="info" />
-		<UndefinedClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Types\Types"/>
-				<referencedClass name="Symfony\Component\Console\Command\Command"/>
-			</errorLevel>
-		</UndefinedClass>
-		<UndefinedDocblockClass>
-			<errorLevel type="suppress">
-				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
-				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
-				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
-				<referencedClass name="Doctrine\DBAL\Schema\Table" />
-				<referencedClass name="Doctrine\DBAL\Statement" />
-			</errorLevel>
-		</UndefinedDocblockClass>
-	</issueHandlers>
+  <extraFiles>
+    <directory name="vendor" />
+    <directory name="vendor-bin/psalm/vendor" />
+    <directory name="vendor-bin/phpunit/vendor/phpunit/phpunit" />
+  </extraFiles>
+  <issueHandlers>
+    <ClassMustBeFinal errorLevel="info" />
+    <MissingConstructor>
+      <errorLevel type="info">
+        <directory name="tests/unit" />
+      </errorLevel>
+    </MissingConstructor>
+  </issueHandlers>
 </psalm>

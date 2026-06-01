@@ -1,11 +1,13 @@
 OC.L10N.register(
     "user_saml",
     {
-    "Saved" : "Đã lưu",
     "Email address" : "Địa chỉ thư điện tử",
     "Encrypted" : "Đã mã hóa",
-    "Open documentation" : "Mở tài liệu",
+    "Saved" : "Đã lưu",
+    "Remove {name}" : "Xoá {name}",
+    "Save changes" : "Lưu thay đổi",
     "General" : "Tổng hợp",
+    "Loading…" : "Đang tải…",
     "Error" : "Lỗi"
 },
 "nplurals=1; plural=0;");

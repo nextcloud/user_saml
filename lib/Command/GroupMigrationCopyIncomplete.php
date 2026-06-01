@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
@@ -21,31 +22,33 @@ class GroupMigrationCopyIncomplete extends Base {
 	) {
 		parent::__construct();
 	}
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('saml:group-migration:copy-incomplete-members');
 		$this->setDescription('Transfers remaining group members from old local to current SAML groups');
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
 		if (empty($groupsToTreat)) {
 			if ($output->isVerbose()) {
 				$output->writeln('<info>No pending group member transfer</info>');
 			}
-			return 0;
+			return self::SUCCESS;
 		}
 
 		if (!$this->doMemberTransfer($groupsToTreat, $output)) {
 			if (!$output->isQuiet()) {
 				$output->writeln('<comment>Not all group members could be transferred completely. Rerun this command or check the Nextcloud log.</comment>');
 			}
-			return 1;
+			return self::FAILURE;
 		}
 
 		if (!$output->isQuiet()) {
 			$output->writeln('<info>All group members could be transferred completely.</info>');
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 
 	/**

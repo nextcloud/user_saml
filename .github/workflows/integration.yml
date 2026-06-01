@@ -41,63 +41,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: [ "8.0", "8.1", "8.2", "8.3", "8.4" ]
+        php-versions: [ "8.2", "8.3", "8.4", "8.5" ]
         databases: [ "mysql" ]
-        server-versions: [ "stable28", "stable29", "stable30", "stable31", "master" ]
-        exclude:
-          - server-versions: "master"
-            php-versions: "8.0"
-            databases: "mysql"
-          - server-versions: "master"
-            php-versions: "8.2"
-            databases: "mysql"
-          - server-versions: "stable31"
-            php-versions: "8.2"
-            databases: "mysql"
-          - server-versions: "stable31"
-            php-versions: "8.1"
-            databases: "mysql"
-          - server-versions: "stable31"
-            php-versions: "8.0"
-            databases: "mysql"
-          - server-versions: "stable30"
-            php-versions: "8.2"
-            databases: "mysql"
-          - server-versions: "stable30"
-            php-versions: "8.1"
-            databases: "mysql"
-          - server-versions: "stable30"
-            php-versions: "8.0"
-            databases: "mysql"
-          - server-versions: "stable29"
-            php-versions: "8.2"
-            databases: "mysql"
-          - server-versions: "stable29"
-            php-versions: "8.1"
-            databases: "mysql"
-          - server-versions: "stable28"
-            php-versions: "8.1"
-            databases: "mysql"
-          - server-versions: "stable28"
-            php-versions: "8.4"
-            databases: "mysql"
-          - server-versions: "stable29"
-            php-versions: "8.4"
-            databases: "mysql"
-          - server-versions: "stable30"
-            php-versions: "8.4"
-            databases: "mysql"
+        server-versions: [ "master" ]
         include:
-          - server-versions: "stable28"
-            php-versions: "8.2"
+          - server-versions: "stable32"
+            php-versions: "8.3"
             databases: "sqlite"
-          - server-versions: "stable28"
-            php-versions: "8.2"
+          - server-versions: "stable32"
+            php-versions: "8.3"
+            databases: "pgsql"
+          - server-versions: "stable33"
+            php-versions: "8.4"
+            databases: "mysql"
+          - server-versions: "stable34"
+            php-versions: "8.4"
             databases: "pgsql"
 
     name: Integration php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
-
-    #container: ubuntu
 
     services:
       postgres:
@@ -117,20 +78,20 @@ jobs:
           MYSQL_ROOT_PASSWORD: rootpassword
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
       directory:
-        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest
+        image: ghcr.io/nextcloud/continuous-integration-user_saml-dirsrv:latest # zizmor: ignore[unpinned-images]
         ports:
           - 389:3389/tcp
         options:
           --name directory
       sso:
-        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest
+        image: ghcr.io/nextcloud/continuous-integration-user_saml_shibboleth-idp:latest # zizmor: ignore[unpinned-images]
         ports:
           - 4443:8443/tcp
           - 9090:8080/tcp
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
           repository: nextcloud/server
@@ -138,13 +99,13 @@ jobs:
           submodules: true
 
       - name: Checkout app
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation

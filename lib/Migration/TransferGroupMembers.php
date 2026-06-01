@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Migration;
 
 use OCA\User_SAML\Service\GroupMigration;
@@ -16,15 +17,17 @@ use Throwable;
 class TransferGroupMembers implements IRepairStep {
 
 	public function __construct(
-		private GroupMigration $groupMigration,
-		private LoggerInterface $logger,
+		private readonly GroupMigration $groupMigration,
+		private readonly LoggerInterface $logger,
 	) {
 	}
 
+	#[\Override]
 	public function getName(): string {
 		return 'Move potential left members from old local groups to SAML groups';
 	}
 
+	#[\Override]
 	public function run(IOutput $output): void {
 		$groupsToTreat = $this->groupMigration->findGroupsWithLocalMembers();
 		if (empty($groupsToTreat)) {

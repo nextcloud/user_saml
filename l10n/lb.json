@@ -1,8 +1,9 @@
 { "translations": {
     "Saved" : "Gespäichert",
-    "Open documentation" : "Dokumentatioun opmaachen",
+    "Save changes" : "Ännerunge späicheren",
     "General" : "Allgemeng",
     "Metadata invalid" : "Falsch Metadata",
+    "Loading…" : "Et gëtt gelueden",
     "Error" : "Fehler"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

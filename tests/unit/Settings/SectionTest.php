@@ -7,21 +7,22 @@
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OCA\User_SAML\Settings\Section;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use Override;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SectionTest extends \Test\TestCase {
-	/** @var \OCA\User_SAML\Settings\Section */
-	private $section;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l10n;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
-	private $urlGenerator;
+	private Section $section;
+	private IL10N&MockObject $l10n;
+	private IURLGenerator&MockObject $urlGenerator;
 
+	#[Override]
 	protected function setUp(): void {
-		$this->l10n = $this->createMock(\OCP\IL10N::class);
+		$this->l10n = $this->createMock(IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
-		$this->section = new \OCA\User_SAML\Settings\Section(
+		$this->section = new Section(
 			$this->l10n,
 			$this->urlGenerator
 		);
@@ -29,11 +30,11 @@ class SectionTest extends \Test\TestCase {
 		parent::setUp();
 	}
 
-	public function testGetId() {
+	public function testGetId(): void {
 		$this->assertSame('saml', $this->section->getID());
 	}
 
-	public function testGetName() {
+	public function testGetName(): void {
 		$this->l10n
 			->expects($this->once())
 			->method('t')
@@ -43,11 +44,11 @@ class SectionTest extends \Test\TestCase {
 		$this->assertSame('SAML authentication', $this->section->getName());
 	}
 
-	public function testGetPriority() {
+	public function testGetPriority(): void {
 		$this->assertSame(75, $this->section->getPriority());
 	}
 
-	public function testGetIcon() {
+	public function testGetIcon(): void {
 		$this->urlGenerator
 			->expects($this->once())
 			->method('imagePath')

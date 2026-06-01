@@ -1,0 +1,12 @@
+OC.L10N.register(
+    "user_saml",
+    {
+    "Email address" : "Имэйл хаяг",
+    "Saved" : "Хадгалсан",
+    "Remove {name}" : "{name} хасах",
+    "Save changes" : "”®”©—Ä—á–ª”©–ª—Ç–∏–π–≥ —Ö–∞–¥–≥–∞–ª–∞—Ö",
+    "General" : "ерөнхий",
+    "Loading…" : "уншиж байна",
+    "Error" : "Алдаа"
+},
+"nplurals=2; plural=(n != 1);");

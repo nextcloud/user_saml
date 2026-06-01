@@ -5,6 +5,189 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.0
+
+### Added
+
+* feat: Flexible matching between LDAP and SAML user ids by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1103
+* feat: Add some hints when auth error happen by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1100
+
+### Fixed
+
+* fix: Chunk group migration by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1099
+* fix: Handle unique constrainst exception related to the session data by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1102
+* fix: Add comments that homepath is trusted by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1119
+
+### Dependencies
+
+* build(deps): bump protobufjs from 7.5.5 to 7.6.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1117
+* build(deps): bump @protobufjs/utf8 from 1.1.0 to 1.1.1 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1113
+* build(deps): bump postcss from 8.5.8 to 8.5.14 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1112
+* build(deps): bump axios from 1.15.0 to 1.16.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1105
+* build(deps): bump fast-xml-builder from 1.1.5 to 1.2.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1107
+* build(deps): bump fast-uri from 3.1.0 to 3.1.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1108
+* build(deps): bump onelogin/php-saml from 4.3.1 to 4.3.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1110
+* build(deps-dev): bump tmp from 0.2.5 to 0.2.7 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1121
+* build(deps-dev): bump symfony/yaml from 5.4.45 to 5.4.53 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1120
+
+## 8.0.1
+
+### Added
+
+* Propagate exception from saml library to our logs by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1089
+
+### Fixed
+
+* Fix dialog button wording to be more understandable by @jancborchardt in https://github.com/nextcloud/user_saml/pull/1093
+* Fix logout condition based on last error reason by @foerster-finsternis in https://github.com/nextcloud/user_saml/pull/1092
+* Avoid redirecting to login with an incomplete configuration by @come-nc in https://github.com/nextcloud/user_saml/pull/1091
+
+### Other
+
+* docs: Add development setup steps to readme by @jancborchardt in https://github.com/nextcloud/user_saml/pull/1094
+
+## 8.0.0
+
+### Added
+
+* drop support for NC 30 and 31; add support for upcoming NC 34 by @blizzz in https://github.com/nextcloud/user_saml/pull/1035
+* Port admin settings to vue by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1047
+* feat(settings): implement admin delegation for SSO & SAML authentication by @printminion-co in https://github.com/nextcloud/user_saml/pull/1053
+* search disabled users by display name or email by @hweihwang in https://github.com/nextcloud/user_saml/pull/997
+
+### Fixed
+
+* fix: Use correct color for login screen text on dark background by @come-nc in https://github.com/nextcloud/user_saml/pull/1055
+* fix: Cleanup DI in Application::boot by @come-nc in https://github.com/nextcloud/user_saml/pull/1060
+
+### Dependencies
+
+* build(deps): bump firebase/php-jwt from 7.0.3 to 7.0.4 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1057
+* build(deps): bump firebase/php-jwt from 7.0.4 to 7.0.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1059
+* build(deps): bump axios from 1.13.6 to 1.15.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1063
+* build(deps): bump fast-xml-parser from 5.5.4 to 5.5.12 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1065
+* build(deps): bump picomatch by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1064
+* build(deps-dev): bump brace-expansion from 2.0.2 to 2.1.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1066
+* build(deps-dev): bump vite from 7.3.1 to 7.3.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1067
+* build(deps): bump lodash and @microsoft/api-extractor by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1068
+* build(deps-dev): bump flatted from 3.4.1 to 3.4.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1070
+* build(deps): bump yaml from 2.8.2 to 2.8.3 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1069
+* build(deps): bump follow-redirects from 1.15.11 to 1.16.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1071
+* build(deps): bump dompurify from 3.3.3 to 3.4.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1074
+* build(deps): bump protobufjs from 7.5.4 to 7.5.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1075
+
+### Other
+
+* refactor(backend): Cleanup PHP code a bit by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1061
+* refactor: Fix many psalm issues by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1003
+* refactor: Use modern attribute instead of annotation by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1076
+
+## 7.1.4
+
+### Added
+* [Feat: Add command to manually migrate groups from database (user_saml#1044)](https://github.com/nextcloud/user_saml/pull/1044)
+
+### Fixed
+* [Fix: Only set valid timezone values (user_saml#1049)](https://github.com/nextcloud/user_saml/pull/1049)
+
+### Dependencies
+* [Build\(deps\): bump firebase/php\-jwt from 7.0.2 to 7.0.3 (user_saml#1045)](https://github.com/nextcloud/user_saml/pull/1045)
+* [Build\(deps\): bump robrichards/xmlseclibs from 3.1.4 to 3.1.5 (user_saml#1048)](https://github.com/nextcloud/user_saml/pull/1048)
+
+### Other
+* [Refactor: Port away from deprecated methods (user_saml#1046)](https://github.com/nextcloud/user_saml/pull/1046)
+
+
+## 7.1.3
+
+### Fixed
+
+* [Fix HTML injection in SAML POST login (user_saml#1037)](https://github.com/nextcloud/user_saml/pull/1037)
+
+## 7.1.2
+
+### Fixed
+
+* [Fix\(Session\): restore session data after cookie login (user_saml#1022)](https://github.com/nextcloud/user_saml/pull/1022)
+
+### Dependencies
+
+* [Build\(deps\): bump firebase/php\-jwt from 6.11.1 to 7.0.2 (user_saml#1024)](https://github.com/nextcloud/user_saml/pull/1024)
+
+## 7.1.1
+
+### Fixed
+
+* [Fix\(settings\): Fix missing global attribute (user_saml#1002)](https://github.com/nextcloud/user_saml/pull/1002)
+
+### Dependencies
+
+* [Build\(deps\): bump robrichards/xmlseclibs from 3.1.3 to 3.1.4 (user_saml#1004)](https://github.com/nextcloud/user_saml/pull/1004)
+* [Build\(deps\): bump onelogin/php\-saml from 4.3.0 to 4.3.1 (user_saml#1005)](https://github.com/nextcloud/user_saml/pull/1005)
+
+## 7.1.0
+
+### Added
+
+* [Feat(deps): Add Nextcloud 33 support (user_saml#986)](https://github.com/nextcloud/user_saml/pull/986)
+
+### Fixed
+
+* [Fix(Users): add to, not overwrite, order by clause (user_saml#976)](https://github.com/nextcloud/user_saml/pull/976)
+* [Fix(LDAP): lookup of AD users through objectGUID (user_saml#995)](https://github.com/nextcloud/user_saml/pull/995)
+
+### Other
+
+* [Chore(CI): Adjust testing matrix for Nextcloud 32 on master (user_saml#985)](https://github.com/nextcloud/user_saml/pull/985)
+* [Chore(migration): Port away from deprecated IQueryBuilder::execute (user_saml#988)](https://github.com/nextcloud/user_saml/pull/988)
+* [Chore(i18n):  Remove trailing space (user_saml#993)](https://github.com/nextcloud/user_saml/pull/993)
+
+### Dependencies
+* [Build(deps-dev): bump guzzlehttp/guzzle from 7.9.3 to 7.10.0 in /tests/integration (user_saml#983)](https://github.com/nextcloud/user_saml/pull/983)
+* [Ci: Update github actions (user_saml#989)](https://github.com/nextcloud/user_saml/pull/989)
+
+## 7.0.0
+
+### Added
+
+* [Feat: Initiate login to IdP via POST (user_saml#861)](https://github.com/nextcloud/user_saml/pull/861)
+* [Feat: add saml:user:add command to pre-provision users (user_saml#962)](https://github.com/nextcloud/user_saml/pull/962)
+
+### Removed
+
+* [Drop support for NC 28+29, requires PHP >= 8.1, update deps, add rector (user_saml#950)](https://github.com/nextcloud/user_saml/pull/950)
+
+### Fixed
+
+* [Chore(i18n): Changed spelling of entity ID (user_saml#953)](https://github.com/nextcloud/user_saml/pull/953)
+* [Fix(env-mode): accept multiple comma-separated groups (user_saml#954)](https://github.com/nextcloud/user_saml/pull/954)
+* [Fix(Settings): do not fail badly on unknown keys (user_saml#955)](https://github.com/nextcloud/user_saml/pull/955)
+* [Fix: do not show login options on env mode (there is just one) (user_saml#956)](https://github.com/nextcloud/user_saml/pull/956)
+* [Fix(Resolver): replace iconv (user_saml#967)](https://github.com/nextcloud/user_saml/pull/967)
+
+### Other
+
+* [Chore(tests): Cleanup bootstrap.php to be forward-compatible (user_saml#961)](https://github.com/nextcloud/user_saml/pull/961)
+* [Chore: update codeowners (user_saml#979)](https://github.com/nextcloud/user_saml/pull/979)
+
+### Dependencies
+
+* [Build(deps): bump onelogin/php-saml from 4.2.0 to 4.3.0 (user_saml#965)](https://github.com/nextcloud/user_saml/pull/965)
+* [Build(deps-dev): bump nextcloud/coding-standard from 1.3.2 to 1.4.0 in /vendor-bin/cs-fixer (user_saml#971)](https://github.com/nextcloud/user_saml/pull/971)
+* [Ci: update reuse.yml workflow from template (user_saml#972)](https://github.com/nextcloud/user_saml/pull/972)
+
+## 6.6.0
+
+### Added
+
+* [Feat(keepEmptyGroups): Add app configuration parameter to keep empty groups (user_saml#911)](https://github.com/nextcloud/user_saml/pull/911)
+* [Feat(settings): optional config option for sp entityId (user_saml#932)](https://github.com/nextcloud/user_saml/pull/932)
+
+### Under the hood
+
+* [Cleanup app bootstrap (user_saml#611)](https://github.com/nextcloud/user_saml/pull/611)
+* [Fix: Register the dav plugin through an event listener (user_saml#943)](https://github.com/nextcloud/user_saml/pull/943)
+
 ## 6.5.0
 
 ### Added

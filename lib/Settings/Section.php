@@ -14,14 +14,15 @@ use OCP\Settings\IIconSection;
 class Section implements IIconSection {
 
 	public function __construct(
-		private IL10N $l,
-		private IURLGenerator $url,
+		private readonly IL10N $l,
+		private readonly IURLGenerator $url,
 	) {
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\Override]
 	public function getID() {
 		return 'saml';
 	}
@@ -29,6 +30,7 @@ class Section implements IIconSection {
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\Override]
 	public function getName() {
 		return $this->l->t('SSO & SAML authentication');
 	}
@@ -36,6 +38,7 @@ class Section implements IIconSection {
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\Override]
 	public function getPriority() {
 		return 75;
 	}
@@ -43,6 +46,7 @@ class Section implements IIconSection {
 	/**
 	 * {@inheritdoc}
 	 */
+	#[\Override]
 	public function getIcon() {
 		return $this->url->imagePath('user_saml', 'app-dark.svg');
 	}

@@ -12,11 +12,14 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -26,39 +29,32 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
+use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class SAMLControllerTest extends TestCase {
-	/** @var UserResolver|\PHPUnit\Framework\MockObject\MockObject */
-	protected $userResolver;
-	/** @var UserData|\PHPUnit\Framework\MockObject\MockObject */
-	private $userData;
-	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
-	private $request;
-	/** @var ISession|\PHPUnit_Framework_MockObject_MockObject */
-	private $session;
-	/** @var IUserSession|\PHPUnit_Framework_MockObject_MockObject */
-	private $userSession;
-	/** @var SAMLSettings|\PHPUnit_Framework_MockObject_MockObject */
-	private $samlSettings;
-	/** @var UserBackend|\PHPUnit_Framework_MockObject_MockObject */
-	private $userBackend;
-	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-	private $config;
-	/** @var IURLGenerator|\PHPUnit_Framework_MockObject_MockObject */
-	private $urlGenerator;
-	/** @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
-	private $logger;
-	/** @var IL10N|\PHPUnit_Framework_MockObject_MockObject */
-	private $l;
-	/** @var ICrypto|MockObject */
-	private $crypto;
-	/** @var SAMLController */
-	private $samlController;
-	private ITrustedDomainHelper|MockObject $trustedDomainController;
+	protected UserResolver&MockObject $userResolver;
+	private UserData&MockObject $userData;
+	private IRequest&MockObject $request;
+	private ISession&MockObject $session;
+	private IUserSession&MockObject $userSession;
+	private SAMLSettings&MockObject $samlSettings;
+	private UserBackend&MockObject $userBackend;
+	private IConfig&MockObject $config;
+	private IAppConfig&MockObject $appConfig;
+	private IURLGenerator&MockObject $urlGenerator;
+	private LoggerInterface&MockObject $logger;
+	private IL10N&MockObject $l;
+	private ICrypto&MockObject $crypto;
+	private SAMLController $samlController;
+	private ITrustedDomainHelper&MockObject $trustedDomainController;
+	private SessionService&MockObject $sessionService;
+	private IEventDispatcher&MockObject $eventDispatcher;
 
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 
@@ -68,6 +64,7 @@ class SAMLControllerTest extends TestCase {
 		$this->samlSettings = $this->createMock(SAMLSettings::class);
 		$this->userBackend = $this->createMock(UserBackend::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->l = $this->createMock(IL10N::class);
@@ -75,17 +72,15 @@ class SAMLControllerTest extends TestCase {
 		$this->userData = $this->createMock(UserData::class);
 		$this->crypto = $this->createMock(ICrypto::class);
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
+		$this->sessionService = $this->createMock(SessionService::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
-			function ($param) {
-				return $param;
-			}
+			static fn (string $param): string => $param
 		);
 
 		$this->config->expects($this->any())->method('getSystemValue')
-			->willReturnCallback(function ($key, $default) {
-				return $default;
-			});
+			->willReturnCallback(static fn (string $key, mixed $default): mixed => $default);
 
 		$this->samlController = new SAMLController(
 			'user_saml',
@@ -95,21 +90,24 @@ class SAMLControllerTest extends TestCase {
 			$this->samlSettings,
 			$this->userBackend,
 			$this->config,
+			$this->appConfig,
 			$this->urlGenerator,
 			$this->logger,
 			$this->l,
 			$this->userResolver,
 			$this->userData,
 			$this->crypto,
-			$this->trustedDomainController
+			$this->trustedDomainController,
+			$this->sessionService,
+			$this->eventDispatcher,
 		);
 	}
 
-	public function testLoginWithInvalidAppValue() {
-		$this->config
+	public function testLoginWithInvalidAppValue(): void {
+		$this->appConfig
 			->expects($this->once())
-			->method('getAppValue')
-			->with('user_saml', 'type')
+			->method('getAppValueString')
+			->with('type')
 			->willReturn('UnknownValue');
 
 		$this->expectException(Exception::class);
@@ -118,7 +116,7 @@ class SAMLControllerTest extends TestCase {
 		$this->samlController->login(1);
 	}
 
-	public function samlUserDataProvider() {
+	public static function samlUserDataProvider(): array {
 		$userNotExisting = 0;
 		$userExisting = 1;
 		$userLazyExisting = 2;
@@ -200,36 +198,27 @@ class SAMLControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider samlUserDataProvider
-	 */
-	public function testLoginWithEnvVariable(array $samlUserData, string $redirect, int $userState, int $autoProvision) {
-		$this->config->expects($this->any())
-			->method('getAppValue')
-			->willReturnCallback(function (string $app, string $key) {
-				if ($app === 'user_saml') {
-					if ($key === 'type') {
-						return 'environment-variable';
-					}
-					if ($key === 'general-uid_mapping') {
-						return 'uid';
-					}
+	#[DataProvider('samlUserDataProvider')]
+	public function testLoginWithEnvVariable(array $samlUserData, string $redirect, int $userState, int $autoProvision): void {
+		$this->appConfig->expects($this->any())
+			->method('getAppValueString')
+			->willReturnCallback(function (string $key) {
+				if ($key === 'type') {
+					return 'environment-variable';
 				}
-				return null;
+				if ($key === 'general-uid_mapping') {
+					return 'uid';
+				}
+				return '';
 			});
 
 		$this->session
 			->expects($this->any())
 			->method('get')
-			->willReturnCallback(function (string $key) use ($samlUserData) {
-				switch ($key) {
-					case 'user_saml.samlUserData':
-						return $samlUserData;
-					case 'user_saml.Idp':
-						return 1;
-					default:
-						return null;
-				}
+			->willReturnCallback(fn (string $key) => match ($key) {
+				'user_saml.samlUserData' => $samlUserData,
+				'user_saml.Idp' => 1,
+				default => null,
 			});
 
 		$this->userData
@@ -251,15 +240,13 @@ class SAMLControllerTest extends TestCase {
 		$this->userData
 			->expects($this->any())
 			->method('testEncodedObjectGUID')
-			->willReturnCallback(function ($uid) {
-				return $uid;
-			});
+			->willReturnCallback(fn (string $uid): string => $uid);
 		$this->userData
 			->expects($this->any())
 			->method('getEffectiveUid')
 			->willReturn($userState > 0 ? 'MyUid' : '');
 
-		if (strpos($redirect, 'notProvisioned') !== false) {
+		if (str_contains($redirect, 'notProvisioned')) {
 			$this->urlGenerator
 				->expects($this->once())
 				->method('linkToRouteAbsolute')
@@ -279,8 +266,8 @@ class SAMLControllerTest extends TestCase {
 			->willReturn($userState === 1);
 
 		if (isset($samlUserData['uid']) && !($userState === 0 && $autoProvision === 0)) {
-			/** @var IUser|MockObject $user */
 			$user = $this->createMock(IUser::class);
+			$user->method('getUID')->willReturn('MyUid');
 			$im = $this->userResolver
 				->expects($this->once())
 				->method('findExistingUser')
@@ -327,54 +314,41 @@ class SAMLControllerTest extends TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	public function testNotPermitted() {
+	public function testNotPermitted(): void {
 		$expected = new TemplateResponse('user_saml', 'notPermitted', [], 'guest');
 		$this->assertEquals($expected, $this->samlController->notPermitted());
 	}
 
-	public function testNotProvisioned() {
+	public function testNotProvisioned(): void {
 		$expected = new TemplateResponse('user_saml', 'notProvisioned', [], 'guest');
 		$this->assertEquals($expected, $this->samlController->notProvisioned());
 	}
 
-	/**
-	 * @dataProvider dataTestGenericError
-	 *
-	 * @param string $messageSend
-	 * @param string $messageExpected
-	 */
-	public function testGenericError($messageSend, $messageExpected) {
+	#[DataProvider('dataTestGenericError')]
+	public function testGenericError(string $messageSend, string $messageExpected): void {
 		$expected = new TemplateResponse('user_saml', 'error', ['message' => $messageExpected], 'guest');
 		$this->assertEquals($expected, $this->samlController->genericError($messageSend));
 	}
 
-	public function dataTestGenericError() {
-		return [
-			['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'],
-			['messageSend' => 'test message', 'messageExpected' => 'test message'],
-		];
+	public static function dataTestGenericError(): \Generator {
+		yield ['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'];
+		yield ['messageSend' => 'userDisabled', 'messageExpected' => 'This user account is disabled, please contact your administrator.'];
+		yield ['messageSend' => 'authFailed', 'messageExpected' => 'Authentication failed.'];
 	}
 
-	/**
-	 * @dataProvider dataTestGetSSODisplayName
-	 *
-	 * @param string $configuredDisplayName
-	 * @param string $expected
-	 */
-	public function testGetSSODisplayName($configuredDisplayName, $expected) {
+	#[DataProvider('dataTestGetSSODisplayName')]
+	public function testGetSSODisplayName(string $configuredDisplayName, string $expected): void {
 		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName', [$configuredDisplayName]);
 
 		$this->assertSame($expected, $result);
 	}
 
-	public function dataTestGetSSODisplayName() {
-		return [
-			['My identity provider', 'My identity provider'],
-			['', 'SSO & SAML log in']
-		];
+	public static function dataTestGetSSODisplayName(): \Generator {
+		yield ['My identity provider', 'My identity provider'];
+		yield ['', 'SSO & SAML log in'];
 	}
 
-	public function userFilterDataProvider(): array {
+	public static function userFilterDataProvider(): array {
 		return [
 			[ // 0 - test rejection by membership
 				'Group C',
@@ -401,9 +375,7 @@ class SAMLControllerTest extends TestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider userFilterDataProvider
-	 */
+	#[DataProvider('userFilterDataProvider')]
 	public function testUserFilter(?string $rejectGroups, ?string $requireGroups, bool $isException, string $message = ''): void {
 		$this->userData->expects($this->any())
 			->method('getGroups')

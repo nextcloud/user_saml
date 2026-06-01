@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -11,6 +13,7 @@ use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -18,39 +21,37 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Events\UserChangedEvent;
+use OCP\UserInterface;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
-class UserBackendTest extends TestCase {
-	/** @var UserData|MockObject */
-	private $userData;
-	/** @var IConfig|MockObject */
-	private $config;
-	/** @var IURLGenerator|MockObject */
-	private $urlGenerator;
-	/** @var ISession|MockObject */
-	private $session;
-	/** @var IDBConnection|MockObject */
-	private $db;
-	/** @var IUserManager|MockObject */
-	private $userManager;
-	/** @var GroupManager|MockObject */
-	private $groupManager;
-	/** @var UserBackend|MockObject */
-	private $userBackend;
-	/** @var SAMLSettings|MockObject */
-	private $SAMLSettings;
-	/** @var LoggerInterface|MockObject */
-	private $logger;
-	/** @var IEventDispatcher|MockObject */
-	private $eventDispatcher;
+interface EnabledStateUserInterface extends UserInterface, IProvideEnabledStateBackend {
+}
 
+class UserBackendTest extends TestCase {
+	private UserData&MockObject $userData;
+	private IConfig&MockObject $config;
+	private IAppConfig&MockObject $appConfig;
+	private IURLGenerator&MockObject $urlGenerator;
+	private ISession&MockObject $session;
+	private IDBConnection&MockObject $db;
+	private IUserManager&MockObject $userManager;
+	private GroupManager&MockObject $groupManager;
+	private UserBackend|MockObject $userBackend;
+	private SAMLSettings&MockObject $SAMLSettings;
+	private LoggerInterface&MockObject $logger;
+	private IEventDispatcher&MockObject $eventDispatcher;
+
+	#[Override]
 	protected function setUp(): void {
 		parent::setUp();
 
 		$this->config = $this->createMock(IConfig::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->db = $this->createMock(IDBConnection::class);
@@ -62,26 +63,14 @@ class UserBackendTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 	}
 
-	public function getMockedBuilder(array $mockedFunctions = []) {
-		if ($mockedFunctions !== []) {
-			$this->userBackend = $this->getMockBuilder(UserBackend::class)
-				->setConstructorArgs([
-					$this->config,
-					$this->urlGenerator,
-					$this->session,
-					$this->db,
-					$this->userManager,
-					$this->groupManager,
-					$this->SAMLSettings,
-					$this->logger,
-					$this->userData,
-					$this->eventDispatcher
-				])
-				->setMethods($mockedFunctions)
-				->getMock();
-		} else {
-			$this->userBackend = new UserBackend(
+	/**
+	 * @param list<non-empty-string> $mockedFunctions
+	 */
+	public function getMockedBuilder(array $mockedFunctions = []): UserBackend&MockObject {
+		return $this->getMockBuilder(UserBackend::class)
+			->setConstructorArgs([
 				$this->config,
+				$this->appConfig,
 				$this->urlGenerator,
 				$this->session,
 				$this->db,
@@ -90,25 +79,130 @@ class UserBackendTest extends TestCase {
 				$this->SAMLSettings,
 				$this->logger,
 				$this->userData,
-				$this->eventDispatcher
-			);
-		}
+				$this->eventDispatcher,
+				'serverRoot',
+			])
+			->onlyMethods($mockedFunctions)
+			->getMock();
 	}
 
-	public function testGetBackendName() {
-		$this->getMockedBuilder();
+	public function getRealUserBackend(): UserBackend {
+		return new UserBackend(
+			$this->config,
+			$this->appConfig,
+			$this->urlGenerator,
+			$this->session,
+			$this->db,
+			$this->userManager,
+			$this->groupManager,
+			$this->SAMLSettings,
+			$this->logger,
+			$this->userData,
+			$this->eventDispatcher,
+			'serverRoot',
+		);
+	}
+
+	public function testGetBackendName(): void {
+		$this->userBackend = $this->getRealUserBackend();
 		$this->assertSame('user_saml', $this->userBackend->getBackendName());
 	}
 
-	public function testUpdateAttributesWithoutAttributes() {
-		$this->getMockedBuilder(['getDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testIsUserEnabledDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var EnabledStateUserInterface&MockObject $backend */
+		$backend = $this->createMock(EnabledStateUserInterface::class);
+		$queryDatabaseValue = static fn (): bool => true;
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend
+			->expects($this->once())
+			->method('isUserEnabled')
+			->with('ExistingUser', $queryDatabaseValue)
+			->willReturn(false);
+
+		$this->assertFalse($this->userBackend->isUserEnabled('ExistingUser', $queryDatabaseValue));
+	}
+
+	public function testIsUserEnabledFallsBackToDatabaseValue(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		$queryDatabaseValue = static fn (): bool => false;
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn(null);
+
+		$this->assertFalse($this->userBackend->isUserEnabled('ExistingUser', $queryDatabaseValue));
+	}
+
+	public function testSetUserEnabledDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var EnabledStateUserInterface&MockObject $backend */
+		$backend = $this->createMock(EnabledStateUserInterface::class);
+		$queryDatabaseValue = static fn (): bool => true;
+		$databaseValues = [];
+		$setDatabaseValue = static function (bool $enabled) use (&$databaseValues): void {
+			$databaseValues[] = $enabled;
+		};
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend
+			->expects($this->once())
+			->method('setUserEnabled')
+			->with('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue)
+			->willReturn(false);
+
+		$this->assertFalse($this->userBackend->setUserEnabled('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue));
+		$this->assertSame([], $databaseValues);
+	}
+
+	public function testSetUserEnabledFallsBackToDatabaseValue(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		$queryDatabaseValue = static fn (): bool => true;
+		$databaseValues = [];
+		$setDatabaseValue = static function (bool $enabled) use (&$databaseValues): void {
+			$databaseValues[] = $enabled;
+		};
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn(null);
+
+		$this->assertFalse($this->userBackend->setUserEnabled('ExistingUser', false, $queryDatabaseValue, $setDatabaseValue));
+		$this->assertSame([false], $databaseValues);
+	}
+
+	public function testGetDisabledUserListReturnsEmptyArray(): void {
+		$this->userBackend = $this->getMockedBuilder();
+
+		$this->assertSame([], $this->userBackend->getDisabledUserList());
+	}
+
+	public function testUpdateAttributesWithoutAttributes(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName']);
 		$user = $this->createMock(IUser::class);
 
-		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
-				return $default;
-			});
+		$this->appConfig->method('getAppValueString')
+			->willReturnCallback(fn (string $key, string $default)
+				// Unused parameters are intentionally kept for clarity
+				=> $default);
+
+		$this->appConfig->method('getAppValueInt')
+			->willReturnCallback(fn (string $key, int $default)
+				// Unused parameters are intentionally kept for clarity
+			=> $default);
 
 		$this->userManager
 			->expects($this->once())
@@ -134,47 +228,44 @@ class UserBackendTest extends TestCase {
 		$this->userBackend->updateAttributes('ExistingUser', []);
 	}
 
-	public function testUpdateAttributesWithoutValidUser() {
-		$this->getMockedBuilder();
+	public function testUpdateAttributesWithoutValidUser(): void {
+		$this->userBackend = $this->getRealUserBackend();
 
 		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
-				return $default;
-			});
+			->willReturnCallback(fn (string $appId, string $key, string $default)
+				// Unused parameters are intentionally kept for clarity
+				=> $default);
 
 		$this->userManager
 			->expects($this->once())
 			->method('get')
 			->with('ExistingUser')
 			->willReturn(null);
-		$this->userBackend->updateAttributes('ExistingUser', []);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
-	public function testUpdateAttributes() {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testUpdateAttributes(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
 
-		$this->config
-			->expects($this->at(0))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-email_mapping', '')
-			->willReturn('email');
-		$this->config
-			->expects($this->at(1))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-displayName_mapping', '')
-			->willReturn('displayname');
-		$this->config
-			->expects($this->at(2))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-quota_mapping', '')
-			->willReturn('quota');
-		$this->config
-			->expects($this->at(3))
-			->method('getAppValue')
-			->with('user_saml', 'saml-attribute-mapping-group_mapping', '')
-			->willReturn('groups');
+		$attributes = [
+			'email' => 'new@example.com',
+			'displayname' => 'New Displayname',
+			'quota' => '50MB',
+			'groups' => ['groupB', 'groupC'],
+		];
+
+		// Replace at() matcher with willReturnCallback to avoid deprecation warning
+		$this->appConfig
+			->method('getAppValueString')
+			->willReturnCallback(static fn (string $key, string $default)
+				=> match ($key) {
+					'saml-attribute-mapping-email_mapping' => 'email',
+					'saml-attribute-mapping-displayName_mapping' => 'displayname',
+					'saml-attribute-mapping-quota_mapping' => 'quota',
+					'saml-attribute-mapping-group_mapping' => 'groups',
+					default => $default,
+				});
 
 		$this->userManager
 			->expects($this->once())
@@ -206,32 +297,29 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('handleIncomingGroups')
 			->with($user, ['groupB', 'groupC']);
-		$this->userBackend->updateAttributes('ExistingUser', [
-			'email' => 'new@example.com',
-			'displayname' => 'New Displayname',
-			'quota' => '50MB',
-			'groups' => ['groupB', 'groupC'],
-		]);
+		$this->userData->expects($this->any())
+			->method('getAttributes')
+			->willReturn($attributes);
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn($attributes['groups']);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
-	public function testUpdateAttributesQuotaDefaultFallback() {
-		$this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
-		/** @var IUser|MockObject $user */
+	public function testUpdateAttributesQuotaDefaultFallback(): void {
+		$this->userBackend = $this->getMockedBuilder(['getDisplayName', 'setDisplayName']);
 		$user = $this->createMock(IUser::class);
+		$attributes = ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => ''];
 
-
-		$this->config->method('getAppValue')
-			->willReturnCallback(function ($appId, $key, $default) {
-				switch ($key) {
-					case 'saml-attribute-mapping-email_mapping':
-						return 'email';
-					case 'saml-attribute-mapping-displayName_mapping':
-						return 'displayname';
-					case 'saml-attribute-mapping-quota_mapping':
-						return 'quota';
-				}
-				return $default;
-			});
+		$this->appConfig->method('getAppValueString')
+			->willReturnCallback(static fn (string $key, string $default)
+				// Unused $appId parameter is intentionally kept for clarity
+				=> match ($key) {
+					'saml-attribute-mapping-email_mapping' => 'email',
+					'saml-attribute-mapping-displayName_mapping' => 'displayname',
+					'saml-attribute-mapping-quota_mapping' => 'quota',
+					default => $default,
+				});
 
 		$this->userManager
 			->expects($this->once())
@@ -266,6 +354,12 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('handleIncomingGroups')
 			->with($user, []);
-		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
+		$this->userData->expects($this->any())
+			->method('getAttributes')
+			->willReturn($attributes);
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn([]);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 }

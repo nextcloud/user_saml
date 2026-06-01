@@ -7,20 +7,29 @@
 
 namespace OCA\User_SAML\Controller;
 
+use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OC\Security\CSRF\CsrfTokenManager;
+use OCA\User_SAML\Attributes\OnlyUnauthenticatedUsers;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
 use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
+use OCP\AppFramework\Http\Attribute\UseSession;
+use OCP\AppFramework\Services\IAppConfig;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -30,10 +39,13 @@ use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Server;
+use OCP\User\Events\UserLoggedInEvent;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class SAMLController extends Controller {
@@ -47,6 +59,7 @@ class SAMLController extends Controller {
 		private SAMLSettings $samlSettings,
 		private UserBackend $userBackend,
 		private IConfig $config,
+		private IAppConfig $appConfig,
 		private IURLGenerator $urlGenerator,
 		private LoggerInterface $logger,
 		private IL10N $l,
@@ -54,6 +67,8 @@ class SAMLController extends Controller {
 		private UserData $userData,
 		private ICrypto $crypto,
 		private ITrustedDomainHelper $trustedDomainHelper,
+		private SessionService $sessionService,
+		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -66,7 +81,7 @@ class SAMLController extends Controller {
 		$auth = $this->userData->getAttributes();
 
 		if (!$this->userData->hasUidMappingAttribute()) {
-			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth)));
+			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth), JSON_THROW_ON_ERROR));
 		}
 
 		$this->assertGroupMemberships();
@@ -91,19 +106,18 @@ class SAMLController extends Controller {
 		$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
 		if ($userExists) {
 			if ($autoProvisioningAllowed) {
-				$this->userBackend->updateAttributes($uid, $auth);
+				$this->userBackend->updateAttributes($uid);
 			}
 			return;
 		}
 		$uid = $this->userData->getOriginalUid();
 		$uid = $this->userData->testEncodedObjectGUID($uid);
-		if (!$userExists && !$autoProvisioningAllowed) {
+		if (!$autoProvisioningAllowed) {
 			throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
-		} elseif (!$userExists && $autoProvisioningAllowed) {
-			$this->userBackend->createUserIfNotExists($uid, $auth);
-			$this->userBackend->updateAttributes($uid, $auth);
-			return;
 		}
+
+		$this->userBackend->createUserIfNotExists($uid, $auth);
+		$this->userBackend->updateAttributes($uid);
 	}
 
 	/**
@@ -121,40 +135,39 @@ class SAMLController extends Controller {
 		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp') ?? 1);
 
 		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
-		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
+		$rejectGroups = array_map(trim(...), explode(',', $rejectGroupsString));
 
 		if (!empty(array_intersect($groups, $rejectGroups))) {
 			throw new UserFilterViolationException('User is member of a rejection group.');
 		}
 
 		$requireGroupsString = trim($settings['saml-user-filter-require_groups'] ?? '');
-		$requireGroups = array_map('trim', explode(',', $requireGroupsString));
+		$requireGroups = array_map(trim(...), explode(',', $requireGroupsString));
 		if (!empty($requireGroupsString) && empty(array_intersect($groups, $requireGroups))) {
 			throw new UserFilterViolationException('User is not member of a required group.');
 		}
 	}
 
 	/**
-	 * @PublicPage
-	 * @UseSession
-	 * @OnlyUnauthenticatedUsers
-	 * @NoCSRFRequired
-	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	public function login(int $idp = 1): Http\RedirectResponse {
+	#[PublicPage]
+	#[UseSession]
+	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
+	public function login(int $idp = 1): Http\RedirectResponse|Http\TemplateResponse {
 		$originalUrl = (string)$this->request->getParam('originalUrl', '');
 		if (!$this->trustedDomainHelper->isTrustedUrl($originalUrl)) {
 			$originalUrl = '';
 		}
 
-		$type = $this->config->getAppValue($this->appName, 'type');
+		$type = $this->appConfig->getAppValueString('type');
 		switch ($type) {
 			case 'saml':
 				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
 				$auth = new Auth($settings);
 				$passthroughParamsString = trim($settings['idp']['passthroughParameters'] ?? '') ;
-				$passthroughParams = array_map('trim', explode(',', $passthroughParamsString));
+				$passthroughParams = array_map(trim(...), explode(',', $passthroughParamsString));
 
 				$passthroughValues = [];
 				foreach ($passthroughParams as $passthroughParam) {
@@ -164,10 +177,39 @@ class SAMLController extends Controller {
 					}
 				}
 
-
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, $passthroughValues, false, false, true);
-				$response = new Http\RedirectResponse($ssoUrl);
+				$settings = $this->samlSettings->get($idp);
+				$isSAMLRequestUsingPost = isset($settings['general-is_saml_request_using_post']) && $settings['general-is_saml_request_using_post'] === '1';
+
+				if ($isSAMLRequestUsingPost) {
+					$query = parse_url($ssoUrl, PHP_URL_QUERY);
+					if ($query === null || $query === false) {
+						throw new \RuntimeException('Unable to parse query string from ' . $ssoUrl);
+					}
+					parse_str($query, $params);
+
+					$samlRequest = $params['SAMLRequest'];
+					$relayState = $params['RelayState'] ?? '';
+					$sigAlg = $params['SigAlg'] ?? '';
+					$signature = $params['Signature'] ?? '';
+					$ssoUrl = explode('?', $ssoUrl)[0];
+
+					$nonce = base64_encode(random_bytes(16));
+
+					$response = new Http\TemplateResponse($this->appName, 'login_post', [
+						'ssoUrl' => $ssoUrl,
+						'samlRequest' => $samlRequest,
+						'relayState' => $relayState,
+						'sigAlg' => $sigAlg,
+						'signature' => $signature,
+						'nonce' => $nonce,
+					], 'guest');
+
+					$response->addHeader('Content-Security-Policy', "script-src 'self' 'nonce-$nonce' 'strict-dynamic' 'unsafe-eval';");
+				} else {
+					$response = new Http\RedirectResponse($ssoUrl);
+				}
 
 				// Small hack to make user_saml work with the loginflows
 				$flowData = [];
@@ -187,7 +229,7 @@ class SAMLController extends Controller {
 					'OriginalUrl' => $originalUrl,
 					'Idp' => $idp,
 					'flow' => $flowData,
-				]);
+				], JSON_THROW_ON_ERROR);
 
 				// Encrypt it
 				$data = $this->crypto->encrypt($data);
@@ -202,7 +244,7 @@ class SAMLController extends Controller {
 				if (empty($ssoUrl)) {
 					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
 				}
-				$this->session->set('user_saml.samlUserData', $_SERVER);
+				$this->sessionService->prepareEnvironmentBasedSession($_SERVER);
 				try {
 					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
 					$this->autoprovisionIfPossible();
@@ -232,7 +274,7 @@ class SAMLController extends Controller {
 				}
 				break;
 			default:
-				throw new \Exception(
+				throw new Exception(
 					sprintf(
 						'Type of "%s" is not supported for user_saml',
 						$type
@@ -244,16 +286,14 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
 	 * @throws Error
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function getMetadata(int $idp = 1): Http\DataDownloadResponse {
 		$settings = new Settings($this->samlSettings->getOneLoginSettingsArray($idp));
 		$metadata = $settings->getSPMetadata();
-		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
-			return $settings->validateMetadata($metadata);
-		});
+		$errors = $this->callWithXmlEntityLoader(fn () => $settings->validateMetadata($metadata));
 		if (empty($errors)) {
 			return new Http\DataDownloadResponse($metadata, 'metadata.xml', 'text/xml');
 		} else {
@@ -265,16 +305,14 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @UseSession
-	 * @OnlyUnauthenticatedUsers
 	 * @NoSameSiteCookieRequired
-	 *
-	 * @return Http\RedirectResponse
 	 * @throws Error
 	 * @throws ValidationError
 	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[UseSession]
+	#[OnlyUnauthenticatedUsers]
 	public function assertionConsumerService(): Http\RedirectResponse {
 		// Fetch and decrypt the cookie
 		$cookie = $this->request->getCookie('saml_data');
@@ -289,7 +327,7 @@ class SAMLController extends Controller {
 		// Decrypt and deserialize
 		try {
 			$cookie = $this->crypto->decrypt($cookie);
-		} catch (\Exception) {
+		} catch (Exception) {
 			$this->logger->debug('Could not decrypt SAML cookie', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
@@ -307,8 +345,8 @@ class SAMLController extends Controller {
 		$AuthNRequestID = $data['AuthNRequestID'];
 		$idp = $data['Idp'];
 		// need to keep the IdP config ID during session lifetime (SAMLSettings::getPrefix)
-		$this->session->set('user_saml.Idp', $idp);
-		if (is_null($AuthNRequestID) || $AuthNRequestID === '' || is_null($idp)) {
+		$this->sessionService->storeIdentityProviderInSession($idp);
+		if (is_null($AuthNRequestID) || $AuthNRequestID === '') {
 			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
@@ -319,16 +357,9 @@ class SAMLController extends Controller {
 			$auth->processResponse($AuthNRequestID);
 		});
 
-		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes()));
+		$this->logger->debug('Attributes send by the IDP: ' . json_encode($auth->getAttributes(), JSON_THROW_ON_ERROR));
 
-		$errors = $auth->getErrors();
-
-		if (!empty($errors)) {
-			foreach ($errors as $error) {
-				$this->logger->error($error, ['app' => $this->appName]);
-			}
-			$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
-		}
+		$this->handleAuthErrors($auth);
 
 		if (!$auth->isAuthenticated()) {
 			$this->logger->info('Auth failed', ['app' => $this->appName]);
@@ -355,23 +386,18 @@ class SAMLController extends Controller {
 			return $response;
 		}
 
-		$this->session->set('user_saml.samlUserData', $auth->getAttributes());
-		$this->session->set('user_saml.samlNameId', $auth->getNameId());
-		$this->session->set('user_saml.samlNameIdFormat', $auth->getNameIdFormat());
-		$this->session->set('user_saml.samlNameIdNameQualifier', $auth->getNameIdNameQualifier());
-		$this->session->set('user_saml.samlNameIdSPNameQualifier', $auth->getNameIdSPNameQualifier());
-		$this->session->set('user_saml.samlSessionIndex', $auth->getSessionIndex());
-		$this->session->set('user_saml.samlSessionExpiration', $auth->getSessionExpiration());
-		$this->logger->debug('Session values set', ['app' => 'user_saml']);
+		$this->sessionService->storeAuthDataInSession($auth);
+
 		try {
 			$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
 			$firstLogin = $user->updateLastLoginTimestamp();
 			if ($firstLogin) {
 				$this->userBackend->initializeHomeDir($user->getUID());
 			}
-		} catch (NoUserFoundException) {
-			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid');
-		} catch (\Exception $e) {
+			$this->eventDispatcher->dispatchTyped(new UserLoggedInEvent($user, $user->getUID(), null, true));
+		} catch (NoUserFoundException $e) {
+			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid.', previous: $e);
+		} catch (Exception $e) {
 			$this->logger->critical($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
@@ -396,39 +422,45 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @UseSession
 	 * @throws Error
 	 */
+	#[PublicPage]
+	#[NoAdminRequired]
+	#[UseSession]
+	#[NoCSRFRequired]
 	public function singleLogoutService(): Http\RedirectResponse {
-		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false) &&
-					 $this->config->getSystemValueString('gss.mode', '') === 'master');
+		$isFromGS = ($this->config->getSystemValueBool('gs.enabled', false)
+					 && $this->config->getSystemValueString('gss.mode', '') === 'master');
 
 		// Some IDPs send the SLO request via POST, but OneLogin php-saml only handles GET.
 		// To hack around this issue we copy the request from _POST to _GET.
-		if (!empty($_POST['SAMLRequest'])) {
+		if (isset($_POST['SAMLRequest']) && $_POST['SAMLRequest'] !== '') {
 			$_GET['SAMLRequest'] = $_POST['SAMLRequest'];
 		}
 
-		$isFromIDP = !$isFromGS && !empty($_GET['SAMLRequest']);
+		$isFromIDP = !$isFromGS && isset($_GET['SAMLRequest']) && $_GET['SAMLRequest'] !== '';
 		$idp = null;
 		if ($isFromIDP) {
 			// requests comes from the IDP so let it manage the logout
 			// (or raise Error if request is invalid)
-			$pass = true ;
+			$pass = true;
 		} elseif ($isFromGS) {
 			// Request is from master GlobalScale
 			$jwt = $this->request->getParam('jwt', '');
 
 			try {
 				$key = $this->config->getSystemValueString('gss.jwt.key', '');
-				$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
+				if ($key === '') {
+					$this->logger->error('gss.jwt.key is not configured; refusing GlobalScale SLO request', ['app' => $this->appName]);
+					$pass = false;
+				} else {
+					$decoded = (array)JWT::decode($jwt, new Key($key, 'HS256'));
 
-				$idp = $decoded['idp'] ?? null;
-				$pass = true;
-			} catch (\Exception) {
+					$idp = $decoded['idp'] ?? null;
+					$pass = true;
+				}
+			} catch (Exception) {
+				$pass = false;
 			}
 		} else {
 			// standard request : need read CRSF check
@@ -446,7 +478,7 @@ class SAMLController extends Controller {
 						foreach ($errors as $error) {
 							$this->logger->error($error, ['app' => $this->appName]);
 						}
-						$this->logger->error($auth->getLastErrorReason(), ['app' => $this->appName]);
+						$this->logger->error($auth->getLastErrorReason() ?? 'No error reason provided', ['app' => $this->appName]);
 					}
 				} else {
 					$this->logger->error('Error while handling SLO request: missing session data, and request is not satisfied by any configuration');
@@ -462,11 +494,12 @@ class SAMLController extends Controller {
 				try {
 					$targetUrl = $auth->logout(null, [], $nameId, $sessionIndex, $stay, $nameIdFormat, $nameIdNameQualifier, $nameIdSPNameQualifier);
 				} catch (Error $e) {
+					$targetUrl = null;
 					$this->logger->warning($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
 					$this->userSession->logout();
 				}
 			}
-			if (!empty($targetUrl) && !$auth->getLastErrorReason()) {
+			if ($targetUrl !== '' && $targetUrl !== null && $auth && $auth->getLastErrorReason() === null) {
 				$this->userSession->logout();
 			}
 		}
@@ -478,25 +511,25 @@ class SAMLController extends Controller {
 	}
 
 	/**
-	 * @returns [?string, ?Auth]
+	 * @return array{0: ?string, 1: ?Auth}
 	 */
 	private function tryProcessSLOResponse(?int $idp): array {
 		$idps = ($idp !== null) ? [$idp] : array_keys($this->samlSettings->getListOfIdps());
-		foreach ($idps as $idp) {
+		foreach ($idps as $identityProviderId) {
 			try {
-				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
+				$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($identityProviderId));
 				// validator (called with processSLO()) needs an XML entity loader
-				$targetUrl = $this->callWithXmlEntityLoader(function () use ($auth, $idp): string {
-					return $auth->processSLO(
-						true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
-						null,
-						$this->samlSettings->usesSloWebServerDecode($idp),
-						null,
-						true
-					);
-				});
+				$targetUrl = $this->callWithXmlEntityLoader(fn (): string => $auth->processSLO(
+					true, // do not let processSLO to delete the entire session. Let userSession->logout do the job
+					null,
+					$this->samlSettings->usesSloWebServerDecode($identityProviderId),
+					null,
+					true
+				));
 				if ($auth->getLastErrorReason() === null) {
 					return [$targetUrl, $auth];
+				} else {
+					$this->handleAuthErrors($auth);
 				}
 			} catch (Error) {
 				continue;
@@ -505,48 +538,43 @@ class SAMLController extends Controller {
 		return [null, null];
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @OnlyUnauthenticatedUsers
-	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function notProvisioned(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notProvisioned', [], 'guest');
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @OnlyUnauthenticatedUsers
-	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function notPermitted(): Http\TemplateResponse {
 		return new Http\TemplateResponse($this->appName, 'notPermitted', [], 'guest');
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @OnlyUnauthenticatedUsers
-	 */
-	public function genericError(string $message): Http\TemplateResponse {
-		if (empty($message)) {
-			$message = $this->l->t('Unknown error, please check the log file for more details.');
-		}
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
+	public function genericError(string $reason): Http\TemplateResponse {
+		$allowedMessages = [
+			'userDisabled' => $this->l->t('This user account is disabled, please contact your administrator.'),
+			'authFailed' => $this->l->t('Authentication failed.'),
+		];
+
+		$message = $allowedMessages[$reason] ?? $this->l->t('Unknown error, please check the log file for more details.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 * @OnlyUnauthenticatedUsers
-	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
+	#[OnlyUnauthenticatedUsers]
 	public function selectUserBackEnd(string $redirectUrl = ''): Http\TemplateResponse {
 		$attributes = ['loginUrls' => []];
 
 		if ($this->samlSettings->allowMultipleUserBackEnds()) {
 			$displayName = $this->l->t('Direct log in');
 
-			$customDisplayName = $this->config->getAppValue('user_saml', 'directLoginName', '');
+			$customDisplayName = $this->appConfig->getAppValueString('directLoginName');
 			if ($customDisplayName !== '') {
 				$displayName = $customDisplayName;
 			}
@@ -558,9 +586,7 @@ class SAMLController extends Controller {
 		}
 
 		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
-
 		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4;
-
 
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
 	}
@@ -581,6 +607,11 @@ class SAMLController extends Controller {
 		return $result;
 	}
 
+	/**
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
+	 * @throws \OCP\DB\Exception
+	 */
 	private function getSSOUrl(string $redirectUrl, string $idp): string {
 		$originalUrl = '';
 		if (!empty($redirectUrl)) {
@@ -590,23 +621,26 @@ class SAMLController extends Controller {
 		/** @var CsrfTokenManager $csrfTokenManager */
 		$csrfTokenManager = Server::get(CsrfTokenManager::class);
 		$csrfToken = $csrfTokenManager->getToken();
-		$ssoUrl = $this->urlGenerator->linkToRouteAbsolute(
+
+		$settings = $this->samlSettings->get((int)$idp);
+		$method = $settings['general-is_saml_request_using_post'] ?? 'get';
+
+		return $this->urlGenerator->linkToRouteAbsolute(
 			'user_saml.SAML.login',
 			[
 				'requesttoken' => $csrfToken->getEncryptedValue(),
 				'originalUrl' => $originalUrl,
-				'idp' => $idp
+				'idp' => $idp,
+				'method' => $method,
 			]
 		);
-
-		return $ssoUrl;
 	}
 
 	/**
-	 * return the display name of the SSO identity provider
+	 * Return the display name of the SSO identity provider.
 	 */
 	protected function getSSODisplayName(?string $displayName): string {
-		if (empty($displayName)) {
+		if ($displayName === null || $displayName === '') {
 			$displayName = $this->l->t('SSO & SAML log in');
 		}
 
@@ -617,19 +651,49 @@ class SAMLController extends Controller {
 	 * get Nextcloud login URL
 	 */
 	private function getDirectLoginUrl(string $redirectUrl): string {
-		$directUrl = $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
+		return $this->urlGenerator->linkToRouteAbsolute('core.login.tryLogin', [
 			'direct' => '1',
 			'redirect_url' => $redirectUrl,
 		]);
-		return $directUrl;
 	}
 
-	/**
-	 * @PublicPage
-	 * @NoCSRFRequired
-	 */
+	#[PublicPage]
+	#[NoCSRFRequired]
 	public function base(): Http\TemplateResponse {
 		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
+	}
+
+	private function handleAuthErrors(Auth $auth): void {
+		$errors = $auth->getErrors();
+		$lastReason = $auth->getLastErrorReason();
+
+		if ($errors === []) {
+			return;
+		}
+
+		if ($lastReason === null) {
+			$this->logger->error('SAML errored with no error message: ' . $errors[0] . '.');
+			return;
+		}
+
+		$hintMap = [
+			ValidationError::INVALID_SIGNATURE => 'Check if the IDP x509 certificate is correctly set and you are using the signing/token-signing certificate of the provider.',
+		];
+
+		$code = end($errors);
+		$hint = isset($hintMap[$code]) ? ' Hint: ' . $hintMap[$code] : '';
+
+		// Only the last error has a corresponding exception and reason
+		$this->logger->error('SAML errored with: ' . $lastReason . ' (code: ' . $code . ').' . $hint, [
+			'exception' => $auth->getLastErrorException(),
+		]);
+
+		if (count($errors) > 1) {
+			// iterate from second last to first one
+			for ($i = count($errors) - 2; $i >= 0; $i--) {
+				$this->logger->error('Additional SAML error code: ' . $errors[$i]);
+			}
+		}
 	}
 }

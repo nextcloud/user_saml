@@ -9,6 +9,7 @@ namespace OCA\User_SAML;
 
 use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -29,6 +30,8 @@ class SAMLSettings {
 	public const IDP_CONFIG_KEYS = [
 		'general-idp0_display_name',
 		'general-uid_mapping',
+		'general-is_saml_request_using_post',
+		'general-saml_request_method',
 		'idp-entityId',
 		'idp-singleLogoutService.responseUrl',
 		'idp-singleLogoutService.url',
@@ -58,6 +61,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-home_mapping',
 		'saml-attribute-mapping-quota_mapping',
 		'saml-attribute-mapping-mfa_mapping',
+		'saml-attribute-mapping-user_id_ldap_mapping',
 		'saml-attribute-mapping-group_mapping_prefix',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
@@ -70,16 +74,17 @@ class SAMLSettings {
 	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
 	/** @var array<int, array<string, string>> */
-	private $configurations = [];
-	/** @var int */
-	private $configurationsLoadedState = self::LOADED_NONE;
+	private array $configurations = [];
+	/** @var self::LOADED_* $configurationsLoadedState */
+	private int $configurationsLoadedState = self::LOADED_NONE;
 
 	public function __construct(
-		private IURLGenerator $urlGenerator,
-		private IConfig $config,
-		private ISession $session,
-		private ConfigurationsMapper $mapper,
-		private IRequest $request,
+		private readonly IURLGenerator $urlGenerator,
+		private readonly IConfig $config,
+		private readonly IAppConfig $appConfig,
+		private readonly ISession $session,
+		private readonly ConfigurationsMapper $mapper,
+		private readonly IRequest $request,
 	) {
 		Utils::setSelfProtocol($this->request->getServerProtocol());
 		Utils::setSelfHost($this->request->getServerHost());
@@ -92,11 +97,17 @@ class SAMLSettings {
 	 * @return array<int, string>
 	 * @throws Exception
 	 */
-	public function getListOfIdps(): array {
+	public function getListOfIdps(bool $onlyComplete = false): array {
 		$this->ensureConfigurationsLoaded();
 
 		$result = [];
 		foreach ($this->configurations as $configID => $config) {
+			if ($onlyComplete
+				&& (trim(($config['idp-entityId'] ?? '')) === ''
+				|| trim(($config['idp-singleSignOnService.url'] ?? '')) === '')
+			) {
+				continue;
+			}
 			// no fancy array_* method, because there might be thousands
 			$result[$configID] = $config['general-idp0_display_name'] ?? '';
 		}
@@ -108,9 +119,9 @@ class SAMLSettings {
 	 * Check if multiple user back ends are allowed
 	 */
 	public function allowMultipleUserBackEnds(): bool {
-		$type = $this->config->getAppValue('user_saml', 'type');
-		$setting = $this->config->getAppValue('user_saml', 'general-allow_multiple_user_back_ends', '0');
-		return ($setting === '1' && $type === 'saml');
+		$type = $this->appConfig->getAppValueString('type');
+		$setting = $this->appConfig->getAppValueInt('general-allow_multiple_user_back_ends');
+		return $setting === 1 && $type === 'saml';
 	}
 
 	public function usesSloWebServerDecode(int $idp): bool {
@@ -128,7 +139,7 @@ class SAMLSettings {
 
 		$settings = [
 			'strict' => true,
-			'debug' => $this->config->getSystemValueBool('debug', false),
+			'debug' => $this->config->getSystemValueBool('debug'),
 			'baseurl' => $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.base'),
 			'security' => [
 				'nameIdEncrypted' => ($this->configurations[$idp]['security-nameIdEncrypted'] ?? '0') === '1',
@@ -201,11 +212,7 @@ class SAMLSettings {
 	 * @throws InvalidArgumentException
 	 */
 	public function set(int $id, array $settings): void {
-		foreach (array_keys($settings) as $configKey) {
-			if (!in_array($configKey, self::IDP_CONFIG_KEYS)) {
-				throw new InvalidArgumentException('Invalid config key');
-			}
-		}
+		$settings = array_filter($settings, static fn (string $configKey): bool => in_array($configKey, self::IDP_CONFIG_KEYS, true), ARRAY_FILTER_USE_KEY);
 
 		$this->mapper->set($id, $settings);
 	}

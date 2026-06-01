@@ -1,10 +1,12 @@
 OC.L10N.register(
     "user_saml",
     {
-    "Saved" : "Saved",
     "Email address" : "E-pochta manzili",
-    "Open documentation" : "Hujjatlarni ochish",
-    "General" : "General",
-    "Error" : "Error"
+    "Saved" : "Saved",
+    "Remove {name}" : " {name} ni o'chirish",
+    "Save changes" : "Save changes",
+    "General" : "Umumiy",
+    "Loading…" : "Yuklanmoqda...",
+    "Error" : "Xatolik"
 },
 "nplurals=1; plural=0;");

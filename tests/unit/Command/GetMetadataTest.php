@@ -9,26 +9,30 @@ namespace OCA\User_SAML\Tests\Command;
 
 use OCA\User_SAML\Command\GetMetadata;
 use OCA\User_SAML\SAMLSettings;
+use Override;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class GetMetadataTest extends \Test\TestCase {
+	protected GetMetadata $GetMetadata;
+	private SAMLSettings&MockObject $samlSettings;
 
-	/** @var GetMetadata|MockObject */
-	protected $GetMetadata;
-	/** @var SAMLSettings|MockObject */
-	private $samlSettings;
-
+	#[Override]
 	protected function setUp(): void {
 		$this->samlSettings = $this->createMock(SAMLSettings::class);
 		$this->GetMetadata = new GetMetadata($this->samlSettings);
 
 		parent::setUp();
 	}
-	public function testGetMetadata() {
+	public function testGetMetadata(): void {
 		$inputInterface = $this->createMock(InputInterface::class);
 		$outputInterface = $this->createMock(OutputInterface::class);
+
+		$inputInterface->expects($this->any())
+			->method('getArgument')
+			->with('idp')
+			->willReturn('1');
 
 		$this->samlSettings->expects($this->any())
 			->method('getOneLoginSettingsArray')
@@ -47,9 +51,12 @@ class GetMetadataTest extends \Test\TestCase {
 				]
 			]);
 
-		$outputInterface->expects($this->once())->method('writeln')
+		$outputInterface->expects($this->once())
+			->method('writeln')
 			->with($this->stringContains('md:EntityDescriptor'));
 
-		$this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
+		$result = $this->invokePrivate($this->GetMetadata, 'execute', [$inputInterface, $outputInterface]);
+
+		$this->assertEquals(0, $result);
 	}
 }

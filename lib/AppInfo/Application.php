@@ -10,25 +10,27 @@ declare(strict_types=1);
 namespace OCA\User_SAML\AppInfo;
 
 use OC\Security\CSRF\CsrfTokenManager;
+use OC\User\DisabledUserException;
 use OC\User\LoginException;
 use OC_User;
 use OCA\DAV\Events\SabrePluginAddEvent;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\GroupBackend;
-use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\Listener\CookieLoginEventListener;
 use OCA\User_SAML\Listener\LoadAdditionalScriptsListener;
+use OCA\User_SAML\Listener\LoginEventListener;
 use OCA\User_SAML\Listener\SabrePluginEventListener;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\EventDispatcher\IEventDispatcher;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IConfig;
-use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -36,8 +38,10 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use OCP\L10N\IFactory;
 use OCP\Server;
+use OCP\User\Events\BeforeUserLoggedInWithCookieEvent;
+use OCP\User\Events\UserLoggedInEvent;
+use OCP\User\Events\UserLoggedInWithCookieEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -49,53 +53,51 @@ class Application extends App implements IBootstrap {
 		parent::__construct('user_saml', $urlParams);
 	}
 
+	#[\Override]
 	public function register(IRegistrationContext $context): void {
 		$context->registerMiddleware(OnlyLoggedInMiddleware::class);
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(SabrePluginAddEvent::class, SabrePluginEventListener::class);
-		$context->registerService(DavPlugin::class, function (ContainerInterface $c) {
-			return new DavPlugin(
-				$c->get(ISession::class),
-				$c->get(IConfig::class),
-				$_SERVER,
-				$c->get(SAMLSettings::class)
-			);
-		});
+		$context->registerEventListener(BeforeUserLoggedInWithCookieEvent::class, CookieLoginEventListener::class);
+		$context->registerEventListener(UserLoggedInWithCookieEvent::class, CookieLoginEventListener::class);
+		$context->registerEventListener(UserLoggedInEvent::class, LoginEventListener::class);
+		$context->registerService(DavPlugin::class, fn (ContainerInterface $c) => new DavPlugin(
+			$c->get(ISession::class),
+			$c->get(IAppConfig::class),
+			$_SERVER,
+			$c->get(SAMLSettings::class),
+			$c->get(SessionService::class),
+		));
 	}
 
+	#[\Override]
 	public function boot(IBootContext $context): void {
 		try {
 			$context->injectFn(function (
 				IL10N $l10n,
 				IURLGenerator $urlGenerator,
 				IConfig $config,
+				IAppConfig $appConfig,
 				IRequest $request,
 				IUserSession $userSession,
-				ISession $session,
-				IFactory $factory,
 				SAMLSettings $samlSettings,
 				IUserManager $userManager,
-				IDBConnection $connection,
-				LoggerInterface $logger,
-				GroupManager $groupManager,
-				IEventDispatcher $dispatcher,
+				IGroupManager $groupManager,
 				CsrfTokenManager $csrfTokenManager,
+				GroupBackend $groupBackend,
+				UserBackend $userBackend,
+				LoggerInterface $logger,
 				bool $isCLI,
-			) {
-				$groupBackend = Server::get(GroupBackend::class);
-				Server::get(IGroupManager::class)->addBackend($groupBackend);
-
-				$samlSettings = Server::get(SAMLSettings::class);
-
-				$userBackend = Server::get(UserBackend::class);
+			): void {
+				$groupManager->addBackend($groupBackend);
 
 				$userBackend->registerBackends($userManager->getBackends());
-				OC_User::useBackend($userBackend);
+				$userManager->registerBackend($userBackend);
 
 				$params = [];
 
 				// Setting up the one login config may fail, if so, do not catch the requests later.
-				switch ($config->getAppValue('user_saml', 'type')) {
+				switch ($appConfig->getAppValueString('type')) {
 					case 'saml':
 						$type = 'saml';
 						break;
@@ -119,12 +121,14 @@ class Application extends App implements IBootstrap {
 						if ($request->getPathInfo() === '/apps/user_saml/saml/error') {
 							return;
 						}
+						/** @psalm-suppress UndefinedClass */
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
 							'user_saml.SAML.genericError',
 							[
-								'message' => $e->getMessage()
+								'reason' => $e instanceof DisabledUserException ? 'userDisabled' : 'authFailed',
 							]
 						);
+						$logger->error('Login failure', ['exception' => $e]);
 						header('Location: ' . $targetUrl);
 						exit();
 					}
@@ -142,7 +146,7 @@ class Application extends App implements IBootstrap {
 						$targetUrl = $urlGenerator->linkToRouteAbsolute(
 							'user_saml.SAML.genericError',
 							[
-								'message' => $l10n->t('This user account is disabled, please contact your administrator.')
+								'reason' => 'userDisabled',
 							]
 						);
 						header('Location: ' . $targetUrl);
@@ -152,12 +156,12 @@ class Application extends App implements IBootstrap {
 
 				// All requests that are not authenticated and match against the "/login" route are
 				// redirected to the SAML login endpoint
-				if (!$isCLI &&
-					!$userSession->isLoggedIn() &&
-					($request->getPathInfo() === '/login')) {
+				if (!$isCLI
+					&& !$userSession->isLoggedIn()
+					&& ($request->getPathInfo() === '/login')) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					if (isset($params['direct']) && ($params['direct'] === 1 || $params['direct'] === '1')) {
@@ -167,13 +171,19 @@ class Application extends App implements IBootstrap {
 				}
 
 				$multipleUserBackEnds = $samlSettings->allowMultipleUserBackEnds();
-				$configuredIdps = $samlSettings->getListOfIdps();
-				$showLoginOptions = $multipleUserBackEnds || count($configuredIdps) > 1;
+				$configuredIdps = $samlSettings->getListOfIdps(true);
+				// If no IdP has the minimum required config (entityId + SSO URL), fall through to normal login
+				// only for regular SAML mode. Environment-variable mode can still redirect to SAMLController::login()
+				// without requiring configured IdP metadata.
+				if ($type === 'saml' && empty($configuredIdps)) {
+					return;
+				}
+				$showLoginOptions = $type !== 'environment-variable' && ($multipleUserBackEnds || count($configuredIdps) > 1);
 
 				if ($redirectSituation === true && $showLoginOptions) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					$redirectUrl = '';
@@ -194,7 +204,7 @@ class Application extends App implements IBootstrap {
 				if ($redirectSituation === true) {
 					try {
 						$params = $request->getParams();
-					} catch (\LogicException $e) {
+					} catch (\LogicException) {
 						// ignore exception when PUT is called since getParams cannot parse parameters in that case
 					}
 					$originalUrl = '';

@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Service;
 
 use OCA\User_SAML\GroupBackend;
@@ -28,6 +29,10 @@ class GroupMigration {
 		protected IDBConnection $dbc,
 		protected LoggerInterface $logger,
 	) {
+	}
+
+	public function setLogger(LoggerInterface $logger): void {
+		$this->logger = $logger;
 	}
 
 	/**
@@ -98,4 +103,85 @@ class GroupMigration {
 		$cleanup->executeStatement();
 	}
 
+	public function migrateGroup(string $gid): bool {
+		$isMigrated = false;
+		$allUsersInserted = false;
+		try {
+			$allUsersInserted = $this->migrateGroupUsers($gid);
+
+			$this->dbc->beginTransaction();
+
+			$qb = $this->dbc->getQueryBuilder();
+			$affected = $qb->delete('groups')
+				->where($qb->expr()->eq('gid', $qb->createNamedParameter($gid)))
+				->executeStatement();
+			if ($affected === 0) {
+				throw new \RuntimeException('Could not delete group from local backend');
+			}
+			if (!$this->ownGroupBackend->createGroup($gid)) {
+				throw new \RuntimeException('Could not create group in SAML backend');
+			}
+
+			$this->dbc->commit();
+			$isMigrated = true;
+		} catch (Throwable $e) {
+			$this->dbc->rollBack();
+			$this->logger->warning($e->getMessage(), ['app' => 'user_saml', 'exception' => $e]);
+		}
+
+		if ($allUsersInserted && $isMigrated) {
+			try {
+				$this->cleanUpOldGroupUsers($gid);
+			} catch (Exception $e) {
+				$this->logger->warning('Error while cleaning up group members in (oc_)group_user of group (gid) {gid}', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+					'exception' => $e,
+				]);
+			}
+		}
+
+		return $isMigrated;
+	}
+
+	public function getGroupsToMigrate(array $samlGroups, array $pool): array {
+		return array_filter($samlGroups, function (string $gid) use ($pool) {
+			if (!in_array($gid, $pool)) {
+				return false;
+			}
+
+			$group = $this->groupManager->get($gid);
+			if ($group === null) {
+				$this->logger->debug('Not migrating group "{gid}": not found by the group manager', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+				]);
+				return false;
+			}
+
+			$backendNames = $group->getBackendNames();
+			if (!in_array('Database', $backendNames, true)) {
+				$this->logger->debug('Not migrating group "{gid}": not belonging to local database backend', [
+					'app' => 'user_saml',
+					'gid' => $gid,
+					'backends' => $backendNames,
+				]);
+				return false;
+			}
+
+			foreach ($group->getUsers() as $user) {
+				if ($user->getBackendClassName() !== 'user_saml') {
+					$this->logger->debug('Not migrating group "{gid}": user "{userId}" from a different backend "{userBackend}"', [
+						'app' => 'user_saml',
+						'gid' => $gid,
+						'userId' => $user->getUID(),
+						'userBackend' => $user->getBackendClassName(),
+					]);
+					return false;
+				}
+			}
+
+			return true;
+		});
+	}
 }

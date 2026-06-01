@@ -3,7 +3,7 @@
  - SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<info>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>user_saml</id>
 	<name>SSO &amp; SAML authentication</name>
 	<summary>Authenticate using single sign-on</summary>
@@ -14,13 +14,14 @@ The following providers are supported and tested at the moment:
 	* OneLogin
 	* Shibboleth
 	* Active Directory Federation Services (ADFS)
+	* Authentik
 
 * **Authentication via Environment Variable**
 	* Kerberos (mod_auth_kerb)
 	* Any other provider that authenticates using the environment variable
 
 While theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.]]></description>
-	<version>6.5.0</version>
+	<version>8.1.0</version>
 	<licence>agpl</licence>
 	<author>Lukas Reschke</author>
 	<namespace>User_SAML</namespace>
@@ -37,8 +38,11 @@ While theoretically any other authentication provider implementing either one of
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/1.png</screenshot>
 	<screenshot>https://raw.githubusercontent.com/nextcloud/user_saml/master/screenshots/2.png</screenshot>
 	<dependencies>
-		<nextcloud min-version="28" max-version="32" />
+		<nextcloud min-version="32" max-version="34" />
 	</dependencies>
+	<background-jobs>
+		<job>OCA\User_SAML\Jobs\CleanSessionData</job>
+	</background-jobs>
 	<repair-steps>
 		<post-migration>
 			<step>OCA\User_SAML\Migration\RememberLocalGroupsForPotentialMigrations</step>
@@ -55,6 +59,8 @@ While theoretically any other authentication provider implementing either one of
 		<command>OCA\User_SAML\Command\ConfigSet</command>
 		<command>OCA\User_SAML\Command\GetMetadata</command>
 		<command>OCA\User_SAML\Command\GroupMigrationCopyIncomplete</command>
+		<command>OCA\User_SAML\Command\GroupMigrationManual</command>
+		<command>OCA\User_SAML\Command\UserAdd</command>
 	</commands>
 	<settings>
 		<admin>OCA\User_SAML\Settings\Admin</admin>

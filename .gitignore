@@ -8,3 +8,6 @@ vendor/
 !/tests/integration/
 
 .ackrc
+css
+js
+node_modules

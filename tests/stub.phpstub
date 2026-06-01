@@ -14,7 +14,7 @@ namespace OC\Core\Command {
 	use Symfony\Component\Console\Input\InputInterface;
 	use Symfony\Component\Console\Output\OutputInterface;
 
-	class Base {
+	class Base extends Command {
 		public function __construct() {}
 		protected function configure(): void {}
 		public function run(InputInterface $input, OutputInterface $output): int {}
@@ -86,4 +86,8 @@ namespace OCA\DAV\Events {
 class OC_User {
 	public static function useBackend($userBackend): void;
 	public static function handleApacheAuth(): void;
+}
+
+class OC_Util {
+	public static function copySkeleton(string $userId, \OCP\Files\Folder $userDirectory): void { }
 }

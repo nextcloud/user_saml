@@ -1,8 +1,9 @@
 { "translations": {
-    "Saved" : "Konservita",
     "Email address" : "Retpoŝtadreso",
-    "Open documentation" : "Malfermi la dokumentaron",
+    "Saved" : "Konservita",
+    "Save changes" : "Konservi ŝanĝojn",
     "General" : "Ĝenerala",
+    "Loading…" : "Ŝargado...",
     "Error" : "Eraro"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

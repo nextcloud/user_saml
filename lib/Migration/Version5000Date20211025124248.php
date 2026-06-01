@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Migration;
 
 use Closure;
@@ -76,6 +77,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
+	#[\Override]
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -104,10 +106,12 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 	 * @param Closure():IschemaWrapper $schemaClosure
 	 * @param array $options
 	 */
+	#[\Override]
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		$prefixes = $this->fetchPrefixes();
 		foreach ($prefixes as $prefix) {
 			$keyStart = $prefix === 1 ? '' : $prefix . '-';
+			/** @var list<string> $configKeys */
 			$configKeys = array_reduce(
 				self::IDP_CONFIG_KEYS,
 				function (array $carry, string $rawConfigKey) use ($keyStart): array {
@@ -151,7 +155,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 
 		$deletedRows = $this->deleteQuery
 			->setParameter('cfgKeys', $keys, IQueryBuilder::PARAM_STR_ARRAY)
-			->execute();
+			->executeStatement();
 
 		return $deletedRows > 0;
 	}
@@ -174,7 +178,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 			->setParameter('configId', $id)
 			->setParameter('displayName', $configData['general-idp0_display_name'] ?? '')
 			->setParameter('configuration', \json_encode($configData, JSON_THROW_ON_ERROR))
-			->execute();
+			->executeStatement();
 
 		return $insertedRows > 0;
 	}
@@ -190,7 +194,7 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		}
 
 		$r = $this->readQuery->setParameter('cfgKeys', $configKeys, IQueryBuilder::PARAM_STR_ARRAY)
-			->execute();
+			->executeQuery();
 
 		while ($row = $r->fetch()) {
 			yield $row;
@@ -216,12 +220,12 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 			->where($q->expr()->eq('appid', $q->createNamedParameter('user_saml')))
 			->andWhere($q->expr()->eq('configkey', $q->createNamedParameter('providerIds')));
 
-		$r = $q->execute();
+		$r = $q->executeQuery();
 		$prefixes = $r->fetchOne();
 		if ($prefixes === false) {
 			return [1]; // 1 is the default value for providerIds
 		}
-		return array_map('intval', explode(',', $prefixes));
+		return array_map(intval(...), explode(',', (string)$prefixes));
 	}
 
 	protected function deletePrefixes(): void {
@@ -229,6 +233,6 @@ class Version5000Date20211025124248 extends SimpleMigrationStep {
 		$q->delete('appconfig')
 			->where($q->expr()->eq('appid', $q->createNamedParameter('user_saml')))
 			->andWhere($q->expr()->eq('configkey', $q->createNamedParameter('providerIds')))
-			->execute();
+			->executeStatement();
 	}
 }

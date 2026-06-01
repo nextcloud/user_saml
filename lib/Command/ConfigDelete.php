@@ -5,6 +5,7 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
@@ -17,11 +18,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigDelete extends Base {
 
 	public function __construct(
-		private SAMLSettings $samlSettings,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this->setName('saml:config:delete');
 
@@ -32,21 +34,22 @@ class ConfigDelete extends Base {
 		);
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pId = (int)$input->getArgument('providerId');
 
 		if ((string)$pId !== $input->getArgument('providerId')) {
 			// Make sure we don't delete provider with id 0 by error
 			$output->writeln('<error>providerId argument needs to be an number. Got: ' . $pId . '</error>');
-			return 1;
+			return self::FAILURE;
 		}
 		try {
 			$this->samlSettings->delete($pId);
 			$output->writeln('Provider deleted.');
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$output->writeln('<error>Provider with id: ' . $pId . ' does not exist.</error>');
-			return 1;
+			return self::FAILURE;
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 }

@@ -10,24 +10,34 @@ namespace OCA\User_SAML\Controller;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Settings\Admin;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\AuthorizedAdminSetting;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
-use OCP\IConfig;
+use OCP\AppFramework\Services\IAppConfig;
 use OCP\IRequest;
 use OneLogin\Saml2\Constants;
 
+/**
+ * @psalm-api
+ */
 class SettingsController extends Controller {
 
 	public function __construct(
-		$appName,
+		string $appName,
 		IRequest $request,
-		private IConfig $config,
-		private Admin $admin,
-		private SAMLSettings $samlSettings,
+		private readonly IAppConfig $appConfig,
+		private readonly Admin $admin,
+		private readonly SAMLSettings $samlSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @return DataResponse<Http::STATUS_OK, array{providerIds: string}, array{}>
+	 * @throws \OCP\DB\Exception
+	 */
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function getSamlProviderIds(): DataResponse {
 		$keys = array_keys($this->samlSettings->getListOfIdps());
 		return new DataResponse([ 'providerIds' => implode(',', $keys)]);
@@ -36,6 +46,7 @@ class SettingsController extends Controller {
 	/**
 	 * @return array of categories containing entries for each config parameter with their value
 	 */
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function getSamlProviderSettings(int $providerId): array {
 		/**
 		 * This uses the list of available config parameters from the admin section
@@ -51,24 +62,28 @@ class SettingsController extends Controller {
 			'passthroughParameters' => ['required' => false],
 		];
 		/* Fetch all config values for the given providerId */
+		$settings = [];
 
 		// initialize settings with default value for option box (others are left empty)
 		$settings['sp']['name-id-format'] = Constants::NAMEID_UNSPECIFIED;
 		$storedSettings = $this->samlSettings->get($providerId);
 		foreach ($params as $category => $content) {
-			if (empty($content) || $category === 'providers' || $category === 'type') {
+			if ($content === '' || $content === null || $category === 'providers' || $category === 'type') {
 				continue;
 			}
 			foreach ($content as $setting => $details) {
 				/* use security as category instead of security-* */
-				if (strpos($category, 'security-') === 0) {
+				if (str_starts_with((string)$category, 'security-')) {
 					$category = 'security';
 				}
 				// make sure we properly fetch the attribute mapping
 				// as this is the only category that has the saml- prefix on config keys
-				if (strpos($category, 'attribute-mapping') === 0) {
+				if (str_starts_with((string)$category, 'attribute-mapping')) {
 					$category = 'attribute-mapping';
 					$key = 'saml-attribute-mapping' . '-' . $setting;
+				} elseif (str_starts_with($category, 'user-filter')) {
+					$category = 'user-filter';
+					$key = 'saml-user-filter' . '-' . $setting;
 				} elseif ($category === 'name-id-formats') {
 					if ($setting === $storedSettings['sp-name-id-format']) {
 						$settings['sp']['name-id-format'] = $storedSettings['sp-name-id-format'];
@@ -81,7 +96,7 @@ class SettingsController extends Controller {
 
 				if (isset($details['global']) && $details['global']) {
 					// Read legacy data from oc_appconfig
-					$settings[$category][$setting] = $this->config->getAppValue('user_saml', $key, '');
+					$settings[$category][$setting] = $this->appConfig->getAppValueString($key);
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';
 				}
@@ -90,18 +105,26 @@ class SettingsController extends Controller {
 		return $settings;
 	}
 
-	public function deleteSamlProviderSettings($providerId): Response {
+	#[AuthorizedAdminSetting(Admin::class)]
+	public function deleteSamlProviderSettings(int $providerId): Response {
 		$this->samlSettings->delete($providerId);
 		return new Response();
 	}
 
-	public function setProviderSetting(int $providerId, string $configKey, string $configValue): Response {
+	#[AuthorizedAdminSetting(Admin::class)]
+	public function setProviderSetting(int $providerId, array $newConfigs): Response {
 		$configuration = $this->samlSettings->get($providerId);
-		$configuration[$configKey] = $configValue;
+		foreach ($newConfigs as $configKey => $configValue) {
+			$configuration[$configKey] = $configValue;
+		}
 		$this->samlSettings->set($providerId, $configuration);
 		return new Response();
 	}
 
+	/*
+	 * @return DataResponse<Http::STATUS_OK, array{id: int}, array{}>
+	 */
+	#[AuthorizedAdminSetting(Admin::class)]
 	public function newSamlProviderSettingsId(): DataResponse {
 		return new DataResponse(['id' => $this->samlSettings->getNewProviderId()]);
 	}

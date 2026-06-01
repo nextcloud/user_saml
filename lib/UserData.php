@@ -11,13 +11,12 @@ namespace OCA\User_SAML;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 
 class UserData {
-	private $uid;
-	/** @var array */
-	private $attributes;
+	private ?string $uid = null;
+	private ?array $attributes = null;
 
 	public function __construct(
-		private UserResolver $userResolver,
-		private SAMLSettings $samlSettings,
+		private readonly UserResolver $userResolver,
+		private readonly SAMLSettings $samlSettings,
 	) {
 	}
 
@@ -48,16 +47,19 @@ class UserData {
 		}
 		$this->assertIsInitialized();
 		try {
-			$uid = $this->extractSamlUserId();
-			$uid = $this->testEncodedObjectGUID($uid);
-			$uid = $this->userResolver->findExistingUserId($uid, true);
+			$providedUid = $this->extractSamlUserId();
+			$uid = $this->testEncodedObjectGUID($providedUid);
+			$uid = $this->userResolver->findExistingUserId($uid, $this->getProviderSettings(), true, $providedUid !== $uid);
 			$this->uid = $uid;
-		} catch (NoUserFoundException $e) {
+		} catch (NoUserFoundException) {
 			return '';
 		}
 		return $uid;
 	}
 
+	/**
+	 * @return list<string>
+	 */
 	public function getGroups(): array {
 		$this->assertIsInitialized();
 		$mapping = $this->getProviderSettings()['saml-attribute-mapping-group_mapping'] ?? null;
@@ -65,27 +67,30 @@ class UserData {
 			return [];
 		}
 
-		return is_array($this->attributes[$mapping])
-			? $this->attributes[$mapping]
-			: array_map('trim', explode(',', $this->attributes[$mapping]));
+		if (is_array($this->attributes[$mapping])) {
+			/** @var list<string> $groups */
+			$groups = $this->attributes[$mapping];
+			return $groups;
+		}
+
+		return array_map(trim(...), explode(',', (string)$this->attributes[$mapping]));
 	}
 
 	protected function extractSamlUserId(): string {
 		$uidMapping = $this->getUidMappingAttribute();
 		if ($uidMapping !== null && isset($this->attributes[$uidMapping])) {
 			if (is_array($this->attributes[$uidMapping])) {
-				return trim($this->attributes[$uidMapping][0]);
+				return trim((string)$this->attributes[$uidMapping][0]);
 			} else {
-				return trim($this->attributes[$uidMapping]);
+				return trim((string)$this->attributes[$uidMapping]);
 			}
 		}
 		return '';
 	}
 
 	/**
-	 * returns the plain text UUID if the provided $uid string is a
+	 * Returns the plain text UUID if the provided $uid string is a
 	 * base64-encoded binary string representing e.g. the objectGUID. Otherwise
-	 *
 	 */
 	public function testEncodedObjectGUID(string $uid): string {
 		if (preg_match('/[^a-zA-Z0-9=+\/]/', $uid) !== 0) {
@@ -109,7 +114,7 @@ class UserData {
 	/**
 	 * @see \OCA\User_LDAP\Access::convertObjectGUID2Str
 	 */
-	protected function convertObjectGUID2Str($oguid): string {
+	protected function convertObjectGUID2Str(string $oguid): string {
 		$hex_guid = bin2hex($oguid);
 		$hex_guid_to_guid_str = '';
 		for ($k = 1; $k <= 4; ++$k) {
@@ -129,7 +134,10 @@ class UserData {
 		return strtoupper($hex_guid_to_guid_str);
 	}
 
-	protected function assertIsInitialized() {
+	/**
+	 * @psalm-assert array $this->attributes
+	 */
+	protected function assertIsInitialized(): void {
 		if ($this->attributes === null) {
 			throw new \LogicException('UserData have to be initialized with setAttributes first');
 		}

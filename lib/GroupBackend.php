@@ -35,6 +35,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	) {
 	}
 
+	#[\Override]
 	public function inGroup($uid, $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
 		$stmt = $qb->select('gid')
@@ -50,8 +51,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	/**
+	 * @param string $uid
 	 * @return list<string> Group names
 	 */
+	#[\Override]
 	public function getUserGroups($uid): array {
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
@@ -71,7 +74,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @return string[] Group names
 	 */
-	public function getGroups($search = '', $limit = null, $offset = null): array {
+	#[\Override]
+	public function getGroups(string $search = '', ?int $limit = null, ?int $offset = null): array {
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)
@@ -104,10 +108,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $groups;
 	}
 
-	/**
-	 * @param string $gid
-	 * @return bool
-	 */
+	#[\Override]
 	public function groupExists($gid): bool {
 		if (isset($this->groupCache[$gid])) {
 			return true;
@@ -151,17 +152,38 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 * @param int $offset
 	 * @return array<int,string> User ids
 	 */
+	#[\Override]
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select('uid')
-			->from(self::TABLE_MEMBERS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->orderBy('uid', 'ASC');
+		$query->selectDistinct('m.uid')
+			->from(self::TABLE_MEMBERS, 'm')
+			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)))
+			->orderBy('m.uid', 'ASC');
 
 		if ($search !== '') {
-			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
-				'%' . $this->dbc->escapeLikeParameter($search) . '%'
-			)));
+			$query->leftJoin('m', 'accounts_data', 'dn',
+				$query->expr()->andX(
+					$query->expr()->eq('dn.uid', 'm.uid'),
+					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
+				)
+			);
+			$query->leftJoin('m', 'accounts_data', 'em',
+				$query->expr()->andX(
+					$query->expr()->eq('em.uid', 'm.uid'),
+					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
+				)
+			);
+
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('m.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			);
 		}
 
 		if ($limit !== -1) {
@@ -172,7 +194,6 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		$result = $query->executeQuery();
-
 		$users = [];
 		while ($row = $result->fetch()) {
 			$users[] = $row['uid'];
@@ -182,11 +203,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $users;
 	}
 
+	#[\Override]
 	public function createGroup(string $gid, ?string $samlGid = null): bool {
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
-			$samlGid = $samlGid ?? $gid;
+			$samlGid ??= $gid;
 			$result = $builder->insert(self::TABLE_GROUPS)
 				->setValue('gid', $builder->createNamedParameter($gid))
 				->setValue('displayname', $builder->createNamedParameter($samlGid))
@@ -213,6 +235,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	/**
 	 * @throws Exception
 	 */
+	#[\Override]
 	public function addToGroup(string $uid, string $gid): bool {
 		if ($this->inGroup($uid, $gid)) {
 			return true;
@@ -226,6 +249,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return true;
 	}
 
+	#[\Override]
 	public function removeFromGroup(string $uid, string $gid): bool {
 		$qb = $this->dbc->getQueryBuilder();
 		$rows = $qb->delete(self::TABLE_MEMBERS)
@@ -236,16 +260,39 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $rows > 0;
 	}
 
+	#[\Override]
 	public function countUsersInGroup(string $gid, string $search = ''): int {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select($query->func()->count('*', 'num_users'))
-			->from(self::TABLE_MEMBERS)
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)));
+		$query->select(
+			$query->createFunction('COUNT(DISTINCT ' . $query->getColumnName('uid', 'm') . ')')
+		)
+			->from(self::TABLE_MEMBERS, 'm')
+			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)));
 
 		if ($search !== '') {
-			$query->andWhere($query->expr()->like('uid', $query->createNamedParameter(
-				'%' . $this->dbc->escapeLikeParameter($search) . '%'
-			)));
+			$query->leftJoin('m', 'accounts_data', 'dn',
+				$query->expr()->andX(
+					$query->expr()->eq('dn.uid', 'm.uid'),
+					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
+				)
+			);
+			$query->leftJoin('m', 'accounts_data', 'em',
+				$query->expr()->andX(
+					$query->expr()->eq('em.uid', 'm.uid'),
+					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
+				)
+			);
+
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('m.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			);
 		}
 
 		$result = $query->executeQuery();
@@ -261,6 +308,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $count;
 	}
 
+	#[\Override]
 	public function deleteGroup(string $gid): bool {
 		$query = $this->dbc->getQueryBuilder();
 
@@ -287,10 +335,12 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return true;
 	}
 
+	#[\Override]
 	public function getBackendName(): string {
 		return 'user_saml';
 	}
 
+	#[\Override]
 	public function getDisplayName(string $gid): string {
 		if (!isset($this->groupCache[$gid])) {
 			$this->getGroups($gid);
@@ -299,6 +349,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $this->groupCache[$gid] ?? $gid;
 	}
 
+	#[\Override]
 	public function setDisplayName(string $gid, string $displayName): bool {
 		if (!$this->groupExists($gid)) {
 			return false;

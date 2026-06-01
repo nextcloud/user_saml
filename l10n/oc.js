@@ -1,13 +1,15 @@
 OC.L10N.register(
     "user_saml",
     {
-    "Saved" : "Enregistrat",
     "Email address" : "Adreça mail",
     "Encrypted" : "Chifrat",
-    "Open documentation" : "Dobrir la documentacion",
+    "Saved" : "Enregistrat",
     "Global settings" : "Paramètres globals",
+    "Remove {name}" : "Suprimir {name}",
+    "Save changes" : "Salvar modificacions",
     "General" : "Generals",
     "Security settings" : "Paramètres de seguretat",
+    "Loading…" : "Telecargament…",
     "Error" : "Error"
 },
 "nplurals=2; plural=(n > 1);");

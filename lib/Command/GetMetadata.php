@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\User_SAML\Command;
 
 use OCA\User_SAML\Helper\TXmlHelper;
@@ -24,6 +25,7 @@ class GetMetadata extends Command {
 		parent::__construct();
 	}
 
+	#[\Override]
 	protected function configure(): void {
 		$this
 			->setName('saml:metadata')
@@ -45,14 +47,13 @@ EOT
 		;
 	}
 
+	#[\Override]
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$idp = (int)$input->getArgument('idp');
 		$settingsArray = $this->samlSettings->getOneLoginSettingsArray($idp);
 		$settings = new Settings($settingsArray);
 		$metadata = $settings->getSPMetadata();
-		$errors = $this->callWithXmlEntityLoader(function () use ($settings, $metadata) {
-			return $settings->validateMetadata($metadata);
-		});
+		$errors = $this->callWithXmlEntityLoader(fn () => $settings->validateMetadata($metadata));
 		if (empty($errors)) {
 			$output->writeln($metadata);
 		} else {
@@ -61,6 +62,6 @@ EOT
 				Error::METADATA_SP_INVALID
 			);
 		}
-		return 0;
+		return self::SUCCESS;
 	}
 }
