@@ -377,7 +377,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return '';
 	}
 
-
 	#[Override]
 	public function getBackendName(): string {
 		return 'user_saml';
