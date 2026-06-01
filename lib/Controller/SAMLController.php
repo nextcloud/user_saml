@@ -29,7 +29,6 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\UseSession;
 use OCP\AppFramework\Services\IAppConfig;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -39,7 +38,6 @@ use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
 use OCP\Server;
-use OCP\User\Events\UserLoggedInEvent;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
@@ -68,7 +66,6 @@ class SAMLController extends Controller {
 		private ICrypto $crypto,
 		private ITrustedDomainHelper $trustedDomainHelper,
 		private SessionService $sessionService,
-		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -394,7 +391,6 @@ class SAMLController extends Controller {
 			if ($firstLogin) {
 				$this->userBackend->initializeHomeDir($user->getUID());
 			}
-			$this->eventDispatcher->dispatchTyped(new UserLoggedInEvent($user, $user->getUID(), null, true));
 		} catch (NoUserFoundException $e) {
 			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid.', previous: $e);
 		} catch (Exception $e) {

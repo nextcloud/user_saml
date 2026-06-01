@@ -19,7 +19,6 @@ use OCA\User_SAML\UserResolver;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IAppConfig;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -50,9 +49,8 @@ class SAMLControllerTest extends TestCase {
 	private IL10N&MockObject $l;
 	private ICrypto&MockObject $crypto;
 	private SAMLController $samlController;
-	private ITrustedDomainHelper&MockObject $trustedDomainController;
-	private SessionService&MockObject $sessionService;
-	private IEventDispatcher&MockObject $eventDispatcher;
+	private ITrustedDomainHelper|MockObject $trustedDomainController;
+	private SessionService|MockObject $sessionService;
 
 	#[Override]
 	protected function setUp(): void {
@@ -73,7 +71,6 @@ class SAMLControllerTest extends TestCase {
 		$this->crypto = $this->createMock(ICrypto::class);
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
 		$this->sessionService = $this->createMock(SessionService::class);
-		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			static fn (string $param): string => $param
@@ -98,8 +95,7 @@ class SAMLControllerTest extends TestCase {
 			$this->userData,
 			$this->crypto,
 			$this->trustedDomainController,
-			$this->sessionService,
-			$this->eventDispatcher,
+			$this->sessionService
 		);
 	}
 
@@ -267,7 +263,6 @@ class SAMLControllerTest extends TestCase {
 
 		if (isset($samlUserData['uid']) && !($userState === 0 && $autoProvision === 0)) {
 			$user = $this->createMock(IUser::class);
-			$user->method('getUID')->willReturn('MyUid');
 			$im = $this->userResolver
 				->expects($this->once())
 				->method('findExistingUser')
