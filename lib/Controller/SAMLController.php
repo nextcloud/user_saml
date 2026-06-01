@@ -177,7 +177,6 @@ class SAMLController extends Controller {
 					}
 				}
 
-
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, $passthroughValues, false, false, true);
 				$settings = $this->samlSettings->get($idp);

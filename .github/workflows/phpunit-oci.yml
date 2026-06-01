@@ -76,6 +76,8 @@ jobs:
           # cannot resolve. Keep OCI 11 coverage on older branches and newer Oracle
           # coverage on master.
           - oci-versions: '11'
+            server-versions: 'stable34'
+          - oci-versions: '11'
             server-versions: 'master'
 
     name: OCI ${{ matrix.oci-versions }} PHP ${{ matrix.php-versions }} Nextcloud ${{ matrix.server-versions }}
