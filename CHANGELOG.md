@@ -5,6 +5,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.1
+
+### Fixed
+
+* fix: Kerberos authentification by using `$_SERVER` instead of `$_ENV` by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1130
+
+### Dependencies
+
+* build(deps-dev): bump guzzlehttp/guzzle from 7.10.0 to 7.10.3 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1128
+* build(deps-dev): bump nextcloud/coding-standard from 1.4.0 to 1.5.0 in /vendor-bin/cs-fixer by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1129
+
+### Other
+
+* test(kerberos): Reuse kerberos tests from server by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1130
+
 ## 8.1.0
 
 ### Added
