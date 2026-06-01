@@ -463,7 +463,7 @@ class SAMLController extends Controller {
 				$pass = false;
 			}
 		} else {
-			// standard request : need read CRSF check
+			// standard request : need read CSRF check
 			$pass = $this->request->passesCSRFCheck();
 		}
 
