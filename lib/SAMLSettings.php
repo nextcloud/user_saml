@@ -12,9 +12,11 @@ use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
 use OCP\IConfig;
+use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OneLogin\Saml2\Constants;
+use OneLogin\Saml2\Utils;
 
 class SAMLSettings {
 	private const LOADED_NONE = 0;
@@ -82,7 +84,11 @@ class SAMLSettings {
 		private readonly IAppConfig $appConfig,
 		private readonly ISession $session,
 		private readonly ConfigurationsMapper $mapper,
+		private readonly IRequest $request,
 	) {
+		Utils::setSelfProtocol($this->request->getServerProtocol());
+		Utils::setSelfHost($this->request->getServerHost());
+		Utils::setProxyVars(true);
 	}
 
 	/**
