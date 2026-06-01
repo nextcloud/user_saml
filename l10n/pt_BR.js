@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "This user account is disabled, please contact your administrator." : "Esta conta de usuário está desabilitada, contacte o administrador.",
+    "Authentication failed." : "Falha na autenticação.",
     "Unknown error, please check the log file for more details." : "Erro desconhecido, verifique o log para mais detalhes.",
     "Direct log in" : "Login direto",
     "SSO & SAML log in" : "Login SSO & SAML",
@@ -73,6 +74,7 @@ OC.L10N.register(
     "Environment variable provider settings" : "Configurações do provedor de variáveis de ambiente",
     "Reset settings" : "Redefinir as configurações",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Este recurso pode não funcionar com todos os provedores de identidade. Use-o somente se o seu IdP (provedor de identidade) exigir especificamente a vinculação POST para solicitações SAML.",
+    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Variáveis de ambiente que começam com HTTP_ não são permitidas, pois os cabeçalhos HTTP são armazenados nessas variáveis de ambiente",
     "Configure: {name}" : "Configure: {name}",
     "Cancel changes" : "Cancelar alterações",
     "Download metadata XML" : "Baixar metadata XML",

@@ -1,5 +1,6 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Учётная запись пользователя отключена, свяжитесь с администратором сервера.",
+    "Authentication failed." : "Сбой аутентификации.",
     "Unknown error, please check the log file for more details." : "Неизвестная ошибка, обратитесь к файлу журнала для более подробных сведений.",
     "Direct log in" : "Прямой вход в систему",
     "SSO & SAML log in" : "Вход через SSO и SAML",
@@ -71,6 +72,7 @@
     "Environment variable provider settings" : "Настройки поставщика переменных среды",
     "Reset settings" : "Сбросить настройки",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Эта функция может работать не со всеми поставщиками удостоверений. Используйте только в том случае, если ваш поставщик удостоверений требует привязки POST для запросов SAML.",
+    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Переменные среды, начинающиеся с HTTP_, не допускаются, поскольку заголовки HTTP сохраняются в этих переменных среды.",
     "Configure: {name}" : "Конфигурировать: {name}",
     "Cancel changes" : "Отменить изменения",
     "Download metadata XML" : "Скачать метаданные XML",
