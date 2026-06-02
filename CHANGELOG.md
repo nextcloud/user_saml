@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.2
+
+### Fixed
+
+* fix: Using user_saml at the same time as the guest application
+
 ## 8.1.1
 
 ### Fixed
