@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "This user account is disabled, please contact your administrator." : "Kullanıcı hesabı kullanımdan kaldırılmış. Lütfen yöneticiniz ile görüşün.",
+    "Authentication failed." : "Kimlik doğrulanamadı.",
     "Unknown error, please check the log file for more details." : "Bilinmeyen bir sorun çıktı. Ayrıntılı bilgi almak için günlük dosyalarına bakabilirsiniz.",
     "Direct log in" : "Doğrudan oturum açma",
     "SSO & SAML log in" : "SSO ve SAML oturum açma",
@@ -73,6 +74,7 @@ OC.L10N.register(
     "Environment variable provider settings" : "Ortam değişkeni hizmet sağlayıcı ayarları",
     "Reset settings" : "Ayarları sıfırla",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Bu özellik tüm kimlik hizmeti sağlayıcılarıyla çalışmayabilir. Yalnızca kimlik hizmeti sağlayıcınızın SAML istekleri için özellikle POST kullanması gerekiyorsa kullanın.",
+    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "HTTP üst bilgileri bu ortam değişkenlerine kaydedildiği için HTTP_ ile başlayan ortam değişkenlerine izin verilmez",
     "Configure: {name}" : "Yapılandır: {name}",
     "Cancel changes" : "Değişiklikleri iptal et",
     "Download metadata XML" : "Üst veri XML dosyasını indir",
