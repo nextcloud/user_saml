@@ -1,7 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
-    "This user account is disabled, please contact your administrator." : "Ši naudotojo paskyra yra išjungta, susisiekite su administratoriumi.",
+    "This user account is disabled, please contact your administrator." : "Ši vartotojo paskyra yra išjungta, susisiekite su administratoriumi.",
     "Unknown error, please check the log file for more details." : "Nežinoma klaida, išsamesnei informacijai žiūrėkite žurnalo failą.",
     "Direct log in" : "Tiesioginis prisijungimas",
     "SSO & SAML log in" : "SSO ir SAML prisijungimas",
@@ -32,9 +32,9 @@ OC.L10N.register(
     "Attribute to map the displayname to." : "Atributas, su kuriuo reikia susieti rodomą pavadinimą.",
     "Attribute to map the email address to." : "Atributas, su kuriuo susieti el. pašto adresą.",
     "Attribute to map the quota to." : "Atributas, su kuriuo reikia susieti kvotą.",
-    "Attribute to map the users home to." : "Atributas, skirtas susieti naudotojų namus.",
+    "Attribute to map the users home to." : "Atributas, skirtas susieti vartotojų namus.",
     "Attribute to map the users groups to." : "Atributas, su kuriuo reikia susieti vartotojų grupes.",
-    "Attribute to map the users MFA login status" : "Atributas, skirtas susieti naudotojų MFA prisijungimo būseną",
+    "Attribute to map the users MFA login status" : "Atributas, skirtas susieti vartotojų MFA prisijungimo būseną",
     "Attribute to map the users to an existing LDAP user" : "Atributas, skirtas susieti vartotojus su esamu LDAP vartotoju",
     "Group Mapping Prefix, default: %s" : "Grupės atvaizdavimo prefiksas, numatytasis: %s",
     "Reject members of these groups. This setting has precedence over required memberships." : "Atmesti šių grupių narius. Šis nustatymas turi pirmenybę prieš privalomas narystes.",
