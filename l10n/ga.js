@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "This user account is disabled, please contact your administrator." : "Tá an cuntas úsáideora seo díchumasaithe, déan teagmháil le do riarthóir le do thoil.",
+    "Authentication failed." : "Theip ar an bhfíordheimhniú.",
     "Unknown error, please check the log file for more details." : "Earráid anaithnid, seiceáil an logchomhad le haghaidh tuilleadh sonraí le do thoil.",
     "Direct log in" : "Logáil isteach díreach",
     "SSO & SAML log in" : "SSO & SAML logáil isteach",
@@ -73,6 +74,7 @@ OC.L10N.register(
     "Environment variable provider settings" : "Socruithe soláthraí athróg timpeallachta",
     "Reset settings" : "Athshocraigh socruithe",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "B’fhéidir nach n-oibreoidh an ghné seo le gach soláthraí aitheantais. Ná húsáid ach amháin má éilíonn do IdP ceangal POST go sonrach le haghaidh iarratais SAML.",
+    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Ní cheadaítear athróga timpeallachta a thosaíonn le HTTP_ mar go sábháiltear ceanntásca HTTP sna hathróga timpeallachta seo",
     "Configure: {name}" : "Cumraigh: {name}",
     "Cancel changes" : "Cealaigh athruithe",
     "Download metadata XML" : "Íoslódáil meiteashonraí xml",
