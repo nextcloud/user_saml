@@ -452,7 +452,7 @@ class SAMLControllerTest extends TestCase {
 	public function testLoginWithUnconfiguredIdpRedirectsToGenericError(): void {
 		$this->config->expects($this->once())
 			->method('getAppValue')
-			->with('type')
+			->with('user_saml', 'type')
 			->willReturn('saml');
 
 		$this->request->expects($this->any())
