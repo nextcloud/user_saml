@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 #saml-select-user-back-end {
-	color: var(--color-primary-text);
+	color: var(--color-background-plain-text);
 }
 
 #saml-select-user-back-end #av_mode {
