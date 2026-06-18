@@ -161,7 +161,16 @@ class SAMLController extends Controller {
 		$type = $this->appConfig->getAppValueString('type');
 		switch ($type) {
 			case 'saml':
-				$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
+				try {
+					$settings = $this->samlSettings->getOneLoginSettingsArray($idp);
+				} catch (\InvalidArgumentException $e) {
+					return new Http\RedirectResponse(
+						$this->urlGenerator->linkToRouteAbsolute(
+							'user_saml.SAML.genericError',
+							['reason' => 'notConfigured']
+						)
+					);
+				}
 				$auth = new Auth($settings);
 				$passthroughParamsString = trim($settings['idp']['passthroughParameters'] ?? '') ;
 				$passthroughParams = array_map(trim(...), explode(',', $passthroughParamsString));
@@ -555,6 +564,7 @@ class SAMLController extends Controller {
 		$allowedMessages = [
 			'userDisabled' => $this->l->t('This user account is disabled, please contact your administrator.'),
 			'authFailed' => $this->l->t('Authentication failed.'),
+			'notConfigured' => $this->l->t('SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel.'),
 		];
 
 		$message = $allowedMessages[$reason] ?? $this->l->t('Unknown error, please check the log file for more details.');

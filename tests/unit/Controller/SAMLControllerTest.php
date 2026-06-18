@@ -421,4 +421,31 @@ class SAMLControllerTest extends TestCase {
 
 		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
 	}
+
+	public function testLoginWithUnconfiguredIdpRedirectsToGenericError(): void {
+		$this->appConfig->expects($this->once())
+			->method('getAppValueString')
+			->with('type')
+			->willReturn('saml');
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->willReturn('');
+
+		$this->samlSettings->expects($this->once())
+			->method('getOneLoginSettingsArray')
+			->with(1)
+			->willThrowException(new \InvalidArgumentException('SAML provider #1 does not exist'));
+
+		$errorUrl = 'https://example.com/error';
+		$this->urlGenerator->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.genericError', ['reason' => 'notConfigured'])
+			->willReturn($errorUrl);
+
+		$result = $this->samlController->login(1);
+
+		$this->assertInstanceOf(RedirectResponse::class, $result);
+		$this->assertEquals($errorUrl, $result->getRedirectURL());
+	}
 }
