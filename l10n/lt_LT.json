@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Ši vartotojo paskyra yra išjungta, susisiekite su administratoriumi.",
     "Authentication failed." : "Autentifikavimas nepavyko.",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "SAML autentifikavimas nėra sukonfigūruotas. Paprašykite savo administratoriaus užbaigti SAML sąranką administravimo skydelyje.",
     "Unknown error, please check the log file for more details." : "Nežinoma klaida, išsamesnei informacijai žiūrėkite žurnalo failą.",
     "Direct log in" : "Tiesioginis prisijungimas",
     "SSO & SAML log in" : "SSO ir SAML prisijungimas",

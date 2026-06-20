@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Dieses Nutzerkonto ist deaktiviert. Bitte kontaktieren Sie Ihre Administration.",
     "Authentication failed." : "Authentifizierung fehlgeschlagen.",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "SAML-Authentifizierung ist nicht eingerichtet. Bitte an die Administration wenden, um die SAML-Einrichtung im Administrationsbereich vornehmen zu lassen.",
     "Unknown error, please check the log file for more details." : "Unbekannter Fehler, bitte prüfen Sie die Log-Datei für weitere Informationen.",
     "Direct log in" : "Direkte Anmeldung",
     "SSO & SAML log in" : "SSO- & SAML-Anmeldung",

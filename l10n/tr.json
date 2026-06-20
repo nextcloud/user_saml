@@ -1,6 +1,7 @@
 { "translations": {
     "This user account is disabled, please contact your administrator." : "Kullanıcı hesabı kullanımdan kaldırılmış. Lütfen yöneticiniz ile görüşün.",
     "Authentication failed." : "Kimlik doğrulanamadı.",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "SAML kimlik doğrulaması yapılandırılmamış. Lütfen yöneticinizden yönetici panosundan SAML kurulumunu tamamlamasını isteyin.",
     "Unknown error, please check the log file for more details." : "Bilinmeyen bir sorun çıktı. Ayrıntılı bilgi almak için günlük dosyalarına bakabilirsiniz.",
     "Direct log in" : "Doğrudan oturum açma",
     "SSO & SAML log in" : "SSO ve SAML oturum açma",
