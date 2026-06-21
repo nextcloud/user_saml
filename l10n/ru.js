@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "Учётная запись пользователя отключена, свяжитесь с администратором сервера.",
     "Authentication failed." : "Сбой аутентификации.",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "Аутентификация SAML не настроена. Попросите своего администратора завершить настройку SAML в панели администратора.",
     "Unknown error, please check the log file for more details." : "Неизвестная ошибка, обратитесь к файлу журнала для более подробных сведений.",
     "Direct log in" : "Прямой вход в систему",
     "SSO & SAML log in" : "Вход через SSO и SAML",
