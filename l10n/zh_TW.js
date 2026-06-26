@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "您的使用者帳號已被停用，請聯絡系統管理員。",
     "Authentication failed." : "驗證失敗。",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "尚未設定 SAML 驗證。請聯絡您的系統管理員，請他在管理後台完成 SAML 的設定。",
     "Unknown error, please check the log file for more details." : "未知的錯誤，請檢查伺服器記錄檔案以取得更多資訊。",
     "Direct log in" : "直接登入",
     "SSO & SAML log in" : "SSO & SAML 登入",
