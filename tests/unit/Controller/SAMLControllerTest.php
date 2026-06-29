@@ -344,7 +344,8 @@ class SAMLControllerTest extends TestCase {
 	public function dataTestGenericError() {
 		return [
 			['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'],
-			['messageSend' => 'test message', 'messageExpected' => 'test message'],
+			['messageSend' => 'userDisabled', 'messageExpected' => 'This user account is disabled, please contact your administrator.'],
+			['messageSend' => 'authFailed', 'messageExpected' => 'Authentication failed.'],
 		];
 	}
 
