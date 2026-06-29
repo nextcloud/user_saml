@@ -13,9 +13,11 @@ use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Model\SessionData;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\Authentication\IApacheBackend;
+use OCP\Authentication\IProvideUserSecretBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
+use OCP\HintException;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ISession;
@@ -24,21 +26,24 @@ use OCP\IUser;
 use OCP\IUserBackend;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\Security\IHasher;
 use OCP\Server;
 use OCP\User\Backend\ABackend;
+use OCP\User\Backend\ICheckPasswordBackend;
 use OCP\User\Backend\ICountUsersBackend;
 use OCP\User\Backend\ICustomLogout;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
+use OCP\User\Events\PostLoginEvent;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ICountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend, IProvideUserSecretBackend, ICheckPasswordBackend {
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
@@ -118,8 +123,68 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			}
 			$qb->executeStatement();
 
+			// If we use per-user encryption the keys must be initialized first
+			$userSecret = $this->getUserSecret($attributes);
+			if ($userSecret !== null) {
+				$this->updateUserSecretHash($uid, $userSecret);
+				$user = $this->userManager->get($uid);
+				if ($user === null) {
+					throw new \RuntimeException('New user doesn\'t exists.');
+				}
+				// Emit a post login action to initialize the encryption module with the user secret provided by the idp.
+				$this->eventDispatcher->dispatchTyped(new PostLoginEvent($user, $uid, $userSecret, false));
+			}
 			$this->initializeHomeDir($uid);
 		}
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	private function getUserSecretHashes(string $uid): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('token')
+			->from('user_saml_auth_token')
+			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+			->andWhere($qb->expr()->eq('name', $qb->createNamedParameter('sso_secret_hash')))
+			->setMaxResults(10);
+		$result = $qb->executeQuery();
+		/** @var list<string> $data */
+		$data = $result->fetchAll(\PDO::FETCH_COLUMN);
+		$result->closeCursor();
+		return $data;
+	}
+
+	private function checkAndUpdateUserSecretHash(string $uid, string $userSecret): bool {
+		$data = $this->getUserSecretHashes($uid);
+		foreach ($data as $storedHash) {
+			if (Server::get(IHasher::class)->verify($userSecret, $storedHash, $newHash)) {
+				if ($newHash !== null && $newHash !== '') {
+					$this->updateUserSecretHash($uid, $userSecret, true);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function updateUserSecretHash(string $uid, string $userSecret, bool $exists = false): bool {
+		$qb = $this->db->getQueryBuilder();
+		$hash = Server::get(IHasher::class)->hash($userSecret);
+		if ($exists || count($this->getUserSecretHashes($uid)) > 0) {
+			$qb->update('user_saml_auth_token')
+				->set('token', $qb->createNamedParameter($hash))
+				->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
+				->andWhere($qb->expr()->eq('name', $qb->createNamedParameter('sso_secret_hash')));
+		} else {
+			$qb->insert('user_saml_auth_token')
+				->values([
+					'uid' => $qb->createNamedParameter($uid),
+					'token' => $qb->createNamedParameter($hash),
+					'name' => $qb->createNamedParameter('sso_secret_hash'),
+				]);
+		}
+		return $qb->executeStatement() > 0;
 	}
 
 	/**
@@ -163,6 +228,22 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$users = $result->fetchAll();
 		$result->closeCursor();
 		return $users[0]['home'] ?? false;
+	}
+
+	/**
+	 * @inheritDoc
+	 *
+	 * By default, user_saml tokens are passwordless and this function
+	 * is unused. It is only called if we have tokens with passwords,
+	 * which happens if we have SSO provided user secrets.
+	 */
+	#[Override]
+	public function checkPassword(string $loginName, string $password): false|string {
+		if ($this->checkAndUpdateUserSecretHash($loginName, $password)) {
+			return $loginName;
+		}
+
+		return false;
 	}
 
 	#[Override]
@@ -388,6 +469,13 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return 'user_saml';
 	}
 
+	#[Override]
+	public function getCurrentUserSecret(): ?string {
+		$samlData = $this->session->get('user_saml.samlUserData');
+		$userSecret = $this->getUserSecret($samlData);
+		return $userSecret;
+	}
+
 	/**
 	 * Whether autoprovisioning is enabled or not
 	 */
@@ -573,7 +661,21 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 	}
 
-	#[\Override]
+	private function getUserSecret(array $attributes): ?string {
+		try {
+			$userSecret = $this->getAttributeValue('saml-attribute-mapping-user_secret_mapping', $attributes);
+			if ($userSecret === '') {
+				throw new HintException('Got no user_secret from IDP. Make sure that your IDP provides a per-user secrets.');
+			} else {
+				return $userSecret;
+			}
+		} catch (\InvalidArgumentException $e) {
+			// ignore no user_secret mapping was configured
+		}
+		return null;
+	}
+
+	#[Override]
 	public function countUsers(): int {
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))
