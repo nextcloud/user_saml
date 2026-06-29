@@ -289,10 +289,9 @@ class UserBackendTest extends TestCase {
 			->method('getDisplayName')
 			->with('ExistingUser')
 			->willReturn('');
-		$this->userBackend
-			->expects($this->once())
+		$user->expects($this->once())
 			->method('setDisplayName')
-			->with('ExistingUser', 'New Displayname');
+			->with('New Displayname');
 		$this->groupManager
 			->expects($this->once())
 			->method('handleIncomingGroups')
@@ -343,10 +342,9 @@ class UserBackendTest extends TestCase {
 			->method('getDisplayName')
 			->with('ExistingUser')
 			->willReturn('');
-		$this->userBackend
-			->expects($this->once())
+		$user->expects($this->once())
 			->method('setDisplayName')
-			->with('ExistingUser', 'New Displayname');
+			->with('New Displayname');
 		$this->eventDispatcher->expects($this->once())
 			->method('dispatchTyped')
 			->with(new UserChangedEvent($user, 'displayName', 'New Displayname', ''));
