@@ -1,5 +1,6 @@
 {
 	"name": "nextcloud/user_saml",
+	"version": "8.1.3",
 	"config": {
 		"optimize-autoloader": true,
 		"classmap-authoritative": true,
