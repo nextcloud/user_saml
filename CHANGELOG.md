@@ -5,6 +5,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.3
+
+### Fixed
+
+* fix: graceful handling when user_saml is enabled but no IdP is configured by @printminion-co in https://github.com/nextcloud/user_saml/pull/1138
+* fix: Update display name in User object by @artonge in https://github.com/nextcloud/user_saml/pull/1137
+
+### Dependencies
+
+* build(deps): bump dompurify from 3.4.0 to 3.4.11 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1145
+* build(deps-dev): bump vite from 7.3.2 to 7.3.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1148
+* build(deps-dev): bump js-yaml from 4.1.1 to 4.2.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1149
+* build(deps): bump form-data from 4.0.5 to 4.0.6 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1147
+* build(deps): bump firebase/php-jwt from 7.0.5 to 7.1.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1150
+
 ## 8.1.2
 
 ### Fixed
