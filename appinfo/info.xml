@@ -56,6 +56,7 @@ While theoretically any other authentication provider implementing either one of
 		<command>OCA\User_SAML\Command\ConfigDelete</command>
 		<command>OCA\User_SAML\Command\ConfigGet</command>
 		<command>OCA\User_SAML\Command\ConfigSet</command>
+		<command>OCA\User_SAML\Command\ConfigValidate</command>
 		<command>OCA\User_SAML\Command\GetMetadata</command>
 		<command>OCA\User_SAML\Command\GroupMigrationCopyIncomplete</command>
 		<command>OCA\User_SAML\Command\GroupMigrationManual</command>

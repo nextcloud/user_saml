@@ -128,6 +128,12 @@ class SAMLSettings {
 	public function getOneLoginSettingsArray(int $idp): array {
 		$this->ensureConfigurationsLoaded($idp);
 
+		if (($this->configurations[$idp] ?? []) === []) {
+			throw new InvalidArgumentException(
+				"SAML provider #{$idp} does not exist or has not been configured yet."
+			);
+		}
+
 		$settings = [
 			'strict' => true,
 			'debug' => $this->config->getSystemValueBool('debug', false),
@@ -150,7 +156,7 @@ class SAMLSettings {
 				// "sloWebServerDecode" is not expected to be passed to the OneLogin class
 			],
 			'sp' => [
-				'entityId' => (array_key_exists('sp-entityId', $this->configurations[$idp]) && trim($this->configurations[$idp]['sp-entityId']) != '')
+				'entityId' => (trim($this->configurations[$idp]['sp-entityId'] ?? '') !== '')
 					? $this->configurations[$idp]['sp-entityId']
 					: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.getMetadata'),
 				'assertionConsumerService' => [
