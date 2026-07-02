@@ -8,12 +8,15 @@
 namespace OCA\User_SAML;
 
 use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
+use OCP\Group\Backend\IBatchMethodsBackend;
 use OCP\Group\Backend\ICountUsersBackend;
 use OCP\Group\Backend\ICreateGroupBackend;
 use OCP\Group\Backend\IDeleteGroupBackend;
 use OCP\Group\Backend\IGetDisplayNameBackend;
+use OCP\Group\Backend\IGroupDetailsBackend;
 use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
@@ -21,10 +24,10 @@ use OCP\IDBConnection;
 use PDO;
 use Psr\Log\LoggerInterface;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend {
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend, IBatchMethodsBackend, IGroupDetailsBackend {
 
-	/** @var array */
-	private $groupCache = [];
+	/** @var array<string, string|null> */
+	private array $groupCache = [];
 
 	public const TABLE_GROUPS = 'user_saml_groups';
 	public const TABLE_MEMBERS = 'user_saml_group_members';
@@ -131,6 +134,39 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			return true;
 		}
 		return false;
+	}
+
+	#[\Override]
+	public function groupsExists(array $gids): array {
+		$notFoundGids = [];
+		$existingGroups = [];
+
+		// In case the data is already locally accessible, not need to do SQL query
+		// or do a SQL query but with a smaller in clause
+		foreach ($gids as $gid) {
+			if (isset($this->groupCache[$gid])) {
+				$existingGroups[] = $gid;
+			} else {
+				$notFoundGids[] = $gid;
+			}
+		}
+
+		foreach (array_chunk($notFoundGids, 1000) as $chunk) {
+			$query = $this->dbc->getQueryBuilder();
+			$query->select('gid', 'displayname')
+				->from(self::TABLE_GROUPS)
+				->where($query->expr()->in('gid', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)));
+
+			$result = $query->executeQuery();
+			while ($row = $result->fetch()) {
+				$gid = (string)$row['gid'];
+				$existingGroups[] = $gid;
+				$this->groupCache[$gid] = (string)$row['displayname'];
+			}
+			$result->closeCursor();
+		}
+
+		return $existingGroups;
 	}
 
 	public function groupExistsWithDifferentGid(string $samlGid): ?string {
@@ -374,5 +410,45 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		return $isUpdated;
+	}
+
+	#[\Override]
+	public function getGroupDetails(string $gid): array {
+		if (!$this->groupExists($gid)) {
+			return [];
+		}
+
+		return ['displayName' => $this->groupCache[$gid] ?? $gid];
+	}
+
+	#[\Override]
+	public function getGroupsDetails(array $gids): array {
+		$notFoundGids = [];
+		$details = [];
+
+		// Try to skip groups already in local cache
+		foreach ($gids as $gid) {
+			if (isset($this->groupCache[$gid])) {
+				$details[$gid] = ['displayName' => $this->groupCache[$gid] ?? $gid];
+			} else {
+				$notFoundGids[] = $gid;
+			}
+		}
+
+		foreach (array_chunk($notFoundGids, 1000) as $chunk) {
+			$query = $this->dbc->getQueryBuilder();
+			$query->select('gid', 'displayname')
+				->from(self::TABLE_GROUPS)
+				->where($query->expr()->in('gid', $query->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)));
+
+			$result = $query->executeQuery();
+			while ($row = $result->fetch()) {
+				$details[(string)$row['gid']] = ['displayName' => (string)$row['displayname']];
+				$this->groupCache[(string)$row['gid']] = (string)$row['displayname'];
+			}
+			$result->closeCursor();
+		}
+
+		return $details;
 	}
 }
