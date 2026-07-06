@@ -40,7 +40,6 @@
     "@nextcloud/router": "^3.1.0",
     "@nextcloud/vue": "^9.4.0",
     "@vitejs/plugin-vue": "^6.0.3",
-    "@vue/compat": "^3.5.27",
     "@vueform/slider": "^2.1.10",
     "camelcase": "^9.0.0",
     "nextcloud-server": "^0.15.10",
@@ -59,8 +58,6 @@
     "npm": "^11.3.0"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-import-assertions": "^7.28.6",
-    "@babel/plugin-transform-typescript": "^7.28.6",
     "@nextcloud/browserslist-config": "^3.1.2",
     "@nextcloud/eslint-config": "^9.0.0-rc.5",
     "@nextcloud/stylelint-config": "^3.2.1",
