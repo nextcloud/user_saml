@@ -5,6 +5,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.6
+
+### Fixed
+
+* [fix: Restricts the env variable authorized](https://github.com/nextcloud/user_saml/pull/1168)
+* [fix: Make sure gss.jwt.key is configured](https://github.com/nextcloud/user_saml/pull/1157)
+* [fix: graceful handling when user_saml is enabled but no IdP is configured](https://github.com/nextcloud/user_saml/pull/1154)
+* [fix: Use correct color for login screen text on dark background](https://github.com/nextcloud/user_saml/pull/1140)
+
+### Performance
+
+* [perf: Cache display name in getUserGroups](https://github.com/nextcloud/user_saml/pull/1162)
+
 ## 7.1.5
 
 ### Fixed
