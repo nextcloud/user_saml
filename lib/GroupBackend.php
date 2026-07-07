@@ -56,14 +56,17 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	#[\Override]
 	public function getUserGroups($uid): array {
 		$qb = $this->dbc->getQueryBuilder();
-		$cursor = $qb->select('gid')
-			->from(self::TABLE_MEMBERS)
+		$cursor = $qb->select('gu.gid', 'g.displayname')
+			->from(self::TABLE_MEMBERS, 'gu')
+			->leftJoin('gu', self::TABLE_GROUPS, 'g', $qb->expr()->eq('gu.gid', 'g.gid'))
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->executeQuery();
 
 		$groups = [];
 		while ($row = $cursor->fetch()) {
-			$groups[] = $row['gid'];
+			$gid = $row['gid'];
+			$this->groupCache[$gid] = $row['displayname'];
+			$groups[] = $gid;
 		}
 		$cursor->closeCursor();
 
