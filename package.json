@@ -40,11 +40,9 @@
     "@nextcloud/router": "^3.1.0",
     "@nextcloud/vue": "^9.4.0",
     "@vitejs/plugin-vue": "^6.0.3",
-    "pinia": "^3.0.4",
     "vite-plugin-node-polyfills": "^0.25.0",
     "vue": "^3.5.18",
-    "vue-material-design-icons": "^5.3.1",
-    "vue-router": "^5.0.1"
+    "vue-material-design-icons": "^5.3.1"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
