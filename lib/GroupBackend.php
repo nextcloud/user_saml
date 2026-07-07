@@ -13,7 +13,7 @@ use OCP\Group\Backend\ABackend;
 use OCP\Group\Backend\IAddToGroupBackend;
 use OCP\Group\Backend\IBatchMethodsBackend;
 use OCP\Group\Backend\ICountUsersBackend;
-use OCP\Group\Backend\ICreateGroupBackend;
+use OCP\Group\Backend\ICreateNamedGroupBackend;
 use OCP\Group\Backend\IDeleteGroupBackend;
 use OCP\Group\Backend\IGetDisplayNameBackend;
 use OCP\Group\Backend\IGroupDetailsBackend;
@@ -24,8 +24,7 @@ use OCP\IDBConnection;
 use PDO;
 use Psr\Log\LoggerInterface;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend, IBatchMethodsBackend, IGroupDetailsBackend {
-
+class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateNamedGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend, IBatchMethodsBackend, IGroupDetailsBackend {
 	/** @var array<string, string|null> */
 	private array $groupCache = [];
 
@@ -242,33 +241,42 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		return $users;
 	}
 
+	/**
+	 * Compute group ID from display name (GIDs are limited to 64 characters in database)
+	 */
+	private function computeGid(string $displayName): string {
+		return mb_strlen($displayName) > 64
+			? hash('sha256', $displayName)
+			: $displayName;
+	}
+
 	#[\Override]
-	public function createGroup(string $gid, ?string $samlGid = null): bool {
+	public function createGroup(string $name, ?string $samlGid = null): ?string {
+		$gid = $this->computeGid($name);
+
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
-			$samlGid ??= $gid;
-			$result = $builder->insert(self::TABLE_GROUPS)
+			$samlGid ??= $name;
+			$builder->insert(self::TABLE_GROUPS)
 				->setValue('gid', $builder->createNamedParameter($gid))
 				->setValue('displayname', $builder->createNamedParameter($samlGid))
 				->setValue('saml_gid', $builder->createNamedParameter($samlGid))
 				->executeStatement();
 		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-				$result = 0;
-			} else {
+			if ($e->getReason() !== Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				$this->logger->warning('Failed to create group: ' . $e->getMessage(), [
 					'app' => 'user_saml',
 					'exception' => $e,
 				]);
-				$result = -1;
+				return null;
 			}
 		}
 
 		// Add to cache
 		$this->groupCache[$gid] = $samlGid;
 
-		return $result === 1;
+		return $gid;
 	}
 
 	/**
