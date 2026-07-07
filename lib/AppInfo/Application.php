@@ -68,7 +68,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(DavPlugin::class, fn (ContainerInterface $c) => new DavPlugin(
 			$c->get(ISession::class),
 			$c->get(IAppConfig::class),
-			$_ENV,
+			$_SERVER,
 			$c->get(SAMLSettings::class),
 			$c->get(SessionService::class),
 		));
