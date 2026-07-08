@@ -198,31 +198,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)))
 			->orderBy('m.uid', 'ASC');
 
-		if ($search !== '') {
-			$query->leftJoin('m', 'accounts_data', 'dn',
-				$query->expr()->andX(
-					$query->expr()->eq('dn.uid', 'm.uid'),
-					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
-				)
-			);
-			$query->leftJoin('m', 'accounts_data', 'em',
-				$query->expr()->andX(
-					$query->expr()->eq('em.uid', 'm.uid'),
-					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
-				)
-			);
-
-			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$query->andWhere(
-				$query->expr()->orX(
-					$query->expr()->ilike('m.uid', $searchParam1),
-					$query->expr()->ilike('dn.value', $searchParam2),
-					$query->expr()->ilike('em.value', $searchParam3)
-				)
-			);
-		}
+		$this->setupSearchQuery($search, $query);
 
 		if ($limit !== -1) {
 			$query->setMaxResults($limit);
@@ -316,31 +292,7 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 			->from(self::TABLE_MEMBERS, 'm')
 			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)));
 
-		if ($search !== '') {
-			$query->leftJoin('m', 'accounts_data', 'dn',
-				$query->expr()->andX(
-					$query->expr()->eq('dn.uid', 'm.uid'),
-					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
-				)
-			);
-			$query->leftJoin('m', 'accounts_data', 'em',
-				$query->expr()->andX(
-					$query->expr()->eq('em.uid', 'm.uid'),
-					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
-				)
-			);
-
-			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$query->andWhere(
-				$query->expr()->orX(
-					$query->expr()->ilike('m.uid', $searchParam1),
-					$query->expr()->ilike('dn.value', $searchParam2),
-					$query->expr()->ilike('em.value', $searchParam3)
-				)
-			);
-		}
+		$this->setupSearchQuery($search, $query);
 
 		$result = $query->executeQuery();
 		$count = $result->fetchOne();
@@ -458,5 +410,33 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 		}
 
 		return $details;
+	}
+
+	public function setupSearchQuery(string $search, IQueryBuilder $query): void {
+		if ($search !== '') {
+			$query->leftJoin('m', 'accounts_data', 'dn',
+				$query->expr()->andX(
+					$query->expr()->eq('dn.uid', 'm.uid'),
+					$query->expr()->eq('dn.name', $query->createNamedParameter('displayname'))
+				)
+			);
+			$query->leftJoin('m', 'accounts_data', 'em',
+				$query->expr()->andX(
+					$query->expr()->eq('em.uid', 'm.uid'),
+					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
+				)
+			);
+
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('m.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			);
+		}
 	}
 }
