@@ -5,6 +5,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.1.4
+
+### Performance
+
+* perf: Cache display name in getUserGroups by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1159
+* feat: Implement ILimitAwareCountUsersBackend interface by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1158
+
+### Dependencies
+
+* build(deps-dev): bump guzzlehttp/guzzle from 7.10.6 to 7.12.3 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1163
+* chore: Remove @nextcloud/cypress by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1164
+* build(deps): Remove uuid and dockerode by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1166
+* build(deps): bump qs from 6.14.2 to 6.15.3 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1165
+* chore(deps): Remove babel by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1167
+
 ## 8.1.3
 
 ### Fixed
