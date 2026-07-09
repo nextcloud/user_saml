@@ -118,7 +118,7 @@ class GroupMigration {
 			if ($affected === 0) {
 				throw new \RuntimeException('Could not delete group from local backend');
 			}
-			if (!$this->ownGroupBackend->createGroup($gid)) {
+			if ($this->ownGroupBackend->createGroup($gid) === null) {
 				throw new \RuntimeException('Could not create group in SAML backend');
 			}
 

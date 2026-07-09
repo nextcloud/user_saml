@@ -278,7 +278,7 @@ class GroupManagerTest extends TestCase {
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupB', 'groupB')
-			->willReturn(true);
+			->willReturn('SAML_groupB');
 		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
 			->willReturnCallback(function (Event $event) use ($groupB): void {
@@ -332,7 +332,7 @@ class GroupManagerTest extends TestCase {
 			->expects($this->once())
 			->method('createGroup')
 			->with('SAML_groupC', 'groupC')
-			->willReturn(true);
+			->willReturn('SAML_groupC');
 		$this->eventDispatcher->expects($this->exactly(2))
 			->method('dispatchTyped')
 			->willReturnCallback(function (Event $event) use ($groupC): void {
