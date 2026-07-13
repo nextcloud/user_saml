@@ -14,6 +14,7 @@ use OC\User\DisabledUserException;
 use OC\User\LoginException;
 use OC_User;
 use OCA\DAV\Events\SabrePluginAddEvent;
+use OCA\User_SAML\AlternativeLogin\AlternativeLoginProvider;
 use OCA\User_SAML\DavPlugin;
 use OCA\User_SAML\GroupBackend;
 use OCA\User_SAML\Listener\CookieLoginEventListener;
@@ -68,6 +69,14 @@ class Application extends App implements IBootstrap {
 			$c->get(SAMLSettings::class),
 			$c->get(SessionService::class),
 		));
+
+		if (method_exists($context, 'registerAlternativeLoginProvider')) {
+			/**
+			 * @psalm-suppress UndefinedInterfaceMethod
+			 * @psalm-suppress MissingDependency
+			 */
+			$context->registerAlternativeLoginProvider(AlternativeLoginProvider::class);
+		}
 	}
 
 	#[\Override]

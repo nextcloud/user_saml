@@ -12,6 +12,7 @@ use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\ProviderListingService;
 use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -51,6 +52,7 @@ class SAMLControllerTest extends TestCase {
 	private SAMLController $samlController;
 	private ITrustedDomainHelper|MockObject $trustedDomainController;
 	private SessionService|MockObject $sessionService;
+	private ProviderListingService|MockObject $providerListingService;
 
 	#[Override]
 	protected function setUp(): void {
@@ -71,6 +73,7 @@ class SAMLControllerTest extends TestCase {
 		$this->crypto = $this->createMock(ICrypto::class);
 		$this->trustedDomainController = $this->createMock(ITrustedDomainHelper::class);
 		$this->sessionService = $this->createMock(SessionService::class);
+		$this->providerListingService = $this->createMock(ProviderListingService::class);
 
 		$this->l->expects($this->any())->method('t')->willReturnCallback(
 			static fn (string $param): string => $param
@@ -95,7 +98,8 @@ class SAMLControllerTest extends TestCase {
 			$this->userData,
 			$this->crypto,
 			$this->trustedDomainController,
-			$this->sessionService
+			$this->sessionService,
+			$this->providerListingService,
 		);
 	}
 
@@ -329,18 +333,6 @@ class SAMLControllerTest extends TestCase {
 		yield ['messageSend' => '', 'messageExpected' => 'Unknown error, please check the log file for more details.'];
 		yield ['messageSend' => 'userDisabled', 'messageExpected' => 'This user account is disabled, please contact your administrator.'];
 		yield ['messageSend' => 'authFailed', 'messageExpected' => 'Authentication failed.'];
-	}
-
-	#[DataProvider('dataTestGetSSODisplayName')]
-	public function testGetSSODisplayName(string $configuredDisplayName, string $expected): void {
-		$result = $this->invokePrivate($this->samlController, 'getSSODisplayName', [$configuredDisplayName]);
-
-		$this->assertSame($expected, $result);
-	}
-
-	public static function dataTestGetSSODisplayName(): \Generator {
-		yield ['My identity provider', 'My identity provider'];
-		yield ['', 'SSO & SAML log in'];
 	}
 
 	public static function userFilterDataProvider(): array {

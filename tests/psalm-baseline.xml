@@ -4,6 +4,11 @@
  - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="lib/AlternativeLogin/AlternativeLoginProvider.php">
+    <UndefinedClass>
+      <code><![CDATA[IAlternativeLoginProvider]]></code>
+    </UndefinedClass>
+  </file>
   <file src="lib/UserBackend.php">
     <DeprecatedInterface>
       <code><![CDATA[UserBackend]]></code>
