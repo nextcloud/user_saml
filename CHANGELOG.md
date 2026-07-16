@@ -5,6 +5,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.2.0
+
+### Added
+
+* feat: Implement IAlternativeLoginProvider to provide login button in the normal nextcloud login form by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1176
+* feat(login): Add option to login with normal NC login form  by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1180
+
+### Performance
+
+* perf: Implement IBatchMethodsBackend by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1161
+
+### Other
+
+* feat: Add ICreateNamedGroupBackend by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1172
+
+### Dependencies
+* build(deps-dev): bump guzzlehttp/guzzle from 7.12.3 to 7.13.1 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1175
+* build(deps-dev): bump guzzlehttp/guzzle from 7.13.1 to 7.13.2 in /tests/integration by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1179
+
 ## 8.1.4
 
 ### Performance
