@@ -221,17 +221,19 @@ class Application extends App implements IBootstrap {
 						$originalUrl = $urlGenerator->getAbsoluteURL($params['redirect_url']);
 					}
 
-					$csrfToken = $csrfTokenManager->getToken();
-					$targetUrl = $urlGenerator->linkToRouteAbsolute(
-						'user_saml.SAML.login',
-						[
-							'requesttoken' => $csrfToken->getEncryptedValue(),
-							'originalUrl' => $originalUrl,
-							'idp' => array_keys($configuredIdps)[0] ?? '',
-						]
-					);
-					header('Location: ' . $targetUrl);
-					exit();
+					if (!$appConfig->getAppValueBool('general-nextcloud_login_form')) {
+						$csrfToken = $csrfTokenManager->getToken();
+						$targetUrl = $urlGenerator->linkToRouteAbsolute(
+							'user_saml.SAML.login',
+							[
+								'requesttoken' => $csrfToken->getEncryptedValue(),
+								'originalUrl' => $originalUrl,
+								'idp' => array_keys($configuredIdps)[0] ?? '',
+							]
+						);
+						header('Location: ' . $targetUrl);
+						exit();
+					}
 				}
 			});
 		} catch (Throwable $e) {
