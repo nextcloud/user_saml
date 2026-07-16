@@ -12,12 +12,12 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
-use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Attributes\OnlyUnauthenticatedUsers;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
 use OCA\User_SAML\SAMLSettings;
+use OCA\User_SAML\Service\ProviderListingService;
 use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -42,8 +42,6 @@ use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 class SAMLController extends Controller {
@@ -66,6 +64,7 @@ class SAMLController extends Controller {
 		private ICrypto $crypto,
 		private ITrustedDomainHelper $trustedDomainHelper,
 		private SessionService $sessionService,
+		private ProviderListingService $providerListingService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -591,66 +590,10 @@ class SAMLController extends Controller {
 			];
 		}
 
-		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
+		$attributes['loginUrls']['ssoLogin'] = $this->providerListingService->getIdps($redirectUrl);
 		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4;
 
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
-	}
-
-	/**
-	 * get the IdPs showed at the login page
-	 */
-	private function getIdps(string $redirectUrl): array {
-		$result = [];
-		$idps = $this->samlSettings->getListOfIdps();
-		foreach ($idps as $idpId => $displayName) {
-			$result[] = [
-				'url' => $this->getSSOUrl($redirectUrl, (string)$idpId),
-				'display-name' => $this->getSSODisplayName($displayName),
-			];
-		}
-
-		return $result;
-	}
-
-	/**
-	 * @throws ContainerExceptionInterface
-	 * @throws NotFoundExceptionInterface
-	 * @throws \OCP\DB\Exception
-	 */
-	private function getSSOUrl(string $redirectUrl, string $idp): string {
-		$originalUrl = '';
-		if (!empty($redirectUrl)) {
-			$originalUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
-		}
-
-		/** @var CsrfTokenManager $csrfTokenManager */
-		$csrfTokenManager = Server::get(CsrfTokenManager::class);
-		$csrfToken = $csrfTokenManager->getToken();
-
-		$settings = $this->samlSettings->get((int)$idp);
-		$method = $settings['general-is_saml_request_using_post'] ?? 'get';
-
-		return $this->urlGenerator->linkToRouteAbsolute(
-			'user_saml.SAML.login',
-			[
-				'requesttoken' => $csrfToken->getEncryptedValue(),
-				'originalUrl' => $originalUrl,
-				'idp' => $idp,
-				'method' => $method,
-			]
-		);
-	}
-
-	/**
-	 * Return the display name of the SSO identity provider.
-	 */
-	protected function getSSODisplayName(?string $displayName): string {
-		if ($displayName === null || $displayName === '') {
-			$displayName = $this->l->t('SSO & SAML log in');
-		}
-
-		return $displayName;
 	}
 
 	/**
