@@ -10,7 +10,6 @@ namespace OCA\User_SAML\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
-use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -18,23 +17,11 @@ use OCP\IDBConnection;
  * @template-extends QBMapper<ConfigurationsEntity>
  */
 class ConfigurationsMapper extends QBMapper {
-	public function __construct(
-		IDBConnection $db,
-		private readonly IAppConfig $appConfig,
-	) {
+	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'user_saml_configurations', ConfigurationsEntity::class);
 	}
 
-	/**
-	 * @throws \InvalidArgumentException
-	 */
 	public function set(int $id, array $configuration): void {
-		if (
-			$this->appConfig->getAppValueString('type') === 'environment-variable'
-			&& isset($configuration['general-uid_mapping'])
-			&& str_starts_with($configuration['general-uid_mapping'], 'HTTP_')) {
-			throw new \InvalidArgumentException('Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables');
-		}
 		$entity = new ConfigurationsEntity();
 		$entity->setId($id);
 		$entity->importConfiguration($configuration);
