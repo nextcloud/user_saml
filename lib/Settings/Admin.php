@@ -117,7 +117,18 @@ class Admin implements IDelegatedSettings {
 				'value' => $this->appConfig->getAppValueBool('general-allow_multiple_user_back_ends'),
 				'provider_type' => '',
 			],
+			'nextcloud_login_form' => [
+				'text' => $this->l10n->t('Use normal Nextcloud login form'),
+				'type' => 'checkbox',
+				'global' => true,
+				'required' => false,
+				'value' => $this->appConfig->getAppValueBool('general-nextcloud_login_form'),
+				'provider_type' => 'saml',
+			],
 		];
+		if (version_compare($this->config->getSystemValueString('version', '0.0.0'), '34.0.0', '<')) {
+			unset($generalSettings['nextcloud_login_form']);
+		}
 
 		$attributeMappingSettings = [
 			'displayName_mapping' => [

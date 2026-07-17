@@ -136,6 +136,14 @@ class AdminTest extends \Test\TestCase {
 				'value' => 0,
 				'provider_type' => '',
 			],
+			'nextcloud_login_form' => [
+				'text' => $this->l10n->t('Use normal Nextcloud login form'),
+				'type' => 'checkbox',
+				'global' => true,
+				'value' => false,
+				'required' => false,
+				'provider_type' => 'saml',
+			],
 		];
 		$attributeMappingSettings = [
 			'displayName_mapping' => [
@@ -264,7 +272,7 @@ class AdminTest extends \Test\TestCase {
 			->willReturnArgument(1);
 
 		$this->appConfig
-			->expects($this->exactly(2))
+			->expects($this->exactly(3))
 			->method('getAppValueBool')
 			->with($this->anything(), $this->anything())
 			->willReturnArgument(1);
@@ -290,13 +298,14 @@ class AdminTest extends \Test\TestCase {
 			->willReturn('saml');
 
 		$this->appConfig
-			->expects($this->exactly(2))
+			->expects($this->exactly(3))
 			->method('getAppValueBool')
 			->willReturnCallback(function (string $key, bool $default): bool {
 				static $i = 0;
 				match (++$i) {
 					1 => $this->assertEquals($key, 'general-require_provisioned_account'),
 					2 => $this->assertEquals($key, 'general-allow_multiple_user_back_ends'),
+					3 => $this->assertEquals($key, 'general-nextcloud_login_form'),
 					default => $this->fail(),
 				};
 				return false;
