@@ -22,6 +22,9 @@ class ConfigurationsMapper extends QBMapper {
 	}
 
 	public function set(int $id, array $configuration): void {
+		// note: We don't restrict environment var starting with HTTP_ as while
+		// HTTP headers are saved in these environment variables, so does every environment
+		// variable do when using a reverse proxy
 		$entity = new ConfigurationsEntity();
 		$entity->setId($id);
 		$entity->importConfiguration($configuration);
