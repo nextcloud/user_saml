@@ -20,8 +20,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			:label="attribute.text"
 			:modelValue="modelValue[key] ?? ''"
 			:required="attribute.required"
-			:error="isError(key)"
-			:helperText="isError(key) ? t('user_saml', 'Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables') : undefined"
+			:helperText="hasWarning(key) ? t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables') : undefined"
 			@update:modelValue="(val: string|number) => update(key, val + '')" />
 	</template>
 </template>
@@ -51,9 +50,6 @@ const emit = defineEmits<{
  * @param value The new value
  */
 function onChange(key: string, value: string): void {
-    if (isError(key)) {
-        return
-    }
 	emit('fieldChange', key, value)
 }
 
@@ -84,7 +80,7 @@ function update(key: string, value: string): void {
 	}
 }
 
-function isError(key: string): boolean {
+function hasWarning(key: string): boolean {
 	return key === 'uid_mapping' && props.type === 'env' && (props.modelValue[key] ?? '').startsWith('HTTP_')
 }
 </script>
