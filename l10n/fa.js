@@ -74,7 +74,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "تنظیمات ارائه‌دهنده متغیر محیطی",
     "Reset settings" : "بازنشانی تنظیمات",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "این ویژگی ممکن است با همه ارائه‌دهندگان هویت کار نکند. فقط در صورتی استفاده کنید که IdP شما به طور خاص برای درخواست‌های SAML به POST binding نیاز دارد.",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "متغیرهای محیطی که با HTTP_ شروع می‌شوند مجاز نیستند، زیرا هدرهای HTTP در این متغیرهای محیطی ذخیره می‌شوند",
     "Configure: {name}" : "پیکربندی: {name}",
     "Cancel changes" : "لغو تغییرات",
     "Download metadata XML" : "دانلود XML فراداده",

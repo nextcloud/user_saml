@@ -75,7 +75,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "Aplinkos kintamųjų teikėjo nustatymai",
     "Reset settings" : "Atstatyti nustatymus",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Ši funkcija gali neveikti su visais tapatybės teikėjais. Naudokite tik tuo atveju, jei jūsų tapatybės teikėjas konkrečiai reikalauja POST susiejimo SAML užklausoms.",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Aplinkos kintamieji, prasidedantys HTTP_, neleidžiami, nes HTTP antraštės išsaugomos šiuose aplinkos kintamuosiuose.",
     "Configure: {name}" : "Konfigūruoti: {name}",
     "Cancel changes" : "Atšaukti pakeitimus",
     "Download metadata XML" : "Atsisiųsti metaduomenų XML",

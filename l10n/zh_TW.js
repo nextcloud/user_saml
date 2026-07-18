@@ -75,7 +75,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "環境變數提供者設定",
     "Reset settings" : "重設設定",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "此功能可能無法適用於所有身分提供者。只有當您的 IdP 特別要求 SAML 請求使用 POST 綁紮時，才能使用此功能。",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "不允許使用以 HTTP_ 開頭的環境變數，因為 HTTP 標頭會儲存在這些環境變數中",
     "Configure: {name}" : "設定：{name}",
     "Cancel changes" : "取消變更",
     "Download metadata XML" : "下載中介資料 XML",

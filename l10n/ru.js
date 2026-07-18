@@ -75,7 +75,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "Настройки поставщика переменных среды",
     "Reset settings" : "Сбросить настройки",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Эта функция может работать не со всеми поставщиками удостоверений. Используйте только в том случае, если ваш поставщик удостоверений требует привязки POST для запросов SAML.",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Переменные среды, начинающиеся с HTTP_, не допускаются, поскольку заголовки HTTP сохраняются в этих переменных среды.",
     "Configure: {name}" : "Конфигурировать: {name}",
     "Cancel changes" : "Отменить изменения",
     "Download metadata XML" : "Скачать метаданные XML",

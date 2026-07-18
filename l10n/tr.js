@@ -75,7 +75,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "Ortam değişkeni hizmet sağlayıcı ayarları",
     "Reset settings" : "Ayarları sıfırla",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Bu özellik tüm kimlik hizmeti sağlayıcılarıyla çalışmayabilir. Yalnızca kimlik hizmeti sağlayıcınızın SAML istekleri için özellikle POST kullanması gerekiyorsa kullanın.",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "HTTP üst bilgileri bu ortam değişkenlerine kaydedildiği için HTTP_ ile başlayan ortam değişkenlerine izin verilmez",
     "Configure: {name}" : "Yapılandır: {name}",
     "Cancel changes" : "Değişiklikleri iptal et",
     "Download metadata XML" : "Üst veri XML dosyasını indir",

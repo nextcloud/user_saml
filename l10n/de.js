@@ -75,7 +75,6 @@ OC.L10N.register(
     "Environment variable provider settings" : "Einstellungen des Umgebungsvariablenanbieters",
     "Reset settings" : "Einstellungen zurücksetzen",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Diese Funktion ist möglicherweise nicht mit allen Identitätsanbietern kompatibel. Verwenden Sie sie nur, wenn Ihr Identitätsanbieter eine POST-Bindung für SAML-Anfragen erfordert.",
-    "Environment var starting with HTTP_ are not allowed as HTTP headers are saved in these environment variables" : "Umgebungsvariablen, die mit HTTP_ beginnen, sind nicht zulässig, da HTTP-Header in diesen Umgebungsvariablen gespeichert werden",
     "Configure: {name}" : "Konfiguriere: {name}",
     "Cancel changes" : "Änderungen abbrechen",
     "Download metadata XML" : "Lade Metadaten-XML herunter",
