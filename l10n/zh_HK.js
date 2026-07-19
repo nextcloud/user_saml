@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "This user account is disabled, please contact your administrator." : "此用戶賬號已被停用，請聯繫管理員。",
     "Authentication failed." : "驗證失敗。",
+    "SAML authentication is not configured. Please ask your administrator to complete the SAML setup in the admin panel." : "尚未設定 SAML 驗證。請聯絡您的系統管理員，請他在管理後台完成 SAML 的設定。",
     "Unknown error, please check the log file for more details." : "錯誤不詳，請在日誌檔案檢查更多詳情。",
     "Direct log in" : "直接登入",
     "This page should not be visited directly." : "不應直接訪問此頁面。",
@@ -30,6 +31,7 @@ OC.L10N.register(
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "可選的身分提供者的顯示名稱（默認：\"SSO及SAML登入\"）",
     "Use POST method for SAML request (default: GET)" : "對 SAML 請求使用 POST 方法（預設：GET）",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "允許使用多個用戶後端（例如 LDAP）",
+    "Use normal Nextcloud login form" : "使用一般 Nextcloud 登入表格",
     "Attribute to map the displayname to." : "映射到顯示名稱的屬性。",
     "Attribute to map the email address to." : "將電子郵件地址映射到的屬性。",
     "Attribute to map the quota to." : "要將配額映射到的屬性。",
@@ -74,6 +76,7 @@ OC.L10N.register(
     "Environment variable provider settings" : "環境變數提供者設定",
     "Reset settings" : "重置設置",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "此功能可能無法適用於所有身分提供者。只有當您的 IdP 特別要求 SAML 請求使用 POST 綁紮時，才能使用此功能。",
+    "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "以 HTTP_ 開頭的環境變數具有安全風險，因為 HTTP 標頭會儲存在這些環境變數中。",
     "Configure: {name}" : "配置：{name}",
     "Cancel changes" : "取消更新",
     "Download metadata XML" : "下載元數據 XML",
