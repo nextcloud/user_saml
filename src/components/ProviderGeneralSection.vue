@@ -3,26 +3,28 @@ SPDX-FileCopyrightText: 2026 Nextcloud GmbH and Nextcloud contributors
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<template v-for="(attribute, key) in generalSettings" :key="key">
-		<template v-if="attribute.type === 'checkbox' && !attribute.global && attribute.provider_type === '' || attribute.provider_type === type">
-			<NcCheckboxRadioSwitch
-				:modelValue="modelValue[key] === '1'"
-				@update:modelValue="(val: boolean) => update(key, val ? '1' : '0')">
-				{{ attribute.text }}
-			</NcCheckboxRadioSwitch>
-			<NcNoteCard v-if="key === 'is_saml_request_using_post'" type="warning">
-				{{ t('user_saml', 'This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests.') }}
-			</NcNoteCard>
+	<NcFormBox>
+		<template v-for="(attribute, key) in generalSettings" :key="key">
+			<template v-if="attribute.type === 'checkbox' && !attribute.global && attribute.provider_type === '' || attribute.provider_type === type">
+				<NcFormBoxSwitch
+					:modelValue="modelValue[key] === '1'"
+					@update:modelValue="(val: boolean) => update(key, val ? '1' : '0')">
+					{{ attribute.text }}
+				</NcFormBoxSwitch>
+				<NcNoteCard v-if="key === 'is_saml_request_using_post'" type="warning" class="no-margin">
+					{{ t('user_saml', 'This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests.') }}
+				</NcNoteCard>
+			</template>
+			<NcInputField
+				v-else-if="attribute.type === 'line' && !attribute.global"
+				:id="'user-saml-general-' + key"
+				:label="attribute.text"
+				:modelValue="modelValue[key] ?? ''"
+				:required="attribute.required"
+				:helperText="hasWarning(key) ? t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables') : undefined"
+				@update:modelValue="(val: string|number) => update(key, val + '')" />
 		</template>
-		<NcInputField
-			v-else-if="attribute.type === 'line' && !attribute.global"
-			:id="'user-saml-general-' + key"
-			:label="attribute.text"
-			:modelValue="modelValue[key] ?? ''"
-			:required="attribute.required"
-			:helperText="hasWarning(key) ? t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables') : undefined"
-			@update:modelValue="(val: string|number) => update(key, val + '')" />
-	</template>
+	</NcFormBox>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +32,8 @@ import type { SettingsMap } from '../types.ts'
 
 import { translate as t } from '@nextcloud/l10n'
 import { ref } from 'vue'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 
@@ -84,3 +87,9 @@ function hasWarning(key: string): boolean {
 	return key === 'uid_mapping' && props.type === 'env' && (props.modelValue[key] ?? '').startsWith('HTTP_')
 }
 </script>
+
+<style scopped>
+.no-margin {
+	margin-block: 0 !important;
+}
+</style>
