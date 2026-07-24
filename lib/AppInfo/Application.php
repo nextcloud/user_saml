@@ -143,6 +143,10 @@ class Application extends App implements IBootstrap {
 					}
 				}
 
+				if ($appConfig->getAppValueBool('general-nextcloud_login_form')) {
+					return;
+				}
+
 				$redirectSituation = false;
 
 				$user = $userSession->getUser();
@@ -221,19 +225,17 @@ class Application extends App implements IBootstrap {
 						$originalUrl = $urlGenerator->getAbsoluteURL($params['redirect_url']);
 					}
 
-					if (!$appConfig->getAppValueBool('general-nextcloud_login_form')) {
-						$csrfToken = $csrfTokenManager->getToken();
-						$targetUrl = $urlGenerator->linkToRouteAbsolute(
-							'user_saml.SAML.login',
-							[
-								'requesttoken' => $csrfToken->getEncryptedValue(),
-								'originalUrl' => $originalUrl,
-								'idp' => array_keys($configuredIdps)[0] ?? '',
-							]
-						);
-						header('Location: ' . $targetUrl);
-						exit();
-					}
+					$csrfToken = $csrfTokenManager->getToken();
+					$targetUrl = $urlGenerator->linkToRouteAbsolute(
+						'user_saml.SAML.login',
+						[
+							'requesttoken' => $csrfToken->getEncryptedValue(),
+							'originalUrl' => $originalUrl,
+							'idp' => array_keys($configuredIdps)[0] ?? '',
+						]
+					);
+					header('Location: ' . $targetUrl);
+					exit();
 				}
 			});
 		} catch (Throwable $e) {
