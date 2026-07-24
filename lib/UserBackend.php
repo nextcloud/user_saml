@@ -9,15 +9,20 @@ declare(strict_types=1);
 
 namespace OCA\User_SAML;
 
+use OC\Files\SetupManager;
 use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\Model\SessionData;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\Authentication\IApacheBackend;
+use OCP\Config\IUserConfig;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
+use OCP\IAvatarManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IImage;
+use OCP\Image;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -30,6 +35,7 @@ use OCP\User\Backend\ICustomLogout;
 use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\ILimitAwareCountUsersBackend;
+use OCP\User\Backend\IProvideAvatarBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
@@ -38,12 +44,23 @@ use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
+class UserBackend extends ABackend implements
+	IApacheBackend,
+	IUserBackend,
+	IGetDisplayNameBackend,
+	ILimitAwareCountUsersBackend,
+	IGetHomeBackend,
+	ICustomLogout,
+	ISetDisplayNameBackend,
+	IProvideEnabledStateBackend,
+	IProvideAvatarBackend {
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
+	/** @psalm-suppress UndefinedClass */
 	public function __construct(
 		private readonly IConfig $config,
+		private readonly IUserConfig $userConfig,
 		private readonly IAppConfig $appConfig,
 		private readonly IURLGenerator $urlGenerator,
 		private readonly ISession $session,
@@ -55,7 +72,18 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		private readonly UserData $userData,
 		private readonly IEventDispatcher $eventDispatcher,
 		private readonly string $serverRoot,
+		private readonly IAvatarManager $avatarManager,
+		private readonly SetupManager $setupManager, // TODO: replace with ISetupManager once we depends on NC34
 	) {
+	}
+
+	#[Override]
+	public function canChangeAvatar($uid): bool {
+		try {
+			return empty(trim($this->getAttributeKeys('saml-attribute-mapping-avatar_mapping')[0]));
+		} catch (\InvalidArgumentException $e) {
+			return true;
+		}
 	}
 
 	/**
@@ -523,6 +551,14 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			$newGroups = null;
 		}
 
+		try {
+			$newAvatar = $this->getAttributeValue('saml-attribute-mapping-avatar_mapping', $attributes);
+			$this->logger->debug('Avatar attribute content: {avatar}', ['avatar' => $newAvatar]);
+		} catch (\InvalidArgumentException $e) {
+			$this->logger->debug('Failed to fetch avatar attribute: {exception}', ['exception' => $e->getMessage()]);
+			$newAvatar = null;
+		}
+
 		if ($user !== null) {
 			$this->logger->debug('Updating attributes for existing user', ['app' => 'user_saml', 'user' => $user->getUID()]);
 			$currentEmail = (string)$user->getSystemEMailAddress();
@@ -570,7 +606,64 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 				'user' => $user->getUID(),
 				'groups' => $newGroups,
 			]);
+
+			if ($newAvatar !== null) {
+				/**
+				 * @psalm-suppress MissingDependency
+				 * @var IImage $image
+				 */
+				$image = new Image();
+				$fileData = file_get_contents($newAvatar);
+				if ($fileData === false) {
+					$this->logger->warning('Unable to read content from avatar');
+					return;
+				}
+
+				$image->loadFromData($fileData);
+				$data = $image->data();
+				if ($data === null) {
+					$this->logger->warning('Image data is invalid');
+					return;
+				}
+
+				$checksum = md5($data);
+				if ($checksum !== $this->userConfig->getValueString($uid, 'user_saml', 'lastAvatarChecksum')) {
+					// use the checksum before modifications
+					if ($this->setAvatarFromSamlProvider($user, $image)) {
+						// save checksum only after successful setting
+						$this->userConfig->setValueString($uid, 'user_saml', 'lastAvatarChecksum', $checksum);
+					}
+				}
+			}
 		}
+	}
+
+	private function setAvatarFromSamlProvider(IUser $user, IImage $image): bool {
+		if (!$image->valid()) {
+			$this->logger->debug('avatar image data from LDAP invalid for ' . $user->getUID());
+			return false;
+		}
+
+		//make sure it is a square and not bigger than 128x128
+		$size = min([$image->width(), $image->height(), 128]);
+		if (!$image->centerCrop($size)) {
+			$this->logger->debug('croping image for avatar failed for ' . $user->getUID());
+			return false;
+		}
+
+		/** @psalm-suppress UndefinedClass */
+		$this->setupManager->setupForUser($user);
+
+		try {
+			$avatar = $this->avatarManager->getAvatar($user->getUID());
+			$avatar->set($image);
+			return true;
+		} catch (\Exception $e) {
+			$this->logger->info('Could not set avatar for ' . $user->getUID(), [
+				'exception' => $e,
+			]);
+		}
+		return false;
 	}
 
 	#[\Override]

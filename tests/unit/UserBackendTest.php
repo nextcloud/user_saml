@@ -9,12 +9,15 @@ declare(strict_types=1);
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OC\Files\SetupManager;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
 use OCP\AppFramework\Services\IAppConfig;
+use OCP\Config\IUserConfig;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IAvatarManager;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\ISession;
@@ -45,6 +48,10 @@ class UserBackendTest extends TestCase {
 	private SAMLSettings&MockObject $SAMLSettings;
 	private LoggerInterface&MockObject $logger;
 	private IEventDispatcher&MockObject $eventDispatcher;
+	private IAvatarManager&MockObject $avatarManager;
+	private IUserConfig&MockObject $userConfig;
+	/** @psalm-suppress UndefinedClass */
+	private SetupManager&MockObject $setupManager;
 
 	#[Override]
 	protected function setUp(): void {
@@ -61,6 +68,13 @@ class UserBackendTest extends TestCase {
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->userData = $this->createMock(UserData::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->avatarManager = $this->createMock(IAvatarManager::class);
+		$this->userConfig = $this->createMock(IUserConfig::class);
+		/**
+		 * @psalm-suppress UndefinedClass
+		 * @psalm-suppress PropertyTypeCoercion
+		 */
+		$this->setupManager = $this->createMock(SetupManager::class);
 	}
 
 	/**
@@ -70,6 +84,7 @@ class UserBackendTest extends TestCase {
 		return $this->getMockBuilder(UserBackend::class)
 			->setConstructorArgs([
 				$this->config,
+				$this->userConfig,
 				$this->appConfig,
 				$this->urlGenerator,
 				$this->session,
@@ -81,6 +96,8 @@ class UserBackendTest extends TestCase {
 				$this->userData,
 				$this->eventDispatcher,
 				'serverRoot',
+				$this->avatarManager,
+				$this->setupManager,
 			])
 			->onlyMethods($mockedFunctions)
 			->getMock();
@@ -89,6 +106,7 @@ class UserBackendTest extends TestCase {
 	public function getRealUserBackend(): UserBackend {
 		return new UserBackend(
 			$this->config,
+			$this->userConfig,
 			$this->appConfig,
 			$this->urlGenerator,
 			$this->session,
@@ -100,6 +118,8 @@ class UserBackendTest extends TestCase {
 			$this->userData,
 			$this->eventDispatcher,
 			'serverRoot',
+			$this->avatarManager,
+			$this->setupManager,
 		);
 	}
 
