@@ -507,7 +507,11 @@ class GroupBackend extends ABackend implements
 		$users = [];
 		$userManager = Server::get(IUserManager::class);
 		while ($row = $result->fetch()) {
-			$users[$row['uid']] = new LazyUser($row['uid'], $userManager, $row['displayname'] ?? null);
+			if (method_exists($userManager, 'createLazyUser')) {
+				$users[$row['uid']] = $userManager->createLazyUser($row['uid'], $row['displayname'] ?? null);
+			} else {
+				$users[$row['uid']] = new LazyUser($row['uid'], $userManager, $row['displayname'] ?? null);
+			}
 		}
 		$result->closeCursor();
 
