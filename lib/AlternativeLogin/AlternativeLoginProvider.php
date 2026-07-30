@@ -36,8 +36,7 @@ class AlternativeLoginProvider implements IAlternativeLoginProvider {
 		}
 
 		$redirectUrl = $this->request->getParam('redirect_url') ?? '';
-		$absoluteRedirectUrl = $this->urlGenerator->getAbsoluteURL($redirectUrl);
 		return array_map(fn (array $idp): AlternativeLogin
-			=> new AlternativeLogin($idp['display-name'], $idp['url']), $this->providerListingService->getIdps($absoluteRedirectUrl));
+			=> new AlternativeLogin($idp['display-name'], $idp['url']), $this->providerListingService->getIdps($redirectUrl));
 	}
 }
