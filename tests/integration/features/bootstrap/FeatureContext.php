@@ -460,7 +460,7 @@ class FeatureContext implements Context {
 					'admin',
 					'admin'
 				],
-				'cookies' => '',
+				'cookies' => false,
 			]
 		);
 
