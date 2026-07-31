@@ -129,40 +129,46 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				:level="3"
 				:description="t('user_saml', 'For increased security we recommend enabling the following settings if supported by your environment.')">
 				<h4>{{ t('user_saml', 'Signatures and encryption offered') }}</h4>
-				<NcCheckboxRadioSwitch
-					v-for="(text, key) in securityOffer"
-					:key="key"
-					:modelValue="draft.security?.[key] === '1'"
-					@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-					{{ text }}
-				</NcCheckboxRadioSwitch>
-
-				<h4>{{ t('user_saml', 'Signatures and encryption required') }}</h4>
-				<NcCheckboxRadioSwitch
-					v-for="(text, key) in securityRequired"
-					:key="key"
-					:modelValue="draft.security?.[key] === '1'"
-					@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-					{{ text }}
-				</NcCheckboxRadioSwitch>
-
-				<h4>{{ t('user_saml', 'General') }}</h4>
-				<template v-for="(attribute, key) in securityGeneral" :key="key">
-					<NcInputField
-						v-if="typeof attribute === 'object' && attribute.type === 'line'"
-						:id="'user-saml-' + key"
-						:label="attribute.text"
-						:modelValue="draft.security?.[key] ?? ''"
-						:required="attribute.required"
-						placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
-						@update:modelValue="(val) => setDraft('security', key, val + '')" />
-					<NcCheckboxRadioSwitch
-						v-else
+				<NcFormBox>
+					<NcFormBoxSwitch
+						v-for="(text, key) in securityOffer"
+						:key="key"
 						:modelValue="draft.security?.[key] === '1'"
 						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-						{{ attribute }}
-					</NcCheckboxRadioSwitch>
-				</template>
+						{{ text }}
+					</NcFormBoxSwitch>
+				</NcFormBox>
+
+				<h4>{{ t('user_saml', 'Signatures and encryption required') }}</h4>
+				<NcFormBox>
+					<NcFormBoxSwitch
+						v-for="(text, key) in securityRequired"
+						:key="key"
+						:modelValue="draft.security?.[key] === '1'"
+						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+						{{ text }}
+					</NcFormBoxSwitch>
+				</NcFormBox>
+
+				<h4>{{ t('user_saml', 'General') }}</h4>
+				<NcFormBox>
+					<template v-for="(attribute, key) in securityGeneral" :key="key">
+						<NcInputField
+							v-if="typeof attribute === 'object' && attribute.type === 'line'"
+							:id="'user-saml-' + key"
+							:label="attribute.text"
+							:modelValue="draft.security?.[key] ?? ''"
+							:required="attribute.required"
+							placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+							@update:modelValue="(val) => setDraft('security', key, val + '')" />
+						<NcFormBoxSwitch
+							v-else
+							:modelValue="draft.security?.[key] === '1'"
+							@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+							{{ attribute }}
+						</NcFormBoxSwitch>
+					</template>
+				</NcFormBox>
 			</NcSettingsSection>
 
 			<!-- User Filtering -->
@@ -214,8 +220,9 @@ import { translate as t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { computed, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
