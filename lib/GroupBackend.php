@@ -7,6 +7,7 @@
 
 namespace OCA\User_SAML;
 
+use OC\User\LazyUser;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Group\Backend\ABackend;
@@ -19,12 +20,27 @@ use OCP\Group\Backend\IGetDisplayNameBackend;
 use OCP\Group\Backend\IGroupDetailsBackend;
 use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
+use OCP\Group\Backend\ISearchableGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
+use OCP\IUserManager;
+use OCP\Server;
 use PDO;
 use Psr\Log\LoggerInterface;
 
-class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBackend, ICreateNamedGroupBackend, IDeleteGroupBackend, IGetDisplayNameBackend, IRemoveFromGroupBackend, ISetDisplayNameBackend, INamedBackend, IBatchMethodsBackend, IGroupDetailsBackend {
+class GroupBackend extends ABackend implements
+	IAddToGroupBackend,
+	ICountUsersBackend,
+	ICreateNamedGroupBackend,
+	IDeleteGroupBackend,
+	IGetDisplayNameBackend,
+	IRemoveFromGroupBackend,
+	ISetDisplayNameBackend,
+	INamedBackend,
+	IBatchMethodsBackend,
+	IGroupDetailsBackend,
+	ISearchableGroupBackend {
+
 	/** @var array<string, string|null> */
 	private array $groupCache = [];
 
@@ -438,5 +454,68 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 				)
 			);
 		}
+	}
+
+	#[\Override]
+	public function searchInGroup(string $gid, string $search = '', int $limit = -1, int $offset = 0): array {
+		$query = $this->dbc->getQueryBuilder();
+		$query->select('g.uid', 'dn.value AS displayname')
+			->from(self::TABLE_MEMBERS, 'g')
+			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
+			->orderBy('g.uid', 'ASC');
+
+		// Join displayname and email from oc_accounts_data
+		$query->leftJoin('g', 'accounts_data', 'dn',
+			$query->expr()->andX(
+				$query->expr()->eq('dn.uid', 'g.uid'),
+				$query->expr()->eq('dn.name', $query->expr()->literal('displayname'))
+			)
+		);
+
+		$query->leftJoin('g', 'accounts_data', 'em',
+			$query->expr()->andX(
+				$query->expr()->eq('em.uid', 'g.uid'),
+				$query->expr()->eq('em.name', $query->expr()->literal('email'))
+			)
+		);
+
+		if ($search !== '') {
+			// sqlite doesn't like re-using a single named parameter here
+			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
+
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->ilike('g.uid', $searchParam1),
+					$query->expr()->ilike('dn.value', $searchParam2),
+					$query->expr()->ilike('em.value', $searchParam3)
+				)
+			)
+				->orderBy('g.uid', 'ASC');
+		}
+
+		if ($limit !== -1) {
+			$query->setMaxResults($limit);
+		}
+		if ($offset !== 0) {
+			$query->setFirstResult($offset);
+		}
+
+		$result = $query->executeQuery();
+
+		$users = [];
+		$userManager = Server::get(IUserManager::class);
+		while ($row = $result->fetch()) {
+			if (method_exists($userManager, 'getExistingUser')) {
+				$users[$row['uid']] = $userManager->getExistingUser($row['uid'], $row['displayname'] ?? null);
+			} else {
+				/** @psalm-suppress UndefinedClass */
+				$users[$row['uid']] = new LazyUser($row['uid'], $userManager, $row['displayname'] ?? null);
+			}
+		}
+		$result->closeCursor();
+
+		return $users;
 	}
 }
