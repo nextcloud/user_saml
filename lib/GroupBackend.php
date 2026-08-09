@@ -481,6 +481,7 @@ class GroupBackend extends ABackend implements
 		$users = [];
 		$userManager = Server::get(IUserManager::class);
 		while ($row = $result->fetch()) {
+			/** @psalm-suppress RedundantConditionGivenDocblockType */
 			if (method_exists($userManager, 'getExistingUser')) {
 				$users[(string)$row['uid']] = $userManager->getExistingUser($row['uid'], $row['displayname'] ?? null);
 			} else {

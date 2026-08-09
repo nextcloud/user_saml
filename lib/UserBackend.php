@@ -262,6 +262,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return $this->session->get(SessionData::KEY_IDENTITY_PROVIDER_ID) !== null;
 	}
 
+	/** @psalm-suppress LessSpecificImplementedReturnType */
 	#[Override]
 	public function getLogoutUrl(): string {
 		$id = $this->settings->getProviderId();
