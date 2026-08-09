@@ -23,6 +23,7 @@ use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\Group\Backend\ISearchableGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Server;
 use PDO;
@@ -428,8 +429,8 @@ class GroupBackend extends ABackend implements
 		return $details;
 	}
 
-	public function setupSearchQuery(string $search, IQueryBuilder $query): void {
-		if ($search !== '') {
+	public function setupSearchQuery(string $search, IQueryBuilder $query, bool $includeMetadata = false): void {
+		if ($includeMetadata || $search !== '') {
 			$query->leftJoin('m', 'accounts_data', 'dn',
 				$query->expr()->andX(
 					$query->expr()->eq('dn.uid', 'm.uid'),
@@ -442,7 +443,9 @@ class GroupBackend extends ABackend implements
 					$query->expr()->eq('em.name', $query->createNamedParameter('email'))
 				)
 			);
+		}
 
+		if ($search !== '') {
 			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
 			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
 			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
@@ -464,36 +467,7 @@ class GroupBackend extends ABackend implements
 			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
 			->orderBy('g.uid', 'ASC');
 
-		// Join displayname and email from oc_accounts_data
-		$query->leftJoin('g', 'accounts_data', 'dn',
-			$query->expr()->andX(
-				$query->expr()->eq('dn.uid', 'g.uid'),
-				$query->expr()->eq('dn.name', $query->expr()->literal('displayname'))
-			)
-		);
-
-		$query->leftJoin('g', 'accounts_data', 'em',
-			$query->expr()->andX(
-				$query->expr()->eq('em.uid', 'g.uid'),
-				$query->expr()->eq('em.name', $query->expr()->literal('email'))
-			)
-		);
-
-		if ($search !== '') {
-			// sqlite doesn't like re-using a single named parameter here
-			$searchParam1 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam2 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-			$searchParam3 = $query->createNamedParameter('%' . $this->dbc->escapeLikeParameter($search) . '%');
-
-			$query->andWhere(
-				$query->expr()->orX(
-					$query->expr()->ilike('g.uid', $searchParam1),
-					$query->expr()->ilike('dn.value', $searchParam2),
-					$query->expr()->ilike('em.value', $searchParam3)
-				)
-			)
-				->orderBy('g.uid', 'ASC');
-		}
+		$this->setupSearchQuery($search, $query, includeMetadata: true);
 
 		if ($limit !== -1) {
 			$query->setMaxResults($limit);
@@ -508,10 +482,12 @@ class GroupBackend extends ABackend implements
 		$userManager = Server::get(IUserManager::class);
 		while ($row = $result->fetch()) {
 			if (method_exists($userManager, 'getExistingUser')) {
-				$users[$row['uid']] = $userManager->getExistingUser($row['uid'], $row['displayname'] ?? null);
+				$users[(string)$row['uid']] = $userManager->getExistingUser($row['uid'], $row['displayname'] ?? null);
 			} else {
 				/** @psalm-suppress UndefinedClass */
-				$users[$row['uid']] = new LazyUser($row['uid'], $userManager, $row['displayname'] ?? null);
+				$user = new LazyUser($row['uid'], $userManager, $row['displayname'] ?? null);
+				/** @var IUser $user */
+				$users[(string)$row['uid']] = $user;
 			}
 		}
 		$result->closeCursor();
