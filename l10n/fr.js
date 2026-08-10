@@ -31,6 +31,7 @@ OC.L10N.register(
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Nom d'affichage facultatif du fournisseur d'identité (par défaut : \"Connexion SSO & SAML\")",
     "Use POST method for SAML request (default: GET)" : "Utilisez la méthode POST pour une requête SAML (par défaut : GET)",
     "Allow the use of multiple user back-ends (e.g. LDAP)" : "Autoriser l'utilisation de plusieurs systèmes d'authentification (ex: LDAP)",
+    "Use normal Nextcloud login form" : "Utiliser le formulaire de connexion normal de Nextcloud",
     "Attribute to map the displayname to." : "Attribut pour relier le nom d'utilisateur.",
     "Attribute to map the email address to." : "Attribut pour relier l'adresse mail.",
     "Attribute to map the quota to." : "Attribut pour relier le quota.",
