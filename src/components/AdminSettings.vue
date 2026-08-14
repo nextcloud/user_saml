@@ -29,20 +29,51 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</div>
 		</div>
 
-		<!-- Global settings (shown when type is set) -->
-		<div v-if="type !== ''" class="global-settings">
-			<h3>{{ t('user_saml', 'Global settings') }}</h3>
+		<div class="settings">
+			<!-- Global settings (shown when type is set) -->
+			<NcFormGroup v-if="type !== ''" class="global-settings" :label="t('user_saml', 'Global settings')">
+				<NcFormBox>
+					<template v-for="(attribute, key) in generalSettings" :key="key">
+						<NcFormBoxSwitch
+							v-if="(attribute.provider_type === '' || attribute.provider_type === type) && (attribute.type === 'checkbox' && attribute.global)"
+							:modelValue="globalConfig[key]"
+							@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
+							{{ attribute.text }}
+						</NcFormBoxSwitch>
+					</template>
+				</NcFormBox>
+			</NcFormGroup>
 
-			<NcFormBox>
-				<template v-for="(attribute, key) in generalSettings" :key="key">
-					<NcFormBoxSwitch
-						v-if="(attribute.provider_type === '' || attribute.provider_type === type) && (attribute.type === 'checkbox' && attribute.global)"
-						:modelValue="globalConfig[key]"
-						@update:modelValue="(val) => onGlobalCheckboxChange(key, val)">
-						{{ attribute.text }}
-					</NcFormBoxSwitch>
-				</template>
-			</NcFormBox>
+			<!-- Environment-variable mode: per-provider general settings inline -->
+			<template v-if="type === 'environment-variable' && providers.length > 0">
+				<NcFormGroup :label="t('user_saml', 'Environment variable provider settings')">
+					<NcFormBox>
+						<ProviderGeneralSection
+							v-model="envVarGeneralConfig"
+							type="env"
+							:generalSettings="generalSettings"
+							@fieldChange="onEnvVarFieldChange" />
+					</NcFormBox>
+				</NcFormGroup>
+
+				<NcFormGroup :label="t('user_saml', 'Attribute mapping')"
+							 :description="t('user_saml', 'If you want to optionally map attributes to the user you can configure these here.')">
+					<ProviderGeneralSection
+						v-model="envVarAttributeMappingConfig"
+						type="env"
+						:generalSettings="attributeMappingSettings"
+						@fieldChange="onEnvVarAttributeMappingChange" />
+				</NcFormGroup>
+
+				<NcFormGroup :label="t('user_saml', 'User filtering')"
+							 :description="t('user_saml', 'If you want to optionally restrict user login depending on user data, configure it here.')">
+					<ProviderGeneralSection
+						v-model="envVarUserFilterConfig"
+						type="env"
+						:generalSettings="userFilterSettings"
+						@fieldChange="onEnvVarUserFilterChange" />
+				</NcFormGroup>
+			</template>
 		</div>
 
 		<!-- Provider list (saml mode only) -->
@@ -82,16 +113,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 					</NcButton>
 				</li>
 			</ul>
-		</div>
-
-		<!-- Environment-variable mode: per-provider general settings inline -->
-		<div v-if="type === 'environment-variable' && providers.length > 0" class="env-var-settings">
-			<h3>{{ t('user_saml', 'Environment variable provider settings') }}</h3>
-			<ProviderGeneralSection
-				v-model="envVarGeneralConfig"
-				type="env"
-				:generalSettings="generalSettings"
-				@fieldChange="onEnvVarFieldChange" />
 		</div>
 
 		<!-- Actions row (reset) -->
@@ -139,6 +160,7 @@ import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { computed, onMounted, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormGroup from '@nextcloud/vue/components/NcFormGroup'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
@@ -176,6 +198,12 @@ const dialogProvider = ref<Provider | null>(null)
 
 /** General config for the single env-var provider, loaded on mount */
 const envVarGeneralConfig = ref<Record<string, string>>({})
+
+/** Attribute mapping config for the single env-var provider, loaded on mount */
+const envVarAttributeMappingConfig = ref<Record<string, string>>({})
+
+/** User filter config for the single env-var provider, loaded on mount */
+const envVarUserFilterConfig = ref<Record<string, string>>({})
 
 const showAttributeMapping = computed(() => globalConfig.value.require_provisioned_account !== '1')
 
@@ -225,6 +253,8 @@ async function loadEnvVarConfig(): Promise<void> {
 	try {
 		const { data } = await axios.get(generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`))
 		envVarGeneralConfig.value = data.general ?? {}
+		envVarAttributeMappingConfig.value = data['attribute-mapping'] ?? {}
+		envVarUserFilterConfig.value = data['user-filter'] ?? {}
 	} catch (error) {
 		logger.error('Could not load provider settings', { error })
 		showError(t('user_saml', 'Could not load provider settings'))
@@ -232,18 +262,18 @@ async function loadEnvVarConfig(): Promise<void> {
 }
 
 /**
+ * Persist a single env-var provider setting under the given fully-qualified config key.
  *
- * @param key The key that changed
+ * @param configKey The config key, including its category prefix (e.g. 'general-uid_mapping')
  * @param value The new value
  */
-async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
+async function saveEnvVarSetting(configKey: string, value: string): Promise<void> {
 	const provider = providers.value[0]
 	if (!provider) {
 		return
 	}
 	try {
-		const newConfigs: Record<string, string> = {}
-		newConfigs[`general-${key}`] = value.trim()
+		const newConfigs: Record<string, string> = { [configKey]: value.trim() }
 		await axios.put(
 			generateUrl(`/apps/user_saml/settings/providerSettings/${provider.id}`),
 			{ newConfigs },
@@ -253,6 +283,33 @@ async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
 		logger.error('Could not save provider setting', { error })
 		showError(t('user_saml', 'Could not save configuration'))
 	}
+}
+
+/**
+ *
+ * @param key The key that changed
+ * @param value The new value
+ */
+async function onEnvVarFieldChange(key: string, value: string): Promise<void> {
+	await saveEnvVarSetting(`general-${key}`, value)
+}
+
+/**
+ *
+ * @param key The key that changed
+ * @param value The new value
+ */
+async function onEnvVarAttributeMappingChange(key: string, value: string): Promise<void> {
+	await saveEnvVarSetting(`saml-attribute-mapping-${key}`, value)
+}
+
+/**
+ *
+ * @param key The key that changed
+ * @param value The new value
+ */
+async function onEnvVarUserFilterChange(key: string, value: string): Promise<void> {
+	await saveEnvVarSetting(`saml-user-filter-${key}`, value)
 }
 
 /**
@@ -401,10 +458,8 @@ async function onGlobalCheckboxChange(key: string, checked: boolean): Promise<vo
 	margin-block-start: calc(var(--default-grid-baseline, 4px) * 2);
 }
 
-.global-settings,
-.provider-list,
-.env-var-settings {
-	padding-block: calc(var(--default-grid-baseline, 4px) * 8);
+.provider-list {
+	padding-block: calc(var(--default-grid-baseline, 4px) * 6);
 	border-bottom: 1px solid var(--color-border);
 }
 
@@ -448,5 +503,11 @@ h3.register-title {
 	align-items: center;
 	justify-content: start;
 	gap: 8px;
+}
+
+.settings {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--default-grid-baseline, 4px) * 6);
 }
 </style>

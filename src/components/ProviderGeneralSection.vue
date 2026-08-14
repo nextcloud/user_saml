@@ -21,6 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				:label="attribute.text"
 				:modelValue="modelValue[key] ?? ''"
 				:required="attribute.required"
+				:placeholder="attribute.placeholder"
 				:helperText="hasWarning(key) ? t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables') : undefined"
 				@update:modelValue="(val: string|number) => update(key, val + '')" />
 		</template>
@@ -67,9 +68,6 @@ const debounceTimers = ref<Record<string, ReturnType<typeof setTimeout>>>({})
 function onChangeDebounced(key: string, value: string): void {
 	clearTimeout(debounceTimers.value[key])
 	debounceTimers.value[key] = setTimeout(() => {
-        if (isError(key)) {
-            return
-        }
 		emit('fieldChange', key, value)
 	}, 500)
 }
