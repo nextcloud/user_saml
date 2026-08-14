@@ -26,167 +26,185 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			</NcButton>
 		</template>
 
-		<div v-if="!isLoading" class="provider-settings">
+		<div v-if="!isLoading">
 			<!-- General (per-provider) -->
-			<NcSettingsSection :name="t('user_saml', 'General')" :level="3">
-				<ProviderGeneralSection
-					:generalSettings="generalSettings"
-					:modelValue="draft.general ?? {}"
-					type="saml"
-					@update:modelValue="(val) => { draft.general = val }"
-					@fieldChange="(key, value) => setDraft('general', key, value)" />
-			</NcSettingsSection>
+			<NcSettingsSection name="" class="settings-group settings-group-general" level="3">
+				<div class="gap">
+					<NcFormGroup :label="t('user_saml', 'General')">
+						<NcFormBox>
+							<ProviderGeneralSection
+								:generalSettings="generalSettings"
+								:modelValue="draft.general ?? {}"
+								type="saml"
+								@update:modelValue="(val) => { draft.general = val }"
+								@fieldChange="(key, value) => setDraft('general', key, value)" />
+						</NcFormBox>
+					</NcFormGroup>
 
-			<!-- Service Provider Data -->
-			<NcSettingsSection
-				:name="t('user_saml', 'Service Provider Data')"
-				:level="3"
-				:description="t('user_saml', 'If your Service Provider should use certificates you can optionally specify them here.')">
-				<NcSelect
-					v-model="nameIdFormatModel"
-					:inputLabel="t('user_saml', 'Name ID format')"
-					:options="nameIdFormatOptions"
-					:clearable="false" />
+					<!-- Service Provider Data -->
+					<NcFormGroup
+						:label="t('user_saml', 'Service Provider Data')"
+						:description="t('user_saml', 'If your Service Provider should use certificates you can optionally specify them here.')">
+						<NcFormBox>
+							<NcSelect
+								v-model="nameIdFormatModel"
+								:inputLabel="t('user_saml', 'Name ID format')"
+								:options="nameIdFormatOptions"
+								:clearable="false" />
 
-				<template v-for="(attribute, key) in spSettings" :key="key">
-					<NcTextArea
-						v-if="attribute.type === 'text'"
-						:id="'user-saml-' + key"
-						:label="attribute.text"
-						:modelValue="draft.sp?.[key] ?? ''"
-						:required="attribute.required"
-						@update:modelValue="(val) => setDraft('sp', key, val)" />
-					<NcInputField
-						v-else
-						:id="'user-saml-' + key"
-						:label="attribute.text"
-						:modelValue="draft.sp?.[key] ?? ''"
-						:required="attribute.required"
-						@update:modelValue="(val) => setDraft('sp', key, val + '')" />
-				</template>
-			</NcSettingsSection>
+							<template v-for="(attribute, key) in spSettings" :key="key">
+								<NcTextArea
+									v-if="attribute.type === 'text'"
+									:id="'user-saml-' + key"
+									:label="attribute.text"
+									:modelValue="draft.sp?.[key] ?? ''"
+									:required="attribute.required"
+									@update:modelValue="(val) => setDraft('sp', key, val)" />
+								<NcInputField
+									v-else
+									:id="'user-saml-' + key"
+									:label="attribute.text"
+									:modelValue="draft.sp?.[key] ?? ''"
+									:required="attribute.required"
+									@update:modelValue="(val) => setDraft('sp', key, val + '')" />
+							</template>
+						</NcFormBox>
+					</NcFormGroup>
 
-			<!-- Identity Provider Data -->
-			<NcSettingsSection :name="t('user_saml', 'Identity Provider Data')" :level="3">
-				<NcInputField
-					id="user-saml-entityId"
-					v-model="draftIdp.entityId"
-					:label="t('user_saml', 'Identifier of the IdP entity (must be a URI)')"
-					required
-					placeholder="https://example.com/auth/realms/default" />
+					<!-- Identity Provider Data -->
+					<NcFormGroup :label="t('user_saml', 'Identity Provider Data')">
+						<NcFormBox>
+							<NcInputField
+								id="user-saml-entityId"
+								v-model="draftIdp.entityId"
+								:label="t('user_saml', 'Identifier of the IdP entity (must be a URI)')"
+								required
+								placeholder="https://example.com/auth/realms/default" />
 
-				<NcInputField
-					id="user-saml-singleSignOnService-url"
-					v-model="draftIdp.ssoUrl"
-					:label="t('user_saml', 'URL Target of the IdP where the SP will send the Authentication Request Message')"
-					required
-					placeholder="https://example.com/auth/realms/default/protocol/saml" />
+							<NcInputField
+								id="user-saml-singleSignOnService-url"
+								v-model="draftIdp.ssoUrl"
+								:label="t('user_saml', 'URL Target of the IdP where the SP will send the Authentication Request Message')"
+								required
+								placeholder="https://example.com/auth/realms/default/protocol/saml" />
 
-				<NcInputField
-					id="user-saml-singleLogoutService-url"
-					v-model="draftIdp.sloUrl"
-					:label="t('user_saml', 'URL Location of the IdP where the SP will send the SLO Request')"
-					placeholder="https://example.com/auth/realms/default/protocol/saml" />
+							<NcInputField
+								id="user-saml-singleLogoutService-url"
+								v-model="draftIdp.sloUrl"
+								:label="t('user_saml', 'URL Location of the IdP where the SP will send the SLO Request')"
+								placeholder="https://example.com/auth/realms/default/protocol/saml" />
 
-				<NcInputField
-					id="user-saml-singleLogoutService-responseUrl"
-					v-model="draftIdp.sloResponseUrl"
-					:label="t('user_saml', 'URL Location of the IDP\'s SLO Response')"
-					placeholder="https://example.com/auth/realms/default/protocol/saml" />
+							<NcInputField
+								id="user-saml-singleLogoutService-responseUrl"
+								v-model="draftIdp.sloResponseUrl"
+								:label="t('user_saml', 'URL Location of the IDP\'s SLO Response')"
+								placeholder="https://example.com/auth/realms/default/protocol/saml" />
 
-				<NcTextArea
-					id="user-saml-x509cert"
-					v-model="draftIdp.x509cert"
-					:label="t('user_saml', 'Public X.509 certificate of the IdP')" />
+							<NcTextArea
+								id="user-saml-x509cert"
+								v-model="draftIdp.x509cert"
+								:label="t('user_saml', 'Public X.509 certificate of the IdP')" />
 
-				<NcInputField
-					id="user-saml-passthroughParameters"
-					v-model="draftIdp.passthroughParameters"
-					:label="t('user_saml', 'Request parameters to pass-through to IdP (comma separated list)')"
-					placeholder="idp_hint,extra_parameter" />
-			</NcSettingsSection>
+							<NcInputField
+								id="user-saml-passthroughParameters"
+								v-model="draftIdp.passthroughParameters"
+								:label="t('user_saml', 'Request parameters to pass-through to IdP (comma separated list)')"
+								placeholder="idp_hint,extra_parameter" />
+						</NcFormBox>
+					</NcFormGroup>
 
-			<!-- Attribute Mapping -->
-			<NcSettingsSection
-				v-if="showAttributeMapping"
-				:name="t('user_saml', 'Attribute mapping')"
-				:level="3"
-				:description="t('user_saml', 'If you want to optionally map attributes to the user you can configure these here.')">
-				<template v-for="(attribute, key) in attributeMappingSettings" :key="key">
-					<NcInputField
-						v-if="attribute.type === 'line'"
-						:id="'user-saml-' + key"
-						:label="attribute.text"
-						:modelValue="draft['attribute-mapping']?.[key] ?? ''"
-						:required="attribute.required"
-						@update:modelValue="(val) => setDraft('attribute-mapping', key, val + '')" />
-				</template>
+					<!-- Attribute Mapping -->
+					<NcFormGroup
+						v-if="showAttributeMapping"
+						:label="t('user_saml', 'Attribute mapping')"
+						:description="t('user_saml', 'If you want to optionally map attributes to the user you can configure these here.')">
+						<NcFormBox>
+							<template v-for="(attribute, key) in attributeMappingSettings" :key="key">
+								<NcInputField
+									v-if="attribute.type === 'line'"
+									:id="'user-saml-' + key"
+									:label="attribute.text"
+									:modelValue="draft['attribute-mapping']?.[key] ?? ''"
+									:required="attribute.required"
+									@update:modelValue="(val) => setDraft('attribute-mapping', key, val + '')" />
+							</template>
+						</NcFormBox>
+					</NcFormGroup>
+				</div>
 			</NcSettingsSection>
 
 			<!-- Security settings -->
 			<NcSettingsSection
 				:name="t('user_saml', 'Security settings')"
-				:level="3"
-				:description="t('user_saml', 'For increased security we recommend enabling the following settings if supported by your environment.')">
-				<h4>{{ t('user_saml', 'Signatures and encryption offered') }}</h4>
-				<NcFormBox>
-					<NcFormBoxSwitch
-						v-for="(text, key) in securityOffer"
-						:key="key"
-						:modelValue="draft.security?.[key] === '1'"
-						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-						{{ text }}
-					</NcFormBoxSwitch>
-				</NcFormBox>
+				:description="t('user_saml', 'For increased security we recommend enabling the following settings if supported by your environment.')"
+				level="3"
+				class="settings-group">
+				<div class="gap">
+					<NcFormGroup :label="t('user_saml', 'Signatures and encryption offered')">
+						<NcFormBox>
+							<NcFormBoxSwitch
+								v-for="(text, key) in securityOffer"
+								:key="key"
+								:modelValue="draft.security?.[key] === '1'"
+								@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+								{{ text }}
+							</NcFormBoxSwitch>
+						</NcFormBox>
+					</NcFormGroup>
 
-				<h4>{{ t('user_saml', 'Signatures and encryption required') }}</h4>
-				<NcFormBox>
-					<NcFormBoxSwitch
-						v-for="(text, key) in securityRequired"
-						:key="key"
-						:modelValue="draft.security?.[key] === '1'"
-						@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-						{{ text }}
-					</NcFormBoxSwitch>
-				</NcFormBox>
+					<NcFormGroup :label="t('user_saml', 'Signatures and encryption required')">
+						<NcFormBox>
+							<NcFormBoxSwitch
+								v-for="(text, key) in securityRequired"
+								:key="key"
+								:modelValue="draft.security?.[key] === '1'"
+								@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+								{{ text }}
+							</NcFormBoxSwitch>
+						</NcFormBox>
+					</NcFormGroup>
 
-				<h4>{{ t('user_saml', 'General') }}</h4>
-				<NcFormBox>
-					<template v-for="(attribute, key) in securityGeneral" :key="key">
-						<NcInputField
-							v-if="typeof attribute === 'object' && attribute.type === 'line'"
-							:id="'user-saml-' + key"
-							:label="attribute.text"
-							:modelValue="draft.security?.[key] ?? ''"
-							:required="attribute.required"
-							placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
-							@update:modelValue="(val) => setDraft('security', key, val + '')" />
-						<NcFormBoxSwitch
-							v-else
-							:modelValue="draft.security?.[key] === '1'"
-							@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
-							{{ attribute }}
-						</NcFormBoxSwitch>
-					</template>
-				</NcFormBox>
+					<NcFormGroup :label="t('user_saml', 'General')">
+						<NcFormBox>
+							<template v-for="(attribute, key) in securityGeneral" :key="key">
+								<NcInputField
+									v-if="typeof attribute === 'object' && attribute.type === 'line'"
+									:id="'user-saml-' + key"
+									:label="attribute.text"
+									:modelValue="draft.security?.[key] ?? ''"
+									:required="attribute.required"
+									placeholder="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+									@update:modelValue="(val) => setDraft('security', key, val + '')" />
+								<NcFormBoxSwitch
+									v-else
+									:modelValue="draft.security?.[key] === '1'"
+									@update:modelValue="(val) => setDraft('security', key, val ? '1' : '0')">
+									{{ attribute }}
+								</NcFormBoxSwitch>
+							</template>
+						</NcFormBox>
+					</NcFormGroup>
+				</div>
 			</NcSettingsSection>
 
 			<!-- User Filtering -->
 			<NcSettingsSection
 				v-if="showAttributeMapping"
 				:name="t('user_saml', 'User filtering')"
-				:level="3"
-				:description="t('user_saml', 'If you want to optionally restrict user login depending on user data, configure it here.')">
-				<template v-for="(attribute, key) in userFilterSettings" :key="key">
-					<NcInputField
-						v-if="attribute.type === 'line'"
-						:id="'user-saml-' + key"
-						:label="attribute.text"
-						:modelValue="draft['user-filter']?.[key] ?? ''"
-						:required="attribute.required"
-						:placeholder="attribute.placeholder"
-						@update:modelValue="(val) => setDraft('user-filter', key, val + '')" />
-				</template>
+				:description="t('user_saml', 'If you want to optionally restrict user login depending on user data, configure it here.')"
+				level="3">
+				<NcFormBox>
+					<template v-for="(attribute, key) in userFilterSettings" :key="key">
+						<NcInputField
+							v-if="attribute.type === 'line'"
+							:id="'user-saml-' + key"
+							:label="attribute.text"
+							:modelValue="draft['user-filter']?.[key] ?? ''"
+							:required="attribute.required"
+							:placeholder="attribute.placeholder"
+							@update:modelValue="(val) => setDraft('user-filter', key, val + '')" />
+					</template>
+				</NcFormBox>
 			</NcSettingsSection>
 
 			<NcNoteCard v-if="metadataValid === true" type="success" class="dialog-status">
@@ -222,6 +240,7 @@ import { computed, ref, watch } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcFormBox from '@nextcloud/vue/components/NcFormBox'
+import NcFormGroup from '@nextcloud/vue/components/NcFormGroup'
 import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
@@ -463,13 +482,31 @@ async function testMetaData(): Promise<void> {
 </script>
 
 <style scoped>
-.provider-settings {
+.dialog-status {
+	margin-inline: calc(var(--default-grid-baseline) * 7);
+}
+
+
+.settings-group {
 	display: flex;
 	flex-direction: column;
 	padding-block-end: calc(var(--default-grid-baseline, 4px) * 2);
+
+	.gap {
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--default-grid-baseline, 4px) * 6);
+	}
+
+	& > :deep(.settings-section__name) {
+		justify-content: start;
+	}
+
+	&-general {
+		:deep(.settings-section__name) {
+			display: none;
+		}
+	}
 }
 
-.dialog-status {
-	margin: 0;
-}
 </style>
