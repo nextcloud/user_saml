@@ -389,7 +389,7 @@ class SAMLController extends Controller {
 			$response->invalidateCookie('saml_data');
 			return $response;
 		} catch (UserFilterViolationException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e, 'attributes' => $attributes]);
+			$this->logger->error($e->getMessage(), ['exception' => $e, 'attributes' => $attributes]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
 			$response->invalidateCookie('saml_data');
 			return $response;
