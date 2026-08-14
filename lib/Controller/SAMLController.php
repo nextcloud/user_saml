@@ -250,8 +250,9 @@ class SAMLController extends Controller {
 					$ssoUrl = $this->urlGenerator->getAbsoluteURL('/');
 				}
 				$this->sessionService->prepareEnvironmentBasedSession($_SERVER);
+				$attributes = $this->session->get('user_saml.samlUserData');
 				try {
-					$this->userData->setAttributes($this->session->get('user_saml.samlUserData'));
+					$this->userData->setAttributes($attributes);
 					$this->autoprovisionIfPossible();
 					$user = $this->userResolver->findExistingUser($this->userBackend->getCurrentUserId());
 					$firstLogin = $user->updateLastLoginTimestamp();
@@ -260,15 +261,17 @@ class SAMLController extends Controller {
 					}
 				} catch (NoUserFoundException $e) {
 					if ($e->getMessage()) {
-						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['app' => 'user_saml']);
+						$this->logger->warning('Error while trying to login using sso environment variable: ' . $e->getMessage(), ['attributes' => $attributes, 'exception' => $e]);
+
 					}
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned');
 				} catch (UserFilterViolationException $e) {
 					$this->logger->info(
 						'SAML filter constraints not met: {msg}',
 						[
-							'app' => 'user_saml',
+							'exception' => $e,
 							'msg' => $e->getMessage(),
+							'attributes' => $attributes,
 						]
 					);
 					$ssoUrl = $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted');
@@ -322,7 +325,7 @@ class SAMLController extends Controller {
 		// Fetch and decrypt the cookie
 		$cookie = $this->request->getCookie('saml_data');
 		if ($cookie === null) {
-			$this->logger->debug('Cookie was not present', ['app' => 'user_saml']);
+			$this->logger->debug('Cookie was not present');
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
@@ -333,7 +336,7 @@ class SAMLController extends Controller {
 		try {
 			$cookie = $this->crypto->decrypt($cookie);
 		} catch (Exception) {
-			$this->logger->debug('Could not decrypt SAML cookie', ['app' => 'user_saml']);
+			$this->logger->debug('Could not decrypt SAML cookie');
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 		$data = json_decode($cookie, true);
@@ -352,7 +355,7 @@ class SAMLController extends Controller {
 		// need to keep the IdP config ID during session lifetime (SAMLSettings::getPrefix)
 		$this->sessionService->storeIdentityProviderInSession($idp);
 		if (is_null($AuthNRequestID) || $AuthNRequestID === '') {
-			$this->logger->debug('Invalid auth payload', ['app' => 'user_saml']);
+			$this->logger->debug('Invalid auth payload');
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
@@ -367,25 +370,26 @@ class SAMLController extends Controller {
 		$this->handleAuthErrors($auth);
 
 		if (!$auth->isAuthenticated()) {
-			$this->logger->info('Auth failed', ['app' => $this->appName]);
+			$this->logger->error('Auth failed', ['exception' => new \RuntimeException('Unable to login')]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
 		}
-		$this->logger->debug('Authentication successful', ['app' => 'user_saml']);
+		$this->logger->debug('Authentication successful');
 
 		// Check whether the user actually exists, if not redirect to an error page
 		// explaining the issue.
+		$attributes = $auth->getAttributes();
 		try {
-			$this->userData->setAttributes($auth->getAttributes());
+			$this->userData->setAttributes($attributes);
 			$this->autoprovisionIfPossible();
 		} catch (NoUserFoundException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e]);
+			$this->logger->error($e->getMessage(), ['exception' => $e, 'attributes' => $attributes]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
 		} catch (UserFilterViolationException $e) {
-			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e]);
+			$this->logger->error($e->getMessage(), ['app' => $this->appName, 'exception' => $e, 'attributes' => $attributes]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -402,12 +406,12 @@ class SAMLController extends Controller {
 		} catch (NoUserFoundException $e) {
 			throw new \InvalidArgumentException('User "' . $this->userBackend->getCurrentUserId() . '" is not valid.', previous: $e);
 		} catch (Exception $e) {
-			$this->logger->critical($e->getMessage(), ['exception' => $e, 'app' => $this->appName]);
+			$this->logger->critical($e->getMessage(), ['exception' => $e, 'attributes' => $attributes]);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
 		}
-		$this->logger->debug('User found, last login timestamp updated', ['app' => 'user_saml']);
+		$this->logger->debug('User found, last login timestamp updated');
 
 		$originalUrl = $data['RelayState'] ?? $data['OriginalUrl'];
 		if ($originalUrl !== null && $originalUrl !== '') {
