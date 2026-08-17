@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 * fix(AlternativeLoginProvider): Fix link to idp by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1196
 * fix: Support for normal nc login form with multiple backends by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1198
 * fix: Add missing settings when in env mode by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1209
+* fix: Disable group backend when auto-provisining is on
+* fix: Exclude own backend when checking if user exists
 
 ### Performance
 
