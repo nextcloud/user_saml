@@ -5,6 +5,36 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.2.1
+
+### Added
+
+* feat: add release-relay.yml workflow by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1193
+* feat(admin): Use FormBox in admin settings by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1195
+* feat: Improve login particularly in case of no provisioning errors by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1210
+
+### Fixed
+
+* fix(AlternativeLoginProvider): Fix link to idp by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1196
+* fix: Support for normal nc login form with multiple backends by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1198
+* fix: Add missing settings when in env mode by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1209
+* fix: Disable group backend when auto-provisining is on
+* fix: Exclude own backend when checking if user exists
+
+### Performance
+
+* perf: Implement ISearchableGroupBackend by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1199
+
+### Dependencies
+
+* build(deps): bump axios from 1.16.0 to 1.18.1 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1186
+* build(deps): bump immutable from 5.1.5 to 5.1.9 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1190
+* build(deps): bump fast-uri from 3.1.2 to 3.1.4 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1192
+* build(deps): bump dompurify from 3.4.11 to 3.4.12 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1191
+* build(deps): bump postcss from 8.5.14 to 8.5.25 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1201
+* build(deps): bump fast-uri from 3.1.4 to 3.1.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1203
+* build(deps): bump dompurify from 3.4.12 to 3.4.13 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1205
+
 ## 8.2.0
 
 ### Added

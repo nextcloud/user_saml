@@ -65,7 +65,7 @@ class UserResolver {
 				$this->ensureUser($rawUidCandidate);
 			}
 		}
-		if ($this->userManager->userExists($rawUidCandidate)) {
+		if ($this->userManager->userExists($rawUidCandidate, ['user_saml'])) {
 			return $rawUidCandidate;
 		}
 		try {
@@ -73,7 +73,7 @@ class UserResolver {
 		} catch (\InvalidArgumentException) {
 			$sanitized = '';
 		}
-		if ($this->userManager->userExists($sanitized)) {
+		if ($this->userManager->userExists($sanitized, ['user_saml'])) {
 			return $sanitized;
 		}
 		throw new NoUserFoundException('User ' . $rawUidCandidate . ' not valid or not found');
