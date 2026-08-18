@@ -21,6 +21,7 @@ use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
+use OCP\Server;
 use PDO;
 use Psr\Log\LoggerInterface;
 
