@@ -215,7 +215,7 @@ class GroupBackend extends ABackend implements
 	public function groupExistsWithDifferentGid(string $samlGid): ?string {
 		if (!$this->getUserBackend()->autoprovisionAllowed()) {
 			// We rely on the auto-provisioning backend for the list of groups
-			return false;
+			return null;
 		}
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
@@ -384,7 +384,7 @@ class GroupBackend extends ABackend implements
 	public function deleteGroup(string $gid): bool {
 		if (!$this->getUserBackend()->autoprovisionAllowed()) {
 			// We rely on the auto-provisioning backend for group management
-			return 0;
+			return false;
 		}
 
 		$query = $this->dbc->getQueryBuilder();
