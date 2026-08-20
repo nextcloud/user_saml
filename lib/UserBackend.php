@@ -309,17 +309,13 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$settings = $this->settings->get($id);
 		$slo = $settings['idp-singleLogoutService.url'] ?? '';
 
-		if ($slo === '') {
-			return '';
-		}
-
 		$tokenManager = Server::get(CsrfTokenManager::class);
-		return $this->urlGenerator->linkToRouteAbsolute(
-			'user_saml.SAML.singleLogoutService',
-			[
-				'requesttoken' => $tokenManager->getToken()->getEncryptedValue(),
-			]
-		);
+
+		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute($slo === '' ? 'core.login.logout' : 'user_saml.SAML.singleLogoutService', [
+			'requesttoken' => $tokenManager->getToken()->getEncryptedValue(),
+		]);
+		/** @var non-empty-string $logoutUrl */
+		return $logoutUrl;
 	}
 
 	/**
