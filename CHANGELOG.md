@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.3.0
+
+* Add support for Nextcloud 35
+
 ## 8.2.1
 
 ### Added
