@@ -162,6 +162,29 @@ class GroupBackendTest extends TestCase {
 		$this->assertSame(1, $this->groupBackend->countUsersInGroup($groupId, $this->users[0]['uid']));
 	}
 
+	public function testSearchInGroup(): void {
+		foreach ($this->groups as $group) {
+			$users = $this->groupBackend->searchInGroup($group['gid']);
+			$this->assertCount(count($group['members']), $users, 'Should retrieve all group members');
+			foreach (array_keys($users) as $uid) {
+				$this->assertContains($uid, $group['members'], sprintf('User %s should be member of group %s', $uid, $group['gid']));
+			}
+		}
+	}
+
+	public function testSearchInGroupMatchesDisplayNameAndEmail(): void {
+		$groupId = $this->groups[0]['gid'];
+
+		$byDisplayName = $this->groupBackend->searchInGroup($groupId, $this->users[0]['displayname']);
+		$this->assertArrayHasKey($this->users[0]['uid'], $byDisplayName, 'Display name search should return the matching user');
+
+		$byEmail = $this->groupBackend->searchInGroup($groupId, $this->users[1]['email']);
+		$this->assertArrayHasKey($this->users[1]['uid'], $byEmail, 'Email search should return the matching user');
+
+		$byUid = $this->groupBackend->searchInGroup($groupId, $this->users[0]['uid']);
+		$this->assertArrayHasKey($this->users[0]['uid'], $byUid, 'UID search should still work');
+	}
+
 	private function resetAccountData(): void {
 		foreach ($this->users as $user) {
 			$qb = $this->connection->getQueryBuilder();
