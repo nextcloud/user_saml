@@ -21,6 +21,7 @@ use OCP\Group\Backend\INamedBackend;
 use OCP\Group\Backend\IRemoveFromGroupBackend;
 use OCP\Group\Backend\ISetDisplayNameBackend;
 use OCP\IDBConnection;
+use OCP\Server;
 use PDO;
 use Psr\Log\LoggerInterface;
 
@@ -28,6 +29,8 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	/** @var array<string, string|null> */
 	private array $groupCache = [];
+
+	protected ?UserBackend $userBackend = null;
 
 	public const TABLE_GROUPS = 'user_saml_groups';
 	public const TABLE_MEMBERS = 'user_saml_group_members';
@@ -38,8 +41,16 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	) {
 	}
 
+	private function getUserBackend(): UserBackend {
+		return $this->userBackend ?? Server::get(UserBackend::class);
+	}
+
 	#[\Override]
 	public function inGroup($uid, $gid): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group membership
+			return false;
+		}
 		$qb = $this->dbc->getQueryBuilder();
 		$stmt = $qb->select('gid')
 			->from(self::TABLE_MEMBERS)
@@ -58,6 +69,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	#[\Override]
 	public function getUserGroups($uid): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for the list of groups
+			return [];
+		}
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gu.gid', 'g.displayname')
 			->from(self::TABLE_MEMBERS, 'gu')
@@ -81,6 +96,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	#[\Override]
 	public function getGroups(string $search = '', $limit = null, $offset = null): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for the list of groups
+			return [];
+		}
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('gid', 'displayname')
 			->from(self::TABLE_GROUPS)
@@ -119,6 +138,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	#[\Override]
 	public function groupExists($gid): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for the list of groups
+			return false;
+		}
+
 		if (isset($this->groupCache[$gid])) {
 			return true;
 		}
@@ -141,6 +165,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function groupsExists(array $gids): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for the list of groups
+			return [];
+		}
 		$notFoundGids = [];
 		$existingGroups = [];
 
@@ -173,6 +201,10 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	}
 
 	public function groupExistsWithDifferentGid(string $samlGid): ?string {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for the list of groups
+			return null;
+		}
 		$qb = $this->dbc->getQueryBuilder();
 		$cursor = $qb->select('gid')
 			->from(self::TABLE_GROUPS)
@@ -196,6 +228,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	#[\Override]
 	public function usersInGroup($gid, $search = '', $limit = -1, $offset = 0): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group membership
+			return [];
+		}
+
 		$query = $this->dbc->getQueryBuilder();
 		$query->select('uid')
 			->from(self::TABLE_MEMBERS)
@@ -228,6 +265,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function createGroup(string $gid, ?string $samlGid = null): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We create groups on the auto-provisioning backend
+			return false;
+		}
+
 		try {
 			// Add group
 			$builder = $this->dbc->getQueryBuilder();
@@ -260,6 +302,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 	 */
 	#[\Override]
 	public function addToGroup(string $uid, string $gid): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We add user to groups on the auto-provisioning backend
+			return false;
+		}
+
 		if ($this->inGroup($uid, $gid)) {
 			return true;
 		}
@@ -274,6 +321,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function removeFromGroup(string $uid, string $gid): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We remove user to groups on the auto-provisioning backend
+			return false;
+		}
+
 		$qb = $this->dbc->getQueryBuilder();
 		$rows = $qb->delete(self::TABLE_MEMBERS)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
@@ -285,6 +337,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function countUsersInGroup(string $gid, string $search = ''): int {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group membership
+			return 0;
+		}
+
 		$query = $this->dbc->getQueryBuilder();
 		$query->select($query->func()->count('*', 'num_users'))
 			->from(self::TABLE_MEMBERS)
@@ -311,6 +368,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function deleteGroup(string $gid): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group management
+			return false;
+		}
+
 		$query = $this->dbc->getQueryBuilder();
 
 		try {
@@ -343,6 +405,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function getDisplayName(string $gid): string {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group management
+			return '';
+		}
+
 		if (!isset($this->groupCache[$gid])) {
 			$this->getGroups($gid);
 		}
@@ -352,6 +419,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function setDisplayName(string $gid, string $displayName): bool {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group management
+			return false;
+		}
+
 		if (!$this->groupExists($gid)) {
 			return false;
 		}
@@ -376,6 +448,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function getGroupDetails(string $gid): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group management
+			return [];
+		}
+
 		if (!$this->groupExists($gid)) {
 			return [];
 		}
@@ -385,6 +462,11 @@ class GroupBackend extends ABackend implements IAddToGroupBackend, ICountUsersBa
 
 	#[\Override]
 	public function getGroupsDetails(array $gids): array {
+		if (!$this->getUserBackend()->autoprovisionAllowed()) {
+			// We rely on the auto-provisioning backend for group management
+			return [];
+		}
+
 		$notFoundGids = [];
 		$details = [];
 
