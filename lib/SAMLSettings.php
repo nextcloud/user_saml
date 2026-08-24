@@ -61,6 +61,7 @@ class SAMLSettings {
 		'saml-attribute-mapping-mfa_mapping',
 		'saml-attribute-mapping-user_id_ldap_mapping',
 		'saml-attribute-mapping-group_mapping_prefix',
+		'saml-attribute-mapping-avatar_mapping',
 		'saml-user-filter-reject_groups',
 		'saml-user-filter-require_groups',
 		'sp-entityId',

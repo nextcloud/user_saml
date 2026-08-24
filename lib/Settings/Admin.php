@@ -161,6 +161,11 @@ class Admin implements IDelegatedSettings {
 				'type' => 'line',
 				'required' => false,
 			],
+			'avatar_mapping' => [
+				'text' => $this->l10n->t('Attribute to map the users avatar to.'),
+				'type' => 'line',
+				'required' => false,
+			],
 			'user_id_ldap_mapping' => [
 				'text' => $this->l10n->t('Attribute to map the users to an existing LDAP user'),
 				'type' => 'line',
