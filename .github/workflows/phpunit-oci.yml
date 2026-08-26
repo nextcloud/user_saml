@@ -78,6 +78,8 @@ jobs:
           - oci-versions: '11'
             server-versions: 'stable34'
           - oci-versions: '11'
+            server-versions: 'stable35'
+          - oci-versions: '11'
             server-versions: 'master'
 
     name: OCI ${{ matrix.oci-versions }} PHP ${{ matrix.php-versions }} Nextcloud ${{ matrix.server-versions }}

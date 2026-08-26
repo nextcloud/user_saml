@@ -57,6 +57,9 @@ jobs:
           - server-versions: "stable34"
             php-versions: "8.4"
             databases: "pgsql"
+          - server-versions: "stable35"
+            php-versions: "8.4"
+            databases: "pgsql"
 
     name: Integration php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
 
