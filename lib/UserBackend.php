@@ -31,6 +31,7 @@ use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\ILimitAwareCountUsersBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
+use OCP\User\Backend\ISearchKnownUsersBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
@@ -38,7 +39,10 @@ use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend, ISearchKnownUsersBackend {
+	private const table = 'user_saml_users';
+
+
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
@@ -576,5 +580,45 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			->from('user_saml_users');
 		$result = $query->executeQuery()->fetchOne();
 		return $result === false ? false : (int)$result;
+	}
+
+	#[\Override]
+	public function searchKnownUsersByDisplayName(string $searcher, string $pattern, ?int $limit = null, ?int $offset = null): array {
+		$limit = $this->fixLimit($limit);
+
+		$query = $this->db->getQueryBuilder();
+
+		$query->select('u.uid', 'u.displayname')
+			->from(self::table, 'u')
+			->leftJoin('u', 'known_users', 'k', $query->expr()->andX(
+				$query->expr()->eq('k.known_user', 'u.uid'),
+				$query->expr()->eq('k.known_to', $query->createNamedParameter($searcher))
+			))
+			->where($query->expr()->eq('k.known_to', $query->createNamedParameter($searcher)))
+			->andWhere($query->expr()->orX(
+				$query->expr()->iLike('u.uid', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%')),
+				$query->expr()->iLike('u.displayname', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%'))
+			))
+			->orderBy('u.displayname', 'ASC')
+			->addOrderBy('u.uid', 'ASC')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		$result = $query->executeQuery();
+		$displayNames = [];
+		while ($row = $result->fetch()) {
+			$displayNames[(string)$row['uid']] = (string)$row['displayname'];
+		}
+		$result->closeCursor();
+
+		return $displayNames;
+	}
+
+	private function fixLimit(?int $limit): ?int {
+		if (is_int($limit) && $limit >= 0) {
+			return $limit;
+		}
+
+		return null;
 	}
 }
