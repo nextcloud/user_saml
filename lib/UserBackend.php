@@ -31,6 +31,7 @@ use OCP\User\Backend\IGetDisplayNameBackend;
 use OCP\User\Backend\IGetHomeBackend;
 use OCP\User\Backend\ILimitAwareCountUsersBackend;
 use OCP\User\Backend\IProvideEnabledStateBackend;
+use OCP\User\Backend\ISearchKnownUsersBackend;
 use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
@@ -38,7 +39,9 @@ use OCP\UserInterface;
 use Override;
 use Psr\Log\LoggerInterface;
 
-class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend {
+class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGetDisplayNameBackend, ILimitAwareCountUsersBackend, IGetHomeBackend, ICustomLogout, ISetDisplayNameBackend, IProvideEnabledStateBackend, ISearchKnownUsersBackend {
+	private const table = 'user_saml_users';
+
 	/** @var \OCP\UserInterface[] */
 	private static array $backends = [];
 
@@ -64,7 +67,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	protected function userExistsInDatabase(string $uid): bool {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('uid')
-			->from('user_saml_users')
+			->from(self::table)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
 		$result = $qb->executeQuery();
@@ -112,7 +115,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			}
 
 			$qb = $this->db->getQueryBuilder();
-			$qb->insert('user_saml_users');
+			$qb->insert(self::table);
 			foreach ($values as $column => $value) {
 				$qb->setValue($column, $qb->createNamedParameter($value));
 			}
@@ -146,7 +149,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	#[Override]
 	public function deleteUser($uid): bool {
 		$qb = $this->db->getQueryBuilder();
-		$affected = $qb->delete('user_saml_users')
+		$affected = $qb->delete(self::table)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->executeStatement();
 		return $affected > 0;
@@ -156,7 +159,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	public function getHome(string $uid): string|false {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('home')
-			->from('user_saml_users')
+			->from(self::table)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
 		$result = $qb->executeQuery();
@@ -191,7 +194,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		}
 
 		$qb = $this->db->getQueryBuilder();
-		$affected = $qb->update('user_saml_users')
+		$affected = $qb->update(self::table)
 			->set('displayname', $qb->createNamedParameter($displayName))
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->executeStatement();
@@ -209,7 +212,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('displayname')
-			->from('user_saml_users')
+			->from(self::table)
 			->where($qb->expr()->eq('uid', $qb->createNamedParameter($uid)))
 			->setMaxResults(1);
 		$result = $qb->executeQuery();
@@ -224,7 +227,7 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$query = $this->db->getQueryBuilder();
 
 		$query->select('uid', 'displayname')
-			->from('user_saml_users', 'u')
+			->from(self::table, 'u')
 			->leftJoin('u', 'preferences', 'p', $query->expr()->andX(
 				$query->expr()->eq('userid', 'uid'),
 				$query->expr()->eq('appid', $query->expr()->literal('settings')),
@@ -573,8 +576,51 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	public function countUsers(int $limit = 0): int|false {
 		$query = $this->db->getQueryBuilder();
 		$query->select($query->func()->count('uid'))
-			->from('user_saml_users');
+			->from(self::table);
 		$result = $query->executeQuery()->fetchOne();
 		return $result === false ? false : (int)$result;
+	}
+
+	#[\Override]
+	public function searchKnownUsersByDisplayName(string $searcher, string $pattern, ?int $limit = null, ?int $offset = null): array {
+		$limit = $this->fixLimit($limit);
+
+		$query = $this->db->getQueryBuilder();
+
+		$query->select('u.uid', 'u.displayname')
+			->from(self::table, 'u')
+			->leftJoin('u', 'known_users', 'k', $query->expr()->andX(
+				$query->expr()->eq('k.known_user', 'u.uid'),
+				$query->expr()->eq('k.known_to', $query->createNamedParameter($searcher))
+			))
+			->where($query->expr()->eq('k.known_to', $query->createNamedParameter($searcher)))
+			->andWhere($query->expr()->orX(
+				$query->expr()->iLike('u.uid', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%')),
+				$query->expr()->iLike('u.displayname', $query->createNamedParameter('%' . $this->db->escapeLikeParameter($pattern) . '%'))
+			))
+			->orderBy('u.displayname', 'ASC')
+			->addOrderBy('u.uid', 'ASC')
+			->setMaxResults($limit);
+
+		if ($offset !== null) {
+			$query->setFirstResult($offset);
+		}
+
+		$result = $query->executeQuery();
+		$displayNames = [];
+		while ($row = $result->fetch()) {
+			$displayNames[(string)$row['uid']] = (string)$row['displayname'];
+		}
+		$result->closeCursor();
+
+		return $displayNames;
+	}
+
+	private function fixLimit(?int $limit): ?int {
+		if (is_int($limit) && $limit >= 0) {
+			return $limit;
+		}
+
+		return null;
 	}
 }
