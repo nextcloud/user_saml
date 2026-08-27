@@ -543,10 +543,10 @@ class GroupBackend extends ABackend implements
 	#[\Override]
 	public function searchInGroup(string $gid, string $search = '', int $limit = -1, int $offset = 0): array {
 		$query = $this->dbc->getQueryBuilder();
-		$query->select('g.uid', 'dn.value AS displayname')
-			->from(self::TABLE_MEMBERS, 'g')
-			->where($query->expr()->eq('gid', $query->createNamedParameter($gid)))
-			->orderBy('g.uid', 'ASC');
+		$query->select('m.uid', 'dn.value AS displayname')
+			->from(self::TABLE_MEMBERS, 'm')
+			->where($query->expr()->eq('m.gid', $query->createNamedParameter($gid)))
+			->orderBy('m.uid', 'ASC');
 
 		$this->setupSearchQuery($search, $query, includeMetadata: true);
 
