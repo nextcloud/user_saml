@@ -1,6 +1,7 @@
 OC.L10N.register(
     "user_saml",
     {
+    "Encrypted" : "Verschlësselt",
     "Saved" : "Gespäichert",
     "Save changes" : "Ännerunge späicheren",
     "General" : "Allgemeng",
