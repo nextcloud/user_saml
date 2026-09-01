@@ -85,7 +85,7 @@ class SettingsController extends Controller {
 					$category = 'user-filter';
 					$key = 'saml-user-filter' . '-' . $setting;
 				} elseif ($category === 'name-id-formats') {
-					if ($setting === $storedSettings['sp-name-id-format']) {
+					if ($setting === ($storedSettings['sp-name-id-format'] ?? null)) {
 						$settings['sp']['name-id-format'] = $storedSettings['sp-name-id-format'];
 						//continue 2;
 					}
