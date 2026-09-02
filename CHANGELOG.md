@@ -5,6 +5,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.3.1
+
+### Added
+
+* feat: Implement ISearchKnownUsersBackend by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1219
+* fix: searching in groups by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1216
+
+### Fixed
+
+* fix: log spam by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1220
+
+### Dependencies
+
+* build(deps): bump postcss-selector-parser from 7.1.1 to 7.1.5 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1221
+
 ## 8.3.0
 
 * Add support for Nextcloud 35
