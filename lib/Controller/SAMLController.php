@@ -94,7 +94,7 @@ class SAMLController extends Controller {
 		// no need to update additional attributes
 		$isGsEnabled = $this->config->getSystemValueBool('gs.enabled', false);
 		$isGsMaster = $this->config->getSystemValueString('gss.mode', 'slave') === 'master';
-		$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []));
+		$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []), true);
 		if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
 			$this->userBackend->createUserIfNotExists($this->userData->getOriginalUid());
 			return;
