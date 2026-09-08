@@ -36,7 +36,7 @@ class TimezoneController extends Controller {
 	#[NoAdminRequired]
 	#[UseSession]
 	public function setTimezone(string $timezone, int $timezoneOffset): JSONResponse {
-		if (!in_array($timezone, \DateTimeZone::listIdentifiers())) {
+		if (!in_array($timezone, \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC))) {
 			throw new \InvalidArgumentException('Invalid timezone');
 		}
 		if ($this->userId === null) {
