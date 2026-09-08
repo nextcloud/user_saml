@@ -23,6 +23,7 @@ class UserData {
 	public function setAttributes(array $attributes): void {
 		$this->attributes = $attributes;
 		$this->uid = null; // clear the state in case
+		$this->samlSettings->recordAvailableAttributes($this->samlSettings->getProviderId(), array_keys($attributes));
 	}
 
 	public function getAttributes(): array {

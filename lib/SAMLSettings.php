@@ -11,10 +11,13 @@ use InvalidArgumentException;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OneLogin\Saml2\Constants;
+use Psr\Log\LoggerInterface;
 
 class SAMLSettings {
 	private const LOADED_NONE = 0;
@@ -71,10 +74,15 @@ class SAMLSettings {
 
 	public const DEFAULT_GROUP_PREFIX = 'SAML_';
 
+	/** Upper bound on how many attribute names are remembered per provider */
+	private const MAX_KNOWN_ATTRIBUTES = 100;
+
 	/** @var array<int, array<string, string>> */
 	private array $configurations = [];
 	/** @var self::LOADED_* $configurationsLoadedState */
 	private int $configurationsLoadedState = self::LOADED_NONE;
+
+	private ICache $knownAttributesCache;
 
 	public function __construct(
 		private readonly IURLGenerator $urlGenerator,
@@ -82,7 +90,10 @@ class SAMLSettings {
 		private readonly IAppConfig $appConfig,
 		private readonly ISession $session,
 		private readonly ConfigurationsMapper $mapper,
+		ICacheFactory $cacheFactory,
+		private readonly LoggerInterface $logger,
 	) {
+		$this->knownAttributesCache = $cacheFactory->createDistributed('user_saml-known_attributes');
 	}
 
 	/**
@@ -222,6 +233,36 @@ class SAMLSettings {
 	 */
 	public function delete(int $id): void {
 		$this->mapper->deleteById($id);
+		$this->knownAttributesCache->remove((string)$id);
+	}
+
+	/**
+	 * @param list<string> $attributeKeys
+	 */
+	public function recordAvailableAttributes(int $id, array $attributeKeys): void {
+		$cacheKey = (string)$id;
+		$known = $this->knownAttributesCache->get($cacheKey) ?? [];
+		$updated = array_values(array_unique(array_merge($known, $attributeKeys)));
+		if (count($updated) > self::MAX_KNOWN_ATTRIBUTES) {
+			$this->logger->info('Not recording available SAML attributes for provider {id}, known attribute cap of {cap} exceeded', [
+				'app' => 'user_saml',
+				'id' => $id,
+				'cap' => self::MAX_KNOWN_ATTRIBUTES,
+			]);
+			return;
+		}
+		sort($updated, SORT_STRING);
+		if ($updated === $known) {
+			return;
+		}
+		$this->knownAttributesCache->set($cacheKey, $updated);
+	}
+
+	/**
+	 * @return list<string>
+	 */
+	public function getAvailableAttributes(int $id): array {
+		return $this->knownAttributesCache->get((string)$id) ?? [];
 	}
 
 	/**

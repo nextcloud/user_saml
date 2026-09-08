@@ -34,6 +34,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 						<NcFormBox>
 							<ProviderGeneralSection
 								:generalSettings="generalSettings"
+								:knownAttributes="knownAttributes"
 								:modelValue="draft.general ?? {}"
 								type="saml"
 								@update:modelValue="(val) => { draft.general = val }"
@@ -255,6 +256,7 @@ const open = defineModel<boolean>('open')
 const props = defineProps<{
 	provider: Provider
 	generalSettings: SettingsMap
+	knownAttributes: string[]
 	spSettings: SettingsMap
 	nameIdFormats: NameIdFormatsMap
 	attributeMappingSettings: SettingsMap
