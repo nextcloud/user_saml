@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 				:modelValue="modelValue[key] ?? ''"
 				:required="attribute.required"
 				:placeholder="attribute.placeholder"
-				:helperText="hasWarning(key) ? t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables') : undefined"
+				:helperText="helperText(key)"
 				@update:modelValue="(val: string|number) => update(key, val + '')" />
 		</template>
 	</NcFormBox>
@@ -38,11 +38,14 @@ import NcFormBoxSwitch from '@nextcloud/vue/components/NcFormBoxSwitch'
 import NcInputField from '@nextcloud/vue/components/NcInputField'
 import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	generalSettings: SettingsMap
 	modelValue: Record<string, string>
 	type: 'saml' | 'env'
-}>()
+	knownAttributes?: string[]
+}>(), {
+	knownAttributes: () => [],
+})
 
 const emit = defineEmits<{
 	'update:modelValue': [value: Record<string, string>]
@@ -81,8 +84,17 @@ function update(key: string, value: string): void {
 	}
 }
 
-function hasWarning(key: string): boolean {
-	return key === 'uid_mapping' && props.type === 'env' && (props.modelValue[key] ?? '').startsWith('HTTP_')
+function helperText(key: string): string | undefined {
+	if (key !== 'uid_mapping') {
+		return undefined
+	}
+	if (props.type === 'env' && (props.modelValue[key] ?? '').startsWith('HTTP_')) {
+		return t('user_saml', 'Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables')
+	}
+	if (props.knownAttributes.length > 0) {
+		return t('user_saml', 'Attributes seen from this IdP: {attributes}', { attributes: props.knownAttributes.join(', ') })
+	}
+	return undefined
 }
 </script>
 

@@ -12,6 +12,8 @@ namespace OCA\User_SAML\Tests;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Services\IAppConfig;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\ISession;
 use OCP\IURLGenerator;
@@ -25,6 +27,7 @@ class SAMLSettingsTest extends TestCase {
 	private IAppConfig&MockObject $appConfig;
 	private ISession&MockObject $session;
 	private ConfigurationsMapper&MockObject $mapper;
+	private ICache&MockObject $knownAttributesCache;
 	private SAMLSettings $samlSettings;
 
 	#[\Override]
@@ -36,6 +39,9 @@ class SAMLSettingsTest extends TestCase {
 		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->session = $this->createMock(ISession::class);
 		$this->mapper = $this->createMock(ConfigurationsMapper::class);
+		$this->knownAttributesCache = $this->createMock(ICache::class);
+		$cacheFactory = $this->createMock(ICacheFactory::class);
+		$cacheFactory->method('createDistributed')->willReturn($this->knownAttributesCache);
 
 		$this->samlSettings = new SAMLSettings(
 			$this->urlGenerator,
@@ -43,6 +49,7 @@ class SAMLSettingsTest extends TestCase {
 			$this->appConfig,
 			$this->session,
 			$this->mapper,
+			$cacheFactory,
 		);
 	}
 
@@ -220,5 +227,48 @@ class SAMLSettingsTest extends TestCase {
 		$result = $this->samlSettings->getOneLoginSettingsArray(1);
 
 		$this->assertEquals('https://example.com/metadata', $result['sp']['entityId']);
+	}
+
+	public function testRecordAvailableAttributesMergesAndSortsWithExisting(): void {
+		$this->knownAttributesCache->method('get')
+			->with('1')
+			->willReturn(['mail']);
+		$this->knownAttributesCache->expects($this->once())
+			->method('set')
+			->with('1', ['Roles', 'mail']);
+
+		$this->samlSettings->recordAvailableAttributes(1, ['Roles', 'mail']);
+	}
+
+	public function testRecordAvailableAttributesDoesNotWriteWhenUnchanged(): void {
+		$this->knownAttributesCache->method('get')
+			->with('1')
+			->willReturn(['Roles', 'mail']);
+		$this->knownAttributesCache->expects($this->never())
+			->method('set');
+
+		$this->samlSettings->recordAvailableAttributes(1, ['mail', 'Roles']);
+	}
+
+	public function testRecordAvailableAttributesDoesNotWriteWhenCapExceeded(): void {
+		$existing = array_map(static fn (int $i): string => 'attr' . $i, range(1, 100));
+		$this->knownAttributesCache->method('get')
+			->with('1')
+			->willReturn($existing);
+		$this->knownAttributesCache->expects($this->never())
+			->method('set');
+
+		$this->samlSettings->recordAvailableAttributes(1, ['a-new-one']);
+	}
+
+	public function testDeleteAlsoRemovesKnownAttributes(): void {
+		$this->mapper->expects($this->once())
+			->method('deleteById')
+			->with(1);
+		$this->knownAttributesCache->expects($this->once())
+			->method('remove')
+			->with('1');
+
+		$this->samlSettings->delete(1);
 	}
 }
