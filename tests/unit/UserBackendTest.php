@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OC\Security\CSRF\CsrfToken;
+use OC\Security\CSRF\CsrfTokenManager;
 use OCA\User_SAML\GroupManager;
+use OCA\User_SAML\Model\SessionData;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -21,7 +24,9 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\User\Backend\IProvideEnabledStateBackend;
+use OCP\User\Backend\ISetDisplayNameBackend;
 use OCP\User\Events\UserChangedEvent;
 use OCP\UserInterface;
 use Override;
@@ -30,6 +35,9 @@ use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 interface EnabledStateUserInterface extends UserInterface, IProvideEnabledStateBackend {
+}
+
+interface DisplayNameUserInterface extends UserInterface, ISetDisplayNameBackend {
 }
 
 class UserBackendTest extends TestCase {
@@ -359,5 +367,161 @@ class UserBackendTest extends TestCase {
 			->method('getGroups')
 			->willReturn([]);
 		$this->userBackend->updateAttributes('ExistingUser');
+	}
+
+	public function testHasUserListingsReflectsAutoprovisioning(): void {
+		$this->userBackend = $this->getRealUserBackend();
+
+		$this->appConfig->method('getAppValueInt')
+			->with('general-require_provisioned_account')
+			->willReturn(0);
+		$this->assertTrue($this->userBackend->hasUserListings());
+	}
+
+	public function testHasUserListingsFalseWhenProvisionedAccountRequired(): void {
+		$this->userBackend = $this->getRealUserBackend();
+
+		$this->appConfig->method('getAppValueInt')
+			->with('general-require_provisioned_account')
+			->willReturn(1);
+		$this->assertFalse($this->userBackend->hasUserListings());
+	}
+
+	public function testIsSessionActiveWithIdentityProvider(): void {
+		$this->userBackend = $this->getRealUserBackend();
+
+		$this->session->method('get')
+			->with(SessionData::KEY_IDENTITY_PROVIDER_ID)
+			->willReturn(1);
+		$this->assertTrue($this->userBackend->isSessionActive());
+	}
+
+	public function testIsSessionActiveWithoutIdentityProvider(): void {
+		$this->userBackend = $this->getRealUserBackend();
+
+		$this->session->method('get')
+			->with(SessionData::KEY_IDENTITY_PROVIDER_ID)
+			->willReturn(null);
+		$this->assertFalse($this->userBackend->isSessionActive());
+	}
+
+	public function testGetLogoutUrlWithoutSingleLogoutService(): void {
+		$this->userBackend = $this->getRealUserBackend();
+		$token = $this->createMock(CsrfToken::class);
+		$tokenManager = $this->createMock(CsrfTokenManager::class);
+		$this->overwriteService(CsrfTokenManager::class, $tokenManager);
+
+		$this->SAMLSettings->method('getProviderId')->willReturn(1);
+		$this->SAMLSettings->method('get')->with(1)->willReturn([]);
+		$token->method('getEncryptedValue')->willReturn('token-value');
+		$tokenManager->method('getToken')->willReturn($token);
+		$this->urlGenerator
+			->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('core.login.logout', ['requesttoken' => 'token-value'])
+			->willReturn('https://example.com/logout');
+
+		$this->assertSame('https://example.com/logout', $this->userBackend->getLogoutUrl());
+	}
+
+	public function testGetLogoutUrlWithSingleLogoutService(): void {
+		$this->userBackend = $this->getRealUserBackend();
+		$token = $this->createMock(CsrfToken::class);
+		$tokenManager = $this->createMock(CsrfTokenManager::class);
+		$this->overwriteService(CsrfTokenManager::class, $tokenManager);
+
+		$this->SAMLSettings->method('getProviderId')->willReturn(1);
+		$this->SAMLSettings->method('get')->with(1)->willReturn(['idp-singleLogoutService.url' => 'https://idp.example.com/slo']);
+		$token->method('getEncryptedValue')->willReturn('token-value');
+		$tokenManager->method('getToken')->willReturn($token);
+		$this->urlGenerator
+			->expects($this->once())
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.singleLogoutService', ['requesttoken' => 'token-value'])
+			->willReturn('https://example.com/slo');
+
+		$this->assertSame('https://example.com/slo', $this->userBackend->getLogoutUrl());
+	}
+
+	public function testGetCurrentUserIdFromActiveSession(): void {
+		$this->userBackend = $this->getMockedBuilder(['userExists']);
+		$userSession = $this->createMock(IUserSession::class);
+		$this->overwriteService(IUserSession::class, $userSession);
+		$user = $this->createMock(IUser::class);
+
+		$user->method('getUID')->willReturn('ExistingUser');
+		$userSession->method('getUser')->willReturn($user);
+		$this->session->method('get')
+			->with('user_saml.samlUserData')
+			->willReturn(['attribute' => 'value']);
+		$this->userBackend->method('userExists')->with('ExistingUser')->willReturn(true);
+
+		$this->assertSame('ExistingUser', $this->userBackend->getCurrentUserId());
+	}
+
+	public function testGetCurrentUserIdReturnsEmptyWhenUserDoesNotExist(): void {
+		$this->userBackend = $this->getMockedBuilder(['userExists']);
+		$userSession = $this->createMock(IUserSession::class);
+		$this->overwriteService(IUserSession::class, $userSession);
+
+		$userSession->method('getUser')->willReturn(null);
+		$this->session->method('get')->willReturn(null);
+		$this->userData->method('getEffectiveUid')->willReturn('');
+		$this->userBackend->method('userExists')->willReturn(false);
+
+		$this->assertSame('', $this->userBackend->getCurrentUserId());
+	}
+
+	public function testUserExistsDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		$backend = $this->createMock(UserInterface::class);
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend->expects($this->once())
+			->method('userExists')
+			->with('ExistingUser')
+			->willReturn(true);
+
+		$this->assertTrue($this->userBackend->userExists('ExistingUser'));
+	}
+
+	public function testGetDisplayNameDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var DisplayNameUserInterface&MockObject $backend */
+		$backend = $this->createMock(DisplayNameUserInterface::class);
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend->expects($this->once())
+			->method('getDisplayName')
+			->with('ExistingUser')
+			->willReturn('Actual Backend Name');
+
+		$this->assertSame('Actual Backend Name', $this->userBackend->getDisplayName('ExistingUser'));
+	}
+
+	public function testSetDisplayNameDelegatesToActualBackend(): void {
+		$this->userBackend = $this->getMockedBuilder(['getActualUserBackend']);
+		/** @var DisplayNameUserInterface&MockObject $backend */
+		$backend = $this->createMock(DisplayNameUserInterface::class);
+
+		$this->userBackend
+			->expects($this->once())
+			->method('getActualUserBackend')
+			->with('ExistingUser')
+			->willReturn($backend);
+		$backend->expects($this->once())
+			->method('setDisplayName')
+			->with('ExistingUser', 'New Name')
+			->willReturn(true);
+
+		$this->assertTrue($this->userBackend->setDisplayName('ExistingUser', 'New Name'));
 	}
 }
