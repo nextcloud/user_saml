@@ -12,6 +12,7 @@ use OCA\User_SAML\Exceptions\NonMigratableGroupException;
 use OCA\User_SAML\Jobs\MigrateGroups;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\BackgroundJob\IJobList;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\BeforeGroupCreatedEvent;
 use OCP\Group\Events\BeforeGroupDeletedEvent;
@@ -275,12 +276,20 @@ class GroupManager {
 	}
 
 	protected function hasGroupForeignMembers(IGroup $group): bool {
-		foreach ($group->getUsers() as $user) {
-			if ($user->getBackendClassName() !== 'user_saml') {
-				return true;
-			}
+		$uids = array_keys($group->searchUsers(''));
+
+		$samlUidCount = 0;
+		foreach (array_chunk($uids, 1000) as $chunk) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('uid')
+				->from('user_saml_users')
+				->where($qb->expr()->in('uid', $qb->createNamedParameter($chunk, IQueryBuilder::PARAM_STR_ARRAY)));
+			$result = $qb->executeQuery();
+			$samlUidCount += count($result->fetchAll(\PDO::FETCH_COLUMN));
+			$result->closeCursor();
 		}
-		return false;
+
+		return $samlUidCount < count($uids);
 	}
 
 	/**
