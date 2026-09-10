@@ -233,7 +233,7 @@ class UserBackendTest extends TestCase {
 			->expects($this->once())
 			->method('handleIncomingGroups')
 			->with($user, []);
-		$this->userBackend->updateAttributes('ExistingUser', []);
+		$this->userBackend->updateAttributes('ExistingUser');
 	}
 
 	public function testUpdateAttributesWithoutValidUser(): void {
