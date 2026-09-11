@@ -45,3 +45,5 @@ export type SettingsMap = Record<string, SettingAttribute>
 export type SecurityMap = Record<string, string>
 export type SecurityGeneralMap = Record<string, string | SettingAttribute>
 export type NameIdFormatsMap = Record<string, NameIdFormat>
+/** SAML attribute names seen from each provider's IdP, keyed by provider id */
+export type KnownAttributesMap = Record<string, string[]>

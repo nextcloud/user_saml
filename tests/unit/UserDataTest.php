@@ -49,4 +49,13 @@ class UserDataTest extends TestCase {
 		$uid = $this->invokePrivate($this->userData, 'testEncodedObjectGUID', [$input]);
 		$this->assertSame($expectation, $uid);
 	}
+
+	public function testSetAttributesRecordsAttributeKeys(): void {
+		$this->samlSettings->method('getProviderId')->willReturn(1);
+		$this->samlSettings->expects($this->once())
+			->method('recordAvailableAttributes')
+			->with(1, ['Roles', 'mail']);
+
+		$this->userData->setAttributes(['Roles' => 'some-value', 'mail' => 'foo@example.com']);
+	}
 }
