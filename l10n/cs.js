@@ -2,6 +2,7 @@ OC.L10N.register(
     "user_saml",
     {
     "This user account is disabled, please contact your administrator." : "Tento uživatelský účet byl znepřístupněn, obraťte se na správce.",
+    "Authentication failed." : "Ověřování se nezdařilo.",
     "Unknown error, please check the log file for more details." : "Neznámá chyba, podrobnosti naleznete v záznamu událostí.",
     "Direct log in" : "Přímé přihlášení",
     "This page should not be visited directly." : "Tato stránka by neměla být zobrazována přímo.",
