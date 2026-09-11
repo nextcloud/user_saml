@@ -24,6 +24,7 @@ use OCA\User_SAML\Listener\SabrePluginEventListener;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Service\SessionService;
+use OCA\User_SAML\Support\SystemReportSection;
 use OCA\User_SAML\UserBackend;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -76,6 +77,14 @@ class Application extends App implements IBootstrap {
 			 * @psalm-suppress MissingDependency
 			 */
 			$context->registerAlternativeLoginProvider(AlternativeLoginProvider::class);
+		}
+
+		if (method_exists($context, 'registerSystemReportSection')) {
+			/**
+			 * @psalm-suppress UndefinedInterfaceMethod
+			 * @psalm-suppress MissingDependency
+			 */
+			$context->registerSystemReportSection(SystemReportSection::class);
 		}
 	}
 
