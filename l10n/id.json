@@ -57,6 +57,8 @@
     "If you want to optionally map attributes to the user you can configure these here." : "Jika Anda ingin memetakan atribut secara opsional ke pengguna, Anda dapat mengonfigurasinya di sini.",
     "User filtering" : "Penyaringan pengguna",
     "If you want to optionally restrict user login depending on user data, configure it here." : "Jika Anda ingin membatasi login pengguna secara opsional bergantung pada data pengguna, konfigurasikan di sini.",
+    "Registered Providers" : "Penyedia Terdaftar",
+    "Register new provider" : "Daftarkan penyedia baru",
     "Remove {name}" : "Hapus {name}",
     "Reset settings" : "Setel ulang pengaturan",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Fitur ini mungkin tidak berfungsi dengan semua penyedia identitas. Gunakan hanya jika IdP Anda secara khusus memerlukan binding POST untuk permintaan SAML.",
