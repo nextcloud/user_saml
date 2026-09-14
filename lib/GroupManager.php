@@ -168,7 +168,7 @@ class GroupManager {
 
 	protected function createGroupInBackend(string $gid, ?string $originalGid = null): ?IGroup {
 		$this->dispatcher->dispatchTyped(new BeforeGroupCreatedEvent($gid));
-		if (!$this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid)) {
+		if ($this->ownGroupBackend->createGroup($gid, $originalGid ?? $gid) === null) {
 			return null;
 		}
 
