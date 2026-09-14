@@ -35,11 +35,13 @@ class Admin implements IDelegatedSettings {
 	public function getForm(): TemplateResponse {
 		$providerIds = $this->samlSettings->getListOfIdps();
 		$providers = [];
+		$knownAttributes = [];
 		foreach ($providerIds as $id => $name) {
 			$providers[] = [
 				'id' => $id,
 				'name' => $name === '' ? $this->l10n->t('Provider %s', [$id])  : $name
 			];
+			$knownAttributes[$id] = $this->samlSettings->getAvailableAttributes($id);
 		}
 		$serviceProviderFields = [
 			'x509cert' => [
@@ -242,6 +244,7 @@ class Admin implements IDelegatedSettings {
 
 		$this->initialState->provideInitialState('type', $type);
 		$this->initialState->provideInitialState('providers', $providers);
+		$this->initialState->provideInitialState('knownAttributes', $knownAttributes);
 		$this->initialState->provideInitialState('generalSettings', $generalSettings);
 		$this->initialState->provideInitialState('spSettings', $serviceProviderFields);
 		$this->initialState->provideInitialState('nameIdFormats', $nameIdFormats);

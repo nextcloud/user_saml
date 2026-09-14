@@ -52,6 +52,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 							v-model="envVarGeneralConfig"
 							type="env"
 							:generalSettings="generalSettings"
+							:knownAttributes="knownAttributesFor(providers[0]?.id)"
 							@fieldChange="onEnvVarFieldChange" />
 					</NcFormBox>
 				</NcFormGroup>
@@ -128,6 +129,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 			:open="dialogOpen"
 			:provider="dialogProvider"
 			:generalSettings="generalSettings"
+			:knownAttributes="knownAttributesFor(dialogProvider.id)"
 			:spSettings="spSettings"
 			:nameIdFormats="nameIdFormats"
 			:attributeMappingSettings="attributeMappingSettings"
@@ -145,6 +147,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import type {
 	GlobalConfig,
+	KnownAttributesMap,
 	NameIdFormatsMap,
 	Provider,
 	SecurityGeneralMap,
@@ -173,6 +176,7 @@ import logger from '../logger.ts'
 const props = defineProps<{
 	initialType: string
 	initialProviders: Provider[]
+	initialKnownAttributes: KnownAttributesMap
 	generalSettings: SettingsMap
 	spSettings: SettingsMap
 	nameIdFormats: NameIdFormatsMap
@@ -206,6 +210,10 @@ const envVarAttributeMappingConfig = ref<Record<string, string>>({})
 const envVarUserFilterConfig = ref<Record<string, string>>({})
 
 const showAttributeMapping = computed(() => globalConfig.value.require_provisioned_account !== '1')
+
+function knownAttributesFor(providerId: Provider['id'] | undefined): string[] {
+	return props.initialKnownAttributes[String(providerId)] ?? []
+}
 
 const adminWarningText = computed(() => {
 	const loginUrl = generateUrl('/login') + '?direct=1'
