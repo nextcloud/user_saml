@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.8
+
+* [feat: Implement ICreateNamedGroupBackend by @CarlSchwan](https://github.com/nextcloud/user_saml/pull/1234)
+
 ## 7.1.6
 
 ### Fixed
