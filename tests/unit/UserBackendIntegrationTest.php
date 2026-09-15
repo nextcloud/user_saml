@@ -39,7 +39,7 @@ class UserBackendIntegrationTest extends TestCase {
 		[
 			'uid' => 'user_saml_integration_test_uid2',
 			'displayname' => 'SAML Integration User Two',
-			'home' => '',
+			'home' => '/tmp/user_saml_integration_test_uid2',
 		],
 	];
 
