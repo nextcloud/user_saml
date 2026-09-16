@@ -78,6 +78,7 @@
     "Remove {name}" : "{name} entfernen",
     "Reset settings" : "Einstellungen zurücksetzen",
     "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "Umgebungsvariablen, die mit \"HTTP_\" beginnen, sind gefährlich, da HTTP-Header in diesen Umgebungsvariablen gespeichert werden",
+    "Attributes seen from this IdP: {attributes}" : "Attribute, die von diesem Identitätsanbieter aus gesehen werden: {attributes}",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Diese Funktion ist möglicherweise nicht mit allen Identitätsanbietern kompatibel. Verwenden Sie sie nur, wenn Ihr Identitätsanbieter eine POST-Bindung für SAML-Anfragen erfordert.",
     "Configure: {name}" : "Konfiguriere: {name}",
     "Cancel changes" : "Änderungen abbrechen",
