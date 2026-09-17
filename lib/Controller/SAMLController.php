@@ -41,6 +41,7 @@ use OCP\Server;
 use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
+use OneLogin\Saml2\Utils;
 use OneLogin\Saml2\ValidationError;
 use Psr\Log\LoggerInterface;
 
@@ -358,6 +359,8 @@ class SAMLController extends Controller {
 			$this->logger->debug('Invalid auth payload');
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
+
+		Utils::setBaseURLPath(\OC::$WEBROOT);
 
 		$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 		// validator (called with processResponse()) needs an XML entity loader
