@@ -78,6 +78,7 @@
     "Remove {name}" : "{name} sil",
     "Reset settings" : "Ayarları sıfırla",
     "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "HTTP üst bilgileri bu ortam değişkenlerine kaydedildiği için HTTP_ ile başlayan ortam değişkenleri tehlikelidir",
+    "Attributes seen from this IdP: {attributes}" : "Bu kimlik hizmeti sağlayıcısından görülebilen öznitelikler: {attributes}",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Bu özellik tüm kimlik hizmeti sağlayıcılarıyla çalışmayabilir. Yalnızca kimlik hizmeti sağlayıcınızın SAML istekleri için özellikle POST kullanması gerekiyorsa kullanın.",
     "Configure: {name}" : "Yapılandır: {name}",
     "Cancel changes" : "Değişiklikleri iptal et",

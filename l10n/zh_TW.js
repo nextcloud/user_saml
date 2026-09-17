@@ -80,6 +80,7 @@ OC.L10N.register(
     "Remove {name}" : "移除 {name}",
     "Reset settings" : "重設設定",
     "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "以 HTTP_ 開頭的環境變數很危險，因為 HTTP 標頭會儲存在這些環境變數中",
+    "Attributes seen from this IdP: {attributes}" : "從此 IdP 取得的屬性：{attributes}",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "此功能可能無法適用於所有身分提供者。只有當您的 IdP 特別要求 SAML 請求使用 POST 綁紮時，才能使用此功能。",
     "Configure: {name}" : "設定：{name}",
     "Cancel changes" : "取消變更",

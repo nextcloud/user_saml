@@ -80,6 +80,7 @@ OC.L10N.register(
     "Remove {name}" : "Supprimer {name}",
     "Reset settings" : "Réinitialiser les paramètres",
     "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "Des variables d'environnement qui commencent par HTTP_ sont dangereuses car les entêtes HTTP sont stockés dans ces variables d'environnement",
+    "Attributes seen from this IdP: {attributes}" : "Attributs vus depuis ce fournisseur d'identité : {attributes}",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "Cette fonctionnalité peut ne pas fonctionner avec tous les fournisseurs d'identité. À utiliser uniquement si votre fournisseur d'identité (IdP) exige spécifiquement une liaison POST pour les requêtes SAML.",
     "Configure: {name}" : "Configurer : {name}",
     "Cancel changes" : "Annuler les modifications",
