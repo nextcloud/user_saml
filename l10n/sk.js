@@ -92,7 +92,7 @@ OC.L10N.register(
     "If your Service Provider should use certificates you can optionally specify them here." : "Ak by poskytovateľ služieb mal používať certifikáty, môžete ich tu špecifikovať.",
     "Name ID format" : "Formát identifikátora názvu",
     "Identity Provider Data" : "Poskytovateľ prihlasovacích údajov",
-    "Identifier of the IdP entity (must be a URI)" : "Identifikátor položky poskytovateľa prihlasovacích údajov (musí byť URI)",
+    "Identifier of the IdP entity (must be a URI)" : "Identifikátor entity IdP (musí byť URI)",
     "URL Target of the IdP where the SP will send the Authentication Request Message" : "Cieľová URL IdP, kam SP zašle správu s požiadavkou na overenie totožnosti",
     "URL Location of the IdP where the SP will send the SLO Request" : "Umiestnenie URL IdP, kam SP zašle SLO požiadavku",
     "URL Location of the IDP's SLO Response" : "Umiestnenie URL IDP, kam SLO pošle odpoveď",
