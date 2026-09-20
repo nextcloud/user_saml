@@ -80,6 +80,7 @@ OC.L10N.register(
     "Remove {name}" : "Bain {name}",
     "Reset settings" : "Athshocraigh socruithe",
     "Environment var starting with HTTP_ are dangerous as HTTP headers are saved in these environment variables" : "Tá athróga timpeallachta a thosaíonn le HTTP_ contúirteach mar go sábháiltear ceanntásca HTTP sna hathróga timpeallachta seo.",
+    "Attributes seen from this IdP: {attributes}" : "Tréithe a chonacthas ón IdP seo: {attributes}",
     "This feature might not work with all identity providers. Use only if your IdP specifically requires POST binding for SAML requests." : "B’fhéidir nach n-oibreoidh an ghné seo le gach soláthraí aitheantais. Ná húsáid ach amháin má éilíonn do IdP ceangal POST go sonrach le haghaidh iarratais SAML.",
     "Configure: {name}" : "Cumraigh: {name}",
     "Cancel changes" : "Cealaigh athruithe",
