@@ -303,8 +303,8 @@ class GroupBackend extends ABackend implements
 					'app' => 'user_saml',
 					'exception' => $e,
 				]);
-				return null;
 			}
+			return null;
 		}
 
 		// Add to cache

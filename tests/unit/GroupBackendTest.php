@@ -185,6 +185,91 @@ class GroupBackendTest extends TestCase {
 		$this->assertArrayHasKey($this->users[0]['uid'], $byUid, 'UID search should still work');
 	}
 
+	public function testGetBackendName(): void {
+		$this->assertSame('user_saml', $this->groupBackend->getBackendName());
+	}
+
+	public function testGetDisplayName(): void {
+		$group = $this->groups[0];
+		$this->assertSame($group['saml_gid'], $this->groupBackend->getDisplayName($group['gid']));
+
+		// falls back to the gid itself when the group is unknown
+		$this->assertSame('unknown_gid', $this->groupBackend->getDisplayName('unknown_gid'));
+	}
+
+	public function testSetDisplayName(): void {
+		$group = $this->groups[2];
+		$this->assertTrue($this->groupBackend->setDisplayName($group['gid'], 'New Display Name'));
+		$this->assertSame('New Display Name', $this->groupBackend->getDisplayName($group['gid']));
+
+		$this->assertFalse($this->groupBackend->setDisplayName('unknown_gid', 'New Display Name'));
+	}
+
+	public function testGroupsExists(): void {
+		$gids = array_column($this->groups, 'gid');
+		$result = $this->groupBackend->groupsExists([...$gids, 'unknown_gid']);
+
+		$this->assertCount(count($gids), $result);
+		foreach ($gids as $gid) {
+			$this->assertContains($gid, $result);
+		}
+	}
+
+	public function testGetGroupDetails(): void {
+		$group = $this->groups[0];
+		$this->assertSame(['displayName' => $group['saml_gid']], $this->groupBackend->getGroupDetails($group['gid']));
+		$this->assertSame([], $this->groupBackend->getGroupDetails('unknown_gid'));
+	}
+
+	public function testGetGroupsDetails(): void {
+		$group = $this->groups[0];
+		$result = $this->groupBackend->getGroupsDetails([$group['gid'], 'unknown_gid']);
+
+		$this->assertSame(['displayName' => $group['saml_gid']], $result[$group['gid']]);
+		$this->assertArrayNotHasKey('unknown_gid', $result);
+	}
+
+	public function testAddToGroupIsIdempotent(): void {
+		$group = $this->groups[2];
+		$uid = $this->users[0]['uid'];
+		$this->assertFalse($this->groupBackend->inGroup($uid, $group['gid']));
+
+		$this->assertTrue($this->groupBackend->addToGroup($uid, $group['gid']));
+		$this->assertTrue($this->groupBackend->inGroup($uid, $group['gid']));
+
+		// adding an already-member user is a no-op that still reports success
+		$this->assertTrue($this->groupBackend->addToGroup($uid, $group['gid']));
+
+		$this->groupBackend->removeFromGroup($uid, $group['gid']);
+	}
+
+	public function testRemoveFromGroupReturnsFalseWhenNotMember(): void {
+		$group = $this->groups[2];
+		$uid = $this->users[0]['uid'];
+
+		$this->assertFalse($this->groupBackend->removeFromGroup($uid, $group['gid']));
+
+		$this->groupBackend->addToGroup($uid, $group['gid']);
+		$this->assertTrue($this->groupBackend->removeFromGroup($uid, $group['gid']));
+	}
+
+	public function testCreateGroupReturnsNullOnDuplicate(): void {
+		$existingGroup = $this->groups[0];
+		$this->assertNull($this->groupBackend->createGroup($existingGroup['gid']));
+	}
+
+	public function testDeleteGroup(): void {
+		$gid = $this->groupBackend->createGroup('user_saml_integration_test_throwaway_group');
+		$this->assertNotNull($gid);
+		$this->assertTrue($this->groupBackend->groupExists($gid));
+
+		$this->assertTrue($this->groupBackend->deleteGroup($gid));
+		$this->assertFalse($this->groupBackend->groupExists($gid));
+
+		// deleting an already-deleted group still reports success
+		$this->assertTrue($this->groupBackend->deleteGroup($gid));
+	}
+
 	private function resetAccountData(): void {
 		foreach ($this->users as $user) {
 			$qb = $this->connection->getQueryBuilder();
