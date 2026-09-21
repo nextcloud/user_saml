@@ -444,7 +444,7 @@ class SAMLControllerTest extends TestCase {
 
 	public function testAssertionConsumerServiceSetsSamlBaseUrlPath(): void {
 		try {
-			Utils::setBaseURLPath(null);
+			Utils::setBaseURLPath('');
 
 			$this->urlGenerator
 				->expects($this->once())
@@ -484,7 +484,7 @@ class SAMLControllerTest extends TestCase {
 
 			$this->assertSame('/nextcloud/', Utils::getBaseURLPath());
 		} finally {
-			Utils::setBaseURLPath(null);
+			Utils::setBaseURLPath('');
 		}
 	}
 }
