@@ -360,7 +360,7 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
-		Utils::setBaseURLPath(\OC::$WEBROOT);
+		Utils::setBaseURLPath($this->urlGenerator->getWebroot());
 
 		$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
 		// validator (called with processResponse()) needs an XML entity loader

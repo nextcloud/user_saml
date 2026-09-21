@@ -443,11 +443,13 @@ class SAMLControllerTest extends TestCase {
 	}
 
 	public function testAssertionConsumerServiceSetsSamlBaseUrlPath(): void {
-		$previousWebRoot = \OC::$WEBROOT;
-
 		try {
-			\OC::$WEBROOT = '/nextcloud';
 			Utils::setBaseURLPath(null);
+
+			$this->urlGenerator
+				->expects($this->once())
+				->method('getWebroot')
+				->willReturn('/nextcloud');
 
 			$data = [
 				'AuthNRequestID' => 'request-id',
@@ -482,7 +484,6 @@ class SAMLControllerTest extends TestCase {
 
 			$this->assertSame('/nextcloud/', Utils::getBaseURLPath());
 		} finally {
-			\OC::$WEBROOT = $previousWebRoot;
 			Utils::setBaseURLPath(null);
 		}
 	}
