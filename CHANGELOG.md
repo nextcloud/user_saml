@@ -5,6 +5,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.4.0
+
+### Added
+
+* Add support for Nextcloud 36
+* feat(admin): Display list of available attributes by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1228
+
+### Fixed
+
+* fix: Use compatibility list when checking for timezone by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1229
+* perf: Don't fetch all users from a group on login by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1231
+* fix: return null when we can't create group, make sure home is not an empty string (Oracle) by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1230
+* fix: Use strict mode with in_array
+* Updated translations
+
+### Dependencies
+
+* build(deps): bump nanoid from 3.3.16 to 3.3.19 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1239
+* build(deps): bump qs from 6.15.3 to 6.16.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1224
+* build(deps): bump fast-uri from 3.1.5 to 3.1.7 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1223
+
 ## 8.3.1
 
 ### Added
