@@ -11,3 +11,4 @@ vendor/
 css
 js
 node_modules
+tests/unit/.phpunit.result.cache

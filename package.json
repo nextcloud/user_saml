@@ -39,8 +39,6 @@
     "@nextcloud/password-confirmation": "^6.0.3",
     "@nextcloud/router": "^3.1.0",
     "@nextcloud/vue": "^9.4.0",
-    "@vitejs/plugin-vue": "^6.0.3",
-    "vite-plugin-node-polyfills": "^0.25.0",
     "vue": "^3.5.18",
     "vue-material-design-icons": "^5.3.1"
   },
