@@ -271,13 +271,20 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		$id = $this->settings->getProviderId();
 		$settings = $this->settings->get($id);
 		$slo = $settings['idp-singleLogoutService.url'] ?? '';
-		$tokenManager = Server::get(CsrfTokenManager::class);
 
-		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute($slo === '' ? 'core.login.logout' : 'user_saml.SAML.singleLogoutService', [
-			'requesttoken' => $tokenManager->getToken()->getEncryptedValue(),
-		]);
-		/** @var non-empty-string $logoutUrl */
-		return $logoutUrl;
+		// Without the normal login form, /login redirects straight back into SAML,
+		// so a local logout would be pointless.
+		if ($slo === '' && !$this->appConfig->getAppValueBool('general-nextcloud_login_form')) {
+			return '';
+		}
+
+		$tokenManager = Server::get(CsrfTokenManager::class);
+		return $this->urlGenerator->linkToRouteAbsolute(
+			$slo === '' ? 'core.login.logout' : 'user_saml.SAML.singleLogoutService',
+			[
+				'requesttoken' => $tokenManager->getToken()->getEncryptedValue(),
+			]
+		);
 	}
 
 	/**
