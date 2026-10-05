@@ -36,7 +36,7 @@ OC.L10N.register(
     "Attribute to map the email address to." : "Atribút na priradenie e-mailovej adresy.",
     "Attribute to map the quota to." : "Atribút na priradenie kvóty.",
     "Attribute to map the users home to." : "Atribút na priradenie domovského priečinka používateľa.",
-    "Attribute to map the users groups to." : "Atribút na priradenie skupiny používateľov.",
+    "Attribute to map the users groups to." : "Atribút na mapovanie skupín používateľov.",
     "Attribute to map the users MFA login status" : "Priradenie atribútu pre mapovanie stavu prihlásenia užívateľa MFA",
     "Attribute to map the users to an existing LDAP user" : "Atribút na mapovanie používateľov na existujúceho používateľa LDAP",
     "Group Mapping Prefix, default: %s" : "Skupinový Mapovací Prefix, predvolené: %s",

@@ -23,6 +23,7 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Usar autenticación SAML integrada",
     "Use environment variable" : "Usar la variable de ambiente",
     "Attribute mapping" : "Mapeo del atributo",
+    "Remove {name}" : "Eliminar {name}",
     "Download metadata XML" : "Descargar metadatos XML",
     "General" : "General",
     "Service Provider Data" : "Datos del Proveedor de Servicio",
