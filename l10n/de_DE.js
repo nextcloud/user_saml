@@ -30,7 +30,7 @@ OC.L10N.register(
     "Only allow authentication if an account exists on some other backend (e.g. LDAP)." : "Anmeldung nur erlauben, wenn ein Konto auf einem anderen Backend vorhanden ist (z. B. LDAP).",
     "Optional display name of the identity provider (default: \"SSO & SAML log in\")" : "Optional den Namen des Identitätsanbieters anzeigen (Standard: \"SSO- & SAML-Anmeldung\")",
     "Use POST method for SAML request (default: GET)" : "POST-Methode für SAML-Anfragen verwenden (Standard: GET)",
-    "Allow the use of multiple user back-ends (e.g. LDAP)" : "Die Verwendung von mehreren Benutzerverwaltungen erlauben (z. B. LDAP)",
+    "Allow the use of multiple user back-ends (e.g. LDAP)" : "Die Verwendung von mehreren Benutzerverwaltungen erlauben (z. B. LDAP)",
     "Use normal Nextcloud login form" : "Normales Nextcloud-Anmeldeformular verwenden",
     "Attribute to map the displayname to." : "Attribut dem der Anzeigename zugeordnet werden soll.",
     "Attribute to map the email address to." : "Attribut, dem die E-Mail-Adresse zugeordnet werden soll.",
