@@ -29,6 +29,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Security\ICrypto;
 use OCP\Security\ITrustedDomainHelper;
+use OneLogin\Saml2\Utils;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -439,5 +440,51 @@ class SAMLControllerTest extends TestCase {
 
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals($errorUrl, $result->getRedirectURL());
+	}
+
+	public function testAssertionConsumerServiceSetsSamlBaseUrlPath(): void {
+		try {
+			Utils::setBaseURLPath('');
+
+			$this->urlGenerator
+				->expects($this->once())
+				->method('getWebroot')
+				->willReturn('/nextcloud');
+
+			$data = [
+				'AuthNRequestID' => 'request-id',
+				'Idp' => 1,
+				'OriginalUrl' => '',
+			];
+
+			$this->request
+				->expects($this->once())
+				->method('getCookie')
+				->with('saml_data')
+				->willReturn(base64_encode('encrypted-cookie'));
+
+			$this->crypto
+				->expects($this->once())
+				->method('decrypt')
+				->with('encrypted-cookie')
+				->willReturn(json_encode($data, JSON_THROW_ON_ERROR));
+
+			$this->samlSettings
+				->expects($this->once())
+				->method('getOneLoginSettingsArray')
+				->with(1)
+				->willReturn([]);
+
+			try {
+				$this->samlController->assertionConsumerService();
+			} catch (\Throwable) {
+				// Auth initialization is expected to fail with the minimal
+				// SAML configuration used by this test.
+			}
+
+			$this->assertSame('/nextcloud/', Utils::getBaseURLPath());
+		} finally {
+			Utils::setBaseURLPath('');
+		}
 	}
 }
