@@ -413,6 +413,9 @@ class UserBackendTest extends TestCase {
 
 		$this->SAMLSettings->method('getProviderId')->willReturn(1);
 		$this->SAMLSettings->method('get')->with(1)->willReturn([]);
+		$this->appConfig->method('getAppValueBool')
+			->with('general-nextcloud_login_form')
+			->willReturn(true);
 		$token->method('getEncryptedValue')->willReturn('token-value');
 		$tokenManager->method('getToken')->willReturn($token);
 		$this->urlGenerator
@@ -422,6 +425,21 @@ class UserBackendTest extends TestCase {
 			->willReturn('https://example.com/logout');
 
 		$this->assertSame('https://example.com/logout', $this->userBackend->getLogoutUrl());
+	}
+
+	public function testGetLogoutUrlWithoutSingleLogoutServiceAndLoginForm(): void {
+		$this->userBackend = $this->getRealUserBackend();
+
+		$this->SAMLSettings->method('getProviderId')->willReturn(1);
+		$this->SAMLSettings->method('get')->with(1)->willReturn([]);
+		$this->appConfig->method('getAppValueBool')
+			->with('general-nextcloud_login_form')
+			->willReturn(false);
+		$this->urlGenerator
+			->expects($this->never())
+			->method('linkToRouteAbsolute');
+
+		$this->assertSame('', $this->userBackend->getLogoutUrl());
 	}
 
 	public function testGetLogoutUrlWithSingleLogoutService(): void {
