@@ -44,6 +44,7 @@
     "Windows domain qualified name" : "Windows-domenekvalifisert navn",
     "X509 subject name" : "X509 emne navn",
     "SSO & SAML authentication" : "SSO- og SAML-autentisering",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "Autentiser med enkel pålogging",
     "Saved" : "Lagret",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Velg om du vil identifisere deg med SAML-tilbyderen som er innebygget i Nextcloud eller om du vil du vil identifisere deg mot en miljøvariabel.",

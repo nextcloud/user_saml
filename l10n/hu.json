@@ -43,6 +43,7 @@
     "Windows domain qualified name" : "Windows tartományi név",
     "X509 subject name" : "X509 tárgy neve",
     "SSO & SAML authentication" : "SSO és SAML hitelesítés",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "Hitelesítés egyszeri bejelentkezéssel",
     "Saved" : "Mentve",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Válasszon, hogy a Nextcloudba épített SAML szolgáltató vagy egy környezeti változó ellenében szeretne bejelentkeztetni.",

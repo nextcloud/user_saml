@@ -31,6 +31,7 @@
     "Email address" : "이메일 주소",
     "Encrypted" : "암호화",
     "SSO & SAML authentication" : "SSO 및 SAML 인증",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "통합 로그인으로 인증",
     "Saved" : "저장됨",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Nextcloud에 내장된 SAML 공급자로 인증할지, 환경 변수를 사용하여 인증할지를 선택하십시오.",

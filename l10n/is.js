@@ -17,6 +17,7 @@ OC.L10N.register(
     "Transient" : "Tímabundið",
     "Unspecified" : "Óskilgreint",
     "SSO & SAML authentication" : "SSO & SAML auðkenning",
+    "SAML" : "SAML",
     "Saved" : "Vistað",
     "Use built-in SAML authentication" : "Nota innbyggða SAML-auðkenningu",
     "Use environment variable" : "Nota umhverfisbreytu",

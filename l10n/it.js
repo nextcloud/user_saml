@@ -48,6 +48,7 @@ OC.L10N.register(
     "Windows domain qualified name" : "Nome di dominio Windows qualificato",
     "X509 subject name" : "Nome oggetto X509",
     "SSO & SAML authentication" : "Autenticazione SSO e SAML",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "Autenticazione con single sign-on",
     "Saved" : "Salvato",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Scegli se vuoi autenticarti utilizzando il fornitore SAML integratore in Nextcloud o se vuoi autenticarti utilizzando una variabile d'ambiente.",

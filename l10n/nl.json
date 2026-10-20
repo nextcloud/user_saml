@@ -38,6 +38,7 @@
     "Windows domain qualified name" : "Windows domain qualified name",
     "X509 subject name" : "X509 onderwerpnaam",
     "SSO & SAML authentication" : "SSO & SAML authenticatie",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "Authenticeren via single sign-on",
     "Saved" : "Bewaard",
     "Please choose whether you want to authenticate using the SAML provider built-in in Nextcloud or whether you want to authenticate against an environment variable." : "Kies of je wilt authenticeren via de in Nextcloud ingebouwde SAML provider, of dat je wilt authenticeren tegen een omgevingsvariabele",

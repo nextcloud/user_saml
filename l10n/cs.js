@@ -50,6 +50,7 @@ OC.L10N.register(
     "Windows domain qualified name" : "Úplný název domény Windows",
     "X509 subject name" : "Název subjektu pro X509",
     "SSO & SAML authentication" : "SSO a SAML ověření",
+    "SAML" : "SAML",
     "Authenticate using single sign-on" : "Ověřit pomocí sjednoceného přihlášení (sso)",
     "Provider {id}" : "Poskytovatel {id}",
     "Saved" : "Uloženo",
