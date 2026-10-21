@@ -48,6 +48,9 @@ use Psr\Log\LoggerInterface;
 class SAMLController extends Controller {
 	use TXmlHelper;
 
+	/** libxml2 parsing is super-linear and runs before signature checks */
+	private const DEFAULT_MAX_MESSAGE_SIZE = 1024 * 1024;
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -360,6 +363,12 @@ class SAMLController extends Controller {
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
+		if (isset($_POST['SAMLResponse']) && !$this->isSamlMessageSizeAcceptable($_POST['SAMLResponse'], false)) {
+			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
+			$response->invalidateCookie('saml_data');
+			return $response;
+		}
+
 		Utils::setBaseURLPath($this->urlGenerator->getWebroot());
 
 		$auth = new Auth($this->samlSettings->getOneLoginSettingsArray($idp));
@@ -447,6 +456,12 @@ class SAMLController extends Controller {
 		// To hack around this issue we copy the request from _POST to _GET.
 		if (isset($_POST['SAMLRequest']) && $_POST['SAMLRequest'] !== '') {
 			$_GET['SAMLRequest'] = $_POST['SAMLRequest'];
+		}
+
+		foreach (['SAMLRequest', 'SAMLResponse'] as $parameter) {
+			if (isset($_GET[$parameter]) && !$this->isSamlMessageSizeAcceptable($_GET[$parameter], true)) {
+				return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
+			}
 		}
 
 		$isFromIDP = !$isFromGS && isset($_GET['SAMLRequest']) && $_GET['SAMLRequest'] !== '';
@@ -618,6 +633,56 @@ class SAMLController extends Controller {
 	public function base(): Http\TemplateResponse {
 		$message = $this->l->t('This page should not be visited directly.');
 		return new Http\TemplateResponse($this->appName, 'error', ['message' => $message], 'guest');
+	}
+
+	private function isSamlMessageSizeAcceptable(mixed $encoded, bool $mayBeDeflated): bool {
+		if (!is_string($encoded)) {
+			$this->logger->warning('Rejected SAML message: unexpected parameter type');
+			return false;
+		}
+
+		$maxSize = $this->appConfig->getAppValueInt('max_saml_message_size', self::DEFAULT_MAX_MESSAGE_SIZE);
+		if ($maxSize <= 0) {
+			return true;
+		}
+
+		if (strlen($encoded) > (int)ceil($maxSize * 4 / 3) + 1024) {
+			$this->logger->warning('Rejected SAML message: encoded size exceeds limit of {limit} bytes. If this is a legitimate message from your IdP, raise the limit with: occ config:app:set user_saml max_saml_message_size --type=integer --value=<bytes>', ['limit' => $maxSize]);
+			return false;
+		}
+
+		$decoded = base64_decode($encoded);
+		if (strlen($decoded) > $maxSize) {
+			$this->logger->warning('Rejected SAML message: decoded size exceeds limit of {limit} bytes. If this is a legitimate message from your IdP, raise the limit with: occ config:app:set user_saml max_saml_message_size --type=integer --value=<bytes>', ['limit' => $maxSize]);
+			return false;
+		}
+
+		if ($mayBeDeflated && $this->getInflatedSize($decoded, $maxSize) > $maxSize) {
+			$this->logger->warning('Rejected SAML message: inflated size exceeds limit of {limit} bytes. If this is a legitimate message from your IdP, raise the limit with: occ config:app:set user_saml max_saml_message_size --type=integer --value=<bytes>', ['limit' => $maxSize]);
+			return false;
+		}
+
+		return true;
+	}
+
+	/** Inflates incrementally, stopping once $maxSize is exceeded. Returns 0 if not deflated. */
+	private function getInflatedSize(string $data, int $maxSize): int {
+		$context = @inflate_init(ZLIB_ENCODING_RAW);
+		if ($context === false) {
+			return 0;
+		}
+		$size = 0;
+		foreach (str_split($data, 1024) as $chunk) {
+			$out = @inflate_add($context, $chunk, ZLIB_SYNC_FLUSH);
+			if ($out === false) {
+				return 0;
+			}
+			$size += strlen($out);
+			if ($size > $maxSize) {
+				return $size;
+			}
+		}
+		return $size;
 	}
 
 	private function handleAuthErrors(Auth $auth): void {
