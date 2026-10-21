@@ -69,7 +69,7 @@ class SAMLController extends Controller {
 			throw new NoUserFoundException('IDP parameter for the UID not found. Possible parameters are: ' . json_encode(array_keys($auth)));
 		}
 
-		$this->assertGroupMemberships();
+		$this->userBackend->assertGroupMemberships();
 
 		if ($this->userData->getOriginalUid() === '') {
 			$this->logger->error('Given UID is not valid, please check your attribute mapping', ['app' => $this->appName]);
@@ -103,34 +103,6 @@ class SAMLController extends Controller {
 			$this->userBackend->createUserIfNotExists($uid, $auth);
 			$this->userBackend->updateAttributes($uid, $auth);
 			return;
-		}
-	}
-
-	/**
-	 * @throws UserFilterViolationException
-	 */
-	protected function assertGroupMemberships(): void {
-		if (!$this->userBackend->autoprovisionAllowed()) {
-			// return early, when users are provided by a different backend
-			// - mappings are not available/configurable in that case
-			// - control is solely based on presence and enabled-state of the user
-			return;
-		}
-
-		$groups = $this->userData->getGroups();
-		$settings = $this->samlSettings->get($this->session->get('user_saml.Idp') ?? 1);
-
-		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
-		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
-
-		if (!empty(array_intersect($groups, $rejectGroups))) {
-			throw new UserFilterViolationException('User is member of a rejection group.');
-		}
-
-		$requireGroupsString = trim($settings['saml-user-filter-require_groups'] ?? '');
-		$requireGroups = array_map('trim', explode(',', $requireGroupsString));
-		if (!empty($requireGroupsString) && empty(array_intersect($groups, $requireGroups))) {
-			throw new UserFilterViolationException('User is not member of a required group.');
 		}
 	}
 

@@ -21,6 +21,7 @@ use OCA\User_SAML\Listener\SabrePluginEventListener;
 use OCA\User_SAML\Middleware\OnlyLoggedInMiddleware;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\UserData;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -58,7 +59,9 @@ class Application extends App implements IBootstrap {
 				$c->get(ISession::class),
 				$c->get(IConfig::class),
 				$_SERVER,
-				$c->get(SAMLSettings::class)
+				$c->get(SAMLSettings::class),
+				$c->get(UserData::class),
+				$c->get(UserBackend::class),
 			);
 		});
 	}
