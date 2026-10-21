@@ -475,4 +475,58 @@ class SAMLControllerTest extends TestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals($errorUrl, $result->getRedirectURL());
 	}
+
+	public function testAssertionConsumerServiceRejectsOversizedResponse(): void {
+		$this->config
+			->method('getAppValue')
+			->with('user_saml', 'max_saml_message_size', (string)(1024 * 1024))
+			->willReturn('1024');
+
+		$this->request
+			->method('getCookie')
+			->with('saml_data')
+			->willReturn(base64_encode('encrypted-cookie'));
+		$this->crypto
+			->method('decrypt')
+			->willReturn(json_encode(['AuthNRequestID' => 'request-id', 'Idp' => 1], JSON_THROW_ON_ERROR));
+		$this->urlGenerator
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.notProvisioned')
+			->willReturn('https://example.com/notProvisioned');
+
+		$this->samlSettings
+			->expects($this->never())
+			->method('getOneLoginSettingsArray');
+
+		$_POST['SAMLResponse'] = base64_encode(str_repeat('<a>', 1000));
+		try {
+			$response = $this->samlController->assertionConsumerService();
+		} finally {
+			unset($_POST['SAMLResponse']);
+		}
+		$this->assertSame('https://example.com/notProvisioned', $response->getRedirectURL());
+	}
+
+	public function testSingleLogoutServiceRejectsDeflateBomb(): void {
+		$this->config
+			->method('getAppValue')
+			->with('user_saml', 'max_saml_message_size', (string)(1024 * 1024))
+			->willReturn((string)(1024 * 1024));
+		$this->urlGenerator
+			->method('getAbsoluteURL')
+			->with('/')
+			->willReturn('https://example.com/');
+
+		$this->samlSettings
+			->expects($this->never())
+			->method('getOneLoginSettingsArray');
+
+		$_GET['SAMLRequest'] = base64_encode((string)gzdeflate(str_repeat('<a>', 2 * 1024 * 1024), 9));
+		try {
+			$response = $this->samlController->singleLogoutService();
+		} finally {
+			unset($_GET['SAMLRequest']);
+		}
+		$this->assertSame('https://example.com/', $response->getRedirectURL());
+	}
 }
