@@ -68,7 +68,7 @@ jobs:
           composer i
 
       - name: Check for vulnerable PHP dependencies
-        run: composer require --dev roave/security-advisories:dev-latest
+        run: composer require --dev roave/security-advisories:dev-latest --ignore-platform-reqs
 
       - name: Install dependencies # zizmor: ignore[template-injection]
         run: composer require --dev 'nextcloud/ocp:${{ matrix.ocp-version }}' --ignore-platform-reqs --with-dependencies
