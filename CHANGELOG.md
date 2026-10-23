@@ -5,6 +5,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 8.5.0
+
+## What's Changed
+
+### Added
+
+* feat(support): Add section to system report by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1232
+
+### Fixed
+
+* fix(logout): Ensure we handle logout button correctly by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1235
+* Fix SAML validation behind reverse proxy with webroot by @rodo6502 in https://github.com/nextcloud/user_saml/pull/1236
+* fix: Use assertGroupMemberships also in the DAV plugin by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1264
+* Limit size of SAML requests and response by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1263
+
+### Dependencies
+
+* fix(npm): Move some dependencies to dev dependencies by @CarlSchwan in https://github.com/nextcloud/user_saml/pull/1245
+* build(deps): bump firebase/php-jwt from 7.1.0 to 7.2.1 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1241
+* build(deps): bump source-map-js from 1.2.1 to 1.2.2 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1255
+* build(deps): bump @vue/server-renderer and vue by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1258
+* build(deps): bump postcss-selector-parser from 7.1.5 to 7.1.6 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1257
+* build(deps): bump dompurify from 3.4.13 to 3.4.16 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1247
+* build(deps): bump axios from 1.18.1 to 1.20.0 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1248
+* build(deps): bump follow-redirects from 1.16.0 to 1.16.1 by @dependabot[bot] in https://github.com/nextcloud/user_saml/pull/1261
+
 ## 8.4.0
 
 ### Added
