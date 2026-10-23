@@ -26,6 +26,7 @@ use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\Support\SystemReportSection;
 use OCA\User_SAML\UserBackend;
+use OCA\User_SAML\UserData;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -69,6 +70,8 @@ class Application extends App implements IBootstrap {
 			$_SERVER,
 			$c->get(SAMLSettings::class),
 			$c->get(SessionService::class),
+			$c->get(UserData::class),
+			$c->get(UserBackend::class),
 		));
 
 		if (method_exists($context, 'registerAlternativeLoginProvider')) {
