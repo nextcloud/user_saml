@@ -10,7 +10,6 @@ namespace OCA\User_SAML\Tests\Controller;
 use Exception;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
-use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\Service\SessionService;
 use OCA\User_SAML\UserBackend;
@@ -366,87 +365,6 @@ class SAMLControllerTest extends TestCase {
 			['My identity provider', 'My identity provider'],
 			['', 'SSO & SAML log in']
 		];
-	}
-
-	public function userFilterDataProvider(): array {
-		return [
-			[ // 0 - test rejection by membership
-				'Group C',
-				'Group A, Group B',
-				true,
-				'User is member of a rejection group.',
-			],
-			[ // 1 - test rejection by required membership
-				'Group D',
-				'Group B',
-				true,
-				'User is not member of a required group.',
-			],
-			[ // 2 - test satisfy all requirements
-				'Group D',
-				'Group A',
-				false,
-			],
-			[ // 3 - test no filtering
-				null,
-				null,
-				false,
-			],
-		];
-	}
-
-	/**
-	 * @dataProvider userFilterDataProvider
-	 */
-	public function testUserFilter(?string $rejectGroups, ?string $requireGroups, bool $isException, string $message = ''): void {
-		$this->userData->expects($this->any())
-			->method('getGroups')
-			->willReturn(['Group A', 'Group C']);
-
-		$this->session->expects($this->any())
-			->method('get')
-			->with('user_saml.Idp')
-			->willReturn(1);
-
-		$settings = [];
-		if ($rejectGroups !== null && $requireGroups !== null) {
-			$settings = [
-				'saml-user-filter-reject_groups' => $rejectGroups,
-				'saml-user-filter-require_groups' => $requireGroups,
-			];
-		}
-		$this->samlSettings->expects($this->any())
-			->method('get')
-			->with(1)
-			->willReturn($settings);
-
-		$this->userBackend->expects($this->any())
-			->method('autoprovisionAllowed')
-			->willReturn(true);
-
-		if ($isException) {
-			$this->expectException(UserFilterViolationException::class);
-			$this->expectExceptionMessage($message);
-		} else {
-			// Nothing to assert other than no exception being thrown
-			$this->assertTrue(true);
-		}
-
-		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
-	}
-
-	public function testUserFilterNotApplicable(): void {
-		$this->userData->expects($this->never())
-			->method('getGroups');
-
-		$this->session->expects($this->never())
-			->method('get');
-
-		$this->userBackend->expects($this->any())
-			->method('autoprovisionAllowed')
-			->willReturn(false);
-
-		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
 	}
 
 	public function testLoginWithUnconfiguredIdpRedirectsToGenericError(): void {

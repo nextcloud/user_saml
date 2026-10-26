@@ -8,6 +8,7 @@
 namespace OCA\User_SAML;
 
 use OCA\DAV\Connector\Sabre\Auth;
+use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Service\SessionService;
 use OCP\IAppConfig;
 use OCP\ISession;
@@ -26,6 +27,8 @@ class DavPlugin extends ServerPlugin {
 		private readonly array $auth,
 		private readonly SAMLSettings $samlSettings,
 		private readonly SessionService $sessionService,
+		private readonly UserData $userData,
+		private readonly UserBackend $userBackend,
 	) {
 	}
 
@@ -42,6 +45,12 @@ class DavPlugin extends ServerPlugin {
 		) {
 			$uidMapping = $this->samlSettings->get(1)['general-uid_mapping'];
 			if (isset($this->auth[$uidMapping])) {
+				$this->userData->setAttributes($this->auth);
+				try {
+					$this->userBackend->assertGroupMemberships();
+				} catch (UserFilterViolationException) {
+					return;
+				}
 				$this->session->set(Auth::DAV_AUTHENTICATED, $this->auth[$uidMapping]);
 				$this->sessionService->prepareEnvironmentBasedSession($this->auth);
 			}
