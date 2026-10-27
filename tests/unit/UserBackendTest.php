@@ -220,7 +220,6 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-
 		$this->config->method('getAppValue')
 			->willReturnCallback(function ($appId, $key, $default) {
 				switch ($key) {

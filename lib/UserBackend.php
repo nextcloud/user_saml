@@ -402,7 +402,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return '';
 	}
 
-
 	/**
 	 * Backend name to be shown in user management
 	 * @return string the name of the backend to be shown

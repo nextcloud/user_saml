@@ -139,7 +139,6 @@ class SAMLController extends Controller {
 					}
 				}
 
-
 				$returnUrl = $originalUrl ?: $this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.login');
 				$ssoUrl = $auth->login($returnUrl, $passthroughValues, false, false, true);
 				$response = new Http\RedirectResponse($ssoUrl);
@@ -547,7 +546,6 @@ class SAMLController extends Controller {
 		$attributes['loginUrls']['ssoLogin'] = $this->getIdps($redirectUrl);
 
 		$attributes['useCombobox'] = count($attributes['loginUrls']['ssoLogin']) > 4;
-
 
 		return new Http\TemplateResponse($this->appName, 'selectUserBackEnd', $attributes, 'guest');
 	}
