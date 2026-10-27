@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 7.1.9
+
+* Limit size of SAML requests and response by @backportbot[bot] in https://github.com/nextcloud/user_saml/pull/1266
+* fix: Use assertGroupMemberships also in the DAV plugin by @backportbot[bot] in https://github.com/nextcloud/user_saml/pull/1267
+
 ## 7.1.8
 
 * [feat: Implement ICreateNamedGroupBackend by @CarlSchwan](https://github.com/nextcloud/user_saml/pull/1234)
