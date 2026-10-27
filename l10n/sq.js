@@ -26,6 +26,7 @@ OC.L10N.register(
     "Use environment variable" : "Përdor variablin e mjedisit",
     "Attribute mapping" : "Përcaktimi i atributeve",
     "If you want to optionally map attributes to the user you can configure these here." : "Nëse dëshironi të maponi atributet tek përdoruesi opsionalisht, ju mund t'i konfiguroni ato këtu.",
+    "Remove {name}" : "Hiq {name}",
     "Download metadata XML" : "Shkarko metadata XML",
     "General" : "Të përgjithshme",
     "Service Provider Data" : "Të dhënat e ofruesit të shërbimit",

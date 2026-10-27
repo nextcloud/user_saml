@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Encrypted" : "Kryptert",
     "Saved" : "Lagra",
+    "Remove {name}" : "Fjern {name}",
     "Save changes" : "Lagre endringar",
     "General" : "Generelt",
     "Loading…" : "Lastar...",

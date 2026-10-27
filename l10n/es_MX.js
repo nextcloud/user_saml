@@ -35,6 +35,7 @@ OC.L10N.register(
     "Use environment variable" : "Usar la variable de ambiente",
     "Attribute mapping" : "Mapeo del atributo",
     "If you want to optionally map attributes to the user you can configure these here." : "SI opcionalmente quieres mapear los atributos del usuario, puedes configurarlos aquí.",
+    "Remove {name}" : "Quitar {name}",
     "Download metadata XML" : "Descargar metadatos XML",
     "Save changes" : "Guardar cambios",
     "General" : "General",

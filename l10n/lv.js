@@ -10,6 +10,7 @@ OC.L10N.register(
     "Use built-in SAML authentication" : "Izmantot iebūvēto SAML autentifikācija",
     "Use environment variable" : "Izmantot vides mainīgo",
     "Global settings" : "Globālie iestatījumi",
+    "Remove {name}" : "Noņemt {name}",
     "Reset settings" : "Atiestatīt iestatījumus",
     "Download metadata XML" : "Lejupielādēt metadatu XML",
     "Save changes" : "Saglabāt izmaiņas",
