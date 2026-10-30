@@ -81,8 +81,10 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	/**
 	 * Creates a user if it does not exist. In case home directory mapping
 	 * is enabled we also set up the user's home from $attributes.
+	 *
+	 * @return bool whether the user was created
 	 */
-	public function createUserIfNotExists(string $uid, array $attributes = []): void {
+	public function createUserIfNotExists(string $uid, array $attributes = []): bool {
 		if (!$this->userExistsInDatabase($uid)) {
 			$values = [
 				'uid' => $uid,
@@ -123,7 +125,9 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 			$qb->executeStatement();
 
 			$this->initializeHomeDir($uid);
+			return true;
 		}
+		return false;
 	}
 
 	/**
