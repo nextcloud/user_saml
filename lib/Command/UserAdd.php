@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\User_SAML\Command;
 
 use OC\Core\Command\Base;
+use OCA\User_SAML\AuditLog\AuditLogger;
 use OCA\User_SAML\UserBackend;
 use OCP\IUserManager;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,6 +21,7 @@ class UserAdd extends Base {
 	public function __construct(
 		protected IUserManager $userManager,
 		protected UserBackend $backend,
+		protected AuditLogger $auditLogger,
 	) {
 		parent::__construct();
 	}
@@ -61,7 +63,9 @@ class UserAdd extends Base {
 		}
 
 		try {
-			$this->backend->createUserIfNotExists($uid);
+			if ($this->backend->createUserIfNotExists($uid)) {
+				$this->auditLogger->userProvisioned($uid, null, 'occ');
+			}
 		} catch (\Exception $e) {
 			$output->writeln('<error>SAML create user ' . $e->getMessage() . '</error>');
 			return self::FAILURE;
