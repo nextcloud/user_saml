@@ -43,9 +43,6 @@
       <code><![CDATA[$offset]]></code>
       <code><![CDATA[$offset]]></code>
     </InvalidArgument>
-    <InvalidReturnStatement>
-      <code><![CDATA['']]></code>
-    </InvalidReturnStatement>
     <UndefinedClass>
       <code><![CDATA[\OC]]></code>
       <code><![CDATA[\OC]]></code>
