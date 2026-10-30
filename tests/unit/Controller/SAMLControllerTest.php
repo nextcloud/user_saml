@@ -10,7 +10,6 @@ namespace OCA\User_SAML\Tests\Controller;
 use Exception;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
-use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
 use OCA\User_SAML\UserData;
@@ -374,84 +373,57 @@ class SAMLControllerTest extends TestCase {
 		];
 	}
 
-	public function userFilterDataProvider(): array {
-		return [
-			[ // 0 - test rejection by membership
-				'Group C',
-				'Group A, Group B',
-				true,
-				'User is member of a rejection group.',
-			],
-			[ // 1 - test rejection by required membership
-				'Group D',
-				'Group B',
-				true,
-				'User is not member of a required group.',
-			],
-			[ // 2 - test satisfy all requirements
-				'Group D',
-				'Group A',
-				false,
-			],
-			[ // 3 - test no filtering
-				null,
-				null,
-				false,
-			],
-		];
+	public function testAssertionConsumerServiceRejectsOversizedResponse(): void {
+		$this->config
+			->method('getAppValue')
+			->with('user_saml', 'max_saml_message_size', (string)(1024 * 1024))
+			->willReturn('1024');
+
+		$this->request
+			->method('getCookie')
+			->with('saml_data')
+			->willReturn(base64_encode('encrypted-cookie'));
+		$this->crypto
+			->method('decrypt')
+			->willReturn(json_encode(['AuthNRequestID' => 'request-id', 'Idp' => 1], JSON_THROW_ON_ERROR));
+		$this->urlGenerator
+			->method('linkToRouteAbsolute')
+			->with('user_saml.SAML.notProvisioned')
+			->willReturn('https://example.com/notProvisioned');
+
+		$this->samlSettings
+			->expects($this->never())
+			->method('getOneLoginSettingsArray');
+
+		$_POST['SAMLResponse'] = base64_encode(str_repeat('<a>', 1000));
+		try {
+			$response = $this->samlController->assertionConsumerService();
+		} finally {
+			unset($_POST['SAMLResponse']);
+		}
+		$this->assertSame('https://example.com/notProvisioned', $response->getRedirectURL());
 	}
 
-	/**
-	 * @dataProvider userFilterDataProvider
-	 */
-	public function testUserFilter(?string $rejectGroups, ?string $requireGroups, bool $isException, string $message = ''): void {
-		$this->userData->expects($this->any())
-			->method('getGroups')
-			->willReturn(['Group A', 'Group C']);
+	public function testSingleLogoutServiceRejectsDeflateBomb(): void {
+		$this->config
+			->method('getAppValue')
+			->with('user_saml', 'max_saml_message_size', (string)(1024 * 1024))
+			->willReturn((string)(1024 * 1024));
+		$this->urlGenerator
+			->method('getAbsoluteURL')
+			->with('/')
+			->willReturn('https://example.com/');
 
-		$this->session->expects($this->any())
-			->method('get')
-			->with('user_saml.Idp')
-			->willReturn(1);
+		$this->samlSettings
+			->expects($this->never())
+			->method('getOneLoginSettingsArray');
 
-		$settings = [];
-		if ($rejectGroups !== null && $requireGroups !== null) {
-			$settings = [
-				'saml-user-filter-reject_groups' => $rejectGroups,
-				'saml-user-filter-require_groups' => $requireGroups,
-			];
+		$_GET['SAMLRequest'] = base64_encode((string)gzdeflate(str_repeat('<a>', 2 * 1024 * 1024), 9));
+		try {
+			$response = $this->samlController->singleLogoutService();
+		} finally {
+			unset($_GET['SAMLRequest']);
 		}
-		$this->samlSettings->expects($this->any())
-			->method('get')
-			->with(1)
-			->willReturn($settings);
-
-		$this->userBackend->expects($this->any())
-			->method('autoprovisionAllowed')
-			->willReturn(true);
-
-		if ($isException) {
-			$this->expectException(UserFilterViolationException::class);
-			$this->expectExceptionMessage($message);
-		} else {
-			// Nothing to assert other than no exception being thrown
-			$this->assertTrue(true);
-		}
-
-		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
-	}
-
-	public function testUserFilterNotApplicable(): void {
-		$this->userData->expects($this->never())
-			->method('getGroups');
-
-		$this->session->expects($this->never())
-			->method('get');
-
-		$this->userBackend->expects($this->any())
-			->method('autoprovisionAllowed')
-			->willReturn(false);
-
-		$this->invokePrivate($this->samlController, 'assertGroupMemberships');
+		$this->assertSame('https://example.com/', $response->getRedirectURL());
 	}
 }

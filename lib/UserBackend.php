@@ -8,6 +8,7 @@
 namespace OCA\User_SAML;
 
 use OC\Security\CSRF\CsrfTokenManager;
+use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCP\Authentication\IApacheBackend;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\NotPermittedException;
@@ -401,7 +402,6 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 		return '';
 	}
 
-
 	/**
 	 * Backend name to be shown in user management
 	 * @return string the name of the backend to be shown
@@ -409,6 +409,36 @@ class UserBackend extends ABackend implements IApacheBackend, IUserBackend, IGet
 	 */
 	public function getBackendName() {
 		return 'user_saml';
+	}
+
+	/**
+	 * Checks the group filter against the attributes set on UserData.
+	 *
+	 * @throws UserFilterViolationException
+	 */
+	public function assertGroupMemberships(): void {
+		if (!$this->autoprovisionAllowed()) {
+			// return early, when users are provided by a different backend
+			// - mappings are not available/configurable in that case
+			// - control is solely based on presence and enabled-state of the user
+			return;
+		}
+
+		$groups = $this->userData->getGroups();
+		$settings = $this->settings->get($this->session->get('user_saml.Idp') ?? 1);
+
+		$rejectGroupsString = $settings['saml-user-filter-reject_groups'] ?? '';
+		$rejectGroups = array_map('trim', explode(',', $rejectGroupsString));
+
+		if (!empty(array_intersect($groups, $rejectGroups))) {
+			throw new UserFilterViolationException('User is member of a rejection group.');
+		}
+
+		$requireGroupsString = trim($settings['saml-user-filter-require_groups'] ?? '');
+		$requireGroups = array_map('trim', explode(',', $requireGroupsString));
+		if (!empty($requireGroupsString) && empty(array_intersect($groups, $requireGroups))) {
+			throw new UserFilterViolationException('User is not member of a required group.');
+		}
 	}
 
 	/**
