@@ -71,7 +71,7 @@
     "Use environment variable" : "使用環境變量",
     "Global settings" : "全域設定",
     "Environment variable provider settings" : "環境變數提供者設定",
-    "Attribute mapping" : "屬性映射",
+    "Attribute mapping" : "屬性對應",
     "If you want to optionally map attributes to the user you can configure these here." : "如果要選擇將屬性映射到用戶，可以在這裡配置。",
     "User filtering" : "用戶過濾",
     "If you want to optionally restrict user login depending on user data, configure it here." : "如果您想根據用戶數據選擇性地限制用戶登錄，請在此處進行配置。",
