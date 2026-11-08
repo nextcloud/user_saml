@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\User_SAML\Tests;
 
+use OCA\User_SAML\AuditLog\AuditLogger;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCA\User_SAML\SAMLSettings;
 use OCP\AppFramework\Services\IAppConfig;
@@ -54,6 +55,7 @@ class SAMLSettingsTest extends TestCase {
 			$this->mapper,
 			$cacheFactory,
 			$this->logger,
+			$this->createMock(AuditLogger::class),
 		);
 	}
 

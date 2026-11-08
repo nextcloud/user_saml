@@ -13,6 +13,7 @@ use Firebase\JWT\Key;
 use OC\Core\Controller\ClientFlowLoginController;
 use OC\Core\Controller\ClientFlowLoginV2Controller;
 use OCA\User_SAML\Attributes\OnlyUnauthenticatedUsers;
+use OCA\User_SAML\AuditLog\AuditLogger;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\Helper\TXmlHelper;
@@ -69,6 +70,7 @@ class SAMLController extends Controller {
 		private ITrustedDomainHelper $trustedDomainHelper,
 		private SessionService $sessionService,
 		private ProviderListingService $providerListingService,
+		private AuditLogger $auditLogger,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -100,7 +102,9 @@ class SAMLController extends Controller {
 		$isGsMaster = $this->config->getSystemValueString('gss.mode', 'slave') === 'master';
 		$isGsMasterAdmin = in_array($uid, $this->config->getSystemValue('gss.master.admin', []), true);
 		if ($isGsEnabled && $isGsMaster && !$isGsMasterAdmin) {
-			$this->userBackend->createUserIfNotExists($this->userData->getOriginalUid());
+			if ($this->userBackend->createUserIfNotExists($this->userData->getOriginalUid())) {
+				$this->auditLogger->userProvisioned($this->userData->getOriginalUid(), $this->samlSettings->getProviderId(), 'global_scale');
+			}
 			return;
 		}
 		$autoProvisioningAllowed = $this->userBackend->autoprovisionAllowed();
@@ -116,7 +120,9 @@ class SAMLController extends Controller {
 			throw new NoUserFoundException('Auto provisioning not allowed and user ' . $uid . ' does not exist');
 		}
 
-		$this->userBackend->createUserIfNotExists($uid, $auth);
+		if ($this->userBackend->createUserIfNotExists($uid, $auth)) {
+			$this->auditLogger->userProvisioned($uid, $this->samlSettings->getProviderId(), 'login');
+		}
 		$this->userBackend->updateAttributes($uid);
 	}
 
@@ -313,6 +319,7 @@ class SAMLController extends Controller {
 			$cookie = $this->crypto->decrypt($cookie);
 		} catch (Exception) {
 			$this->logger->debug('Could not decrypt SAML cookie');
+			$this->auditLogger->loginFailed('invalid_cookie', null);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 		$data = json_decode($cookie, true);
@@ -332,10 +339,12 @@ class SAMLController extends Controller {
 		$this->sessionService->storeIdentityProviderInSession($idp);
 		if (is_null($AuthNRequestID) || $AuthNRequestID === '') {
 			$this->logger->debug('Invalid auth payload');
+			$this->auditLogger->loginFailed('invalid_request', $idp);
 			return new Http\RedirectResponse($this->urlGenerator->getAbsoluteURL('/'));
 		}
 
 		if (isset($_POST['SAMLResponse']) && !$this->isSamlMessageSizeAcceptable($_POST['SAMLResponse'], false)) {
+			$this->auditLogger->loginFailed('response_too_large', $idp);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -355,6 +364,7 @@ class SAMLController extends Controller {
 
 		if (!$auth->isAuthenticated()) {
 			$this->logger->error('Auth failed', ['exception' => new \RuntimeException('Unable to login')]);
+			$this->auditLogger->loginFailed('not_authenticated', $idp, $auth->getErrors());
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -369,11 +379,13 @@ class SAMLController extends Controller {
 			$this->autoprovisionIfPossible();
 		} catch (NoUserFoundException $e) {
 			$this->logger->error($e->getMessage(), ['exception' => $e, 'attributes' => $attributes]);
+			$this->auditLogger->loginFailed('user_not_found', $idp);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notProvisioned'));
 			$response->invalidateCookie('saml_data');
 			return $response;
 		} catch (UserFilterViolationException $e) {
 			$this->logger->error($e->getMessage(), ['exception' => $e, 'attributes' => $attributes]);
+			$this->auditLogger->loginFailed('user_filter_violation', $idp);
 			$response = new Http\RedirectResponse($this->urlGenerator->linkToRouteAbsolute('user_saml.SAML.notPermitted'));
 			$response->invalidateCookie('saml_data');
 			return $response;
@@ -498,6 +510,10 @@ class SAMLController extends Controller {
 				}
 			}
 			if ($targetUrl !== '' && $targetUrl !== null && $auth && $auth->getLastErrorReason() === null) {
+				$user = $this->userSession->getUser();
+				if ($user !== null && ($isFromIDP || $isFromGS)) {
+					$this->auditLogger->sessionRevoked($user->getUID(), $idp !== null ? (int)$idp : null, $isFromIDP ? 'idp' : 'global_scale');
+				}
 				$this->userSession->logout();
 			}
 		}

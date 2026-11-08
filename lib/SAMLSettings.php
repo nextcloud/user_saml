@@ -8,6 +8,7 @@
 namespace OCA\User_SAML;
 
 use InvalidArgumentException;
+use OCA\User_SAML\AuditLog\AuditLogger;
 use OCA\User_SAML\Db\ConfigurationsMapper;
 use OCP\AppFramework\Services\IAppConfig;
 use OCP\DB\Exception;
@@ -92,6 +93,7 @@ class SAMLSettings {
 		private readonly ConfigurationsMapper $mapper,
 		ICacheFactory $cacheFactory,
 		private readonly LoggerInterface $logger,
+		private readonly AuditLogger $auditLogger,
 	) {
 		$this->knownAttributesCache = $cacheFactory->createDistributed('user_saml-known_attributes');
 	}
@@ -208,7 +210,9 @@ class SAMLSettings {
 	}
 
 	public function getNewProviderId(): int {
-		return $this->mapper->reserveId();
+		$providerId = $this->mapper->reserveId();
+		$this->auditLogger->providerCreated($providerId);
+		return $providerId;
 	}
 
 	/**
@@ -225,7 +229,9 @@ class SAMLSettings {
 	public function set(int $id, array $settings): void {
 		$settings = array_filter($settings, static fn (string $configKey): bool => in_array($configKey, self::IDP_CONFIG_KEYS, true), ARRAY_FILTER_USE_KEY);
 
+		$settingsBefore = $this->mapper->get($id);
 		$this->mapper->set($id, $settings);
+		$this->auditLogger->providerUpdated($id, $settingsBefore, $settings);
 	}
 
 	/**
@@ -234,6 +240,7 @@ class SAMLSettings {
 	public function delete(int $id): void {
 		$this->mapper->deleteById($id);
 		$this->knownAttributesCache->remove((string)$id);
+		$this->auditLogger->providerDeleted($id);
 	}
 
 	/**
