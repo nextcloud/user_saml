@@ -8,3 +8,4 @@ vendor/
 !/tests/integration/
 
 .ackrc
+tests/unit/.phpunit.result.cache

@@ -7,6 +7,7 @@
 
 namespace OCA\User_SAML\Tests\Settings;
 
+use OCA\User_SAML\Exceptions\UserFilterViolationException;
 use OCA\User_SAML\GroupManager;
 use OCA\User_SAML\SAMLSettings;
 use OCA\User_SAML\UserBackend;
@@ -219,7 +220,6 @@ class UserBackendTest extends TestCase {
 		/** @var IUser|MockObject $user */
 		$user = $this->createMock(IUser::class);
 
-
 		$this->config->method('getAppValue')
 			->willReturnCallback(function ($appId, $key, $default) {
 				switch ($key) {
@@ -267,5 +267,92 @@ class UserBackendTest extends TestCase {
 			->method('handleIncomingGroups')
 			->with($user, []);
 		$this->userBackend->updateAttributes('ExistingUser', ['email' => 'new@example.com', 'displayname' => 'New Displayname', 'quota' => '']);
+	}
+
+	public function userFilterDataProvider(): array {
+		return [
+			[ // 0 - test rejection by membership
+				'Group C',
+				'Group A, Group B',
+				true,
+				'User is member of a rejection group.',
+			],
+			[ // 1 - test rejection by required membership
+				'Group D',
+				'Group B',
+				true,
+				'User is not member of a required group.',
+			],
+			[ // 2 - test satisfy all requirements
+				'Group D',
+				'Group A',
+				false,
+			],
+			[ // 3 - test no filtering
+				null,
+				null,
+				false,
+			],
+		];
+	}
+
+	/**
+	 * @dataProvider userFilterDataProvider
+	 */
+	public function testUserFilter(?string $rejectGroups, ?string $requireGroups, bool $isException, string $message = ''): void {
+		$this->getMockedBuilder();
+
+		$this->userData->expects($this->any())
+			->method('getGroups')
+			->willReturn(['Group A', 'Group C']);
+
+		$this->session->expects($this->any())
+			->method('get')
+			->with('user_saml.Idp')
+			->willReturn(1);
+
+		$settings = [];
+		if ($rejectGroups !== null && $requireGroups !== null) {
+			$settings = [
+				'saml-user-filter-reject_groups' => $rejectGroups,
+				'saml-user-filter-require_groups' => $requireGroups,
+			];
+		}
+		$this->SAMLSettings->expects($this->any())
+			->method('get')
+			->with(1)
+			->willReturn($settings);
+
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('user_saml', 'general-require_provisioned_account', '0')
+			->willReturn('0');
+
+		if ($isException) {
+			$this->expectException(UserFilterViolationException::class);
+			$this->expectExceptionMessage($message);
+		} else {
+			// Nothing to assert other than no exception being thrown
+			$this->assertTrue(true);
+		}
+
+		$this->userBackend->assertGroupMemberships();
+	}
+
+	public function testUserFilterNotApplicable(): void {
+		$this->getMockedBuilder();
+
+		$this->userData->expects($this->never())
+			->method('getGroups');
+
+		$this->session->expects($this->never())
+			->method('get');
+
+		$this->config->expects($this->any())
+			->method('getAppValue')
+			->with('user_saml', 'general-require_provisioned_account', '0')
+			->willReturn('1');
+
+		$this->userBackend->assertGroupMemberships();
 	}
 }
