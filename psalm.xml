@@ -50,5 +50,10 @@
         <directory name="tests/unit" />
       </errorLevel>
     </MissingConstructor>
+    <PropertyNotSetInConstructor>
+      <errorLevel type="info">
+        <directory name="tests/unit" />
+      </errorLevel>
+    </PropertyNotSetInConstructor>
   </issueHandlers>
 </psalm>
