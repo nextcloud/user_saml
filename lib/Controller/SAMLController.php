@@ -48,6 +48,7 @@ use OneLogin\Saml2\Auth;
 use OneLogin\Saml2\Error;
 use OneLogin\Saml2\Settings;
 use OneLogin\Saml2\ValidationError;
+use function OCP\Log\logger;
 
 class SAMLController extends Controller {
 	use TXmlHelper;
@@ -227,11 +228,20 @@ class SAMLController extends Controller {
 
 				if ($this->session->get(ClientFlowLoginController::STATE_NAME) !== null) {
 					$flowData['cf1'] = $this->session->get(ClientFlowLoginController::STATE_NAME);
+					logger('core')->error('Transporting login flow token', [
+						'requestToken' => $this->session->get(ClientFlowLoginController::STATE_NAME),
+					]);
 				} elseif ($this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME) !== null) {
 					$flowData['cf2'] = [
 						'token' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
 						'state' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
 					];
+					logger('core')->error('Transporting login flow tokens', [
+						'sessionToken' => $this->session->get(ClientFlowLoginV2Controller::TOKEN_NAME),
+						'requestToken' => $this->session->get(ClientFlowLoginV2Controller::STATE_NAME),
+					]);
+				} else {
+					logger('core')->error('No login flow tokens found');
 				}
 
 				// Pack data as JSON so we can properly extract it later
