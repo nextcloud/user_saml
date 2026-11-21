@@ -4,6 +4,7 @@
     "Remove {name}" : "Одстрани {name}",
     "Save changes" : "Зачувај ги промените",
     "General" : "Општо",
+    "Security settings" : "Безбедносни поставки",
     "Loading…" : "Се вчитува…",
     "Error" : "Грешка"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"

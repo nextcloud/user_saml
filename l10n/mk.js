@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove {name}" : "Одстрани {name}",
     "Save changes" : "Зачувај ги промените",
     "General" : "Општо",
+    "Security settings" : "Безбедносни поставки",
     "Loading…" : "Се вчитува…",
     "Error" : "Грешка"
 },
