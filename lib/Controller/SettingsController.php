@@ -95,8 +95,8 @@ class SettingsController extends Controller {
 				}
 
 				if (isset($details['global']) && $details['global']) {
-					// Read legacy data from oc_appconfig
-					$settings[$category][$setting] = $this->appConfig->getAppValueString($key);
+					// Global settings are checkboxes, read from oc_appconfig as bool
+					$settings[$category][$setting] = $this->appConfig->getAppValueBool($key) ? '1' : '0';
 				} else {
 					$settings[$category][$setting] = $storedSettings[$key] ?? '';
 				}
