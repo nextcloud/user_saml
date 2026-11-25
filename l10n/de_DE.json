@@ -74,7 +74,7 @@
     "Attribute mapping" : "Attribute zuordnen",
     "If you want to optionally map attributes to the user you can configure these here." : "Wenn Sie optional Attribute dem Benutzer zuordnen möchten, können Sie dies hier einstellen.",
     "User filtering" : "Benutzerfilterung",
-    "If you want to optionally restrict user login depending on user data, configure it here." : "Wenn Sie die Benutzeranmeldung abhängig von Benutzerdaten optional einschränken möchten, stellen Sie dies hier ein.",
+    "If you want to optionally restrict user login depending on user data, configure it here." : "Wenn eine Benutzeranmeldung abhängig von Benutzerdaten optional eingeschränkt werden soll, dann kann dies hier eingestellt werden.",
     "Registered Providers" : "Registrierte Anbieter",
     "Register new provider" : "Neuen Anbieter registrieren",
     "Remove {name}" : "{name} entfernen",
