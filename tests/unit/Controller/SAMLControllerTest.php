@@ -8,6 +8,7 @@
 namespace OCA\User_SAML\Tests\Controller;
 
 use Exception;
+use OCA\User_SAML\AuditLog\AuditLogger;
 use OCA\User_SAML\Controller\SAMLController;
 use OCA\User_SAML\Exceptions\NoUserFoundException;
 use OCA\User_SAML\SAMLSettings;
@@ -100,6 +101,7 @@ class SAMLControllerTest extends TestCase {
 			$this->trustedDomainController,
 			$this->sessionService,
 			$this->providerListingService,
+			$this->createMock(AuditLogger::class),
 		);
 	}
 
